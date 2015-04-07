@@ -30,6 +30,11 @@ extern "C" API void ImGui_Render()
 	ImGui::Render();
 }
 
+extern "C" API void ImGui_ShowTestWindow(bool* opened)
+{
+	ImGui::ShowTestWindow(opened);
+}
+
 extern "C" API bool ImGui_Begin(const char* name, bool* p_opened, ImGuiWindowFlags flags)
 {
 	return ImGui::Begin(name, p_opened, flags);
@@ -54,6 +59,11 @@ extern "C" API void ImGui_Text(const char* text, ...)
 extern "C" API bool ImGui_ColorEdit3(const char* label, float col[3])
 {
 	return ImGui::ColorEdit3(label,col);
+}
+
+extern "C" API void ImGui_SetNextWindowPos(const ImVec2 pos, ImGuiSetCond cond)
+{
+	ImGui::SetNextWindowPos(pos,cond);
 }
 
 extern "C" API void ImGui_SetNextWindowSize(const ImVec2 size, ImGuiSetCond cond)
