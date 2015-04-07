@@ -81,6 +81,38 @@ extern "C" API bool ImGui_Button(const char* label, const ImVec2& size, bool rep
 	return ImGui::Button(label,size,repeat_when_held);
 }
 
+extern "C" API bool ImGui_SmallButton(const char* label)
+{
+	return ImGui::SmallButton(label);
+}
+
+extern "C" API bool ImGui_TreeNode(const char* str_label_id)
+{
+	return ImGui::TreeNode(str_label_id);
+}
+
+extern "C" API bool ImGui_TreeNode_IdFmt(const void* ptr_id, const char* fmt, ...)
+{
+	char buffer[256];
+  	va_list args;
+  	va_start (args, fmt);
+  	vsprintf (buffer, fmt, args);
+  	va_end (args);
+
+  	//TODO: use TreeNodeV
+	return ImGui::TreeNode(ptr_id,"%s",buffer);	
+}
+
+extern "C" API void ImGui_TreePop()
+{
+	ImGui::TreePop();
+}
+
+extern "C" API void ImGui_SameLine(int column_x, int spacing_w)
+{
+	ImGui::SameLine(column_x,spacing_w);
+}
+
 extern "C" API void ImFontAtlas_GetTexDataAsRGBA32(ImFontAtlas* atlas, unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel)
 {
 	atlas->GetTexDataAsRGBA32(out_pixels,out_width,out_height,out_bytes_per_pixel);
