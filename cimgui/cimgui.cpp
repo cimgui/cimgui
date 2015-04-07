@@ -47,3 +47,27 @@ extern "C" API void ImFontAtlas_GetTexDataAsRGBA32(ImFontAtlas* atlas, unsigned 
 	atlas->GetTexDataAsRGBA32(out_pixels,out_width,out_height,out_bytes_per_pixel);
 }
 
+extern "C" API void ImFontAtlas_SetTexID(ImFontAtlas* atlas, void* tex)
+{
+	atlas->TexID = tex;
+}
+
+extern "C" API int ImDrawList_GetVertexBufferSize(ImDrawList* list)
+{
+	return list->vtx_buffer.size();
+}
+
+extern "C" API ImDrawVert* ImDrawList_GetVertexPtr(ImDrawList* list, int n)
+{
+	return &list->vtx_buffer[n];
+}
+
+extern "C" API int ImDrawList_GetCmdSize(ImDrawList* list)
+{
+	return list->commands.size();
+}
+
+extern "C" API ImDrawCmd* ImDrawList_GetCmdPtr(ImDrawList* list, int n)
+{
+	return &list->commands[n];
+}
