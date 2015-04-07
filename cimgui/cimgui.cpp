@@ -1,4 +1,7 @@
 
+#include <stdarg.h>
+#include <stdio.h>
+
 #include "../imgui/imgui.h"
 
 #if defined _WIN32 || defined __CYGWIN__
@@ -27,9 +30,35 @@ extern "C" API void ImGui_Render()
 	ImGui::Render();
 }
 
-extern "C" API void ImGui_Text(const char* text)
+extern "C" API bool ImGui_Begin(const char* name, bool* p_opened, ImGuiWindowFlags flags)
 {
-	ImGui::Text(text);
+	return ImGui::Begin(name, p_opened, flags);
+}
+
+extern "C" API void ImGui_End()
+{
+	ImGui::End();
+}
+
+extern "C" API void ImGui_Text(const char* text, ...)
+{
+	char buffer[256];
+  	va_list args;
+  	va_start (args, text);
+  	vsprintf (buffer, text, args);
+  	va_end (args);
+
+	ImGui::Text(buffer);
+}
+
+extern "C" API bool ImGui_ColorEdit3(const char* label, float col[3])
+{
+	return ImGui::ColorEdit3(label,col);
+}
+
+extern "C" API void ImGui_SetNextWindowSize(const ImVec2 size, ImGuiSetCond cond)
+{
+	ImGui::SetNextWindowSize(size, cond);
 }
 
 extern "C" API void ImGui_SliderFloat(const char* label, float* v, float v_min, float v_max, const char* display_format, float power)
@@ -70,4 +99,9 @@ extern "C" API int ImDrawList_GetCmdSize(ImDrawList* list)
 extern "C" API ImDrawCmd* ImDrawList_GetCmdPtr(ImDrawList* list, int n)
 {
 	return &list->commands[n];
+}
+
+extern "C" API void ImGuiIO_AddInputCharacter(unsigned short c)
+{
+	ImGui::GetIO().AddInputCharacter(c);
 }
