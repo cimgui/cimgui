@@ -1,7 +1,11 @@
 
 #include "../imgui/imgui.h"
 
+#if defined _WIN32 || defined __CYGWIN__
 #define API __declspec(dllexport)
+#else
+#define API
+#endif
 
 extern "C" API ImGuiIO* ImGui_GetIO()
 {
