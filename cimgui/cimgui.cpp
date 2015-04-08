@@ -3,49 +3,201 @@
 #include <stdio.h>
 
 #include "../imgui/imgui.h"
+#include "cimgui.h"
 
-#if defined _WIN32 || defined __CYGWIN__
-#define API __declspec(dllexport)
-#else
-#define API
-#endif
-
-extern "C" API ImGuiIO* ImGui_GetIO()
+CIMGUI_API ImGuiIO* ig_GetIO()
 {
 	return &ImGui::GetIO();
 }
 
-extern "C" API void ImGui_Shutdown()
+CIMGUI_API ImGuiStyle* ig_GetStyle()
 {
-	ImGui::Shutdown();
+	return &ImGui::GetStyle();
 }
 
-extern "C" API void ImGui_NewFrame()
+CIMGUI_API void ig_NewFrame()
 {
 	ImGui::NewFrame();
 }
 
-extern "C" API void ImGui_Render()
+CIMGUI_API void ig_Render()
 {
 	ImGui::Render();
 }
 
-extern "C" API void ImGui_ShowTestWindow(bool* opened)
+CIMGUI_API void ig_Shutdown()
+{
+	ImGui::Shutdown();
+}
+
+CIMGUI_API void ig_ShowUserGuide()
+{
+	ImGui::ShowUserGuide();
+}
+
+CIMGUI_API void ig_ShowStyleEditor(ImGuiStyle* ref)
+{
+	ImGui::ShowStyleEditor(ref);
+}
+
+CIMGUI_API void ig_ShowTestWindow(bool* opened)
 {
 	ImGui::ShowTestWindow(opened);
 }
 
-extern "C" API bool ImGui_Begin(const char* name, bool* p_opened, ImGuiWindowFlags flags)
+IMGUI_API void ig_ShowMetricsWindow(bool* opened)
+{
+	ImGui::ShowMetricsWindow(opened);
+}
+
+// Window
+
+CIMGUI_API bool ig_Begin(const char* name, bool* p_opened, ImGuiWindowFlags flags)
 {
 	return ImGui::Begin(name, p_opened, flags);
 }
 
-extern "C" API void ImGui_End()
+CIMGUI_API bool ig_Begin2(const char* name, bool* p_opened, const ImVec2& size_on_first_use, float bg_alpha, ImGuiWindowFlags flags)
+{
+	return ImGui::Begin(name, p_opened, size_on_first_use, bg_alpha, flags);
+}
+
+CIMGUI_API void ig_End()
 {
 	ImGui::End();
 }
 
-extern "C" API void ImGui_Text(const char* text, ...)
+CIMGUI_API bool ig_BeginChild(const char* str_id, const ImVec2& size, bool border, ImGuiWindowFlags extra_flags)
+{
+	return ImGui::BeginChild(str_id, size, border, extra_flags);
+}
+
+CIMGUI_API bool ig_BeginChild2(ImGuiID id, const ImVec2& size, bool border, ImGuiWindowFlags extra_flags)
+{
+	return ImGui::BeginChild(id, size, border, extra_flags);
+}
+
+CIMGUI_API void ig_EndChild()
+{
+	ImGui::EndChild();
+}
+
+CIMGUI_API void ig_GetContentRegionMax(ImVec2& out)
+{
+	out = ImGui::GetContentRegionMax();
+}
+
+CIMGUI_API void ig_GetWindowContentRegionMin(ImVec2& out)
+{
+	out = ImGui::GetWindowContentRegionMin();
+}
+
+CIMGUI_API void ig_GetWindowContentRegionMax(ImVec2& out)
+{
+	out = ImGui::GetWindowContentRegionMax();
+}
+
+CIMGUI_API ImDrawList* ig_GetWindowDrawList()
+{
+	return ImGui::GetWindowDrawList();
+}
+
+CIMGUI_API ImFont* ig_GetWindowFont()
+{
+	return ImGui::GetWindowFont();
+}
+
+CIMGUI_API float ig_GetWindowFontSize()
+{
+	return ImGui::GetWindowFontSize();
+}
+
+CIMGUI_API void ig_SetWindowFontScale(float scale)
+{
+	ImGui::SetWindowFontScale(scale);
+}
+
+CIMGUI_API void ig_GetWindowPos(ImVec2& out)
+{
+	out = ImGui::GetWindowPos();
+}
+
+CIMGUI_API void ig_GetWindowSize(ImVec2& out)
+{
+	out = ImGui::GetWindowSize();
+}
+
+CIMGUI_API float ig_GetWindowWidth()
+{
+	return ImGui::GetWindowWidth();
+}
+
+CIMGUI_API bool ig_GetWindowCollapsed()
+{
+	return ImGui::GetWindowCollapsed();
+}
+
+CIMGUI_API void ig_SetNextWindowPos(const ImVec2& pos, ImGuiSetCond cond)
+{
+	ImGui::SetNextWindowPos(pos, cond);
+}
+
+CIMGUI_API void ig_SetNextWindowSize(const ImVec2& size, ImGuiSetCond cond)
+{
+	ImGui::SetNextWindowSize(size, cond);
+}
+
+CIMGUI_API void ig_SetNextWindowCollapsed(bool collapsed, ImGuiSetCond cond)
+{
+	ImGui::SetNextWindowCollapsed(collapsed,cond);
+}
+
+CIMGUI_API void ig_SetNextWindowFocus()
+{
+	ImGui::SetNextWindowFocus();
+}
+
+CIMGUI_API void ig_SetWindowPos(const ImVec2& pos, ImGuiSetCond cond)
+{
+	ImGui::SetWindowPos(pos,cond);
+}
+
+CIMGUI_API void ig_SetWindowSize(const ImVec2& size, ImGuiSetCond cond)
+{
+	ImGui::SetWindowSize(size, cond);
+}
+
+CIMGUI_API void ig_SetWindowCollapsed(bool collapsed, ImGuiSetCond cond)
+{
+	ImGui::SetWindowCollapsed(collapsed,cond);
+}
+
+CIMGUI_API void ig_SetWindowFocus()
+{
+	ImGui::SetWindowFocus();
+}
+
+CIMGUI_API void ig_SetWindowPos2(const char* name, const ImVec2& pos, ImGuiSetCond cond)
+{
+	ImGui::SetWindowPos(name,pos,cond);
+}
+
+CIMGUI_API void ig_SetWindowSize2(const char* name, const ImVec2& size, ImGuiSetCond cond)
+{
+	ImGui::SetWindowSize(name, size, cond);
+}
+
+CIMGUI_API void ig_SetWindowCollapsed2(const char* name, bool collapsed, ImGuiSetCond cond)
+{
+	ImGui::SetWindowCollapsed(name, collapsed, cond);
+}
+
+CIMGUI_API void ig_SetWindowFocus2(const char* name)
+{
+	ImGui::SetWindowFocus(name);
+}
+
+CIMGUI_API void ig_Text(const char* text, ...)
 {
 	char buffer[256];
   	va_list args;
@@ -56,42 +208,32 @@ extern "C" API void ImGui_Text(const char* text, ...)
 	ImGui::Text(buffer);
 }
 
-extern "C" API bool ImGui_ColorEdit3(const char* label, float col[3])
+CIMGUI_API bool ig_ColorEdit3(const char* label, float col[3])
 {
 	return ImGui::ColorEdit3(label,col);
 }
 
-extern "C" API void ImGui_SetNextWindowPos(const ImVec2 pos, ImGuiSetCond cond)
-{
-	ImGui::SetNextWindowPos(pos,cond);
-}
-
-extern "C" API void ImGui_SetNextWindowSize(const ImVec2 size, ImGuiSetCond cond)
-{
-	ImGui::SetNextWindowSize(size, cond);
-}
-
-extern "C" API void ImGui_SliderFloat(const char* label, float* v, float v_min, float v_max, const char* display_format, float power)
+CIMGUI_API void ig_SliderFloat(const char* label, float* v, float v_min, float v_max, const char* display_format, float power)
 {
 	ImGui::SliderFloat(label,v,v_min,v_max,display_format,power);
 }
 
-extern "C" API bool ImGui_Button(const char* label, const ImVec2& size, bool repeat_when_held)
+CIMGUI_API bool ig_Button(const char* label, const ImVec2& size, bool repeat_when_held)
 {
 	return ImGui::Button(label,size,repeat_when_held);
 }
 
-extern "C" API bool ImGui_SmallButton(const char* label)
+CIMGUI_API bool ig_SmallButton(const char* label)
 {
 	return ImGui::SmallButton(label);
 }
 
-extern "C" API bool ImGui_TreeNode(const char* str_label_id)
+CIMGUI_API bool ig_TreeNode(const char* str_label_id)
 {
 	return ImGui::TreeNode(str_label_id);
 }
 
-extern "C" API bool ImGui_TreeNode_IdFmt(const void* ptr_id, const char* fmt, ...)
+CIMGUI_API bool ig_TreeNode_IdFmt(const void* ptr_id, const char* fmt, ...)
 {
 	char buffer[256];
   	va_list args;
@@ -103,47 +245,17 @@ extern "C" API bool ImGui_TreeNode_IdFmt(const void* ptr_id, const char* fmt, ..
 	return ImGui::TreeNode(ptr_id,"%s",buffer);	
 }
 
-extern "C" API void ImGui_TreePop()
+CIMGUI_API void ig_TreePop()
 {
 	ImGui::TreePop();
 }
 
-extern "C" API void ImGui_SameLine(int column_x, int spacing_w)
+CIMGUI_API void ig_SameLine(int column_x, int spacing_w)
 {
 	ImGui::SameLine(column_x,spacing_w);
 }
 
-extern "C" API void ImFontAtlas_GetTexDataAsRGBA32(ImFontAtlas* atlas, unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel)
-{
-	atlas->GetTexDataAsRGBA32(out_pixels,out_width,out_height,out_bytes_per_pixel);
-}
-
-extern "C" API void ImFontAtlas_SetTexID(ImFontAtlas* atlas, void* tex)
-{
-	atlas->TexID = tex;
-}
-
-extern "C" API int ImDrawList_GetVertexBufferSize(ImDrawList* list)
-{
-	return list->vtx_buffer.size();
-}
-
-extern "C" API ImDrawVert* ImDrawList_GetVertexPtr(ImDrawList* list, int n)
-{
-	return &list->vtx_buffer[n];
-}
-
-extern "C" API int ImDrawList_GetCmdSize(ImDrawList* list)
-{
-	return list->commands.size();
-}
-
-extern "C" API ImDrawCmd* ImDrawList_GetCmdPtr(ImDrawList* list, int n)
-{
-	return &list->commands[n];
-}
-
-extern "C" API void ImGuiIO_AddInputCharacter(unsigned short c)
+CIMGUI_API void ImGuiIO_AddInputCharacter(unsigned short c)
 {
 	ImGui::GetIO().AddInputCharacter(c);
 }

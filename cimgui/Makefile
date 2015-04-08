@@ -3,6 +3,8 @@
 # Compatible with Ubuntu 14.04.1 and Mac OS X
 
 OBJS = cimgui.o
+OBJS += fontAtlas.o 
+OBJS += drawList.o
 OBJS += ../imgui/imgui.o
 
 UNAME_S := $(shell uname -s)

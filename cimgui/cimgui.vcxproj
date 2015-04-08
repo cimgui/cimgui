@@ -78,6 +78,11 @@
   <ItemGroup>
     <ClCompile Include="..\imgui\imgui.cpp" />
     <ClCompile Include="cimgui.cpp" />
+    <ClCompile Include="drawList.cpp" />
+    <ClCompile Include="fontAtlas.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cimgui.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
