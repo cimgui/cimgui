@@ -787,10 +787,36 @@ CIMGUI_API bool				ig_TreeNode(const char* str_label_id)
 	return ImGui::TreeNode(str_label_id);
 }
 
-//CIMGUI_API bool				ig_TreeNode2(const char* str_id, const char* fmt, ...);
-//CIMGUI_API bool				ig_TreeNode3(const void* ptr_id, const char* fmt, ...);
-//CIMGUI_API bool				ig_TreeNodeV(const char* str_id, const char* fmt, va_list args);
-//CIMGUI_API bool				ig_TreeNodeV2(const void* ptr_id, const char* fmt, va_list args);
+CIMGUI_API bool				ig_TreeNode2(const char* str_id, const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	bool res = ImGui::TreeNodeV(str_id, fmt, args);
+	va_end(args);
+
+	return res;
+}
+
+CIMGUI_API bool				ig_TreeNode3(const void* ptr_id, const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	bool res = ImGui::TreeNodeV(ptr_id, fmt, args);
+	va_end(args);
+
+	return res;
+}
+
+CIMGUI_API bool				ig_TreeNodeV(const char* str_id, const char* fmt, va_list args)
+{
+	return ImGui::TreeNodeV(str_id,fmt,args);
+}
+
+CIMGUI_API bool				ig_TreeNodeV2(const void* ptr_id, const char* fmt, va_list args)
+{
+	return ImGui::TreeNodeV(ptr_id, fmt, args);
+}
+
 CIMGUI_API void				ig_TreePush(const char* str_id)
 {
 	return ImGui::TreePush(str_id);
@@ -906,10 +932,10 @@ CIMGUI_API void				ig_LogButtons()
 
 CIMGUI_API void				ig_LogText(const char* fmt, ...)
 {
-	char buffer[512];
+	char buffer[256];
 	va_list args;
 	va_start(args, fmt);
-	vsprintf(buffer, fmt, args);
+	vsprintf_s(buffer, 256, fmt, args);
 	va_end(args);
 
 	ImGui::LogText("%s",buffer);
