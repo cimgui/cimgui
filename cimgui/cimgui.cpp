@@ -405,7 +405,11 @@ CIMGUI_API int				ig_GetColumnsCount()
 	return ImGui::GetColumnsCount();
 }
 
-//CIMGUI_API struct ImVec2	ig_GetCursorPos();
+CIMGUI_API void	ig_GetCursorPos(ImVec2* pOut)
+{
+	*pOut = ImGui::GetCursorPos();
+}
+
 CIMGUI_API float			ig_GetCursorPosX()
 {
 	return ImGui::GetCursorPosX();
@@ -431,7 +435,11 @@ CIMGUI_API void				ig_SetCursorPosY(float y)
 	return ImGui::SetCursorPosY(y);
 }
 
-//CIMGUI_API struct ImVec2	ig_GetCursorScreenPos();
+CIMGUI_API void ig_GetCursorScreenPos(ImVec2* pOut)
+{
+	*pOut = ImGui::GetCursorScreenPos();
+}
+
 CIMGUI_API void				ig_SetCursorScreenPos(const ImVec2 pos)
 {
 	return ImGui::SetCursorScreenPos(pos);
@@ -962,9 +970,20 @@ CIMGUI_API bool				ig_IsAnyItemActive()
 	return ImGui::IsAnyItemActive();
 }
 
-//CIMGUI_API struct ImVec2	ig_GetItemRectMin();
-//CIMGUI_API struct ImVec2	ig_GetItemRectMax();
-//CIMGUI_API struct ImVec2	ig_GetItemRectSize();
+CIMGUI_API void ig_GetItemRectMin(ImVec2* pOut)
+{
+	*pOut = ImGui::GetItemRectMin();
+}
+
+CIMGUI_API void ig_GetItemRectMax(ImVec2* pOut)
+{
+	*pOut = ImGui::GetItemRectMax();
+}
+
+CIMGUI_API void	ig_GetItemRectSize(ImVec2* pOut)
+{
+	*pOut = ImGui::GetItemRectSize();
+}
 
 CIMGUI_API bool				ig_IsWindowFocused()
 {
@@ -1025,8 +1044,15 @@ CIMGUI_API bool				ig_IsPosHoveringAnyWindow(const ImVec2 pos)
 	return ImGui::IsPosHoveringAnyWindow(pos);
 }
 
-//CIMGUI_API struct ImVec2	ig_GetMousePos(){}
-//CIMGUI_API struct ImVec2	ig_GetMouseDragDelta(int button = 0, float lock_threshold = -1.0f){}
+CIMGUI_API void ig_GetMousePos(ImVec2* pOut)
+{
+	*pOut = ImGui::GetMousePos();
+}
+
+CIMGUI_API void ig_GetMouseDragDelta(ImVec2* pOut, int button, float lock_threshold)
+{
+	*pOut = ImGui::GetMouseDragDelta(button,lock_threshold);
+}
 
 CIMGUI_API ImGuiMouseCursor ig_GetMouseCursor()
 {
@@ -1053,8 +1079,15 @@ CIMGUI_API const char*		ig_GetStyleColName(ImGuiCol idx)
 	return ImGui::GetStyleColName(idx);
 }
 
-//CIMGUI_API struct ImVec2	ig_CalcItemRectClosestPoint(const ImVec2 pos, bool on_edge = false, float outward = +0.0f);
-//CIMGUI_API struct ImVec2	ig_CalcTextSize(const char* text, const char* text_end = NULL, bool hide_text_after_double_hash = false, float wrap_width = -1.0f)
+CIMGUI_API void ig_CalcItemRectClosestPoint(ImVec2* pOut, const ImVec2 pos, bool on_edge, float outward)
+{
+	*pOut = ImGui::CalcItemRectClosestPoint(pos,on_edge,outward);
+}
+
+CIMGUI_API void ig_CalcTextSize(ImVec2* pOut, const char* text, const char* text_end, bool hide_text_after_double_hash, float wrap_width)
+{
+	*pOut = ImGui::CalcTextSize(text, text_end, hide_text_after_double_hash, wrap_width);
+}
 
 CIMGUI_API void				ig_CalcListClipping(int items_count, float items_height, int* out_items_display_start, int* out_items_display_end)
 {
