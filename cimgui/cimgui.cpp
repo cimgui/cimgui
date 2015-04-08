@@ -82,19 +82,19 @@ CIMGUI_API void ig_EndChild()
 	ImGui::EndChild();
 }
 
-CIMGUI_API void ig_GetContentRegionMax(ImVec2& out)
+CIMGUI_API void ig_GetContentRegionMax(ImVec2* out)
 {
-	out = ImGui::GetContentRegionMax();
+	*out = ImGui::GetContentRegionMax();
 }
 
-CIMGUI_API void ig_GetWindowContentRegionMin(ImVec2& out)
+CIMGUI_API void ig_GetWindowContentRegionMin(ImVec2* out)
 {
-	out = ImGui::GetWindowContentRegionMin();
+	*out = ImGui::GetWindowContentRegionMin();
 }
 
-CIMGUI_API void ig_GetWindowContentRegionMax(ImVec2& out)
+CIMGUI_API void ig_GetWindowContentRegionMax(ImVec2* out)
 {
-	out = ImGui::GetWindowContentRegionMax();
+	*out = ImGui::GetWindowContentRegionMax();
 }
 
 CIMGUI_API ImDrawList* ig_GetWindowDrawList()
@@ -117,14 +117,14 @@ CIMGUI_API void ig_SetWindowFontScale(float scale)
 	ImGui::SetWindowFontScale(scale);
 }
 
-CIMGUI_API void ig_GetWindowPos(ImVec2& out)
+CIMGUI_API void ig_GetWindowPos(ImVec2* out)
 {
-	out = ImGui::GetWindowPos();
+	*out = ImGui::GetWindowPos();
 }
 
-CIMGUI_API void ig_GetWindowSize(ImVec2& out)
+CIMGUI_API void ig_GetWindowSize(ImVec2* out)
 {
-	out = ImGui::GetWindowSize();
+	*out = ImGui::GetWindowSize();
 }
 
 CIMGUI_API float ig_GetWindowWidth()
