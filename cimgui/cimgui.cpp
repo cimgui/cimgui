@@ -57,7 +57,7 @@ CIMGUI_API bool ig_Begin(const char* name, bool* p_opened, ImGuiWindowFlags flag
 	return ImGui::Begin(name, p_opened, flags);
 }
 
-CIMGUI_API bool ig_Begin2(const char* name, bool* p_opened, const ImVec2& size_on_first_use, float bg_alpha, ImGuiWindowFlags flags)
+CIMGUI_API bool ig_Begin2(const char* name, bool* p_opened, const ImVec2 size_on_first_use, float bg_alpha, ImGuiWindowFlags flags)
 {
 	return ImGui::Begin(name, p_opened, size_on_first_use, bg_alpha, flags);
 }
@@ -67,12 +67,12 @@ CIMGUI_API void ig_End()
 	ImGui::End();
 }
 
-CIMGUI_API bool ig_BeginChild(const char* str_id, const ImVec2& size, bool border, ImGuiWindowFlags extra_flags)
+CIMGUI_API bool ig_BeginChild(const char* str_id, const ImVec2 size, bool border, ImGuiWindowFlags extra_flags)
 {
 	return ImGui::BeginChild(str_id, size, border, extra_flags);
 }
 
-CIMGUI_API bool ig_BeginChild2(ImGuiID id, const ImVec2& size, bool border, ImGuiWindowFlags extra_flags)
+CIMGUI_API bool ig_BeginChild2(ImGuiID id, const ImVec2 size, bool border, ImGuiWindowFlags extra_flags)
 {
 	return ImGui::BeginChild(id, size, border, extra_flags);
 }
@@ -137,12 +137,12 @@ CIMGUI_API bool ig_GetWindowCollapsed()
 	return ImGui::GetWindowCollapsed();
 }
 
-CIMGUI_API void ig_SetNextWindowPos(const ImVec2& pos, ImGuiSetCond cond)
+CIMGUI_API void ig_SetNextWindowPos(const ImVec2 pos, ImGuiSetCond cond)
 {
 	ImGui::SetNextWindowPos(pos, cond);
 }
 
-CIMGUI_API void ig_SetNextWindowSize(const ImVec2& size, ImGuiSetCond cond)
+CIMGUI_API void ig_SetNextWindowSize(const ImVec2 size, ImGuiSetCond cond)
 {
 	ImGui::SetNextWindowSize(size, cond);
 }
@@ -157,12 +157,12 @@ CIMGUI_API void ig_SetNextWindowFocus()
 	ImGui::SetNextWindowFocus();
 }
 
-CIMGUI_API void ig_SetWindowPos(const ImVec2& pos, ImGuiSetCond cond)
+CIMGUI_API void ig_SetWindowPos(const ImVec2 pos, ImGuiSetCond cond)
 {
 	ImGui::SetWindowPos(pos,cond);
 }
 
-CIMGUI_API void ig_SetWindowSize(const ImVec2& size, ImGuiSetCond cond)
+CIMGUI_API void ig_SetWindowSize(const ImVec2 size, ImGuiSetCond cond)
 {
 	ImGui::SetWindowSize(size, cond);
 }
@@ -177,12 +177,12 @@ CIMGUI_API void ig_SetWindowFocus()
 	ImGui::SetWindowFocus();
 }
 
-CIMGUI_API void ig_SetWindowPos2(const char* name, const ImVec2& pos, ImGuiSetCond cond)
+CIMGUI_API void ig_SetWindowPos2(const char* name, const ImVec2 pos, ImGuiSetCond cond)
 {
 	ImGui::SetWindowPos(name,pos,cond);
 }
 
-CIMGUI_API void ig_SetWindowSize2(const char* name, const ImVec2& size, ImGuiSetCond cond)
+CIMGUI_API void ig_SetWindowSize2(const char* name, const ImVec2 size, ImGuiSetCond cond)
 {
 	ImGui::SetWindowSize(name, size, cond);
 }
@@ -218,7 +218,7 @@ CIMGUI_API void ig_SliderFloat(const char* label, float* v, float v_min, float v
 	ImGui::SliderFloat(label,v,v_min,v_max,display_format,power);
 }
 
-CIMGUI_API bool ig_Button(const char* label, const ImVec2& size, bool repeat_when_held)
+CIMGUI_API bool ig_Button(const char* label, const ImVec2 size, bool repeat_when_held)
 {
 	return ImGui::Button(label,size,repeat_when_held);
 }
