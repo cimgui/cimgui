@@ -1,4 +1,4 @@
-# cimgui
+# cimgui [![Build Status](https://travis-ci.org/Extrawurst/cimgui.svg)](https://travis-ci.org/Extrawurst/cimgui)
 
 ![sample](https://raw.github.com/extrawurst/cimgui/master/Screen Shot 2015-04-09.png)
 
