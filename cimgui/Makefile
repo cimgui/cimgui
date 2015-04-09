@@ -5,6 +5,7 @@
 OBJS = cimgui.o
 OBJS += fontAtlas.o 
 OBJS += drawList.o
+OBJS += test.o
 OBJS += ../imgui/imgui.o
 
 UNAME_S := $(shell uname -s)
