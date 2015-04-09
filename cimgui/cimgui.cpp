@@ -1,7 +1,4 @@
 
-#include <stdarg.h>
-#include <stdio.h>
-
 #include "../imgui/imgui.h"
 #include "cimgui.h"
 
