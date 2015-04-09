@@ -16,7 +16,7 @@ ifeq ($(UNAME_S), Linux) #LINUX
 	OUTPUTNAME = cimgui.so
 	CXXFLAGS = -I../../
 	CXXFLAGS += -Wall
-	CXXFLAGS += -shared
+	CXXFLAGS += -shared -fPIC
 	CFLAGS = $(CXXFLAGS)
 endif
 
