@@ -1,0 +1,11 @@
+language: cpp
+
+os:
+  - linux
+
+compiler:
+  - gcc
+  - clang
+
+script: 
+  - make -C cimgui
