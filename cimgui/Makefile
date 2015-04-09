@@ -13,16 +13,20 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S), Linux) #LINUX
 	ECHO_MESSAGE = "Linux"
 
+	OUTPUTNAME = cimgui.so
 	CXXFLAGS = -I../../
 	CXXFLAGS += -Wall
+	CXXFLAGS += -shared
 	CFLAGS = $(CXXFLAGS)
 endif
 
 ifeq ($(UNAME_S), Darwin) #APPLE
 	ECHO_MESSAGE = "Mac OS X"
 
+	OUTPUTNAME = cimgui.dylib
 	CXXFLAGS = -I/usr/local/include
 	CXXFLAGS += -Wall
+	CXXFLAGS += -dynamiclib
 	CFLAGS = $(CXXFLAGS)
 endif
 
@@ -33,7 +37,7 @@ all:imgui_example
 	@echo Build complete for $(ECHO_MESSAGE)
 
 imgui_example:$(OBJS)
-	$(CXX) -dynamiclib -current_version 1.0 -o cimgui.dylib $(OBJS) $(CXXFLAGS)
+	$(CXX) -o $(OUTPUTNAME) $(OBJS) $(CXXFLAGS)
 
 clean:
 	rm $(OBJS)
