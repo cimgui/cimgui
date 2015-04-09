@@ -13,7 +13,7 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S), Linux) #LINUX
 	ECHO_MESSAGE = "Linux"
 
-	CXXFLAGS = -I../../ `pkg-config --cflags glfw3`
+	CXXFLAGS = -I../../
 	CXXFLAGS += -Wall
 	CFLAGS = $(CXXFLAGS)
 endif
