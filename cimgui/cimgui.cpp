@@ -69,7 +69,7 @@ CIMGUI_API bool ig_BeginChild(const char* str_id, const ImVec2 size, bool border
 	return ImGui::BeginChild(str_id, size, border, extra_flags);
 }
 
-CIMGUI_API bool ig_BeginChild2(ImGuiID id, const ImVec2 size, bool border, ImGuiWindowFlags extra_flags)
+CIMGUI_API bool ig_BeginChildEx(ImGuiID id, const ImVec2 size, bool border, ImGuiWindowFlags extra_flags)
 {
 	return ImGui::BeginChild(id, size, border, extra_flags);
 }
@@ -174,7 +174,7 @@ CIMGUI_API void ig_SetWindowFocus()
 	ImGui::SetWindowFocus();
 }
 
-CIMGUI_API void ig_SetWindowPos2(const char* name, const ImVec2 pos, ImGuiSetCond cond)
+CIMGUI_API void ig_SetWindowPosByName(const char* name, const ImVec2 pos, ImGuiSetCond cond)
 {
 	ImGui::SetWindowPos(name,pos,cond);
 }
@@ -460,17 +460,17 @@ CIMGUI_API float			ig_GetTextLineHeightWithSpacing()
 // ID scopes
 // If you are creating widgets in a loop you most likely want to push a unique identifier so ImGui can differentiate them
 // You can also use "##extra" within your widget name to distinguish them from each others (see 'Programmer Guide')
-CIMGUI_API void				ig_PushID(const char* str_id)
+CIMGUI_API void				ig_PushIdStr(const char* str_id)
 {
 	return ImGui::PushID(str_id);
 }
 
-CIMGUI_API void				ig_PushID2(const void* ptr_id)
+CIMGUI_API void				ig_PushIdPtr(const void* ptr_id)
 {
 	return ImGui::PushID(ptr_id);
 }
 
-CIMGUI_API void				ig_PushID3(const int int_id)
+CIMGUI_API void				ig_PushIdInt(const int int_id)
 {
 	return ImGui::PushID(int_id);
 }
@@ -606,12 +606,12 @@ CIMGUI_API bool				ig_CheckboxFlags(const char* label, unsigned int* flags, unsi
 	return ImGui::CheckboxFlags(label, flags, flags_value);
 }
 
-CIMGUI_API bool				ig_RadioButton(const char* label, bool active)
+CIMGUI_API bool				ig_RadioButtonBool(const char* label, bool active)
 {
 	return ImGui::RadioButton(label, active);
 }
 
-CIMGUI_API bool				ig_RadioButton2(const char* label, int* v, int v_button)
+CIMGUI_API bool				ig_RadioButton(const char* label, int* v, int v_button)
 {
 	return ImGui::RadioButton(label, v, v_button);
 }
@@ -792,7 +792,7 @@ CIMGUI_API bool				ig_TreeNode(const char* str_label_id)
 	return ImGui::TreeNode(str_label_id);
 }
 
-CIMGUI_API bool				ig_TreeNode2(const char* str_id, const char* fmt, ...)
+CIMGUI_API bool				ig_TreeNodeStr(const char* str_id, const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
@@ -802,7 +802,7 @@ CIMGUI_API bool				ig_TreeNode2(const char* str_id, const char* fmt, ...)
 	return res;
 }
 
-CIMGUI_API bool				ig_TreeNode3(const void* ptr_id, const char* fmt, ...)
+CIMGUI_API bool				ig_TreeNodePtr(const void* ptr_id, const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
@@ -812,22 +812,22 @@ CIMGUI_API bool				ig_TreeNode3(const void* ptr_id, const char* fmt, ...)
 	return res;
 }
 
-CIMGUI_API bool				ig_TreeNodeV(const char* str_id, const char* fmt, va_list args)
+CIMGUI_API bool				ig_TreeNodeStrV(const char* str_id, const char* fmt, va_list args)
 {
 	return ImGui::TreeNodeV(str_id,fmt,args);
 }
 
-CIMGUI_API bool				ig_TreeNodeV2(const void* ptr_id, const char* fmt, va_list args)
+CIMGUI_API bool				ig_TreeNodePtrV(const void* ptr_id, const char* fmt, va_list args)
 {
 	return ImGui::TreeNodeV(ptr_id, fmt, args);
 }
 
-CIMGUI_API void				ig_TreePush(const char* str_id)
+CIMGUI_API void				ig_TreePushStr(const char* str_id)
 {
 	return ImGui::TreePush(str_id);
 }
 
-CIMGUI_API void				ig_TreePush2(const void* ptr_id)
+CIMGUI_API void				ig_TreePushPtr(const void* ptr_id)
 {
 	return ImGui::TreePush(ptr_id);
 }
@@ -848,7 +848,7 @@ CIMGUI_API bool				ig_Selectable(const char* label, bool selected, const ImVec2 
 	return ImGui::Selectable(label, selected, size);
 }
 
-CIMGUI_API bool				ig_Selectable2(const char* label, bool* p_selected, const ImVec2 size)
+CIMGUI_API bool				ig_SelectableEx(const char* label, bool* p_selected, const ImVec2 size)
 {
 	return ImGui::Selectable(label,p_selected,size);
 }
@@ -879,22 +879,22 @@ CIMGUI_API void				ig_ListBoxFooter()
 }
 
 // Widgets: Value() Helpers. Output single value in "name: value" format (tip: freely declare your own within the ImGui namespace!)
-CIMGUI_API void				ig_Value(const char* prefix, bool b)
+CIMGUI_API void				ig_ValueBool(const char* prefix, bool b)
 {
 	ImGui::Value(prefix, b);
 }
 
-CIMGUI_API void				ig_Value2(const char* prefix, int v)
+CIMGUI_API void				ig_ValueInt(const char* prefix, int v)
 {
 	ImGui::Value(prefix, v);
 }
 
-CIMGUI_API void				ig_Value3(const char* prefix, unsigned int v)
+CIMGUI_API void				ig_ValueUInt(const char* prefix, unsigned int v)
 {
 	ImGui::Value(prefix, v);
 }
 
-CIMGUI_API void				ig_Value4(const char* prefix, float v, const char* float_format)
+CIMGUI_API void				ig_ValueFloat(const char* prefix, float v, const char* float_format)
 {
 	ImGui::Value(prefix,v,float_format);
 }

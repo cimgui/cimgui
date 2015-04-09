@@ -26,7 +26,7 @@ ifeq ($(UNAME_S), Darwin) #APPLE
 	OUTPUTNAME = cimgui.dylib
 	CXXFLAGS = -I/usr/local/include
 	CXXFLAGS += -Wall
-	CXXFLAGS += -dynamiclib
+	LINKFLAGS = -dynamiclib
 	CFLAGS = $(CXXFLAGS)
 endif
 
@@ -37,7 +37,7 @@ all:imgui_example
 	@echo Build complete for $(ECHO_MESSAGE)
 
 imgui_example:$(OBJS)
-	$(CXX) -o $(OUTPUTNAME) $(OBJS) $(CXXFLAGS)
+	$(CXX) -o $(OUTPUTNAME) $(OBJS) $(CXXFLAGS) $(LINKFLAGS)
 
 clean:
 	rm $(OBJS)

@@ -36,7 +36,7 @@ CIMGUI_API bool				ig_Begin(const char* name, bool* p_opened, ImGuiWindowFlags f
 CIMGUI_API bool				ig_Begin2(const char* name, bool* p_opened, const struct ImVec2 size_on_first_use, float bg_alpha, ImGuiWindowFlags flags);
 CIMGUI_API void				ig_End();
 CIMGUI_API bool				ig_BeginChild(const char* str_id, const struct ImVec2 size, bool border, ImGuiWindowFlags extra_flags);
-CIMGUI_API bool				ig_BeginChild2(ImGuiID id, const struct ImVec2 size, bool border, ImGuiWindowFlags extra_flags);
+CIMGUI_API bool				ig_BeginChildEx(ImGuiID id, const struct ImVec2 size, bool border, ImGuiWindowFlags extra_flags);
 CIMGUI_API void				ig_EndChild();
 CIMGUI_API void				ig_GetContentRegionMax(struct ImVec2* out);
 CIMGUI_API void				ig_GetWindowContentRegionMin(struct ImVec2* out);
@@ -58,7 +58,7 @@ CIMGUI_API void				ig_SetWindowPos(const struct ImVec2 pos, ImGuiSetCond cond);
 CIMGUI_API void				ig_SetWindowSize(const struct ImVec2 size, ImGuiSetCond cond);
 CIMGUI_API void				ig_SetWindowCollapsed(bool collapsed, ImGuiSetCond cond);
 CIMGUI_API void				ig_SetWindowFocus();
-CIMGUI_API void				ig_SetWindowPos2(const char* name, const struct ImVec2 pos, ImGuiSetCond cond);
+CIMGUI_API void				ig_SetWindowPosByName(const char* name, const struct ImVec2 pos, ImGuiSetCond cond);
 CIMGUI_API void				ig_SetWindowSize2(const char* name, const struct ImVec2 size, ImGuiSetCond cond);
 CIMGUI_API void				ig_SetWindowCollapsed2(const char* name, bool collapsed, ImGuiSetCond cond);
 CIMGUI_API void				ig_SetWindowFocus2(const char* name);
@@ -129,8 +129,8 @@ CIMGUI_API float			ig_GetTextLineHeightWithSpacing();
 // If you are creating widgets in a loop you most likely want to push a unique identifier so ImGui can differentiate them
 // You can also use "##extra" within your widget name to distinguish them from each others (see 'Programmer Guide')
 CIMGUI_API void				ig_PushID(const char* str_id);
-CIMGUI_API void				ig_PushID2(const void* ptr_id);
-CIMGUI_API void				ig_PushID3(const int int_id);
+CIMGUI_API void				ig_PushIdPtr(const void* ptr_id);
+CIMGUI_API void				ig_PushIdInt(const int int_id);
 CIMGUI_API void				ig_PopID();
 CIMGUI_API ImGuiID			ig_GetID(const char* str_id);
 CIMGUI_API ImGuiID			ig_GetID2(const void* ptr_id);
@@ -156,8 +156,8 @@ CIMGUI_API bool				ig_ImageButton(ImTextureID user_texture_id, const struct ImVe
 CIMGUI_API bool				ig_CollapsingHeader(const char* label, const char* str_id, bool display_frame, bool default_open);
 CIMGUI_API bool				ig_Checkbox(const char* label, bool* v);
 CIMGUI_API bool				ig_CheckboxFlags(const char* label, unsigned int* flags, unsigned int flags_value);
-CIMGUI_API bool				ig_RadioButton(const char* label, bool active);
-CIMGUI_API bool				ig_RadioButton2(const char* label, int* v, int v_button);
+CIMGUI_API bool				ig_RadioButtonBool(const char* label, bool active);
+CIMGUI_API bool				ig_RadioButton(const char* label, int* v, int v_button);
 CIMGUI_API bool				ig_Combo(const char* label, int* current_item, const char** items, int items_count, int height_in_items);
 CIMGUI_API bool				ig_Combo2(const char* label, int* current_item, const char* items_separated_by_zeros, int height_in_items);
 CIMGUI_API bool				ig_Combo3(const char* label, int* current_item, bool(*items_getter)(void* data, int idx, const char** out_text), void* data, int items_count, int height_in_items);
@@ -201,18 +201,18 @@ CIMGUI_API bool				ig_InputInt4(const char* label, int v[4]);
 
 // Widgets: Trees
 CIMGUI_API bool				ig_TreeNode(const char* str_label_id);
-CIMGUI_API bool				ig_TreeNode2(const char* str_id, const char* fmt, ...);
-CIMGUI_API bool				ig_TreeNode3(const void* ptr_id, const char* fmt, ...);
-CIMGUI_API bool				ig_TreeNodeV(const char* str_id, const char* fmt, va_list args);
-CIMGUI_API bool				ig_TreeNodeV2(const void* ptr_id, const char* fmt, va_list args);
-CIMGUI_API void				ig_TreePush(const char* str_id);
-CIMGUI_API void				ig_TreePush2(const void* ptr_id);
+CIMGUI_API bool				ig_TreeNodeStr(const char* str_id, const char* fmt, ...);
+CIMGUI_API bool				ig_TreeNodePtr(const void* ptr_id, const char* fmt, ...);
+CIMGUI_API bool				ig_TreeNodeStrV(const char* str_id, const char* fmt, va_list args);
+CIMGUI_API bool				ig_TreeNodePtrV(const void* ptr_id, const char* fmt, va_list args);
+CIMGUI_API void				ig_TreePushStr(const char* str_id);
+CIMGUI_API void				ig_TreePushPtr(const void* ptr_id);
 CIMGUI_API void				ig_TreePop();
 CIMGUI_API void				ig_SetNextTreeNodeOpened(bool opened, ImGuiSetCond cond);
 
 // Widgets: Selectable / Lists
 CIMGUI_API bool				ig_Selectable(const char* label, bool selected, const struct ImVec2 size);
-CIMGUI_API bool				ig_Selectable2(const char* label, bool* p_selected, const struct ImVec2 size);
+CIMGUI_API bool				ig_SelectableEx(const char* label, bool* p_selected, const struct ImVec2 size);
 CIMGUI_API bool				ig_ListBox(const char* label, int* current_item, const char** items, int items_count, int height_in_items);
 CIMGUI_API bool				ig_ListBox2(const char* label, int* current_item, bool(*items_getter)(void* data, int idx, const char** out_text), void* data, int items_count, int height_in_items);
 CIMGUI_API bool				ig_ListBoxHeader(const char* label, const struct ImVec2 size);
@@ -220,10 +220,10 @@ CIMGUI_API bool				ig_ListBoxHeader2(const char* label, int items_count, int hei
 CIMGUI_API void				ig_ListBoxFooter();
 
 // Widgets: Value() Helpers. Output single value in "name: value" format (tip: freely declare your own within the ImGui namespace!)
-CIMGUI_API void				ig_Value(const char* prefix, bool b);
-CIMGUI_API void				ig_Value2(const char* prefix, int v);
-CIMGUI_API void				ig_Value3(const char* prefix, unsigned int v);
-CIMGUI_API void				ig_Value4(const char* prefix, float v, const char* float_format);
+CIMGUI_API void				ig_ValueBool(const char* prefix, bool b);
+CIMGUI_API void				ig_ValueInt(const char* prefix, int v);
+CIMGUI_API void				ig_ValueUInt(const char* prefix, unsigned int v);
+CIMGUI_API void				ig_ValueFloat(const char* prefix, float v, const char* float_format);
 CIMGUI_API void				ig_Color(const char* prefix, const struct ImVec4 v);
 CIMGUI_API void				ig_Color2(const char* prefix, unsigned int v);
 
