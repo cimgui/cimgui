@@ -1,9 +1,6 @@
 
-#include <stdbool.h>
-#include <stdarg.h>
-#include <stdio.h>
-
 #if defined _WIN32 || defined __CYGWIN__
+#include <stdio.h>
 #define API __declspec(dllexport)
 #define snprintf sprintf_s
 #else
@@ -13,6 +10,8 @@
 #if defined __cplusplus
 #define EXTERN extern "C"
 #else
+#include <stdarg.h>
+#include <stdbool.h>
 #define EXTERN extern
 #endif
 #define CIMGUI_API EXTERN API
