@@ -278,3 +278,12 @@ CIMGUI_API const char*		ig_GetVersion();
 CIMGUI_API void*			ig_GetInternalState();
 CIMGUI_API size_t			ig_GetInternalStateSize();
 CIMGUI_API void				ig_SetInternalState(void* state, bool construct);
+
+CIMGUI_API void				ImFontAtlas_GetTexDataAsRGBA32(ImFontAtlas* atlas, unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel);
+CIMGUI_API void				ImFontAtlas_GetTexDataAsAlpha8(ImFontAtlas* atlas, unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel);
+CIMGUI_API void				ImFontAtlas_SetTexID(ImFontAtlas* atlas, void* tex);
+CIMGUI_API ImFont*			ImFontAtlas_AddFontDefault(ImFontAtlas* atlas);
+CIMGUI_API ImFont*			ImFontAtlas_AddFontFromFileTTF(ImFontAtlas* atlas, const char* filename, float size_pixels, const ImWchar* glyph_ranges, int font_no);
+CIMGUI_API ImFont*			ImFontAtlas_AddFontFromMemoryTTF(ImFontAtlas* atlas, void* in_ttf_data, size_t in_ttf_data_size, float size_pixels, const ImWchar* glyph_ranges, int font_no);
+CIMGUI_API void				ImFontAtlas_ClearTexData(ImFontAtlas* atlas);
+CIMGUI_API void				ImFontAtlas_Clear(ImFontAtlas* atlas);
