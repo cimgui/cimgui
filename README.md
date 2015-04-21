@@ -6,7 +6,9 @@ This is a thin c-api wrapper for the excellent C++ intermediate gui [imgui](http
 Most of the functions have wrapper counterparts now, missing stuff is added on a as-needed basis (PR welcome).
 This library is intended as a intermediate layer to be able to use imgui from other languages that can interface with C (like D - see [D-binding](https://github.com/Extrawurst/DerelictImgui))
 
-Note: currently this wrapper is based on a WIP version of imgui 1.38
+Notes:
+* currently this wrapper is based on version [1.38 of imgui](https://github.com/ocornut/imgui/releases/tag/v1.38)
+* does not compile with pure C compiler yet (for writing bindings in languages that are able to use C-ABI it is enough though, see D-bindings)
 
 # usage
 
