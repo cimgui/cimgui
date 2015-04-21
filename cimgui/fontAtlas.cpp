@@ -27,9 +27,14 @@ CIMGUI_API ImFont* ImFontAtlas_AddFontFromFileTTF(ImFontAtlas* atlas,const char*
 	return atlas->AddFontFromFileTTF(filename, size_pixels, glyph_ranges, font_no);
 }
 
-CIMGUI_API ImFont* ImFontAtlas_AddFontFromMemoryTTF(ImFontAtlas* atlas, void* in_ttf_data, size_t in_ttf_data_size, float size_pixels, const ImWchar* glyph_ranges, int font_no)
+CIMGUI_API ImFont* ImFontAtlas_AddFontFromMemoryTTF(ImFontAtlas* atlas, void* in_ttf_data, unsigned int in_ttf_data_size, float size_pixels, const ImWchar* glyph_ranges, int font_no)
 {
 	return atlas->AddFontFromMemoryTTF(in_ttf_data, in_ttf_data_size, size_pixels, glyph_ranges, font_no);
+}
+
+CIMGUI_API ImFont* ImFontAtlas_AddFontFromMemoryCompressedTTF(ImFontAtlas* atlas, const void* in_compressed_ttf_data, unsigned int in_compressed_ttf_data_size, float size_pixels, const ImWchar* glyph_ranges, int font_no)
+{
+	return atlas->AddFontFromMemoryCompressedTTF(in_compressed_ttf_data, in_compressed_ttf_data_size, size_pixels, glyph_ranges, font_no);	
 }
 
 CIMGUI_API void ImFontAtlas_ClearTexData(ImFontAtlas* atlas)

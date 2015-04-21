@@ -128,12 +128,14 @@ CIMGUI_API float			ig_GetTextLineHeightWithSpacing();
 // ID scopes
 // If you are creating widgets in a loop you most likely want to push a unique identifier so ImGui can differentiate them
 // You can also use "##extra" within your widget name to distinguish them from each others (see 'Programmer Guide')
-CIMGUI_API void				ig_PushID(const char* str_id);
-CIMGUI_API void				ig_PushIdPtr(const void* ptr_id);
-CIMGUI_API void				ig_PushIdInt(const int int_id);
-CIMGUI_API void				ig_PopID();
-CIMGUI_API ImGuiID			ig_GetID(const char* str_id);
-CIMGUI_API ImGuiID			ig_GetID2(const void* ptr_id);
+CIMGUI_API void             ig_PushIdStr(const char* str_id);
+CIMGUI_API void             ig_PushIdStrRange(const char* str_begin, const char* str_end);
+CIMGUI_API void             ig_PushIdPtr(const void* ptr_id);
+CIMGUI_API void             ig_PushIdInt(const int int_id);
+CIMGUI_API void             ig_PopId();
+CIMGUI_API ImGuiID          ig_GetIdStr(const char* str_id);
+CIMGUI_API ImGuiID          ig_GetIdStrRange(const char* str_begin,const char* str_end);
+CIMGUI_API ImGuiID          ig_GetIdPtr(const void* ptr_id);
 
 // Widgets
 CIMGUI_API void				ig_Text(const char* fmt, ...);
@@ -184,9 +186,15 @@ CIMGUI_API bool				ig_VSliderFloat(const char* label, const struct ImVec2 size, 
 CIMGUI_API bool				ig_VSliderInt(const char* label, const struct ImVec2 size, int* v, int v_min, int v_max, const char* display_format);
 
 // Widgets: Drags (tip: ctrl+click on a drag box to input text)
-// ImGui 1.38+ work-in-progress, may change name or API.
-CIMGUI_API bool				ig_DragFloat(const char* label, float* v, float v_step, float v_min, float v_max, const char* display_format);
-CIMGUI_API bool				ig_DragInt(const char* label, int* v, int v_step, int v_min, int v_max, const char* display_format);
+CIMGUI_API bool             ig_DragFloat(const char* label, float* v, float v_speed, float v_min, float v_max, const char* display_format, float power);     // If v_max >= v_max we have no bound
+CIMGUI_API bool             ig_DragFloat2(const char* label, float v[2], float v_speed, float v_min, float v_max, const char* display_format, float power);
+CIMGUI_API bool             ig_DragFloat3(const char* label, float v[3], float v_speed, float v_min, float v_max, const char* display_format, float power);
+CIMGUI_API bool             ig_DragFloat4(const char* label, float v[4], float v_speed, float v_min, float v_max, const char* display_format, float power);
+CIMGUI_API bool             ig_DragInt(const char* label, int* v, float v_speed, int v_min, int v_max, const char* display_format);                                       // If v_max >= v_max we have no bound
+CIMGUI_API bool             ig_DragInt2(const char* label, int v[2], float v_speed, int v_min, int v_max, const char* display_format);
+CIMGUI_API bool             ig_DragInt3(const char* label, int v[3], float v_speed, int v_min, int v_max, const char* display_format);
+CIMGUI_API bool             ig_DragInt4(const char* label, int v[4], float v_speed, int v_min, int v_max, const char* display_format);
+
 
 // Widgets: Input
 CIMGUI_API bool				ig_InputText(const char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags, ImGuiTextEditCallback callback, void* user_data);
@@ -240,13 +248,14 @@ CIMGUI_API bool				ig_IsItemHovered();
 CIMGUI_API bool				ig_IsItemHoveredRect();
 CIMGUI_API bool				ig_IsItemActive();
 CIMGUI_API bool				ig_IsAnyItemActive();
+CIMGUI_API bool             ig_IsItemVisible();
 CIMGUI_API void				ig_GetItemRectMin(struct ImVec2* pOut);
 CIMGUI_API void				ig_GetItemRectMax(struct ImVec2* pOut);
 CIMGUI_API void				ig_GetItemRectSize(struct ImVec2* pOut);
 CIMGUI_API bool				ig_IsWindowFocused();
 CIMGUI_API bool				ig_IsRootWindowFocused();
 CIMGUI_API bool				ig_IsRootWindowOrAnyChildFocused();
-CIMGUI_API bool				ig_IsClipped(const struct ImVec2 item_size);
+CIMGUI_API bool				ig_IsRectClipped(const struct ImVec2 item_size);
 CIMGUI_API bool				ig_IsKeyPressed(int key_index, bool repeat);
 CIMGUI_API bool				ig_IsMouseClicked(int button, bool repeat);
 CIMGUI_API bool				ig_IsMouseDoubleClicked(int button);
@@ -257,6 +266,7 @@ CIMGUI_API bool				ig_IsMouseDragging(int button, float lock_threshold);
 CIMGUI_API bool				ig_IsPosHoveringAnyWindow(const struct ImVec2 pos);
 CIMGUI_API void				ig_GetMousePos(struct ImVec2* pOut);
 CIMGUI_API void				ig_GetMouseDragDelta(struct ImVec2* pOut, int button, float lock_threshold);
+CIMGUI_API void             ig_ResetMouseDragDelta(int button);
 CIMGUI_API ImGuiMouseCursor ig_GetMouseCursor();
 CIMGUI_API void				ig_SetMouseCursor(ImGuiMouseCursor type);
 CIMGUI_API float			ig_GetTime();
@@ -284,6 +294,7 @@ CIMGUI_API void				ImFontAtlas_GetTexDataAsAlpha8(ImFontAtlas* atlas, unsigned c
 CIMGUI_API void				ImFontAtlas_SetTexID(ImFontAtlas* atlas, void* tex);
 CIMGUI_API ImFont*			ImFontAtlas_AddFontDefault(ImFontAtlas* atlas);
 CIMGUI_API ImFont*			ImFontAtlas_AddFontFromFileTTF(ImFontAtlas* atlas, const char* filename, float size_pixels, const ImWchar* glyph_ranges, int font_no);
-CIMGUI_API ImFont*			ImFontAtlas_AddFontFromMemoryTTF(ImFontAtlas* atlas, void* in_ttf_data, size_t in_ttf_data_size, float size_pixels, const ImWchar* glyph_ranges, int font_no);
+CIMGUI_API ImFont*			ImFontAtlas_AddFontFromMemoryTTF(ImFontAtlas* atlas, void* in_ttf_data, unsigned int in_ttf_data_size, float size_pixels, const ImWchar* glyph_ranges, int font_no);
+CIMGUI_API ImFont*          ImFontAtlas_AddFontFromMemoryCompressedTTF(ImFontAtlas* atlas, const void* in_compressed_ttf_data, unsigned int in_compressed_ttf_data_size, float size_pixels, const ImWchar* glyph_ranges = NULL, int font_no = 0);
 CIMGUI_API void				ImFontAtlas_ClearTexData(ImFontAtlas* atlas);
 CIMGUI_API void				ImFontAtlas_Clear(ImFontAtlas* atlas);

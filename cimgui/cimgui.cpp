@@ -465,6 +465,12 @@ CIMGUI_API void				ig_PushIdStr(const char* str_id)
 	return ImGui::PushID(str_id);
 }
 
+CIMGUI_API void				ig_PushIdStrRange(const char* str_begin, const char* str_end)
+{
+	return ImGui::PushID(str_begin, str_end);
+}
+
+
 CIMGUI_API void				ig_PushIdPtr(const void* ptr_id)
 {
 	return ImGui::PushID(ptr_id);
@@ -475,17 +481,22 @@ CIMGUI_API void				ig_PushIdInt(const int int_id)
 	return ImGui::PushID(int_id);
 }
 
-CIMGUI_API void				ig_PopID()
+CIMGUI_API void				ig_PopId()
 {
 	return ImGui::PopID();
 }
 
-CIMGUI_API ImGuiID			ig_GetID(const char* str_id)
+CIMGUI_API ImGuiID			ig_GetIdStr(const char* str_id)
 {
 	return ImGui::GetID(str_id);
 }
 
-CIMGUI_API ImGuiID			ig_GetID2(const void* ptr_id)
+CIMGUI_API ImGuiID			ig_GetIdStrRange(const char* str_begin, const char* str_end)
+{
+	return ImGui::GetID(str_begin, str_end);
+}
+
+CIMGUI_API ImGuiID			ig_GetIdPtr(const void* ptr_id)
 {
 	return ImGui::GetID(ptr_id);
 }
@@ -728,15 +739,44 @@ CIMGUI_API bool				ig_VSliderInt(const char* label, const ImVec2 size, int* v, i
 }
 
 // Widgets: Drags (tip: ctrl+click on a drag box to input text)
-// ImGui 1.38+ work-in-progress, may change name or API.
-CIMGUI_API bool				ig_DragFloat(const char* label, float* v, float v_step, float v_min, float v_max, const char* display_format)
+CIMGUI_API bool          	ig_DragFloat(const char* label, float* v, float v_speed, float v_min, float v_max, const char* display_format, float power)
 {
-	return ImGui::DragFloat(label, v, v_step, v_min, v_max, display_format);
+	return ImGui::DragFloat(label, v, v_speed, v_min, v_max, display_format, power);
 }
 
-CIMGUI_API bool				ig_DragInt(const char* label, int* v, int v_step, int v_min, int v_max, const char* display_format)
+CIMGUI_API bool          	ig_DragFloat2(const char* label, float v[2], float v_speed, float v_min, float v_max, const char* display_format, float power)
 {
-	return ImGui::DragInt(label, v, v_step, v_min, v_max, display_format);
+	return ImGui::DragFloat2(label, v, v_speed, v_min, v_max, display_format, power);
+}
+
+CIMGUI_API bool          	ig_DragFloat3(const char* label, float v[3], float v_speed, float v_min, float v_max, const char* display_format, float power)
+{
+	return ImGui::DragFloat3(label, v, v_speed, v_min, v_max, display_format, power);
+}
+
+CIMGUI_API bool          	ig_DragFloat4(const char* label, float v[4], float v_speed, float v_min, float v_max, const char* display_format, float power)
+{
+	return ImGui::DragFloat4(label, v, v_speed, v_min, v_max, display_format, power);
+}
+
+CIMGUI_API bool          	ig_DragInt(const char* label, int* v, float v_speed, int v_min, int v_max, const char* display_format)
+{
+	return ImGui::DragInt(label, v, v_speed, v_min, v_max, display_format);
+}
+
+CIMGUI_API bool          	ig_DragInt2(const char* label, int v[2], float v_speed, int v_min, int v_max, const char* display_format)
+{
+	return ImGui::DragInt2(label, v, v_speed, v_min, v_max, display_format);
+}
+
+CIMGUI_API bool          	ig_DragInt3(const char* label, int v[3], float v_speed, int v_min, int v_max, const char* display_format)
+{
+	return ImGui::DragInt3(label, v, v_speed, v_min, v_max, display_format);
+}
+
+CIMGUI_API bool          	ig_DragInt4(const char* label, int v[4], float v_speed, int v_min, int v_max, const char* display_format)
+{
+	return ImGui::DragInt4(label, v, v_speed, v_min, v_max, display_format);
 }
 
 // Widgets: Input
@@ -967,6 +1007,11 @@ CIMGUI_API bool				ig_IsAnyItemActive()
 	return ImGui::IsAnyItemActive();
 }
 
+CIMGUI_API bool             ig_IsItemVisible()
+{
+	return ImGui::IsItemVisible();	
+}
+
 CIMGUI_API void ig_GetItemRectMin(ImVec2* pOut)
 {
 	*pOut = ImGui::GetItemRectMin();
@@ -997,9 +1042,9 @@ CIMGUI_API bool				ig_IsRootWindowOrAnyChildFocused()
 	return ImGui::IsRootWindowOrAnyChildFocused();
 }
 
-CIMGUI_API bool				ig_IsClipped(const ImVec2 item_size)
+CIMGUI_API bool				ig_IsRectClipped(const ImVec2 item_size)
 {
-	return ImGui::IsClipped(item_size);
+	return ImGui::IsRectClipped(item_size);
 }
 
 CIMGUI_API bool				ig_IsKeyPressed(int key_index, bool repeat)
@@ -1049,6 +1094,11 @@ CIMGUI_API void ig_GetMousePos(ImVec2* pOut)
 CIMGUI_API void ig_GetMouseDragDelta(ImVec2* pOut, int button, float lock_threshold)
 {
 	*pOut = ImGui::GetMouseDragDelta(button,lock_threshold);
+}
+
+CIMGUI_API void ig_ResetMouseDragDelta(int button)
+{
+	ImGui::ResetMouseDragDelta(button);
 }
 
 CIMGUI_API ImGuiMouseCursor ig_GetMouseCursor()
