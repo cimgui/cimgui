@@ -321,14 +321,24 @@ CIMGUI_API void				ig_EndTooltip()
 }
 
 // Popup
-CIMGUI_API void				ig_BeginPopup(bool* p_opened)
+CIMGUI_API void				ig_OpenPopup(const char* str_id)
 {
-	return ImGui::BeginPopup(p_opened);
+	return ImGui::OpenPopup(str_id);
+}
+
+CIMGUI_API bool				ig_BeginPopup(const char* str_id)
+{
+	return ImGui::BeginPopup(str_id);
 }
 
 CIMGUI_API void				ig_EndPopup()
 {
 	return ImGui::EndPopup();
+}
+
+CIMGUI_API void				ig_CloseCurrentPopup()
+{
+	return ImGui::CloseCurrentPopup();
 }
 
 // Layout
@@ -355,6 +365,11 @@ CIMGUI_API void				ig_SameLine(int column_x, int spacing_w)
 CIMGUI_API void				ig_Spacing()
 {
 	return ImGui::Spacing();
+}
+
+CIMGUI_API void             ig_Dummy(CONST ImVec2* size)
+{
+	return ImGui::Dummy(*size);
 }
 
 CIMGUI_API void				ig_Indent()
@@ -790,19 +805,19 @@ CIMGUI_API bool				ig_InputFloat(CONST char* label, float* v, float step, float 
 	return ImGui::InputFloat(label, v, step, step_fast, decimal_precision, extra_flags);
 }
 
-CIMGUI_API bool				ig_InputFloat2(CONST char* label, float v[2], int decimal_precision)
+CIMGUI_API bool				ig_InputFloat2(CONST char* label, float v[2], int decimal_precision, ImGuiInputTextFlags extra_flags)
 {
-	return ImGui::InputFloat2(label, v, decimal_precision);
+	return ImGui::InputFloat2(label, v, decimal_precision, extra_flags);
 }
 
-CIMGUI_API bool				ig_InputFloat3(CONST char* label, float v[3], int decimal_precision)
+CIMGUI_API bool				ig_InputFloat3(CONST char* label, float v[3], int decimal_precision, ImGuiInputTextFlags extra_flags)
 {
-	return ImGui::InputFloat3(label, v, decimal_precision);
+	return ImGui::InputFloat3(label, v, decimal_precision, extra_flags);
 }
 
-CIMGUI_API bool				ig_InputFloat4(CONST char* label, float v[4], int decimal_precision)
+CIMGUI_API bool				ig_InputFloat4(CONST char* label, float v[4], int decimal_precision, ImGuiInputTextFlags extra_flags)
 {
-	return ImGui::InputFloat4(label, v, decimal_precision);
+	return ImGui::InputFloat4(label, v, decimal_precision, extra_flags);
 }
 
 CIMGUI_API bool				ig_InputInt(CONST char* label, int* v, int step, int step_fast, ImGuiInputTextFlags extra_flags)
@@ -810,19 +825,19 @@ CIMGUI_API bool				ig_InputInt(CONST char* label, int* v, int step, int step_fas
 	return ImGui::InputInt(label, v, step, step_fast, extra_flags);
 }
 
-CIMGUI_API bool				ig_InputInt2(CONST char* label, int v[2])
+CIMGUI_API bool				ig_InputInt2(CONST char* label, int v[2], ImGuiInputTextFlags extra_flags)
 {
-	return ImGui::InputInt2(label, v);
+	return ImGui::InputInt2(label, v, extra_flags);
 }
 
-CIMGUI_API bool				ig_InputInt3(CONST char* label, int v[3])
+CIMGUI_API bool				ig_InputInt3(CONST char* label, int v[3], ImGuiInputTextFlags extra_flags)
 {
-	return ImGui::InputInt3(label, v);
+	return ImGui::InputInt3(label, v, extra_flags);
 }
 
-CIMGUI_API bool				ig_InputInt4(CONST char* label, int v[4])
+CIMGUI_API bool				ig_InputInt4(CONST char* label, int v[4], ImGuiInputTextFlags extra_flags)
 {
-	return ImGui::InputInt4(label, v);
+	return ImGui::InputInt4(label, v, extra_flags);
 }
 
 
@@ -915,7 +930,47 @@ CIMGUI_API bool				ig_ListBoxHeader2(CONST char* label, int items_count, int hei
 
 CIMGUI_API void				ig_ListBoxFooter()
 {
-	ImGui::ListBoxFooter();
+	return ImGui::ListBoxFooter();
+}
+
+CIMGUI_API bool             ig_BeginMainMenuBar()
+{
+	return ImGui::BeginMainMenuBar();
+}
+
+CIMGUI_API void             ig_EndMainMenuBar()
+{
+	return ImGui::EndMainMenuBar();
+}
+
+CIMGUI_API bool             ig_BeginMenuBar()
+{
+	return ImGui::BeginMenuBar();
+}
+
+CIMGUI_API void             ig_EndMenuBar()
+{
+	return ImGui::EndMenuBar();
+}
+
+CIMGUI_API bool             ig_BeginMenu(CONST char* label, bool enabled)
+{
+	return ImGui::BeginMenu(label, enabled);
+}
+
+CIMGUI_API void             ig_EndMenu()
+{
+	return ImGui::EndMenu();
+}
+
+CIMGUI_API bool             ig_MenuItem(CONST char* label, CONST char* shortcut, bool selected, bool enabled)
+{
+	return ImGui::MenuItem(label, shortcut, selected, enabled);
+}
+
+CIMGUI_API bool             ig_MenuItemPtr(CONST char* label, CONST char* shortcut, bool* p_selected, bool enabled)
+{
+	return ImGui::MenuItem(label, shortcut, p_selected, enabled);
 }
 
 // Widgets: Value() Helpers. Output single value in "name: value" format (tip: freely declare your own within the ImGui namespace!)
@@ -1047,9 +1102,19 @@ CIMGUI_API bool				ig_IsRectClipped(CONST ImVec2 item_size)
 	return ImGui::IsRectClipped(item_size);
 }
 
+CIMGUI_API bool             ig_IsKeyDown(int key_index)
+{
+	return ImGui::IsKeyDown(key_index);
+}
+
 CIMGUI_API bool				ig_IsKeyPressed(int key_index, bool repeat)
 {
 	return ImGui::IsKeyPressed(key_index,repeat);
+}
+
+CIMGUI_API bool             ig_IsMouseDown(int button)
+{
+	return ImGui::IsMouseDown(button);
 }
 
 CIMGUI_API bool				ig_IsMouseClicked(int button, bool repeat)

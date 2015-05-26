@@ -97,8 +97,10 @@ CIMGUI_API void             ig_BeginTooltip();
 CIMGUI_API void             ig_EndTooltip();
 
 // Popup
-CIMGUI_API void             ig_BeginPopup(bool* p_opened);
+CIMGUI_API void             ig_OpenPopup(CONST char* str_id);
+CIMGUI_API bool             ig_BeginPopup(CONST char* str_id);
 CIMGUI_API void             ig_EndPopup();
+CIMGUI_API void             ig_CloseCurrentPopup();
 
 // Layout
 CIMGUI_API void             ig_BeginGroup();
@@ -106,6 +108,7 @@ CIMGUI_API void             ig_EndGroup();
 CIMGUI_API void             ig_Separator();
 CIMGUI_API void             ig_SameLine(int column_x, int spacing_w);
 CIMGUI_API void             ig_Spacing();
+CIMGUI_API void             ig_Dummy(CONST ImVec2* size);
 CIMGUI_API void             ig_Indent();
 CIMGUI_API void             ig_Unindent();
 CIMGUI_API void             ig_Columns(int count, CONST char* id, bool border);
@@ -201,13 +204,13 @@ CIMGUI_API bool             ig_DragInt4(CONST char* label, int v[4], float v_spe
 // Widgets: Input
 CIMGUI_API bool             ig_InputText(CONST char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags, ImGuiTextEditCallback callback, void* user_data);
 CIMGUI_API bool             ig_InputFloat(CONST char* label, float* v, float step, float step_fast, int decimal_precision, ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool             ig_InputFloat2(CONST char* label, float v[2], int decimal_precision);
-CIMGUI_API bool             ig_InputFloat3(CONST char* label, float v[3], int decimal_precision);
-CIMGUI_API bool             ig_InputFloat4(CONST char* label, float v[4], int decimal_precision);
+CIMGUI_API bool             ig_InputFloat2(CONST char* label, float v[2], int decimal_precision, ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool             ig_InputFloat3(CONST char* label, float v[3], int decimal_precision, ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool             ig_InputFloat4(CONST char* label, float v[4], int decimal_precision, ImGuiInputTextFlags extra_flags);
 CIMGUI_API bool             ig_InputInt(CONST char* label, int* v, int step, int step_fast, ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool             ig_InputInt2(CONST char* label, int v[2]);
-CIMGUI_API bool             ig_InputInt3(CONST char* label, int v[3]);
-CIMGUI_API bool             ig_InputInt4(CONST char* label, int v[4]);
+CIMGUI_API bool             ig_InputInt2(CONST char* label, int v[2], ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool             ig_InputInt3(CONST char* label, int v[3], ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool             ig_InputInt4(CONST char* label, int v[4], ImGuiInputTextFlags extra_flags);
 
 // Widgets: Trees
 CIMGUI_API bool             ig_TreeNode(CONST char* str_label_id);
@@ -228,6 +231,17 @@ CIMGUI_API bool             ig_ListBox2(CONST char* label, int* current_item, bo
 CIMGUI_API bool             ig_ListBoxHeader(CONST char* label, CONST struct ImVec2 size);
 CIMGUI_API bool             ig_ListBoxHeader2(CONST char* label, int items_count, int height_in_items);
 CIMGUI_API void             ig_ListBoxFooter();
+
+// Widgets: Menus
+CIMGUI_API bool             ig_BeginMainMenuBar();
+CIMGUI_API void             ig_EndMainMenuBar();
+CIMGUI_API bool             ig_BeginMenuBar();
+CIMGUI_API void             ig_EndMenuBar();
+CIMGUI_API bool             ig_BeginMenu(CONST char* label, bool enabled = true);
+CIMGUI_API void             ig_EndMenu();
+CIMGUI_API bool             ig_MenuItem(CONST char* label, CONST char* shortcut = NULL, bool selected = false, bool enabled = true);
+CIMGUI_API bool             ig_MenuItemPtr(CONST char* label, CONST char* shortcut, bool* p_selected, bool enabled = true);
+
 
 // Widgets: Value() Helpers. Output single value in "name: value" format (tip: freely declare your own within the ImGui namespace!)
 CIMGUI_API void             ig_ValueBool(CONST char* prefix, bool b);
@@ -258,7 +272,9 @@ CIMGUI_API bool             ig_IsWindowFocused();
 CIMGUI_API bool             ig_IsRootWindowFocused();
 CIMGUI_API bool             ig_IsRootWindowOrAnyChildFocused();
 CIMGUI_API bool             ig_IsRectClipped(CONST struct ImVec2 item_size);
+CIMGUI_API bool             ig_IsKeyDown(int key_index);
 CIMGUI_API bool             ig_IsKeyPressed(int key_index, bool repeat);
+CIMGUI_API bool             ig_IsMouseDown(int button);
 CIMGUI_API bool             ig_IsMouseClicked(int button, bool repeat);
 CIMGUI_API bool             ig_IsMouseDoubleClicked(int button);
 CIMGUI_API bool             ig_IsMouseHoveringWindow();
@@ -296,7 +312,7 @@ CIMGUI_API void             ImFontAtlas_GetTexDataAsAlpha8(ImFontAtlas* atlas, u
 CIMGUI_API void             ImFontAtlas_SetTexID(ImFontAtlas* atlas, void* tex);
 CIMGUI_API ImFont*          ImFontAtlas_AddFontDefault(ImFontAtlas* atlas);
 CIMGUI_API ImFont*          ImFontAtlas_AddFontFromFileTTF(ImFontAtlas* atlas, CONST char* filename, float size_pixels, CONST ImWchar* glyph_ranges, int font_no);
-CIMGUI_API ImFont*          ImFontAtlas_AddFontFromMemoryTTF(ImFontAtlas* atlas, void* in_ttf_data, unsigned int in_ttf_data_size, float size_pixels, CONST ImWchar* glyph_ranges, int font_no);
-CIMGUI_API ImFont*          ImFontAtlas_AddFontFromMemoryCompressedTTF(ImFontAtlas* atlas, CONST void* in_compressed_ttf_data, unsigned int in_compressed_ttf_data_size, float size_pixels, CONST ImWchar* glyph_ranges = NULL, int font_no = 0);
+CIMGUI_API ImFont*          ImFontAtlas_AddFontFromMemoryTTF(ImFontAtlas* atlas, void* ttf_data, int ttf_size, float size_pixels, CONST ImWchar* glyph_ranges, int font_no);
+CIMGUI_API ImFont*          ImFontAtlas_AddFontFromMemoryCompressedTTF(ImFontAtlas* atlas, CONST void* compressed_ttf_data, int compressed_ttf_size, float size_pixels, CONST ImWchar* glyph_ranges, int font_no);
 CIMGUI_API void             ImFontAtlas_ClearTexData(ImFontAtlas* atlas);
 CIMGUI_API void             ImFontAtlas_Clear(ImFontAtlas* atlas);
