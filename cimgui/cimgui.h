@@ -50,7 +50,7 @@ CIMGUI_API void             ig_SetWindowFontScale(float scale);
 CIMGUI_API void             ig_GetWindowPos(struct ImVec2* out);
 CIMGUI_API void             ig_GetWindowSize(struct ImVec2* out);
 CIMGUI_API float            ig_GetWindowWidth();
-CIMGUI_API bool             ig_GetWindowCollapsed();
+CIMGUI_API bool             ig_IsWindowCollapsed();
 
 CIMGUI_API void             ig_SetNextWindowPos(CONST struct ImVec2 pos, ImGuiSetCond cond);
 CIMGUI_API void             ig_SetNextWindowSize(CONST struct ImVec2 size, ImGuiSetCond cond);
@@ -89,6 +89,9 @@ CIMGUI_API void             ig_PushAllowKeyboardFocus(bool v);
 CIMGUI_API void             ig_PopAllowKeyboardFocus();
 CIMGUI_API void             ig_PushTextWrapPos(float wrap_pos_x);
 CIMGUI_API void             ig_PopTextWrapPos();
+CIMGUI_API void             ig_PushButtonRepeat(bool repeat);
+CIMGUI_API void             ig_PopButtonRepeat();
+
 
 // Tooltip
 CIMGUI_API void             ig_SetTooltip(CONST char* fmt, ...);
@@ -99,6 +102,9 @@ CIMGUI_API void             ig_EndTooltip();
 // Popup
 CIMGUI_API void             ig_OpenPopup(CONST char* str_id);
 CIMGUI_API bool             ig_BeginPopup(CONST char* str_id);
+CIMGUI_API bool             ig_BeginPopupContextItem(CONST char* str_id, int mouse_button = 1);
+CIMGUI_API bool             ig_BeginPopupContextWindow(bool also_over_items = true, CONST char* str_id = NULL, int mouse_button = 1);
+CIMGUI_API bool             ig_BeginPopupContextVoid(CONST char* str_id = NULL, int mouse_button = 1);
 CIMGUI_API void             ig_EndPopup();
 CIMGUI_API void             ig_CloseCurrentPopup();
 
@@ -129,6 +135,7 @@ CIMGUI_API void             ig_SetCursorScreenPos(CONST struct ImVec2 pos);
 CIMGUI_API void             ig_AlignFirstTextHeightToWidgets();
 CIMGUI_API float            ig_GetTextLineHeight();
 CIMGUI_API float            ig_GetTextLineHeightWithSpacing();
+CIMGUI_API float            ig_GetItemsLineHeightWithSpacing();
 
 // ID scopes
 // If you are creating widgets in a loop you most likely want to push a unique identifier so ImGui can differentiate them
@@ -147,6 +154,8 @@ CIMGUI_API void             ig_Text(CONST char* fmt, ...);
 CIMGUI_API void             ig_TextV(CONST char* fmt, va_list args);
 CIMGUI_API void             ig_TextColored(CONST struct ImVec4 col, CONST char* fmt, ...);
 CIMGUI_API void             ig_TextColoredV(CONST struct ImVec4 col, CONST char* fmt, va_list args);
+CIMGUI_API void             ig_TextDisabled(CONST char* fmt, ...);
+CIMGUI_API void             ig_TextDisabledV(CONST char* fmt, va_list args);
 CIMGUI_API void             ig_TextWrapped(CONST char* fmt, ...);
 CIMGUI_API void             ig_TextWrappedV(CONST char* fmt, va_list args);
 CIMGUI_API void             ig_TextUnformatted(CONST char* text, CONST char* text_end);
@@ -155,7 +164,7 @@ CIMGUI_API void             ig_LabelTextV(CONST char* label, CONST char* fmt, va
 CIMGUI_API void             ig_Bullet();
 CIMGUI_API void             ig_BulletText(CONST char* fmt, ...);
 CIMGUI_API void             ig_BulletTextV(CONST char* fmt, va_list args);
-CIMGUI_API bool             ig_Button(CONST char* label, CONST struct ImVec2 size, bool repeat_when_held);
+CIMGUI_API bool             ig_Button(CONST char* label, CONST struct ImVec2 size);
 CIMGUI_API bool             ig_SmallButton(CONST char* label);
 CIMGUI_API bool             ig_InvisibleButton(CONST char* str_id, CONST struct ImVec2 size);
 CIMGUI_API void             ig_Image(ImTextureID user_texture_id, CONST struct ImVec2 size, CONST struct ImVec2 uv0, CONST struct ImVec2 uv1, CONST struct ImVec4 tint_col, CONST struct ImVec4 border_col);
@@ -237,10 +246,10 @@ CIMGUI_API bool             ig_BeginMainMenuBar();
 CIMGUI_API void             ig_EndMainMenuBar();
 CIMGUI_API bool             ig_BeginMenuBar();
 CIMGUI_API void             ig_EndMenuBar();
-CIMGUI_API bool             ig_BeginMenu(CONST char* label, bool enabled = true);
+CIMGUI_API bool             ig_BeginMenu(CONST char* label, bool enabled);
 CIMGUI_API void             ig_EndMenu();
-CIMGUI_API bool             ig_MenuItem(CONST char* label, CONST char* shortcut = NULL, bool selected = false, bool enabled = true);
-CIMGUI_API bool             ig_MenuItemPtr(CONST char* label, CONST char* shortcut, bool* p_selected, bool enabled = true);
+CIMGUI_API bool             ig_MenuItem(CONST char* label, CONST char* shortcut, bool selected, bool enabled);
+CIMGUI_API bool             ig_MenuItemPtr(CONST char* label, CONST char* shortcut, bool* p_selected, bool enabled);
 
 
 // Widgets: Value() Helpers. Output single value in "name: value" format (tip: freely declare your own within the ImGui namespace!)
@@ -263,15 +272,16 @@ CIMGUI_API void             ig_LogText(CONST char* fmt, ...);
 CIMGUI_API bool             ig_IsItemHovered();
 CIMGUI_API bool             ig_IsItemHoveredRect();
 CIMGUI_API bool             ig_IsItemActive();
-CIMGUI_API bool             ig_IsAnyItemActive();
 CIMGUI_API bool             ig_IsItemVisible();
+CIMGUI_API bool             ig_IsAnyItemHovered();
+CIMGUI_API bool             ig_IsAnyItemActive();
 CIMGUI_API void             ig_GetItemRectMin(struct ImVec2* pOut);
 CIMGUI_API void             ig_GetItemRectMax(struct ImVec2* pOut);
 CIMGUI_API void             ig_GetItemRectSize(struct ImVec2* pOut);
 CIMGUI_API bool             ig_IsWindowFocused();
 CIMGUI_API bool             ig_IsRootWindowFocused();
 CIMGUI_API bool             ig_IsRootWindowOrAnyChildFocused();
-CIMGUI_API bool             ig_IsRectClipped(CONST struct ImVec2 item_size);
+CIMGUI_API bool             ig_IsRectVisible(CONST struct ImVec2 item_size);
 CIMGUI_API bool             ig_IsKeyDown(int key_index);
 CIMGUI_API bool             ig_IsKeyPressed(int key_index, bool repeat);
 CIMGUI_API bool             ig_IsMouseDown(int button);

@@ -129,9 +129,9 @@ CIMGUI_API float ig_GetWindowWidth()
 	return ImGui::GetWindowWidth();
 }
 
-CIMGUI_API bool ig_GetWindowCollapsed()
+CIMGUI_API bool ig_IsWindowCollapsed()
 {
-	return ImGui::GetWindowCollapsed();
+	return ImGui::IsWindowCollapsed();
 }
 
 CIMGUI_API void ig_SetNextWindowPos(CONST ImVec2 pos, ImGuiSetCond cond)
@@ -296,6 +296,16 @@ CIMGUI_API void				ig_PopTextWrapPos()
 	return ImGui::PopTextWrapPos();
 }
 
+CIMGUI_API void             ig_PushButtonRepeat(bool repeat)
+{
+	return ImGui::PushButtonRepeat(repeat);
+}
+
+CIMGUI_API void             ig_PopButtonRepeat()
+{
+	return ImGui::PopButtonRepeat();
+}
+
 // Tooltip
 CIMGUI_API void				ig_SetTooltip(CONST char* fmt, ...)
 {
@@ -329,6 +339,21 @@ CIMGUI_API void				ig_OpenPopup(const char* str_id)
 CIMGUI_API bool				ig_BeginPopup(const char* str_id)
 {
 	return ImGui::BeginPopup(str_id);
+}
+
+CIMGUI_API bool             ig_BeginPopupContextItem(CONST char* str_id, int mouse_button)
+{
+	return ImGui::BeginPopupContextItem(str_id, mouse_button);
+}
+
+CIMGUI_API bool             ig_BeginPopupContextWindow(bool also_over_items, CONST char* str_id, int mouse_button)
+{
+	return ImGui::BeginPopupContextWindow(also_over_items, str_id, mouse_button);
+}
+
+CIMGUI_API bool             ig_BeginPopupContextVoid(CONST char* str_id, int mouse_button)
+{
+	return ImGui::BeginPopupContextVoid(str_id, mouse_button);
 }
 
 CIMGUI_API void				ig_EndPopup()
@@ -472,6 +497,11 @@ CIMGUI_API float			ig_GetTextLineHeightWithSpacing()
 	return ImGui::GetTextLineHeightWithSpacing();
 }
 
+CIMGUI_API float            ig_GetItemsLineHeightWithSpacing()
+{
+	return ImGui::GetItemsLineHeightWithSpacing();	
+}
+
 // ID scopes
 // If you are creating widgets in a loop you most likely want to push a unique identifier so ImGui can differentiate them
 // You can also use "##extra" within your widget name to distinguish them from each others (see 'Programmer Guide')
@@ -543,6 +573,19 @@ CIMGUI_API void				ig_TextColoredV(CONST ImVec4 col, CONST char* fmt, va_list ar
 	ImGui::TextColoredV(col,fmt,args);
 }
 
+CIMGUI_API void             ig_TextDisabled(CONST char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	ImGui::TextDisabledV(fmt, args);
+	va_end(args);
+}
+
+CIMGUI_API void             ig_TextDisabledV(CONST char* fmt, va_list args)
+{
+	return ImGui::TextDisabledV(fmt,args);
+}
+
 CIMGUI_API void				ig_TextWrapped(CONST char* fmt, ...)
 {
 	va_list args;
@@ -592,9 +635,9 @@ CIMGUI_API void				ig_BulletTextV(CONST char* fmt, va_list args)
 	ImGui::BulletTextV(fmt, args);
 }
 
-CIMGUI_API bool				ig_Button(CONST char* label, CONST ImVec2 size, bool repeat_when_held)
+CIMGUI_API bool				ig_Button(CONST char* label, CONST ImVec2 size)
 {
-	return ImGui::Button(label, size, repeat_when_held);
+	return ImGui::Button(label, size);
 }
 
 CIMGUI_API bool				ig_SmallButton(CONST char* label)
@@ -1057,14 +1100,19 @@ CIMGUI_API bool				ig_IsItemActive()
 	return ImGui::IsItemActive();
 }
 
-CIMGUI_API bool				ig_IsAnyItemActive()
-{
-	return ImGui::IsAnyItemActive();
-}
-
 CIMGUI_API bool             ig_IsItemVisible()
 {
 	return ImGui::IsItemVisible();	
+}
+
+CIMGUI_API bool             ig_IsAnyItemHovered()
+{
+	return ImGui::IsAnyItemHovered();		
+}
+
+CIMGUI_API bool				ig_IsAnyItemActive()
+{
+	return ImGui::IsAnyItemActive();
 }
 
 CIMGUI_API void ig_GetItemRectMin(ImVec2* pOut)
@@ -1097,9 +1145,9 @@ CIMGUI_API bool				ig_IsRootWindowOrAnyChildFocused()
 	return ImGui::IsRootWindowOrAnyChildFocused();
 }
 
-CIMGUI_API bool				ig_IsRectClipped(CONST ImVec2 item_size)
+CIMGUI_API bool				ig_IsRectVisible(CONST ImVec2 item_size)
 {
-	return ImGui::IsRectClipped(item_size);
+	return ImGui::IsRectVisible(item_size);
 }
 
 CIMGUI_API bool             ig_IsKeyDown(int key_index)
