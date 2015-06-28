@@ -853,7 +853,7 @@ CIMGUI_API bool				ig_InputText(CONST char* label, char* buf, size_t buf_size, I
 	return ImGui::InputText(label, buf, buf_size, flags, callback, user_data);
 }
 
-CIMGUI_API bool             ig_InputTextMultiline(CONST char* label, char* buf, size_t buf_size, CONST ImVec2& size, ImGuiInputTextFlags flags, ImGuiTextEditCallback callback, void* user_data)
+CIMGUI_API bool             ig_InputTextMultiline(CONST char* label, char* buf, size_t buf_size, CONST ImVec2 size, ImGuiInputTextFlags flags, ImGuiTextEditCallback callback, void* user_data)
 {
 	return ImGui::InputTextMultiline(label, buf, buf_size, size, flags, callback, user_data);
 }
@@ -956,12 +956,12 @@ CIMGUI_API void				ig_SetNextTreeNodeOpened(bool opened, ImGuiSetCond cond)
 }
 
 // Widgets: Selectable / Lists
-CIMGUI_API bool             ig_Selectable(CONST char* label, bool selected, ImGuiSelectableFlags flags, CONST ImVec2& size)
+CIMGUI_API bool             ig_Selectable(CONST char* label, bool selected, ImGuiSelectableFlags flags, CONST ImVec2 size)
 {
 	return ImGui::Selectable(label, selected, flags, size);
 }
 
-CIMGUI_API bool             ig_SelectableEx(CONST char* label, bool* p_selected, ImGuiSelectableFlags flags, CONST ImVec2& size)
+CIMGUI_API bool             ig_SelectableEx(CONST char* label, bool* p_selected, ImGuiSelectableFlags flags, CONST ImVec2 size)
 {
 	return ImGui::Selectable(label, p_selected, flags, size);
 }

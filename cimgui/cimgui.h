@@ -214,7 +214,7 @@ CIMGUI_API bool             ig_DragInt4(CONST char* label, int v[4], float v_spe
 
 // Widgets: Input
 CIMGUI_API bool             ig_InputText(CONST char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags, ImGuiTextEditCallback callback, void* user_data);
-CIMGUI_API bool             ig_InputTextMultiline(CONST char* label, char* buf, size_t buf_size, CONST ImVec2& size = ImVec2(0,0), ImGuiInputTextFlags flags = 0, ImGuiTextEditCallback callback = NULL, void* user_data = NULL);
+CIMGUI_API bool             ig_InputTextMultiline(CONST char* label, char* buf, size_t buf_size, CONST ImVec2 size, ImGuiInputTextFlags flags, ImGuiTextEditCallback callback, void* user_data);
 CIMGUI_API bool             ig_InputFloat(CONST char* label, float* v, float step, float step_fast, int decimal_precision, ImGuiInputTextFlags extra_flags);
 CIMGUI_API bool             ig_InputFloat2(CONST char* label, float v[2], int decimal_precision, ImGuiInputTextFlags extra_flags);
 CIMGUI_API bool             ig_InputFloat3(CONST char* label, float v[3], int decimal_precision, ImGuiInputTextFlags extra_flags);
@@ -236,8 +236,8 @@ CIMGUI_API void             ig_TreePop();
 CIMGUI_API void             ig_SetNextTreeNodeOpened(bool opened, ImGuiSetCond cond);
 
 // Widgets: Selectable / Lists
-CIMGUI_API bool             ig_Selectable(CONST char* label, bool selected = false, ImGuiSelectableFlags flags = 0, CONST ImVec2& size = ImVec2(0,0));
-CIMGUI_API bool             ig_SelectableEx(CONST char* label, bool* p_selected, ImGuiSelectableFlags flags = 0, CONST ImVec2& size = ImVec2(0,0));
+CIMGUI_API bool             ig_Selectable(CONST char* label, bool selected, ImGuiSelectableFlags flags, CONST ImVec2 size);
+CIMGUI_API bool             ig_SelectableEx(CONST char* label, bool* p_selected, ImGuiSelectableFlags flags, CONST ImVec2 size);
 CIMGUI_API bool             ig_ListBox(CONST char* label, int* current_item, CONST char** items, int items_count, int height_in_items);
 CIMGUI_API bool             ig_ListBox2(CONST char* label, int* current_item, bool(*items_getter)(void* data, int idx, CONST char** out_text), void* data, int items_count, int height_in_items);
 CIMGUI_API bool             ig_ListBoxHeader(CONST char* label, CONST struct ImVec2 size);
