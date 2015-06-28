@@ -956,12 +956,12 @@ CIMGUI_API void				ig_SetNextTreeNodeOpened(bool opened, ImGuiSetCond cond)
 }
 
 // Widgets: Selectable / Lists
-CIMGUI_API bool             ig_Selectable(CONST char* label, bool selected = false, ImGuiSelectableFlags flags = 0, CONST ImVec2& size = ImVec2(0,0))
+CIMGUI_API bool             ig_Selectable(CONST char* label, bool selected, ImGuiSelectableFlags flags, CONST ImVec2& size)
 {
 	return ImGui::Selectable(label, selected, flags, size);
 }
 
-CIMGUI_API bool             ig_SelectableEx(CONST char* label, bool* p_selected, ImGuiSelectableFlags flags = 0, CONST ImVec2& size = ImVec2(0,0))
+CIMGUI_API bool             ig_SelectableEx(CONST char* label, bool* p_selected, ImGuiSelectableFlags flags, CONST ImVec2& size)
 {
 	return ImGui::Selectable(label, p_selected, flags, size);
 }
