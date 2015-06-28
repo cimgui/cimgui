@@ -139,6 +139,11 @@ CIMGUI_API void ig_SetNextWindowPos(CONST ImVec2 pos, ImGuiSetCond cond)
 	ImGui::SetNextWindowPos(pos, cond);
 }
 
+CIMGUI_API void ig_SetNextWindowPosCenter(ImGuiSetCond cond)
+{
+	ImGui::SetNextWindowPosCenter(cond);
+}
+
 CIMGUI_API void ig_SetNextWindowSize(CONST ImVec2 size, ImGuiSetCond cond)
 {
 	ImGui::SetNextWindowSize(size, cond);
@@ -339,6 +344,11 @@ CIMGUI_API void				ig_OpenPopup(const char* str_id)
 CIMGUI_API bool				ig_BeginPopup(const char* str_id)
 {
 	return ImGui::BeginPopup(str_id);
+}
+
+CIMGUI_API bool             ig_BeginPopupModal(CONST char* name, bool* p_opened, ImGuiWindowFlags extra_flags)
+{
+	return ImGui::BeginPopupModal(name, p_opened, extra_flags);
 }
 
 CIMGUI_API bool             ig_BeginPopupContextItem(CONST char* str_id, int mouse_button)
@@ -843,6 +853,11 @@ CIMGUI_API bool				ig_InputText(CONST char* label, char* buf, size_t buf_size, I
 	return ImGui::InputText(label, buf, buf_size, flags, callback, user_data);
 }
 
+CIMGUI_API bool             ig_InputTextMultiline(CONST char* label, char* buf, size_t buf_size, CONST ImVec2& size, ImGuiInputTextFlags flags, ImGuiTextEditCallback callback, void* user_data)
+{
+	return ImGui::InputTextMultiline(label, buf, buf_size, size, flags, callback, user_data);
+}
+
 CIMGUI_API bool				ig_InputFloat(CONST char* label, float* v, float step, float step_fast, int decimal_precision, ImGuiInputTextFlags extra_flags)
 {
 	return ImGui::InputFloat(label, v, step, step_fast, decimal_precision, extra_flags);
@@ -941,14 +956,14 @@ CIMGUI_API void				ig_SetNextTreeNodeOpened(bool opened, ImGuiSetCond cond)
 }
 
 // Widgets: Selectable / Lists
-CIMGUI_API bool				ig_Selectable(CONST char* label, bool selected, CONST ImVec2 size)
+CIMGUI_API bool             ig_Selectable(CONST char* label, bool selected = false, ImGuiSelectableFlags flags = 0, CONST ImVec2& size = ImVec2(0,0))
 {
-	return ImGui::Selectable(label, selected, size);
+	return ImGui::Selectable(label, selected, flags, size);
 }
 
-CIMGUI_API bool				ig_SelectableEx(CONST char* label, bool* p_selected, CONST ImVec2 size)
+CIMGUI_API bool             ig_SelectableEx(CONST char* label, bool* p_selected, ImGuiSelectableFlags flags = 0, CONST ImVec2& size = ImVec2(0,0))
 {
-	return ImGui::Selectable(label,p_selected,size);
+	return ImGui::Selectable(label, p_selected, flags, size);
 }
 
 CIMGUI_API bool				ig_ListBox(CONST char* label, int* current_item, CONST char** items, int items_count, int height_in_items)
@@ -1130,6 +1145,11 @@ CIMGUI_API void	ig_GetItemRectSize(ImVec2* pOut)
 	*pOut = ImGui::GetItemRectSize();
 }
 
+CIMGUI_API bool             ig_IsWindowHovered()
+{
+	return ImGui::IsWindowHovered();
+}
+
 CIMGUI_API bool				ig_IsWindowFocused()
 {
 	return ImGui::IsWindowFocused();
@@ -1160,6 +1180,11 @@ CIMGUI_API bool				ig_IsKeyPressed(int key_index, bool repeat)
 	return ImGui::IsKeyPressed(key_index,repeat);
 }
 
+CIMGUI_API bool             ig_IsKeyReleased(int key_index)
+{
+	return ImGui::IsKeyReleased(key_index);
+}
+
 CIMGUI_API bool             ig_IsMouseDown(int button)
 {
 	return ImGui::IsMouseDown(button);
@@ -1173,6 +1198,11 @@ CIMGUI_API bool				ig_IsMouseClicked(int button, bool repeat)
 CIMGUI_API bool				ig_IsMouseDoubleClicked(int button)
 {
 	return ImGui::IsMouseDoubleClicked(button);
+}
+
+CIMGUI_API bool             ig_IsMouseReleased(int button)
+{
+	return ImGui::IsMouseReleased(button);
 }
 
 CIMGUI_API bool				ig_IsMouseHoveringWindow()
@@ -1254,9 +1284,9 @@ CIMGUI_API void				ig_CalcListClipping(int items_count, float items_height, int*
 	ImGui::CalcListClipping(items_count,items_height,out_items_display_start,out_items_display_end);
 }
 
-CIMGUI_API void				ig_BeginChildFrame(ImGuiID id, CONST ImVec2 size)
+CIMGUI_API bool				ig_BeginChildFrame(ImGuiID id, CONST ImVec2 size)
 {
-	ImGui::BeginChildFrame(id, size);
+	return ImGui::BeginChildFrame(id, size);
 }
 
 CIMGUI_API void				ig_EndChildFrame()

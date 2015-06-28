@@ -53,6 +53,7 @@ CIMGUI_API float            ig_GetWindowWidth();
 CIMGUI_API bool             ig_IsWindowCollapsed();
 
 CIMGUI_API void             ig_SetNextWindowPos(CONST struct ImVec2 pos, ImGuiSetCond cond);
+CIMGUI_API void             ig_SetNextWindowPosCenter(ImGuiSetCond cond = 0);
 CIMGUI_API void             ig_SetNextWindowSize(CONST struct ImVec2 size, ImGuiSetCond cond);
 CIMGUI_API void             ig_SetNextWindowCollapsed(bool collapsed, ImGuiSetCond cond);
 CIMGUI_API void             ig_SetNextWindowFocus();
@@ -102,6 +103,7 @@ CIMGUI_API void             ig_EndTooltip();
 // Popup
 CIMGUI_API void             ig_OpenPopup(CONST char* str_id);
 CIMGUI_API bool             ig_BeginPopup(CONST char* str_id);
+CIMGUI_API bool             ig_BeginPopupModal(CONST char* name, bool* p_opened = NULL, ImGuiWindowFlags extra_flags = 0);
 CIMGUI_API bool             ig_BeginPopupContextItem(CONST char* str_id, int mouse_button = 1);
 CIMGUI_API bool             ig_BeginPopupContextWindow(bool also_over_items = true, CONST char* str_id = NULL, int mouse_button = 1);
 CIMGUI_API bool             ig_BeginPopupContextVoid(CONST char* str_id = NULL, int mouse_button = 1);
@@ -212,6 +214,7 @@ CIMGUI_API bool             ig_DragInt4(CONST char* label, int v[4], float v_spe
 
 // Widgets: Input
 CIMGUI_API bool             ig_InputText(CONST char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags, ImGuiTextEditCallback callback, void* user_data);
+CIMGUI_API bool             ig_InputTextMultiline(CONST char* label, char* buf, size_t buf_size, CONST ImVec2& size = ImVec2(0,0), ImGuiInputTextFlags flags = 0, ImGuiTextEditCallback callback = NULL, void* user_data = NULL);
 CIMGUI_API bool             ig_InputFloat(CONST char* label, float* v, float step, float step_fast, int decimal_precision, ImGuiInputTextFlags extra_flags);
 CIMGUI_API bool             ig_InputFloat2(CONST char* label, float v[2], int decimal_precision, ImGuiInputTextFlags extra_flags);
 CIMGUI_API bool             ig_InputFloat3(CONST char* label, float v[3], int decimal_precision, ImGuiInputTextFlags extra_flags);
@@ -233,8 +236,8 @@ CIMGUI_API void             ig_TreePop();
 CIMGUI_API void             ig_SetNextTreeNodeOpened(bool opened, ImGuiSetCond cond);
 
 // Widgets: Selectable / Lists
-CIMGUI_API bool             ig_Selectable(CONST char* label, bool selected, CONST struct ImVec2 size);
-CIMGUI_API bool             ig_SelectableEx(CONST char* label, bool* p_selected, CONST struct ImVec2 size);
+CIMGUI_API bool             ig_Selectable(CONST char* label, bool selected = false, ImGuiSelectableFlags flags = 0, CONST ImVec2& size = ImVec2(0,0));
+CIMGUI_API bool             ig_SelectableEx(CONST char* label, bool* p_selected, ImGuiSelectableFlags flags = 0, CONST ImVec2& size = ImVec2(0,0));
 CIMGUI_API bool             ig_ListBox(CONST char* label, int* current_item, CONST char** items, int items_count, int height_in_items);
 CIMGUI_API bool             ig_ListBox2(CONST char* label, int* current_item, bool(*items_getter)(void* data, int idx, CONST char** out_text), void* data, int items_count, int height_in_items);
 CIMGUI_API bool             ig_ListBoxHeader(CONST char* label, CONST struct ImVec2 size);
@@ -278,15 +281,18 @@ CIMGUI_API bool             ig_IsAnyItemActive();
 CIMGUI_API void             ig_GetItemRectMin(struct ImVec2* pOut);
 CIMGUI_API void             ig_GetItemRectMax(struct ImVec2* pOut);
 CIMGUI_API void             ig_GetItemRectSize(struct ImVec2* pOut);
+CIMGUI_API bool             ig_IsWindowHovered();
 CIMGUI_API bool             ig_IsWindowFocused();
 CIMGUI_API bool             ig_IsRootWindowFocused();
 CIMGUI_API bool             ig_IsRootWindowOrAnyChildFocused();
 CIMGUI_API bool             ig_IsRectVisible(CONST struct ImVec2 item_size);
 CIMGUI_API bool             ig_IsKeyDown(int key_index);
 CIMGUI_API bool             ig_IsKeyPressed(int key_index, bool repeat);
+CIMGUI_API bool             ig_IsKeyReleased(int key_index);
 CIMGUI_API bool             ig_IsMouseDown(int button);
 CIMGUI_API bool             ig_IsMouseClicked(int button, bool repeat);
 CIMGUI_API bool             ig_IsMouseDoubleClicked(int button);
+CIMGUI_API bool             ig_IsMouseReleased(int button);
 CIMGUI_API bool             ig_IsMouseHoveringWindow();
 CIMGUI_API bool             ig_IsMouseHoveringAnyWindow();
 CIMGUI_API bool             ig_IsMouseHoveringRect(CONST struct ImVec2 rect_min, CONST struct ImVec2 rect_max);
@@ -304,7 +310,7 @@ CIMGUI_API void             ig_CalcItemRectClosestPoint(struct ImVec2* pOut, CON
 CIMGUI_API void             ig_CalcTextSize(struct ImVec2* pOut, CONST char* text, CONST char* text_end, bool hide_text_after_double_hash, float wrap_width);
 CIMGUI_API void             ig_CalcListClipping(int items_count, float items_height, int* out_items_display_start, int* out_items_display_end);
 
-CIMGUI_API void             ig_BeginChildFrame(ImGuiID id, CONST struct ImVec2 size);
+CIMGUI_API bool             ig_BeginChildFrame(ImGuiID id, CONST struct ImVec2 size);
 CIMGUI_API void             ig_EndChildFrame();
 
 CIMGUI_API ImU32            ig_ColorConvertFloat4ToU32(CONST struct ImVec4 in);
