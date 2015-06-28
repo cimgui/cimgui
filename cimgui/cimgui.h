@@ -53,7 +53,7 @@ CIMGUI_API float            ig_GetWindowWidth();
 CIMGUI_API bool             ig_IsWindowCollapsed();
 
 CIMGUI_API void             ig_SetNextWindowPos(CONST struct ImVec2 pos, ImGuiSetCond cond);
-CIMGUI_API void             ig_SetNextWindowPosCenter(ImGuiSetCond cond = 0);
+CIMGUI_API void             ig_SetNextWindowPosCenter(ImGuiSetCond cond);
 CIMGUI_API void             ig_SetNextWindowSize(CONST struct ImVec2 size, ImGuiSetCond cond);
 CIMGUI_API void             ig_SetNextWindowCollapsed(bool collapsed, ImGuiSetCond cond);
 CIMGUI_API void             ig_SetNextWindowFocus();
@@ -103,10 +103,10 @@ CIMGUI_API void             ig_EndTooltip();
 // Popup
 CIMGUI_API void             ig_OpenPopup(CONST char* str_id);
 CIMGUI_API bool             ig_BeginPopup(CONST char* str_id);
-CIMGUI_API bool             ig_BeginPopupModal(CONST char* name, bool* p_opened = NULL, ImGuiWindowFlags extra_flags = 0);
-CIMGUI_API bool             ig_BeginPopupContextItem(CONST char* str_id, int mouse_button = 1);
-CIMGUI_API bool             ig_BeginPopupContextWindow(bool also_over_items = true, CONST char* str_id = NULL, int mouse_button = 1);
-CIMGUI_API bool             ig_BeginPopupContextVoid(CONST char* str_id = NULL, int mouse_button = 1);
+CIMGUI_API bool             ig_BeginPopupModal(CONST char* name, bool* p_opened, ImGuiWindowFlags extra_flags);
+CIMGUI_API bool             ig_BeginPopupContextItem(CONST char* str_id, int mouse_button);
+CIMGUI_API bool             ig_BeginPopupContextWindow(bool also_over_items, CONST char* str_id, int mouse_button);
+CIMGUI_API bool             ig_BeginPopupContextVoid(CONST char* str_id, int mouse_button);
 CIMGUI_API void             ig_EndPopup();
 CIMGUI_API void             ig_CloseCurrentPopup();
 
