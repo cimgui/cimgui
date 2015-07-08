@@ -66,9 +66,11 @@ CIMGUI_API void             ig_SetWindowSize2(CONST char* name, CONST struct ImV
 CIMGUI_API void             ig_SetWindowCollapsed2(CONST char* name, bool collapsed, ImGuiSetCond cond);
 CIMGUI_API void             ig_SetWindowFocus2(CONST char* name);
 
-CIMGUI_API float            ig_GetScrollPosY();
+CIMGUI_API float            ig_GetScrollY();
 CIMGUI_API float            ig_GetScrollMaxY();
-CIMGUI_API void             ig_SetScrollPosHere();
+CIMGUI_API void             ig_SetScrollY(float scroll_y);
+CIMGUI_API void             ig_SetScrollHere(float center_y_ratio = 0.5f);
+CIMGUI_API void             ig_SetScrollFromPosY(float pos_y, float center_y_ratio = 0.5f);
 CIMGUI_API void             ig_SetKeyboardFocusHere(int offset);
 CIMGUI_API void             ig_SetStateStorage(ImGuiStorage* tree);
 CIMGUI_API ImGuiStorage*    ig_GetStateStorage();
@@ -93,23 +95,6 @@ CIMGUI_API void             ig_PopTextWrapPos();
 CIMGUI_API void             ig_PushButtonRepeat(bool repeat);
 CIMGUI_API void             ig_PopButtonRepeat();
 
-
-// Tooltip
-CIMGUI_API void             ig_SetTooltip(CONST char* fmt, ...);
-CIMGUI_API void             ig_SetTooltipV(CONST char* fmt, va_list args);
-CIMGUI_API void             ig_BeginTooltip();
-CIMGUI_API void             ig_EndTooltip();
-
-// Popup
-CIMGUI_API void             ig_OpenPopup(CONST char* str_id);
-CIMGUI_API bool             ig_BeginPopup(CONST char* str_id);
-CIMGUI_API bool             ig_BeginPopupModal(CONST char* name, bool* p_opened, ImGuiWindowFlags extra_flags);
-CIMGUI_API bool             ig_BeginPopupContextItem(CONST char* str_id, int mouse_button);
-CIMGUI_API bool             ig_BeginPopupContextWindow(bool also_over_items, CONST char* str_id, int mouse_button);
-CIMGUI_API bool             ig_BeginPopupContextVoid(CONST char* str_id, int mouse_button);
-CIMGUI_API void             ig_EndPopup();
-CIMGUI_API void             ig_CloseCurrentPopup();
-
 // Layout
 CIMGUI_API void             ig_BeginGroup();
 CIMGUI_API void             ig_EndGroup();
@@ -132,6 +117,7 @@ CIMGUI_API float            ig_GetCursorPosY();
 CIMGUI_API void             ig_SetCursorPos(CONST struct ImVec2 pos);
 CIMGUI_API void             ig_SetCursorPosX(float x);
 CIMGUI_API void             ig_SetCursorPosY(float y);
+CIMGUI_API void             ig_GetCursorStartPos(struct ImVec2* pOut);
 CIMGUI_API void             ig_GetCursorScreenPos(struct ImVec2* pOut);
 CIMGUI_API void             ig_SetCursorScreenPos(CONST struct ImVec2 pos);
 CIMGUI_API void             ig_AlignFirstTextHeightToWidgets();
@@ -183,9 +169,9 @@ CIMGUI_API bool             ig_ColorButton(CONST struct ImVec4 col, bool small_h
 CIMGUI_API bool             ig_ColorEdit3(CONST char* label, float col[3]);
 CIMGUI_API bool             ig_ColorEdit4(CONST char* label, float col[4], bool show_alpha);
 CIMGUI_API void             ig_ColorEditMode(ImGuiColorEditMode mode);
-CIMGUI_API void             ig_PlotLines(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size, size_t stride);
+CIMGUI_API void             ig_PlotLines(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size, int stride);
 CIMGUI_API void             ig_PlotLines2(CONST char* label, float(*values_getter)(void* data, int idx), void* data, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size);
-CIMGUI_API void             ig_PlotHistogram(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size, size_t stride);
+CIMGUI_API void             ig_PlotHistogram(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size, int stride);
 CIMGUI_API void             ig_PlotHistogram2(CONST char* label, float(*values_getter)(void* data, int idx), void* data, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size);
 
 // Widgets: Sliders (tip: ctrl+click on a slider to input text)
@@ -206,10 +192,12 @@ CIMGUI_API bool             ig_DragFloat(CONST char* label, float* v, float v_sp
 CIMGUI_API bool             ig_DragFloat2(CONST char* label, float v[2], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
 CIMGUI_API bool             ig_DragFloat3(CONST char* label, float v[3], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
 CIMGUI_API bool             ig_DragFloat4(CONST char* label, float v[4], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
+CIMGUI_API bool             ig_DragFloatRange2(const char* label, float* v_current_min, float* v_current_max, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* display_format = "%.3f", const char* display_format_max = NULL, float power = 1.0f);
 CIMGUI_API bool             ig_DragInt(CONST char* label, int* v, float v_speed, int v_min, int v_max, CONST char* display_format);                                       // If v_max >= v_max we have no bound
 CIMGUI_API bool             ig_DragInt2(CONST char* label, int v[2], float v_speed, int v_min, int v_max, CONST char* display_format);
 CIMGUI_API bool             ig_DragInt3(CONST char* label, int v[3], float v_speed, int v_min, int v_max, CONST char* display_format);
 CIMGUI_API bool             ig_DragInt4(CONST char* label, int v[4], float v_speed, int v_min, int v_max, CONST char* display_format);
+CIMGUI_API bool             ig_DragIntRange2(const char* label, int* v_current_min, int* v_current_max, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* display_format = "%.0f", const char* display_format_max = NULL);
 
 
 // Widgets: Input
@@ -244,6 +232,20 @@ CIMGUI_API bool             ig_ListBoxHeader(CONST char* label, CONST struct ImV
 CIMGUI_API bool             ig_ListBoxHeader2(CONST char* label, int items_count, int height_in_items);
 CIMGUI_API void             ig_ListBoxFooter();
 
+// Widgets: Value() Helpers. Output single value in "name: value" format (tip: freely declare your own within the ImGui namespace!)
+CIMGUI_API void             ig_ValueBool(CONST char* prefix, bool b);
+CIMGUI_API void             ig_ValueInt(CONST char* prefix, int v);
+CIMGUI_API void             ig_ValueUInt(CONST char* prefix, unsigned int v);
+CIMGUI_API void             ig_ValueFloat(CONST char* prefix, float v, CONST char* float_format);
+CIMGUI_API void             ig_Color(CONST char* prefix, CONST struct ImVec4 v);
+CIMGUI_API void             ig_Color2(CONST char* prefix, unsigned int v);
+
+// Tooltip
+CIMGUI_API void             ig_SetTooltip(CONST char* fmt, ...);
+CIMGUI_API void             ig_SetTooltipV(CONST char* fmt, va_list args);
+CIMGUI_API void             ig_BeginTooltip();
+CIMGUI_API void             ig_EndTooltip();
+
 // Widgets: Menus
 CIMGUI_API bool             ig_BeginMainMenuBar();
 CIMGUI_API void             ig_EndMainMenuBar();
@@ -254,14 +256,15 @@ CIMGUI_API void             ig_EndMenu();
 CIMGUI_API bool             ig_MenuItem(CONST char* label, CONST char* shortcut, bool selected, bool enabled);
 CIMGUI_API bool             ig_MenuItemPtr(CONST char* label, CONST char* shortcut, bool* p_selected, bool enabled);
 
-
-// Widgets: Value() Helpers. Output single value in "name: value" format (tip: freely declare your own within the ImGui namespace!)
-CIMGUI_API void             ig_ValueBool(CONST char* prefix, bool b);
-CIMGUI_API void             ig_ValueInt(CONST char* prefix, int v);
-CIMGUI_API void             ig_ValueUInt(CONST char* prefix, unsigned int v);
-CIMGUI_API void             ig_ValueFloat(CONST char* prefix, float v, CONST char* float_format);
-CIMGUI_API void             ig_Color(CONST char* prefix, CONST struct ImVec4 v);
-CIMGUI_API void             ig_Color2(CONST char* prefix, unsigned int v);
+// Popup
+CIMGUI_API void             ig_OpenPopup(CONST char* str_id);
+CIMGUI_API bool             ig_BeginPopup(CONST char* str_id);
+CIMGUI_API bool             ig_BeginPopupModal(CONST char* name, bool* p_opened, ImGuiWindowFlags extra_flags);
+CIMGUI_API bool             ig_BeginPopupContextItem(CONST char* str_id, int mouse_button);
+CIMGUI_API bool             ig_BeginPopupContextWindow(bool also_over_items, CONST char* str_id, int mouse_button);
+CIMGUI_API bool             ig_BeginPopupContextVoid(CONST char* str_id, int mouse_button);
+CIMGUI_API void             ig_EndPopup();
+CIMGUI_API void             ig_CloseCurrentPopup();
 
 // Logging: all text output from interface is redirected to tty/file/clipboard. Tree nodes are automatically opened.
 CIMGUI_API void             ig_LogToTTY(int max_depth);
@@ -286,23 +289,7 @@ CIMGUI_API bool             ig_IsWindowFocused();
 CIMGUI_API bool             ig_IsRootWindowFocused();
 CIMGUI_API bool             ig_IsRootWindowOrAnyChildFocused();
 CIMGUI_API bool             ig_IsRectVisible(CONST struct ImVec2 item_size);
-CIMGUI_API bool             ig_IsKeyDown(int key_index);
-CIMGUI_API bool             ig_IsKeyPressed(int key_index, bool repeat);
-CIMGUI_API bool             ig_IsKeyReleased(int key_index);
-CIMGUI_API bool             ig_IsMouseDown(int button);
-CIMGUI_API bool             ig_IsMouseClicked(int button, bool repeat);
-CIMGUI_API bool             ig_IsMouseDoubleClicked(int button);
-CIMGUI_API bool             ig_IsMouseReleased(int button);
-CIMGUI_API bool             ig_IsMouseHoveringWindow();
-CIMGUI_API bool             ig_IsMouseHoveringAnyWindow();
-CIMGUI_API bool             ig_IsMouseHoveringRect(CONST struct ImVec2 rect_min, CONST struct ImVec2 rect_max);
-CIMGUI_API bool             ig_IsMouseDragging(int button, float lock_threshold);
 CIMGUI_API bool             ig_IsPosHoveringAnyWindow(CONST struct ImVec2 pos);
-CIMGUI_API void             ig_GetMousePos(struct ImVec2* pOut);
-CIMGUI_API void             ig_GetMouseDragDelta(struct ImVec2* pOut, int button, float lock_threshold);
-CIMGUI_API void             ig_ResetMouseDragDelta(int button);
-CIMGUI_API ImGuiMouseCursor ig_GetMouseCursor();
-CIMGUI_API void             ig_SetMouseCursor(ImGuiMouseCursor type);
 CIMGUI_API float            ig_GetTime();
 CIMGUI_API int              ig_GetFrameCount();
 CIMGUI_API CONST char*      ig_GetStyleColName(ImGuiCol idx);
@@ -316,6 +303,23 @@ CIMGUI_API void             ig_EndChildFrame();
 CIMGUI_API ImU32            ig_ColorConvertFloat4ToU32(CONST struct ImVec4 in);
 CIMGUI_API void             ig_ColorConvertRGBtoHSV(float r, float g, float b, float* out_h, float* out_s, float* out_v);
 CIMGUI_API void             ig_ColorConvertHSVtoRGB(float h, float s, float v, float* out_r, float* out_g, float* out_b);
+
+CIMGUI_API bool             ig_IsKeyDown(int key_index);
+CIMGUI_API bool             ig_IsKeyPressed(int key_index, bool repeat);
+CIMGUI_API bool             ig_IsKeyReleased(int key_index);
+CIMGUI_API bool             ig_IsMouseDown(int button);
+CIMGUI_API bool             ig_IsMouseClicked(int button, bool repeat);
+CIMGUI_API bool             ig_IsMouseDoubleClicked(int button);
+CIMGUI_API bool             ig_IsMouseReleased(int button);
+CIMGUI_API bool             ig_IsMouseHoveringWindow();
+CIMGUI_API bool             ig_IsMouseHoveringAnyWindow();
+CIMGUI_API bool             ig_IsMouseHoveringRect(CONST struct ImVec2 rect_min, CONST struct ImVec2 rect_max);
+CIMGUI_API bool             ig_IsMouseDragging(int button, float lock_threshold);
+CIMGUI_API void             ig_GetMousePos(struct ImVec2* pOut);
+CIMGUI_API void             ig_GetMouseDragDelta(struct ImVec2* pOut, int button, float lock_threshold);
+CIMGUI_API void             ig_ResetMouseDragDelta(int button);
+CIMGUI_API ImGuiMouseCursor ig_GetMouseCursor();
+CIMGUI_API void             ig_SetMouseCursor(ImGuiMouseCursor type);
 
 // Internal state access - if you want to share ImGui state between modules (e.g. DLL) or allocate it yourself
 CIMGUI_API CONST char*      ig_GetVersion();

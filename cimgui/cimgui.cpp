@@ -199,9 +199,9 @@ CIMGUI_API void ig_SetWindowFocus2(CONST char* name)
 	ImGui::SetWindowFocus(name);
 }
 
-CIMGUI_API float			ig_GetScrollPosY()
+CIMGUI_API float			ig_GetScrollY()
 {
-	return ImGui::GetScrollPosY();
+	return ImGui::GetScrollY();
 }
 
 CIMGUI_API float			ig_GetScrollMaxY()
@@ -209,9 +209,19 @@ CIMGUI_API float			ig_GetScrollMaxY()
 	return ImGui::GetScrollMaxY();
 }
 
-CIMGUI_API void				ig_SetScrollPosHere()
+CIMGUI_API void             ig_SetScrollY(float scroll_y)
 {
-	ImGui::SetScrollPosHere();
+	return ImGui::SetScrollY(scroll_y);
+}
+
+CIMGUI_API void				ig_SetScrollHere(float center_y_ratio)
+{
+	ImGui::SetScrollHere(center_y_ratio);
+}
+
+CIMGUI_API void             ig_SetScrollFromPosY(float pos_y, float center_y_ratio)
+{
+	return ImGui::SetScrollFromPosY(pos_y,center_y_ratio);
 }
 
 CIMGUI_API void				ig_SetKeyboardFocusHere(int offset)
@@ -482,6 +492,11 @@ CIMGUI_API void				ig_SetCursorPosY(float y)
 	return ImGui::SetCursorPosY(y);
 }
 
+CIMGUI_API void			ig_GetCursorStartPos(ImVec2* pOut)
+{
+	*pOut = ImGui::GetCursorStartPos();
+}
+
 CIMGUI_API void ig_GetCursorScreenPos(ImVec2* pOut)
 {
 	*pOut = ImGui::GetCursorScreenPos();
@@ -730,7 +745,7 @@ CIMGUI_API void				ig_ColorEditMode(ImGuiColorEditMode mode)
 	return ImGui::ColorEditMode(mode);
 }
 
-CIMGUI_API void				ig_PlotLines(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, ImVec2 graph_size, size_t stride)
+CIMGUI_API void				ig_PlotLines(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, ImVec2 graph_size, int stride)
 {
 	return ImGui::PlotLines(label, values, values_count, values_offset, overlay_text, scale_min, scale_max, graph_size, stride);
 }
@@ -740,7 +755,7 @@ CIMGUI_API void				ig_PlotLines2(CONST char* label, float(*values_getter)(void* 
 	return ImGui::PlotLines(label, values_getter, data, values_count, values_offset, overlay_text, scale_min, scale_max, graph_size);
 }
 
-CIMGUI_API void				ig_PlotHistogram(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, ImVec2 graph_size, size_t stride)
+CIMGUI_API void				ig_PlotHistogram(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, ImVec2 graph_size, int stride)
 {
 	return ImGui::PlotHistogram(label,values, values_count, values_offset, overlay_text, scale_min, scale_max, graph_size, stride);
 }
@@ -827,6 +842,11 @@ CIMGUI_API bool          	ig_DragFloat4(CONST char* label, float v[4], float v_s
 	return ImGui::DragFloat4(label, v, v_speed, v_min, v_max, display_format, power);
 }
 
+CIMGUI_API bool             ig_DragFloatRange2(const char* label, float* v_current_min, float* v_current_max, float v_speed, float v_min, float v_max, const char* display_format, const char* display_format_max, float power)
+{
+	return ImGui::DragFloatRange2(label,v_current_min,v_current_max,v_speed,v_min,v_max,display_format,display_format_max,power);
+}
+
 CIMGUI_API bool          	ig_DragInt(CONST char* label, int* v, float v_speed, int v_min, int v_max, CONST char* display_format)
 {
 	return ImGui::DragInt(label, v, v_speed, v_min, v_max, display_format);
@@ -845,6 +865,11 @@ CIMGUI_API bool          	ig_DragInt3(CONST char* label, int v[3], float v_speed
 CIMGUI_API bool          	ig_DragInt4(CONST char* label, int v[4], float v_speed, int v_min, int v_max, CONST char* display_format)
 {
 	return ImGui::DragInt4(label, v, v_speed, v_min, v_max, display_format);
+}
+
+CIMGUI_API bool             ig_DragIntRange2(const char* label, int* v_current_min, int* v_current_max, float v_speed, int v_min, int v_max, const char* display_format, const char* display_format_max)
+{
+	return ImGui::DragIntRange2(label,v_current_min,v_current_max,v_speed,v_min,v_max,display_format,display_format_max);
 }
 
 // Widgets: Input
