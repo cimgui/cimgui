@@ -2,22 +2,37 @@
 #include "../imgui/imgui.h"
 #include "cimgui.h"
 
-EXTERN API int ImDrawList_GetVertexBufferSize(ImDrawList* list)
+CIMGUI_API int ImDrawList_GetVertexBufferSize(ImDrawList* list)
 {
-	return list->vtx_buffer.size();
+	return list->VtxBuffer.size();
 }
 
-EXTERN API ImDrawVert* ImDrawList_GetVertexPtr(ImDrawList* list, int n)
+CIMGUI_API ImDrawVert* ImDrawList_GetVertexPtr(ImDrawList* list, int n)
 {
-	return &list->vtx_buffer[n];
+	return &list->VtxBuffer[n];
 }
 
-EXTERN API int ImDrawList_GetCmdSize(ImDrawList* list)
+CIMGUI_API int              ImDrawList_GetIndexBufferSize(ImDrawList* list)
 {
-	return list->commands.size();
+	return list->IdxBuffer.size();
 }
 
-EXTERN API ImDrawCmd* ImDrawList_GetCmdPtr(ImDrawList* list, int n)
+CIMGUI_API ImDrawIdx*       ImDrawList_GetIndexPtr(ImDrawList* list, int n)
 {
-	return &list->commands[n];
+	return &list->IdxBuffer[n];
+}
+
+CIMGUI_API int ImDrawList_GetCmdSize(ImDrawList* list)
+{
+	return list->CmdBuffer.size();
+}
+
+CIMGUI_API ImDrawCmd* ImDrawList_GetCmdPtr(ImDrawList* list, int n)
+{
+	return &list->CmdBuffer[n];
+}
+
+CIMGUI_API void ImDrawData_DeIndexAllBuffers(ImDrawData* drawData)
+{
+	return drawData->DeIndexAllBuffers();
 }

@@ -402,9 +402,9 @@ CIMGUI_API void				igSeparator()
     return ImGui::Separator();
 }
 
-CIMGUI_API void				igSameLine(int column_x, int spacing_w)
+CIMGUI_API void				igSameLine(float pos_x, float spacing_w)
 {
-    return ImGui::SameLine(column_x, spacing_w);
+    return ImGui::SameLine(pos_x, spacing_w);
 }
 
 CIMGUI_API void				igSpacing()
@@ -546,7 +546,7 @@ CIMGUI_API void				igPushIdPtr(CONST void* ptr_id)
     return ImGui::PushID(ptr_id);
 }
 
-CIMGUI_API void				igPushIdInt(CONST int int_id)
+CIMGUI_API void				igPushIdInt(int int_id)
 {
     return ImGui::PushID(int_id);
 }
@@ -1357,4 +1357,9 @@ CIMGUI_API void	igSetInternalState(void* state, bool construct)
 CIMGUI_API void ImGuiIO_AddInputCharacter(unsigned short c)
 {
     ImGui::GetIO().AddInputCharacter(c);
+}
+
+CIMGUI_API void ImGuiIO_AddInputCharactersUTF8(CONST char* utf8_chars)
+{
+    return ImGui::GetIO().AddInputCharactersUTF8(utf8_chars);
 }
