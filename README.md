@@ -8,7 +8,7 @@ Most of the functions have wrapper counterparts now, missing stuff is added on a
 This library is intended as a intermediate layer to be able to use imgui from other languages that can interface with C (like D - see [D-binding](https://github.com/Extrawurst/DerelictImgui))
 
 Notes:
-* currently this wrapper is based on version [1.42 of imgui](https://github.com/ocornut/imgui/releases/tag/v1.42)
+* currently this wrapper is based on version [1.43 of imgui](https://github.com/ocornut/imgui/releases/tag/v1.43)
 * does not compile with pure C compiler yet (for writing bindings in languages that are able to use C-ABI it is enough though, see D-bindings)
 
 # usage
