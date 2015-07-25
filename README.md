@@ -14,6 +14,6 @@ Notes:
 # usage
 
 * clone
-* make using makefile on linux/osx (linux makefile not tested)
+* make using makefile on linux/osx
 * use whatever method is in ImGui c++ namespace in the original [imgui.h](https://github.com/ocornut/imgui/blob/master/imgui.h) by prepending `ig`
 * methods have the same parameter list and return values (where possible)
