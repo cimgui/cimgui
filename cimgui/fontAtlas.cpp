@@ -42,6 +42,11 @@ CIMGUI_API ImFont* ImFontAtlas_AddFontFromMemoryCompressedTTF(ImFontAtlas* atlas
 	return atlas->AddFontFromMemoryCompressedTTF(compressed_ttf_data, compressed_ttf_size, size_pixels, font_cfg, glyph_ranges);
 }
 
+CIMGUI_API ImFont* ImFontAtlas_AddFontFromMemoryCompressedBase85TTF(ImFontAtlas* atlas, CONST char* compressed_ttf_data_base85, float size_pixels, CONST ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges)
+{
+	return atlas->AddFontFromMemoryCompressedBase85TTF(compressed_ttf_data_base85, size_pixels, font_cfg, glyph_ranges);
+}
+
 CIMGUI_API void ImFontAtlas_ClearTexData(ImFontAtlas* atlas)
 {
 	return atlas->ClearTexData();

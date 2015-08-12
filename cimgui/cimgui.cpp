@@ -84,6 +84,11 @@ CIMGUI_API void igGetContentRegionMax(ImVec2* out)
     *out = ImGui::GetContentRegionMax();
 }
 
+CIMGUI_API void	igGetContentRegionAvail(struct ImVec2* out)
+{
+	*out = ImGui::GetContentRegionAvail();
+}
+
 CIMGUI_API void igGetWindowContentRegionMin(ImVec2* out)
 {
     *out = ImGui::GetWindowContentRegionMin();
