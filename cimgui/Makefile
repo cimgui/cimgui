@@ -7,6 +7,8 @@ OBJS += fontAtlas.o
 OBJS += drawList.o
 #OBJS += test.o
 OBJS += ../imgui/imgui.o
+OBJS += ../imgui/imgui_draw.o
+OBJS += ../imgui/imgui_demo.o
 
 UNAME_S := $(shell uname -s)
 
