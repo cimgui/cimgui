@@ -42,8 +42,10 @@ CIMGUI_API bool             igBeginChildEx(ImGuiID id, CONST struct ImVec2 size,
 CIMGUI_API void             igEndChild();
 CIMGUI_API void             igGetContentRegionMax(struct ImVec2* out);
 CIMGUI_API void             igGetContentRegionAvail(struct ImVec2* out);
+CIMGUI_API float            igGetContentRegionAvailWidth();                                       //
 CIMGUI_API void             igGetWindowContentRegionMin(struct ImVec2* out);
 CIMGUI_API void             igGetWindowContentRegionMax(struct ImVec2* out);
+CIMGUI_API float            igGetWindowContentRegionWidth();                                      //
 CIMGUI_API ImDrawList*      igGetWindowDrawList();
 CIMGUI_API ImFont*          igGetWindowFont();
 CIMGUI_API float            igGetWindowFontSize(); 
@@ -51,11 +53,14 @@ CIMGUI_API void             igSetWindowFontScale(float scale);
 CIMGUI_API void             igGetWindowPos(struct ImVec2* out);
 CIMGUI_API void             igGetWindowSize(struct ImVec2* out);
 CIMGUI_API float            igGetWindowWidth();
+CIMGUI_API float            igGetWindowHeight();
 CIMGUI_API bool             igIsWindowCollapsed();
 
 CIMGUI_API void             igSetNextWindowPos(CONST struct ImVec2 pos, ImGuiSetCond cond);
 CIMGUI_API void             igSetNextWindowPosCenter(ImGuiSetCond cond);
 CIMGUI_API void             igSetNextWindowSize(CONST struct ImVec2 size, ImGuiSetCond cond);
+CIMGUI_API void             igSetNextWindowContentSize(CONST ImVec2 size);
+CIMGUI_API void             igSetNextWindowContentWidth(float width);
 CIMGUI_API void             igSetNextWindowCollapsed(bool collapsed, ImGuiSetCond cond);
 CIMGUI_API void             igSetNextWindowFocus();
 CIMGUI_API void             igSetWindowPos(CONST struct ImVec2 pos, ImGuiSetCond cond);
@@ -67,8 +72,11 @@ CIMGUI_API void             igSetWindowSize2(CONST char* name, CONST struct ImVe
 CIMGUI_API void             igSetWindowCollapsed2(CONST char* name, bool collapsed, ImGuiSetCond cond);
 CIMGUI_API void             igSetWindowFocus2(CONST char* name);
 
+CIMGUI_API float            igGetScrollX();
 CIMGUI_API float            igGetScrollY();
+CIMGUI_API float            igGetScrollMaxX();
 CIMGUI_API float            igGetScrollMaxY();
+CIMGUI_API void             igSetScrollX(float scroll_x);
 CIMGUI_API void             igSetScrollY(float scroll_y);
 CIMGUI_API void             igSetScrollHere(float center_y_ratio = 0.5f);
 CIMGUI_API void             igSetScrollFromPosY(float pos_y, float center_y_ratio = 0.5f);
@@ -100,7 +108,7 @@ CIMGUI_API void             igPopButtonRepeat();
 CIMGUI_API void             igBeginGroup();
 CIMGUI_API void             igEndGroup();
 CIMGUI_API void             igSeparator();
-CIMGUI_API void             igSameLine(float pos_x, float spacing_w);
+CIMGUI_API void             igSameLine(float local_pos_x, float spacing_w);
 CIMGUI_API void             igSpacing();
 CIMGUI_API void             igDummy(CONST ImVec2* size);
 CIMGUI_API void             igIndent();
@@ -115,7 +123,7 @@ CIMGUI_API int              igGetColumnsCount();
 CIMGUI_API void             igGetCursorPos(struct ImVec2* pOut);
 CIMGUI_API float            igGetCursorPosX();
 CIMGUI_API float            igGetCursorPosY();
-CIMGUI_API void             igSetCursorPos(CONST struct ImVec2 pos);
+CIMGUI_API void             igSetCursorPos(CONST struct ImVec2 local_pos);
 CIMGUI_API void             igSetCursorPosX(float x);
 CIMGUI_API void             igSetCursorPosY(float y);
 CIMGUI_API void             igGetCursorStartPos(struct ImVec2* pOut);
@@ -301,6 +309,7 @@ CIMGUI_API void             igCalcListClipping(int items_count, float items_heig
 CIMGUI_API bool             igBeginChildFrame(ImGuiID id, CONST struct ImVec2 size);
 CIMGUI_API void             igEndChildFrame();
 
+CIMGUI_API void             igColorConvertU32ToFloat4(ImVec4* pOut, ImU32 in);
 CIMGUI_API ImU32            igColorConvertFloat4ToU32(CONST struct ImVec4 in);
 CIMGUI_API void             igColorConvertRGBtoHSV(float r, float g, float b, float* out_h, float* out_s, float* out_v);
 CIMGUI_API void             igColorConvertHSVtoRGB(float h, float s, float v, float* out_r, float* out_g, float* out_b);
@@ -314,9 +323,10 @@ CIMGUI_API bool             igIsMouseDoubleClicked(int button);
 CIMGUI_API bool             igIsMouseReleased(int button);
 CIMGUI_API bool             igIsMouseHoveringWindow();
 CIMGUI_API bool             igIsMouseHoveringAnyWindow();
-CIMGUI_API bool             igIsMouseHoveringRect(CONST struct ImVec2 rect_min, CONST struct ImVec2 rect_max);
+CIMGUI_API bool             igIsMouseHoveringRect(CONST struct ImVec2 pos_min, CONST struct ImVec2 pos_max);
 CIMGUI_API bool             igIsMouseDragging(int button, float lock_threshold);
 CIMGUI_API void             igGetMousePos(struct ImVec2* pOut);
+CIMGUI_API void             igGetMousePosOnOpeningCurrentPopup(ImVec2* pOut);
 CIMGUI_API void             igGetMouseDragDelta(struct ImVec2* pOut, int button, float lock_threshold);
 CIMGUI_API void             igResetMouseDragDelta(int button);
 CIMGUI_API ImGuiMouseCursor igGetMouseCursor();

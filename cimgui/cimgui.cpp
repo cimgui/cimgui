@@ -89,6 +89,11 @@ CIMGUI_API void	igGetContentRegionAvail(struct ImVec2* out)
 	*out = ImGui::GetContentRegionAvail();
 }
 
+CIMGUI_API float igGetContentRegionAvailWidth()
+{
+    return ImGui::GetContentRegionAvailWidth();
+}
+
 CIMGUI_API void igGetWindowContentRegionMin(ImVec2* out)
 {
     *out = ImGui::GetWindowContentRegionMin();
@@ -97,6 +102,11 @@ CIMGUI_API void igGetWindowContentRegionMin(ImVec2* out)
 CIMGUI_API void igGetWindowContentRegionMax(ImVec2* out)
 {
     *out = ImGui::GetWindowContentRegionMax();
+}
+
+CIMGUI_API float igGetWindowContentRegionWidth()
+{
+    return ImGui::GetWindowContentRegionWidth();
 }
 
 CIMGUI_API ImDrawList* igGetWindowDrawList()
@@ -134,6 +144,11 @@ CIMGUI_API float igGetWindowWidth()
     return ImGui::GetWindowWidth();
 }
 
+CIMGUI_API float igGetWindowHeight()
+{
+    return ImGui::GetWindowHeight();
+}
+
 CIMGUI_API bool igIsWindowCollapsed()
 {
     return ImGui::IsWindowCollapsed();
@@ -152,6 +167,16 @@ CIMGUI_API void igSetNextWindowPosCenter(ImGuiSetCond cond)
 CIMGUI_API void igSetNextWindowSize(CONST ImVec2 size, ImGuiSetCond cond)
 {
     ImGui::SetNextWindowSize(size, cond);
+}
+
+CIMGUI_API void igSetNextWindowContentSize(CONST ImVec2 size)
+{
+    ImGui::SetNextWindowContentSize(size);
+}
+
+CIMGUI_API void igSetNextWindowContentWidth(float width)
+{
+    ImGui::SetNextWindowContentWidth(width);
 }
 
 CIMGUI_API void igSetNextWindowCollapsed(bool collapsed, ImGuiSetCond cond)
@@ -204,14 +229,29 @@ CIMGUI_API void igSetWindowFocus2(CONST char* name)
     ImGui::SetWindowFocus(name);
 }
 
+CIMGUI_API float igGetScrollX()
+{
+    return ImGui::GetScrollX();
+}
+
 CIMGUI_API float			igGetScrollY()
 {
     return ImGui::GetScrollY();
 }
 
+CIMGUI_API float igGetScrollMaxX()
+{
+    return ImGui::GetScrollMaxX();
+}
+
 CIMGUI_API float			igGetScrollMaxY()
 {
     return ImGui::GetScrollMaxY();
+}
+
+CIMGUI_API void igSetScrollX(float scroll_x)
+{
+    return ImGui::SetScrollX(scroll_x);
 }
 
 CIMGUI_API void             igSetScrollY(float scroll_y)
@@ -407,9 +447,9 @@ CIMGUI_API void				igSeparator()
     return ImGui::Separator();
 }
 
-CIMGUI_API void				igSameLine(float pos_x, float spacing_w)
+CIMGUI_API void				igSameLine(float local_pos_x, float spacing_w)
 {
-    return ImGui::SameLine(pos_x, spacing_w);
+    return ImGui::SameLine(local_pos_x, spacing_w);
 }
 
 CIMGUI_API void				igSpacing()
@@ -482,9 +522,9 @@ CIMGUI_API float			igGetCursorPosY()
     return ImGui::GetCursorPosY();
 }
 
-CIMGUI_API void				igSetCursorPos(CONST ImVec2 pos)
+CIMGUI_API void				igSetCursorPos(CONST ImVec2 local_pos)
 {
-    return ImGui::SetCursorPos(pos);
+    return ImGui::SetCursorPos(local_pos);
 }
 
 CIMGUI_API void				igSetCursorPosX(float x)
@@ -1245,9 +1285,9 @@ CIMGUI_API bool				igIsMouseHoveringAnyWindow()
     return ImGui::IsMouseHoveringAnyWindow();
 }
 
-CIMGUI_API bool				igIsMouseHoveringRect(CONST ImVec2 rect_min, CONST ImVec2 rect_max)
+CIMGUI_API bool				igIsMouseHoveringRect(CONST ImVec2 pos_min, CONST ImVec2 pos_max)
 {
-    return ImGui::IsMouseHoveringRect(rect_min,rect_max);
+    return ImGui::IsMouseHoveringRect(pos_min,pos_max);
 }
 
 CIMGUI_API bool				igIsMouseDragging(int button, float lock_threshold)
@@ -1262,6 +1302,11 @@ CIMGUI_API bool				igIsPosHoveringAnyWindow(CONST ImVec2 pos)
 CIMGUI_API void igGetMousePos(ImVec2* pOut)
 {
     *pOut = ImGui::GetMousePos();
+}
+
+CIMGUI_API void igGetMousePosOnOpeningCurrentPopup(ImVec2* pOut)
+{
+    *pOut = ImGui::GetMousePosOnOpeningCurrentPopup();
 }
 
 CIMGUI_API void igGetMouseDragDelta(ImVec2* pOut, int button, float lock_threshold)
@@ -1322,6 +1367,11 @@ CIMGUI_API bool				igBeginChildFrame(ImGuiID id, CONST ImVec2 size)
 CIMGUI_API void				igEndChildFrame()
 {
     ImGui::EndChildFrame();
+}
+
+CIMGUI_API void igColorConvertU32ToFloat4(ImVec4* pOut, ImU32 in)
+{
+    *pOut = ImGui::ColorConvertU32ToFloat4(in);
 }
 
 CIMGUI_API ImU32			igColorConvertFloat4ToU32(CONST ImVec4 in)
