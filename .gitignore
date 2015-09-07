@@ -33,3 +33,5 @@ cimgui/cimgui.v12.suo
 cimgui/Release/
 .idea
 CMakeLists.txt
+cimgui/.vs/
+cimgui/cimgui.vcxproj.user
