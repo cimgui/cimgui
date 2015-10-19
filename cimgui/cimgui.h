@@ -332,6 +332,8 @@ CIMGUI_API void             igGetMouseDragDelta(struct ImVec2* pOut, int button,
 CIMGUI_API void             igResetMouseDragDelta(int button);
 CIMGUI_API ImGuiMouseCursor igGetMouseCursor();
 CIMGUI_API void             igSetMouseCursor(ImGuiMouseCursor type);
+CIMGUI_API void             igCaptureKeyboardFromApp();
+CIMGUI_API void             igCaptureMouseFromApp();
 
 // Helpers functions to access functions pointers in ImGui::GetIO()
 CIMGUI_API void*            igMemAlloc(size_t sz);

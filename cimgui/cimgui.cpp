@@ -1334,6 +1334,16 @@ CIMGUI_API void				igSetMouseCursor(ImGuiMouseCursor type)
     ImGui::SetMouseCursor(type);
 }
 
+CIMGUI_API void igCaptureKeyboardFromApp()
+{
+    return ImGui::CaptureKeyboardFromApp();
+}
+
+CIMGUI_API void igCaptureMouseFromApp()
+{
+    return ImGui::CaptureMouseFromApp();
+}
+
 CIMGUI_API void* igMemAlloc(size_t sz)
 {
     return ImGui::MemAlloc(sz);
