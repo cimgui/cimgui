@@ -25,6 +25,7 @@ typedef int ImGuiColorEditMode;
 
 CIMGUI_API ImGuiIO*         igGetIO();
 CIMGUI_API ImGuiStyle*      igGetStyle();
+CIMGUI_API ImDrawData*      igGetDrawData();
 CIMGUI_API void             igNewFrame();
 CIMGUI_API void             igRender();
 CIMGUI_API void             igShutdown();
@@ -97,10 +98,10 @@ CIMGUI_API void             igPopStyleVar(int count);
 CIMGUI_API void             igPushItemWidth(float item_width);
 CIMGUI_API void             igPopItemWidth();
 CIMGUI_API float            igCalcItemWidth();
-CIMGUI_API void             igPushAllowKeyboardFocus(bool v);
-CIMGUI_API void             igPopAllowKeyboardFocus();
 CIMGUI_API void             igPushTextWrapPos(float wrap_pos_x);
 CIMGUI_API void             igPopTextWrapPos();
+CIMGUI_API void             igPushAllowKeyboardFocus(bool v);
+CIMGUI_API void             igPopAllowKeyboardFocus();
 CIMGUI_API void             igPushButtonRepeat(bool repeat);
 CIMGUI_API void             igPopButtonRepeat();
 
@@ -306,7 +307,7 @@ CIMGUI_API void             igCalcItemRectClosestPoint(struct ImVec2* pOut, CONS
 CIMGUI_API void             igCalcTextSize(struct ImVec2* pOut, CONST char* text, CONST char* text_end, bool hide_text_after_double_hash, float wrap_width);
 CIMGUI_API void             igCalcListClipping(int items_count, float items_height, int* out_items_display_start, int* out_items_display_end);
 
-CIMGUI_API bool             igBeginChildFrame(ImGuiID id, CONST struct ImVec2 size);
+CIMGUI_API bool             igBeginChildFrame(ImGuiID id, CONST struct ImVec2 size, ImGuiWindowFlags extra_flags);
 CIMGUI_API void             igEndChildFrame();
 
 CIMGUI_API void             igColorConvertU32ToFloat4(ImVec4* pOut, ImU32 in);
@@ -323,7 +324,7 @@ CIMGUI_API bool             igIsMouseDoubleClicked(int button);
 CIMGUI_API bool             igIsMouseReleased(int button);
 CIMGUI_API bool             igIsMouseHoveringWindow();
 CIMGUI_API bool             igIsMouseHoveringAnyWindow();
-CIMGUI_API bool             igIsMouseHoveringRect(CONST struct ImVec2 pos_min, CONST struct ImVec2 pos_max);
+CIMGUI_API bool             igIsMouseHoveringRect(CONST struct ImVec2 pos_min, CONST struct ImVec2 pos_max, bool clip);
 CIMGUI_API bool             igIsMouseDragging(int button, float lock_threshold);
 CIMGUI_API void             igGetMousePos(struct ImVec2* pOut);
 CIMGUI_API void             igGetMousePosOnOpeningCurrentPopup(ImVec2* pOut);
@@ -331,6 +332,12 @@ CIMGUI_API void             igGetMouseDragDelta(struct ImVec2* pOut, int button,
 CIMGUI_API void             igResetMouseDragDelta(int button);
 CIMGUI_API ImGuiMouseCursor igGetMouseCursor();
 CIMGUI_API void             igSetMouseCursor(ImGuiMouseCursor type);
+
+// Helpers functions to access functions pointers in ImGui::GetIO()
+CIMGUI_API void*            igMemAlloc(size_t sz);
+CIMGUI_API void             igMemFree(void* ptr);
+CIMGUI_API const char*      igGetClipboardText();
+CIMGUI_API void             igSetClipboardText(const char* text);
 
 // Internal state access - if you want to share ImGui state between modules (e.g. DLL) or allocate it yourself
 CIMGUI_API CONST char*      igGetVersion();

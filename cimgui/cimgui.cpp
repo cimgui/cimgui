@@ -12,6 +12,11 @@ CIMGUI_API ImGuiStyle* igGetStyle()
     return &ImGui::GetStyle();
 }
 
+CIMGUI_API ImDrawData* igGetDrawData()
+{
+    return ImGui::GetDrawData();
+}
+
 CIMGUI_API void igNewFrame()
 {
     ImGui::NewFrame();
@@ -1285,9 +1290,9 @@ CIMGUI_API bool				igIsMouseHoveringAnyWindow()
     return ImGui::IsMouseHoveringAnyWindow();
 }
 
-CIMGUI_API bool				igIsMouseHoveringRect(CONST ImVec2 pos_min, CONST ImVec2 pos_max)
+CIMGUI_API bool				igIsMouseHoveringRect(CONST ImVec2 pos_min, CONST ImVec2 pos_max, bool clip)
 {
-    return ImGui::IsMouseHoveringRect(pos_min,pos_max);
+    return ImGui::IsMouseHoveringRect(pos_min,pos_max,clip);
 }
 
 CIMGUI_API bool				igIsMouseDragging(int button, float lock_threshold)
@@ -1329,6 +1334,26 @@ CIMGUI_API void				igSetMouseCursor(ImGuiMouseCursor type)
     ImGui::SetMouseCursor(type);
 }
 
+CIMGUI_API void* igMemAlloc(size_t sz)
+{
+    return ImGui::MemAlloc(sz);
+}
+
+CIMGUI_API void igMemFree(void* ptr)
+{
+    return ImGui::MemFree(ptr);
+}
+
+CIMGUI_API const char* igGetClipboardText()
+{
+    return ImGui::GetClipboardText();
+}
+
+CIMGUI_API void igSetClipboardText(const char* text)
+{
+    return ImGui::SetClipboardText(text);
+}
+
 CIMGUI_API float			igGetTime()
 {
     return ImGui::GetTime();
@@ -1359,9 +1384,9 @@ CIMGUI_API void				igCalcListClipping(int items_count, float items_height, int* 
     ImGui::CalcListClipping(items_count,items_height,out_items_display_start,out_items_display_end);
 }
 
-CIMGUI_API bool				igBeginChildFrame(ImGuiID id, CONST ImVec2 size)
+CIMGUI_API bool				igBeginChildFrame(ImGuiID id, CONST ImVec2 size, ImGuiWindowFlags extra_flags)
 {
-    return ImGui::BeginChildFrame(id, size);
+    return ImGui::BeginChildFrame(id, size, extra_flags);
 }
 
 CIMGUI_API void				igEndChildFrame()
