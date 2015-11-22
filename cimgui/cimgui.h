@@ -43,10 +43,10 @@ CIMGUI_API bool             igBeginChildEx(ImGuiID id, CONST struct ImVec2 size,
 CIMGUI_API void             igEndChild();
 CIMGUI_API void             igGetContentRegionMax(struct ImVec2* out);
 CIMGUI_API void             igGetContentRegionAvail(struct ImVec2* out);
-CIMGUI_API float            igGetContentRegionAvailWidth();                                       //
+CIMGUI_API float            igGetContentRegionAvailWidth();
 CIMGUI_API void             igGetWindowContentRegionMin(struct ImVec2* out);
 CIMGUI_API void             igGetWindowContentRegionMax(struct ImVec2* out);
-CIMGUI_API float            igGetWindowContentRegionWidth();                                      //
+CIMGUI_API float            igGetWindowContentRegionWidth();
 CIMGUI_API ImDrawList*      igGetWindowDrawList();
 CIMGUI_API ImFont*          igGetWindowFont();
 CIMGUI_API float            igGetWindowFontSize(); 
@@ -202,12 +202,12 @@ CIMGUI_API bool             igDragFloat(CONST char* label, float* v, float v_spe
 CIMGUI_API bool             igDragFloat2(CONST char* label, float v[2], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
 CIMGUI_API bool             igDragFloat3(CONST char* label, float v[3], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
 CIMGUI_API bool             igDragFloat4(CONST char* label, float v[4], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
-CIMGUI_API bool             igDragFloatRange2(const char* label, float* v_current_min, float* v_current_max, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* display_format = "%.3f", const char* display_format_max = NULL, float power = 1.0f);
+CIMGUI_API bool             igDragFloatRange2(CONST char* label, float* v_current_min, float* v_current_max, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, CONST char* display_format = "%.3f", CONST char* display_format_max = NULL, float power = 1.0f);
 CIMGUI_API bool             igDragInt(CONST char* label, int* v, float v_speed, int v_min, int v_max, CONST char* display_format);                                       // If v_max >= v_max we have no bound
 CIMGUI_API bool             igDragInt2(CONST char* label, int v[2], float v_speed, int v_min, int v_max, CONST char* display_format);
 CIMGUI_API bool             igDragInt3(CONST char* label, int v[3], float v_speed, int v_min, int v_max, CONST char* display_format);
 CIMGUI_API bool             igDragInt4(CONST char* label, int v[4], float v_speed, int v_min, int v_max, CONST char* display_format);
-CIMGUI_API bool             igDragIntRange2(const char* label, int* v_current_min, int* v_current_max, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* display_format = "%.0f", const char* display_format_max = NULL);
+CIMGUI_API bool             igDragIntRange2(CONST char* label, int* v_current_min, int* v_current_max, float v_speed = 1.0f, int v_min = 0, int v_max = 0, CONST char* display_format = "%.0f", CONST char* display_format_max = NULL);
 
 
 // Widgets: Input
@@ -338,8 +338,8 @@ CIMGUI_API void             igCaptureMouseFromApp();
 // Helpers functions to access functions pointers in ImGui::GetIO()
 CIMGUI_API void*            igMemAlloc(size_t sz);
 CIMGUI_API void             igMemFree(void* ptr);
-CIMGUI_API const char*      igGetClipboardText();
-CIMGUI_API void             igSetClipboardText(const char* text);
+CIMGUI_API CONST char*      igGetClipboardText();
+CIMGUI_API void             igSetClipboardText(CONST char* text);
 
 // Internal state access - if you want to share ImGui state between modules (e.g. DLL) or allocate it yourself
 CIMGUI_API CONST char*      igGetVersion();
@@ -362,10 +362,66 @@ CIMGUI_API void             ImFontAtlas_Clear(ImFontAtlas* atlas);
 CIMGUI_API void             ImGuiIO_AddInputCharacter(unsigned short c);
 CIMGUI_API void             ImGuiIO_AddInputCharactersUTF8(CONST char* utf8_chars);
 
+//ImDrawData
+CIMGUI_API void             ImDrawData_DeIndexAllBuffers(ImDrawData* drawData);
+
+//ImDrawList
 CIMGUI_API int              ImDrawList_GetVertexBufferSize(ImDrawList* list);
 CIMGUI_API ImDrawVert*      ImDrawList_GetVertexPtr(ImDrawList* list, int n);
 CIMGUI_API int              ImDrawList_GetIndexBufferSize(ImDrawList* list);
 CIMGUI_API ImDrawIdx*       ImDrawList_GetIndexPtr(ImDrawList* list, int n);
 CIMGUI_API int              ImDrawList_GetCmdSize(ImDrawList* list);
 CIMGUI_API ImDrawCmd*       ImDrawList_GetCmdPtr(ImDrawList* list, int n);
-CIMGUI_API void             ImDrawData_DeIndexAllBuffers(ImDrawData* drawData);
+
+CIMGUI_API void             ImDrawList_Clear(ImDrawList* list);
+CIMGUI_API void             ImDrawList_ClearFreeMemory(ImDrawList* list);
+CIMGUI_API void             ImDrawList_PushClipRect(ImDrawList* list, CONST struct ImVec4 clip_rect); // Scissoring. The values are x1, y1, x2, y2.
+CIMGUI_API void             ImDrawList_PushClipRectFullScreen(ImDrawList* list);
+CIMGUI_API void             ImDrawList_PopClipRect(ImDrawList* list);
+CIMGUI_API void             ImDrawList_PushTextureID(ImDrawList* list, CONST ImTextureID texture_id);
+CIMGUI_API void             ImDrawList_PopTextureID(ImDrawList* list);
+
+// Primitives
+CIMGUI_API void             ImDrawList_AddLine(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float thickness);
+CIMGUI_API void             ImDrawList_AddRect(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners);
+CIMGUI_API void             ImDrawList_AddRectFilled(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners);
+CIMGUI_API void             ImDrawList_AddRectFilledMultiColor(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col_upr_left, ImU32 col_upr_right, ImU32 col_bot_right, ImU32 col_bot_left);
+CIMGUI_API void             ImDrawList_AddTriangleFilled(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, ImU32 col);
+CIMGUI_API void             ImDrawList_AddCircle(ImDrawList* list, CONST struct ImVec2 centre, float radius, ImU32 col, int num_segments);
+CIMGUI_API void             ImDrawList_AddCircleFilled(ImDrawList* list, CONST struct ImVec2 centre, float radius, ImU32 col, int num_segments);
+CIMGUI_API void             ImDrawList_AddText(ImDrawList* list, CONST struct ImVec2 pos, ImU32 col, CONST char* text_begin, CONST char* text_end);
+CIMGUI_API void             ImDrawList_AddTextExt(ImDrawList* list, CONST ImFont* font, float font_size, CONST struct ImVec2 pos, ImU32 col, CONST char* text_begin, CONST char* text_end, float wrap_width, CONST ImVec4* cpu_fine_clip_rect);
+CIMGUI_API void             ImDrawList_AddImage(ImDrawList* list, ImTextureID user_texture_id, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 uv0, CONST struct ImVec2 uv1, ImU32 col);
+CIMGUI_API void             ImDrawList_AddPolyline(ImDrawList* list, CONST ImVec2* points, CONST int num_points, ImU32 col, bool closed, float thickness, bool anti_aliased);
+CIMGUI_API void             ImDrawList_AddConvexPolyFilled(ImDrawList* list, CONST ImVec2* points, CONST int num_points, ImU32 col, bool anti_aliased);
+CIMGUI_API void             ImDrawList_AddBezierCurve(ImDrawList* list, CONST struct ImVec2 pos0, CONST struct ImVec2 cp0, CONST struct ImVec2 cp1, CONST struct ImVec2 pos1, ImU32 col, float thickness, int num_segments);
+
+// Stateful path API, add points then finish with PathFill() or PathStroke()
+CIMGUI_API void             ImDrawList_PathClear(ImDrawList* list);
+CIMGUI_API void             ImDrawList_PathLineTo(ImDrawList* list, CONST struct ImVec2 pos);
+CIMGUI_API void             ImDrawList_PathLineToMergeDuplicate(ImDrawList* list, CONST struct ImVec2 pos);
+CIMGUI_API void             ImDrawList_PathFill(ImDrawList* list, ImU32 col);
+CIMGUI_API void             ImDrawList_PathStroke(ImDrawList* list, ImU32 col, bool closed, float thickness);
+CIMGUI_API void             ImDrawList_PathArcTo(ImDrawList* list, CONST struct ImVec2 centre, float radius, float a_min, float a_max, int num_segments);
+CIMGUI_API void             ImDrawList_PathArcToFast(ImDrawList* list, CONST struct ImVec2 centre, float radius, int a_min_of_12, int a_max_of_12); // Use precomputed angles for a 12 steps circle
+CIMGUI_API void             ImDrawList_PathBezierCurveTo(ImDrawList* list, CONST struct ImVec2 p1, CONST struct ImVec2 p2, CONST struct ImVec2 p3, int num_segments);
+CIMGUI_API void             ImDrawList_PathRect(ImDrawList* list, CONST struct ImVec2 rect_min, CONST struct ImVec2 rect_max, float rounding, int rounding_corners);
+
+// Channels
+CIMGUI_API void             ImDrawList_ChannelsSplit(ImDrawList* list, int channels_count);
+CIMGUI_API void             ImDrawList_ChannelsMerge(ImDrawList* list);
+CIMGUI_API void             ImDrawList_ChannelsSetCurrent(ImDrawList* list, int channel_index);
+
+// Advanced
+CIMGUI_API void             ImDrawList_AddCallback(ImDrawList* list, ImDrawCallback callback, void* callback_data); // Your rendering function must check for 'UserCallback' in ImDrawCmd and call the function instead of rendering triangles.
+CIMGUI_API void             ImDrawList_AddDrawCmd(ImDrawList* list); // This is useful if you need to forcefully create a new draw call (to allow for dependent rendering / blending). Otherwise primitives are merged into the same draw-call as much as possible
+
+// Internal helpers
+CIMGUI_API void             ImDrawList_PrimReserve(ImDrawList* list, int idx_count, int vtx_count);
+CIMGUI_API void             ImDrawList_PrimRect(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col);
+CIMGUI_API void             ImDrawList_PrimRectUV(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 uv_a, CONST struct ImVec2 uv_b, ImU32 col);
+CIMGUI_API void             ImDrawList_PrimVtx(ImDrawList* list, CONST struct ImVec2 pos, CONST struct ImVec2 uv, ImU32 col);
+CIMGUI_API void             ImDrawList_PrimWriteVtx(ImDrawList* list, CONST struct ImVec2 pos, CONST struct ImVec2 uv, ImU32 col);
+CIMGUI_API void             ImDrawList_PrimWriteIdx(ImDrawList* list, ImDrawIdx idx);
+CIMGUI_API void             ImDrawList_UpdateClipRect(ImDrawList* list);
+CIMGUI_API void             ImDrawList_UpdateTextureID(ImDrawList* list);
