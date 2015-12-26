@@ -1260,6 +1260,11 @@ CIMGUI_API bool igIsRectVisible(CONST ImVec2 item_size)
     return ImGui::IsRectVisible(item_size);
 }
 
+CIMGUI_API int igGetKeyIndex(ImGuiKey key)
+{
+    return ImGui::GetKeyIndex(key);
+}
+
 CIMGUI_API bool igIsKeyDown(int key_index)
 {
     return ImGui::IsKeyDown(key_index);

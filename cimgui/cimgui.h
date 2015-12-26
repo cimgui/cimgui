@@ -320,6 +320,7 @@ CIMGUI_API ImU32            igColorConvertFloat4ToU32(CONST struct ImVec4 in);
 CIMGUI_API void             igColorConvertRGBtoHSV(float r, float g, float b, float* out_h, float* out_s, float* out_v);
 CIMGUI_API void             igColorConvertHSVtoRGB(float h, float s, float v, float* out_r, float* out_g, float* out_b);
 
+CIMGUI_API int              igGetKeyIndex(ImGuiKey key);
 CIMGUI_API bool             igIsKeyDown(int key_index);
 CIMGUI_API bool             igIsKeyPressed(int key_index, bool repeat);
 CIMGUI_API bool             igIsKeyReleased(int key_index);
