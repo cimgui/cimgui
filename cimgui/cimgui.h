@@ -93,6 +93,9 @@ CIMGUI_API void             igPopStyleColor(int count);
 CIMGUI_API void             igPushStyleVar(ImGuiStyleVar idx, float val);
 CIMGUI_API void             igPushStyleVarVec(ImGuiStyleVar idx, CONST struct ImVec2 val);
 CIMGUI_API void             igPopStyleVar(int count);
+CIMGUI_API ImU32            igGetColorU32(ImGuiCol idx, float alpha_mul);
+CIMGUI_API ImU32            igGetColorU32Vec(CONST ImVec4* col);
+
 
 // Parameters stacks (current window)
 CIMGUI_API void             igPushItemWidth(float item_width);
@@ -183,6 +186,8 @@ CIMGUI_API void             igPlotLines(CONST char* label, CONST float* values, 
 CIMGUI_API void             igPlotLines2(CONST char* label, float(*values_getter)(void* data, int idx), void* data, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size);
 CIMGUI_API void             igPlotHistogram(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size, int stride);
 CIMGUI_API void             igPlotHistogram2(CONST char* label, float(*values_getter)(void* data, int idx), void* data, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size);
+CIMGUI_API void             igProgressBar(float fraction, CONST ImVec2* size_arg, const char* overlay);
+
 
 // Widgets: Sliders (tip: ctrl+click on a slider to input text)
 CIMGUI_API bool             igSliderFloat(CONST char* label, float* v, float v_min, float v_max, CONST char* display_format, float power);
@@ -247,8 +252,8 @@ CIMGUI_API void             igValueBool(CONST char* prefix, bool b);
 CIMGUI_API void             igValueInt(CONST char* prefix, int v);
 CIMGUI_API void             igValueUInt(CONST char* prefix, unsigned int v);
 CIMGUI_API void             igValueFloat(CONST char* prefix, float v, CONST char* float_format);
-CIMGUI_API void             igColor(CONST char* prefix, CONST struct ImVec4 v);
-CIMGUI_API void             igColor2(CONST char* prefix, unsigned int v);
+CIMGUI_API void             igValueColor(CONST char* prefix, CONST struct ImVec4 v);
+CIMGUI_API void             igValueColor2(CONST char* prefix, unsigned int v);
 
 // Tooltip
 CIMGUI_API void             igSetTooltip(CONST char* fmt, ...);
@@ -361,6 +366,7 @@ CIMGUI_API void             ImFontAtlas_Clear(ImFontAtlas* atlas);
 
 CIMGUI_API void             ImGuiIO_AddInputCharacter(unsigned short c);
 CIMGUI_API void             ImGuiIO_AddInputCharactersUTF8(CONST char* utf8_chars);
+CIMGUI_API void             ImGuiIO_ClearInputCharacters();
 
 //ImDrawData
 CIMGUI_API void             ImDrawData_DeIndexAllBuffers(ImDrawData* drawData);

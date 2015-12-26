@@ -325,6 +325,16 @@ CIMGUI_API void igPopStyleVar(int count)
     return ImGui::PopStyleVar(count);
 }
 
+CIMGUI_API ImU32 igGetColorU32(ImGuiCol idx, float alpha_mul)
+{
+    return ImGui::GetColorU32(idx,alpha_mul);
+}
+
+CIMGUI_API ImU32 igGetColorU32Vec(CONST ImVec4* col)
+{
+    return ImGui::GetColorU32(*col);
+}
+
 // Parameters stacks (current window)
 CIMGUI_API void igPushItemWidth(float item_width)
 {
@@ -815,6 +825,11 @@ CIMGUI_API void igPlotHistogram2(CONST char* label, float(*values_getter)(void* 
     return ImGui::PlotHistogram(label, values_getter, data, values_count, values_offset, overlay_text, scale_min, scale_max, graph_size);
 }
 
+CIMGUI_API void igProgressBar(float fraction, CONST ImVec2* size_arg, const char* overlay)
+{
+    return ImGui::ProgressBar(fraction,*size_arg,overlay);
+}
+
 // Widgets: Sliders (tip: ctrl+click on a slider to input text)
 CIMGUI_API bool igSliderFloat(CONST char* label, float* v, float v_min, float v_max, CONST char* display_format, float power)
 {
@@ -1127,14 +1142,14 @@ CIMGUI_API void igValueFloat(CONST char* prefix, float v, CONST char* float_form
     ImGui::Value(prefix,v,float_format);
 }
 
-CIMGUI_API void igColor(CONST char* prefix, CONST ImVec4 v)
+CIMGUI_API void igValueColor(CONST char* prefix, CONST ImVec4 v)
 {
-    ImGui::Color(prefix,v);
+    ImGui::ValueColor(prefix,v);
 }
 
-CIMGUI_API void igColor2(CONST char* prefix, unsigned int v)
+CIMGUI_API void igValueColor2(CONST char* prefix, unsigned int v)
 {
-    ImGui::Color(prefix,v);
+    ImGui::ValueColor(prefix,v);
 }
 
 // Logging: all text output from interface is redirected to tty/file/clipboard. Tree nodes are automatically opened.
@@ -1452,4 +1467,9 @@ CIMGUI_API void ImGuiIO_AddInputCharacter(unsigned short c)
 CIMGUI_API void ImGuiIO_AddInputCharactersUTF8(CONST char* utf8_chars)
 {
     return ImGui::GetIO().AddInputCharactersUTF8(utf8_chars);
+}
+
+CIMGUI_API void ImGuiIO_ClearInputCharacters()
+{
+    return ImGui::GetIO().ClearInputCharacters();
 }
