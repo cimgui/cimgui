@@ -1,7 +1,6 @@
 # cimgui [![Build Status](https://travis-ci.org/Extrawurst/cimgui.svg)](https://travis-ci.org/Extrawurst/cimgui)
 
 ![sample](https://raw.github.com/extrawurst/cimgui/master/Screen Shot 2015-04-09.png)
-![new menus api](https://raw.github.com/extrawurst/cimgui/master/menus-api.gif)
 
 This is a thin c-api wrapper for the excellent C++ intermediate gui [imgui](https://github.com/ocornut/imgui).
 Most of the functions have wrapper counterparts now, missing stuff is added on a as-needed basis (PR welcome).
