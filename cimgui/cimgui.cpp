@@ -119,21 +119,6 @@ CIMGUI_API ImDrawList* igGetWindowDrawList()
     return ImGui::GetWindowDrawList();
 }
 
-CIMGUI_API ImFont* igGetWindowFont()
-{
-    return ImGui::GetWindowFont();
-}
-
-CIMGUI_API float igGetWindowFontSize()
-{
-    return ImGui::GetWindowFontSize();
-}
-
-CIMGUI_API void igSetWindowFontScale(float scale)
-{
-    ImGui::SetWindowFontScale(scale);
-}
-
 CIMGUI_API void igGetWindowPos(ImVec2* out)
 {
     *out = ImGui::GetWindowPos();
@@ -157,6 +142,11 @@ CIMGUI_API float igGetWindowHeight()
 CIMGUI_API bool igIsWindowCollapsed()
 {
     return ImGui::IsWindowCollapsed();
+}
+
+CIMGUI_API void igSetWindowFontScale(float scale)
+{
+    ImGui::SetWindowFontScale(scale);
 }
 
 CIMGUI_API void igSetNextWindowPos(CONST ImVec2 pos, ImGuiSetCond cond)
@@ -325,6 +315,21 @@ CIMGUI_API void igPopStyleVar(int count)
     return ImGui::PopStyleVar(count);
 }
 
+CIMGUI_API ImFont* igGetFont()
+{
+    return ImGui::GetFont();
+}
+
+CIMGUI_API float igGetFontSize()
+{
+    return ImGui::GetFontSize();
+}
+
+CIMGUI_API void igGetFontTexUvWhitePixel(ImVec2* pOut)
+{
+    *pOut = ImGui::GetFontTexUvWhitePixel();
+}
+
 CIMGUI_API ImU32 igGetColorU32(ImGuiCol idx, float alpha_mul)
 {
     return ImGui::GetColorU32(idx,alpha_mul);
@@ -462,9 +467,9 @@ CIMGUI_API void igSeparator()
     return ImGui::Separator();
 }
 
-CIMGUI_API void igSameLine(float local_pos_x, float spacing_w)
+CIMGUI_API void igSameLine(float pos_x, float spacing_w)
 {
-    return ImGui::SameLine(local_pos_x, spacing_w);
+    return ImGui::SameLine(pos_x, spacing_w);
 }
 
 CIMGUI_API void igSpacing()
@@ -485,41 +490,6 @@ CIMGUI_API void igIndent()
 CIMGUI_API void igUnindent()
 {
     return ImGui::Unindent();
-}
-
-CIMGUI_API void igColumns(int count, CONST char* id, bool border)
-{
-    return ImGui::Columns(count, id, border);
-}
-
-CIMGUI_API void igNextColumn()
-{
-    return ImGui::NextColumn();
-}
-
-CIMGUI_API int igGetColumnIndex()
-{
-    return ImGui::GetColumnIndex();
-}
-
-CIMGUI_API float igGetColumnOffset(int column_index)
-{
-    return ImGui::GetColumnOffset(column_index);
-}
-
-CIMGUI_API void igSetColumnOffset(int column_index, float offset_x)
-{
-    return ImGui::SetColumnOffset(column_index, offset_x);
-}
-
-CIMGUI_API float igGetColumnWidth(int column_index)
-{
-    return ImGui::GetColumnWidth(column_index);
-}
-
-CIMGUI_API int igGetColumnsCount()
-{
-    return ImGui::GetColumnsCount();
 }
 
 CIMGUI_API void igGetCursorPos(ImVec2* pOut)
@@ -585,6 +555,43 @@ CIMGUI_API float igGetTextLineHeightWithSpacing()
 CIMGUI_API float igGetItemsLineHeightWithSpacing()
 {
     return ImGui::GetItemsLineHeightWithSpacing();
+}
+
+//Columns
+
+CIMGUI_API void igColumns(int count, CONST char* id, bool border)
+{
+    return ImGui::Columns(count, id, border);
+}
+
+CIMGUI_API void igNextColumn()
+{
+    return ImGui::NextColumn();
+}
+
+CIMGUI_API int igGetColumnIndex()
+{
+    return ImGui::GetColumnIndex();
+}
+
+CIMGUI_API float igGetColumnOffset(int column_index)
+{
+    return ImGui::GetColumnOffset(column_index);
+}
+
+CIMGUI_API void igSetColumnOffset(int column_index, float offset_x)
+{
+    return ImGui::SetColumnOffset(column_index, offset_x);
+}
+
+CIMGUI_API float igGetColumnWidth(int column_index)
+{
+    return ImGui::GetColumnWidth(column_index);
+}
+
+CIMGUI_API int igGetColumnsCount()
+{
+    return ImGui::GetColumnsCount();
 }
 
 // ID scopes
@@ -1235,6 +1242,11 @@ CIMGUI_API void igGetItemRectSize(ImVec2* pOut)
     *pOut = ImGui::GetItemRectSize();
 }
 
+CIMGUI_API void igSetItemAllowOverlap()
+{
+    ImGui::SetItemAllowOverlap();
+}
+
 CIMGUI_API bool igIsWindowHovered()
 {
     return ImGui::IsWindowHovered();
@@ -1310,9 +1322,9 @@ CIMGUI_API bool igIsMouseHoveringAnyWindow()
     return ImGui::IsMouseHoveringAnyWindow();
 }
 
-CIMGUI_API bool igIsMouseHoveringRect(CONST ImVec2 pos_min, CONST ImVec2 pos_max, bool clip)
+CIMGUI_API bool igIsMouseHoveringRect(CONST ImVec2 r_min, CONST ImVec2 r_max, bool clip)
 {
-    return ImGui::IsMouseHoveringRect(pos_min,pos_max,clip);
+    return ImGui::IsMouseHoveringRect(r_min,r_max,clip);
 }
 
 CIMGUI_API bool igIsMouseDragging(int button, float lock_threshold)
@@ -1354,14 +1366,14 @@ CIMGUI_API void igSetMouseCursor(ImGuiMouseCursor type)
     ImGui::SetMouseCursor(type);
 }
 
-CIMGUI_API void igCaptureKeyboardFromApp()
+CIMGUI_API void igCaptureKeyboardFromApp(bool capture)
 {
-    return ImGui::CaptureKeyboardFromApp();
+    return ImGui::CaptureKeyboardFromApp(capture);
 }
 
-CIMGUI_API void igCaptureMouseFromApp()
+CIMGUI_API void igCaptureMouseFromApp(bool capture)
 {
-    return ImGui::CaptureMouseFromApp();
+    return ImGui::CaptureMouseFromApp(capture);
 }
 
 CIMGUI_API void* igMemAlloc(size_t sz)

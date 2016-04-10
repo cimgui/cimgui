@@ -77,9 +77,9 @@ CIMGUI_API void ImDrawList_AddLine(ImDrawList* list, CONST struct ImVec2 a, CONS
 	return list->AddLine(a, b, col, thickness);
 }
 
-CIMGUI_API void ImDrawList_AddRect(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners)
+CIMGUI_API void ImDrawList_AddRect(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners, float thickness)
 {
-	return list->AddRect(a, b, col, rounding, rounding_corners);
+	return list->AddRect(a, b, col, rounding, rounding_corners, thickness);
 }
 
 CIMGUI_API void ImDrawList_AddRectFilled(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners)
@@ -92,14 +92,19 @@ CIMGUI_API void ImDrawList_AddRectFilledMultiColor(ImDrawList* list, CONST struc
 	return list->AddRectFilledMultiColor(a, b, col_upr_left, col_upr_right, col_bot_right, col_bot_left);
 }
 
+CIMGUI_API void ImDrawList_AddTriangle(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, ImU32 col, float thickness)
+{
+	return list->AddTriangle(a,b,c,col,thickness);
+}
+
 CIMGUI_API void ImDrawList_AddTriangleFilled(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, ImU32 col)
 {
 	return list->AddTriangleFilled(a, b, c, col);
 }
 
-CIMGUI_API void ImDrawList_AddCircle(ImDrawList* list, CONST struct ImVec2 centre, float radius, ImU32 col, int num_segments)
+CIMGUI_API void ImDrawList_AddCircle(ImDrawList* list, CONST struct ImVec2 centre, float radius, ImU32 col, int num_segments, float thickness)
 {
-	return list->AddCircle(centre, radius, col, num_segments);
+	return list->AddCircle(centre, radius, col, num_segments, thickness);
 }
 
 CIMGUI_API void ImDrawList_AddCircleFilled(ImDrawList* list, CONST struct ImVec2 centre, float radius, ImU32 col, int num_segments)
@@ -220,6 +225,11 @@ CIMGUI_API void ImDrawList_PrimRect(ImDrawList* list, CONST struct ImVec2 a, CON
 CIMGUI_API void ImDrawList_PrimRectUV(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 uv_a, CONST struct ImVec2 uv_b, ImU32 col)
 {
 	return list->PrimRectUV(a, b, uv_a, uv_b, col);
+}
+
+CIMGUI_API void ImDrawList_PrimQuadUV(ImDrawList* list,CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, CONST struct ImVec2 uv_a, CONST struct ImVec2 uv_b, CONST struct ImVec2 uv_c, CONST struct ImVec2 uv_d, ImU32 col)
+{
+	return list->PrimQuadUV(a,b,c,d,uv_a,uv_b,uv_c,uv_d,col);
 }
 
 CIMGUI_API void ImDrawList_PrimVtx(ImDrawList* list, CONST struct ImVec2 pos, CONST struct ImVec2 uv, ImU32 col)
