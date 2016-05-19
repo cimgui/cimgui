@@ -77,8 +77,8 @@ CIMGUI_API float            igGetScrollMaxX();
 CIMGUI_API float            igGetScrollMaxY();
 CIMGUI_API void             igSetScrollX(float scroll_x);
 CIMGUI_API void             igSetScrollY(float scroll_y);
-CIMGUI_API void             igSetScrollHere(float center_y_ratio = 0.5f);
-CIMGUI_API void             igSetScrollFromPosY(float pos_y, float center_y_ratio = 0.5f);
+CIMGUI_API void             igSetScrollHere(float center_y_ratio);
+CIMGUI_API void             igSetScrollFromPosY(float pos_y, float center_y_ratio);
 CIMGUI_API void             igSetKeyboardFocusHere(int offset);
 CIMGUI_API void             igSetStateStorage(ImGuiStorage* tree);
 CIMGUI_API ImGuiStorage*    igGetStateStorage();
@@ -210,12 +210,12 @@ CIMGUI_API bool             igDragFloat(CONST char* label, float* v, float v_spe
 CIMGUI_API bool             igDragFloat2(CONST char* label, float v[2], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
 CIMGUI_API bool             igDragFloat3(CONST char* label, float v[3], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
 CIMGUI_API bool             igDragFloat4(CONST char* label, float v[4], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
-CIMGUI_API bool             igDragFloatRange2(CONST char* label, float* v_current_min, float* v_current_max, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, CONST char* display_format = "%.3f", CONST char* display_format_max = NULL, float power = 1.0f);
+CIMGUI_API bool             igDragFloatRange2(CONST char* label, float* v_current_min, float* v_current_max, float v_speed, float v_min, float v_max, CONST char* display_format, CONST char* display_format_max, float power);
 CIMGUI_API bool             igDragInt(CONST char* label, int* v, float v_speed, int v_min, int v_max, CONST char* display_format);                                       // If v_max >= v_max we have no bound
 CIMGUI_API bool             igDragInt2(CONST char* label, int v[2], float v_speed, int v_min, int v_max, CONST char* display_format);
 CIMGUI_API bool             igDragInt3(CONST char* label, int v[3], float v_speed, int v_min, int v_max, CONST char* display_format);
 CIMGUI_API bool             igDragInt4(CONST char* label, int v[4], float v_speed, int v_min, int v_max, CONST char* display_format);
-CIMGUI_API bool             igDragIntRange2(CONST char* label, int* v_current_min, int* v_current_max, float v_speed = 1.0f, int v_min = 0, int v_max = 0, CONST char* display_format = "%.0f", CONST char* display_format_max = NULL);
+CIMGUI_API bool             igDragIntRange2(CONST char* label, int* v_current_min, int* v_current_max, float v_speed, int v_min, int v_max, CONST char* display_format, CONST char* display_format_max);
 
 
 // Widgets: Input
