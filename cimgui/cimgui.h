@@ -33,6 +33,7 @@ struct ImFontConfig;
 struct ImFontAtlas;
 struct ImDrawCmd;
 
+typedef unsigned short ImDrawIdx;
 typedef unsigned int ImU32;
 typedef unsigned short ImWchar;     
 typedef void* ImTextureID;       
@@ -428,7 +429,7 @@ CIMGUI_API void                 ImDrawData_DeIndexAllBuffers(struct ImDrawData* 
 CIMGUI_API int                  ImDrawList_GetVertexBufferSize(struct ImDrawList* list);
 CIMGUI_API struct ImDrawVert*   ImDrawList_GetVertexPtr(struct ImDrawList* list, int n);
 CIMGUI_API int                  ImDrawList_GetIndexBufferSize(struct ImDrawList* list);
-CIMGUI_API struct ImDrawIdx*    ImDrawList_GetIndexPtr(struct ImDrawList* list, int n);
+CIMGUI_API ImDrawIdx*           ImDrawList_GetIndexPtr(struct ImDrawList* list, int n);
 CIMGUI_API int                  ImDrawList_GetCmdSize(struct ImDrawList* list);
 CIMGUI_API struct ImDrawCmd*    ImDrawList_GetCmdPtr(struct ImDrawList* list, int n);
 
@@ -484,7 +485,7 @@ CIMGUI_API void             ImDrawList_PrimRect(struct ImDrawList* list, CONST s
 CIMGUI_API void             ImDrawList_PrimRectUV(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 uv_a, CONST struct ImVec2 uv_b, ImU32 col);
 CIMGUI_API void             ImDrawList_PrimQuadUV(struct ImDrawList* list,CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, CONST struct ImVec2 uv_a, CONST struct ImVec2 uv_b, CONST struct ImVec2 uv_c, CONST struct ImVec2 uv_d, ImU32 col);
 CIMGUI_API void             ImDrawList_PrimWriteVtx(struct ImDrawList* list, CONST struct ImVec2 pos, CONST struct ImVec2 uv, ImU32 col);
-CIMGUI_API void             ImDrawList_PrimWriteIdx(struct ImDrawList* list, struct ImDrawIdx idx);
+CIMGUI_API void             ImDrawList_PrimWriteIdx(struct ImDrawList* list, ImDrawIdx idx);
 CIMGUI_API void             ImDrawList_PrimVtx(struct ImDrawList* list, CONST struct ImVec2 pos, CONST struct ImVec2 uv, ImU32 col);
 CIMGUI_API void             ImDrawList_UpdateClipRect(struct ImDrawList* list);
 CIMGUI_API void             ImDrawList_UpdateTextureID(struct ImDrawList* list);
