@@ -47,9 +47,9 @@ CIMGUI_API void ImDrawList_ClearFreeMemory(ImDrawList* list)
 	return list->ClearFreeMemory();
 }
 
-CIMGUI_API void ImDrawList_PushClipRect(ImDrawList* list, CONST struct ImVec4 clip_rect)
+CIMGUI_API void ImDrawList_PushClipRect(ImDrawList* list, struct ImVec2 clip_rect_min, struct ImVec2 clip_rect_max, bool intersect_with_current_clip_rect)
 {
-	return list->PushClipRect(clip_rect);
+	return list->PushClipRect(clip_rect_min,clip_rect_max,intersect_with_current_clip_rect);
 }
 
 CIMGUI_API void ImDrawList_PushClipRectFullScreen(ImDrawList* list)
@@ -90,6 +90,16 @@ CIMGUI_API void ImDrawList_AddRectFilled(ImDrawList* list, CONST struct ImVec2 a
 CIMGUI_API void ImDrawList_AddRectFilledMultiColor(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col_upr_left, ImU32 col_upr_right, ImU32 col_bot_right, ImU32 col_bot_left)
 {
 	return list->AddRectFilledMultiColor(a, b, col_upr_left, col_upr_right, col_bot_right, col_bot_left);
+}
+
+CIMGUI_API void ImDrawLust_AddQuad(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, ImU32 col, float thickness)
+{
+	return list->AddQuad(a, b, c, d, col, thickness);
+}
+
+CIMGUI_API void ImDrawLust_AddQuadFilled(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, ImU32 col)
+{
+	return list->AddQuadFilled(a, b, c, d, col);
 }
 
 CIMGUI_API void ImDrawList_AddTriangle(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, ImU32 col, float thickness)
