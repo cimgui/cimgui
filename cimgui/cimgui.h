@@ -446,8 +446,8 @@ CIMGUI_API void             ImDrawList_AddLine(struct ImDrawList* list, CONST st
 CIMGUI_API void             ImDrawList_AddRect(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners, float thickness);
 CIMGUI_API void             ImDrawList_AddRectFilled(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners);
 CIMGUI_API void             ImDrawList_AddRectFilledMultiColor(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col_upr_left, ImU32 col_upr_right, ImU32 col_bot_right, ImU32 col_bot_left);
-CIMGUI_API void             ImDrawLust_AddQuad(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, ImU32 col, float thickness);
-CIMGUI_API void             ImDrawLust_AddQuadFilled(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, ImU32 col);
+CIMGUI_API void             ImDrawList_AddQuad(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, ImU32 col, float thickness);
+CIMGUI_API void             ImDrawList_AddQuadFilled(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, ImU32 col);
 CIMGUI_API void             ImDrawList_AddTriangle(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, ImU32 col, float thickness);
 CIMGUI_API void             ImDrawList_AddTriangleFilled(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, ImU32 col);
 CIMGUI_API void             ImDrawList_AddCircle(struct ImDrawList* list, CONST struct ImVec2 centre, float radius, ImU32 col, int num_segments, float thickness);
