@@ -92,12 +92,12 @@ CIMGUI_API void ImDrawList_AddRectFilledMultiColor(ImDrawList* list, CONST struc
 	return list->AddRectFilledMultiColor(a, b, col_upr_left, col_upr_right, col_bot_right, col_bot_left);
 }
 
-CIMGUI_API void ImDrawLust_AddQuad(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, ImU32 col, float thickness)
+CIMGUI_API void ImDrawList_AddQuad(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, ImU32 col, float thickness)
 {
 	return list->AddQuad(a, b, c, d, col, thickness);
 }
 
-CIMGUI_API void ImDrawLust_AddQuadFilled(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, ImU32 col)
+CIMGUI_API void ImDrawList_AddQuadFilled(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, ImU32 col)
 {
 	return list->AddQuadFilled(a, b, c, d, col);
 }
