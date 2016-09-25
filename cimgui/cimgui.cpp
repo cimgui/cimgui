@@ -851,7 +851,7 @@ CIMGUI_API bool igSliderFloat(CONST char* label, float* v, float v_min, float v_
 
 CIMGUI_API bool igSliderFloat2(CONST char* label, float v[2], float v_min, float v_max, CONST char* display_format, float power)
 {
-    return ImGui::SliderFloat(label, v, v_min, v_max, display_format, power);
+    return ImGui::SliderFloat2(label, v, v_min, v_max, display_format, power);
 }
 
 CIMGUI_API bool igSliderFloat3(CONST char* label, float v[3], float v_min, float v_max, CONST char* display_format, float power)

@@ -424,6 +424,7 @@ CIMGUI_API void             ImGuiIO_ClearInputCharacters();
 
 //ImDrawData
 CIMGUI_API void                 ImDrawData_DeIndexAllBuffers(struct ImDrawData* drawData);
+CIMGUI_API void					ImDrawData_ScaleClipRects(ImDrawData* drawData, struct ImVec2 sc);
 
 //ImDrawList
 CIMGUI_API int                  ImDrawList_GetVertexBufferSize(struct ImDrawList* list);
