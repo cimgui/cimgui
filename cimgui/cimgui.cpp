@@ -1576,3 +1576,32 @@ CIMGUI_API void ImGuiIO_ClearInputCharacters()
 {
     return ImGui::GetIO().ClearInputCharacters();
 }
+
+CIMGUI_API void	ImGuiTextFilter_Init(struct ImGuiTextFilter* filter, const char* default_filter)
+{
+	*filter = ImGuiTextFilter(default_filter);
+}
+
+CIMGUI_API void	ImGuiTextFilter_Clear(struct ImGuiTextFilter* filter)
+{
+	filter->Clear();
+}
+
+CIMGUI_API bool	ImGuiTextFilter_Draw(struct ImGuiTextFilter* filter, const char* label, float width)
+{
+	return filter->Draw(label, width);
+}
+
+CIMGUI_API bool	ImGuiTextFilter_PassFilter(struct ImGuiTextFilter* filter, const char* text, const char* text_end)
+{
+	return filter->PassFilter(text, text_end);
+}
+
+CIMGUI_API bool	ImGuiTextFilter_IsActive(struct ImGuiTextFilter* filter)
+{
+	return filter->IsActive();
+}
+CIMGUI_API void	ImGuiTextFilter_Build(struct ImGuiTextFilter* filter)
+{
+	filter->Build();
+}

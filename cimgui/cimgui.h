@@ -490,3 +490,11 @@ CIMGUI_API void             ImDrawList_PrimWriteIdx(struct ImDrawList* list, ImD
 CIMGUI_API void             ImDrawList_PrimVtx(struct ImDrawList* list, CONST struct ImVec2 pos, CONST struct ImVec2 uv, ImU32 col);
 CIMGUI_API void             ImDrawList_UpdateClipRect(struct ImDrawList* list);
 CIMGUI_API void             ImDrawList_UpdateTextureID(struct ImDrawList* list);
+
+// ImGuiTextFilter
+CIMGUI_API void	ImGuiTextFilter_Init(struct ImGuiTextFilter* filter, const char* default_filter);
+CIMGUI_API void	ImGuiTextFilter_Clear(struct ImGuiTextFilter* filter);
+CIMGUI_API bool	ImGuiTextFilter_Draw(struct ImGuiTextFilter* filter, const char* label, float width);
+CIMGUI_API bool	ImGuiTextFilter_PassFilter(struct ImGuiTextFilter* filter, const char* text, const char* text_end);
+CIMGUI_API bool	ImGuiTextFilter_IsActive(struct ImGuiTextFilter* filter);
+CIMGUI_API void	ImGuiTextFilter_Build(struct ImGuiTextFilter* filter);
