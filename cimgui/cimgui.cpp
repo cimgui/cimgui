@@ -1605,3 +1605,18 @@ CIMGUI_API void	ImGuiTextFilter_Build(struct ImGuiTextFilter* filter)
 {
 	filter->Build();
 }
+
+CIMGUI_API void ImGuiTextEditCallbackData_DeleteChars(struct ImGuiTextEditCallbackData* data, int pos, int bytes_count)
+{
+	data->DeleteChars(pos, bytes_count);
+}
+
+CIMGUI_API void ImGuiTextEditCallbackData_InsertChars(struct ImGuiTextEditCallbackData* data, int pos, const char* text, const char* text_end)
+{
+	data->InsertChars(pos, text, text_end);
+}
+
+CIMGUI_API bool ImGuiTextEditCallbackData_HasSelection(struct ImGuiTextEditCallbackData* data)
+{
+	return data->HasSelection();
+}

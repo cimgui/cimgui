@@ -498,3 +498,8 @@ CIMGUI_API bool	ImGuiTextFilter_Draw(struct ImGuiTextFilter* filter, const char*
 CIMGUI_API bool	ImGuiTextFilter_PassFilter(struct ImGuiTextFilter* filter, const char* text, const char* text_end);
 CIMGUI_API bool	ImGuiTextFilter_IsActive(struct ImGuiTextFilter* filter);
 CIMGUI_API void	ImGuiTextFilter_Build(struct ImGuiTextFilter* filter);
+
+// ImGuiTextEditCallbackData
+CIMGUI_API void ImGuiTextEditCallbackData_DeleteChars(struct ImGuiTextEditCallbackData* data, int pos, int bytes_count);
+CIMGUI_API void ImGuiTextEditCallbackData_InsertChars(struct ImGuiTextEditCallbackData* data, int pos, const char* text, const char* text_end);
+CIMGUI_API bool ImGuiTextEditCallbackData_HasSelection(struct ImGuiTextEditCallbackData* data);
