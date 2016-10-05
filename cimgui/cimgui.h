@@ -503,3 +503,20 @@ CIMGUI_API void	ImGuiTextFilter_Build(struct ImGuiTextFilter* filter);
 CIMGUI_API void ImGuiTextEditCallbackData_DeleteChars(struct ImGuiTextEditCallbackData* data, int pos, int bytes_count);
 CIMGUI_API void ImGuiTextEditCallbackData_InsertChars(struct ImGuiTextEditCallbackData* data, int pos, const char* text, const char* text_end);
 CIMGUI_API bool ImGuiTextEditCallbackData_HasSelection(struct ImGuiTextEditCallbackData* data);
+
+// ImGuiStorage
+CIMGUI_API void ImGuiStorage_Init(struct ImGuiStorage* storage);
+CIMGUI_API void ImGuiStorage_Clear(struct ImGuiStorage* storage);
+CIMGUI_API int ImGuiStorage_GetInt(struct ImGuiStorage* storage, ImGuiID key, int default_val);
+CIMGUI_API void ImGuiStorage_SetInt(struct ImGuiStorage* storage, ImGuiID key, int val);
+CIMGUI_API bool ImGuiStorage_GetBool(struct ImGuiStorage* storage, ImGuiID key, bool default_val);
+CIMGUI_API void ImGuiStorage_SetBool(struct ImGuiStorage* storage, ImGuiID key, bool val);
+CIMGUI_API float ImGuiStorage_GetFloat(struct ImGuiStorage* storage, ImGuiID key, float default_val);
+CIMGUI_API void ImGuiStorage_SetFloat(struct ImGuiStorage* storage, ImGuiID key, float val);
+CIMGUI_API void* ImGuiStorage_GetVoidPtr(struct ImGuiStorage* storage, ImGuiID key);
+CIMGUI_API void ImGuiStorage_SetVoidPtr(struct ImGuiStorage* storage, ImGuiID key, void* val);
+CIMGUI_API int* ImGuiStorage_GetIntRef(struct ImGuiStorage* storage, ImGuiID key, int default_val);
+CIMGUI_API bool* ImGuiStorage_GetBoolRef(struct ImGuiStorage* storage, ImGuiID key, bool default_val);
+CIMGUI_API float* ImGuiStorage_GetFloatRef(struct ImGuiStorage* storage, ImGuiID key, float default_val);
+CIMGUI_API void** ImGuiStorage_GetVoidPtrRef(struct ImGuiStorage* storage, ImGuiID key, void* default_val);
+CIMGUI_API void ImGuiStorage_SetAllInt(struct ImGuiStorage* storage, int val);

@@ -1620,3 +1620,78 @@ CIMGUI_API bool ImGuiTextEditCallbackData_HasSelection(struct ImGuiTextEditCallb
 {
 	return data->HasSelection();
 }
+
+CIMGUI_API void ImGuiStorage_Init(struct ImGuiStorage* storage)
+{
+	*storage = ImGuiStorage();
+}
+
+CIMGUI_API void ImGuiStorage_Clear(struct ImGuiStorage* storage)
+{
+	storage->Clear();
+}
+
+CIMGUI_API int ImGuiStorage_GetInt(struct ImGuiStorage* storage, ImGuiID key, int default_val)
+{
+	return storage->GetInt(key, default_val);
+}
+
+CIMGUI_API void ImGuiStorage_SetInt(struct ImGuiStorage* storage, ImGuiID key, int val)
+{
+	storage->SetInt(key, val);
+}
+
+CIMGUI_API bool ImGuiStorage_GetBool(struct ImGuiStorage* storage, ImGuiID key, bool default_val)
+{
+	return storage->GetBool(key, default_val);
+}
+
+CIMGUI_API void ImGuiStorage_SetBool(struct ImGuiStorage* storage, ImGuiID key, bool val)
+{
+	storage->SetBool(key, val);
+}
+
+CIMGUI_API float ImGuiStorage_GetFloat(struct ImGuiStorage* storage, ImGuiID key, float default_val) 
+{
+	return storage->GetFloat(key, default_val);
+}
+
+CIMGUI_API void ImGuiStorage_SetFloat(struct ImGuiStorage* storage, ImGuiID key, float val)
+{
+	storage->SetFloat(key, val);
+}
+
+CIMGUI_API void* ImGuiStorage_GetVoidPtr(struct ImGuiStorage* storage, ImGuiID key) 
+{
+	return storage->GetVoidPtr(key);
+}
+
+CIMGUI_API void ImGuiStorage_SetVoidPtr(struct ImGuiStorage* storage, ImGuiID key, void* val)
+{
+	storage->SetVoidPtr(key, val);
+}
+
+CIMGUI_API int* ImGuiStorage_GetIntRef(struct ImGuiStorage* storage, ImGuiID key, int default_val)
+{
+	return storage->GetIntRef(key, default_val);
+}
+
+CIMGUI_API bool* ImGuiStorage_GetBoolRef(struct ImGuiStorage* storage, ImGuiID key, bool default_val) 
+{
+	return storage->GetBoolRef(key, default_val);
+}
+
+CIMGUI_API float* ImGuiStorage_GetFloatRef(struct ImGuiStorage* storage, ImGuiID key, float default_val)
+{
+	return storage->GetFloatRef(key, default_val);
+}
+
+CIMGUI_API void** ImGuiStorage_GetVoidPtrRef(struct ImGuiStorage* storage, ImGuiID key, void* default_val)
+{
+	return storage->GetVoidPtrRef(key, default_val);
+}
+
+CIMGUI_API void ImGuiStorage_SetAllInt(struct ImGuiStorage* storage, int val)
+{
+	storage->SetAllInt(val);
+}
