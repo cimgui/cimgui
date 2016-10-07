@@ -61,3 +61,28 @@ CIMGUI_API void ImFontAtlas_Clear(ImFontAtlas* atlas)
 {
 	return atlas->Clear();
 }
+
+CIMGUI_API CONST ImWchar* ImFontAtlas_GetGlyphRangesDefault(struct ImFontAtlas* atlas)
+{
+	return atlas->GetGlyphRangesDefault();
+}
+
+CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesKorean(struct ImFontAtlas* atlas)
+{
+	return atlas->GetGlyphRangesKorean();
+}
+
+CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesJapanese(struct ImFontAtlas* atlas)
+{
+	return atlas->GetGlyphRangesJapanese();
+}
+
+CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesChinese(struct ImFontAtlas* atlas)
+{
+	return atlas->GetGlyphRangesChinese();
+}
+
+CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesCyrillic(struct ImFontAtlas* atlas)
+{
+	return atlas->GetGlyphRangesCyrillic();
+}
