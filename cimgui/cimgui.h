@@ -495,3 +495,5 @@ CIMGUI_API void             ImDrawList_UpdateTextureID(struct ImDrawList* list);
 CIMGUI_API void ImGuiListClipper_Begin(ImGuiListClipper* clipper, int count, float items_height);
 CIMGUI_API void ImGuiListClipper_End(ImGuiListClipper* clipper);
 CIMGUI_API bool ImGuiListClipper_Step(ImGuiListClipper* clipper);
+CIMGUI_API int ImGuiListClipper_GetDisplayStart(ImGuiListClipper* clipper);
+CIMGUI_API int ImGuiListClipper_GetDisplayEnd(ImGuiListClipper* clipper);
