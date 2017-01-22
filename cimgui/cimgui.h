@@ -55,6 +55,7 @@ typedef int (*ImGuiTextEditCallback)(struct ImGuiTextEditCallbackData *data);
 typedef void (*ImGuiSizeConstraintCallback)(struct ImGuiSizeConstraintCallbackData* data);
 typedef void (*ImDrawCallback)(CONST struct ImDrawList* parent_list, CONST struct ImDrawCmd* cmd);
 
+#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 struct ImVec2 {
     float x, y;
 };
@@ -384,6 +385,7 @@ struct ImFontConfig {
     char            Name[32];
     ImFont*         DstFont;
 };
+#endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
 CIMGUI_API struct ImGuiIO*         igGetIO();
 CIMGUI_API struct ImGuiStyle*      igGetStyle();
