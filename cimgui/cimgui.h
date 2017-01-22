@@ -3,7 +3,9 @@
 
 #if defined _WIN32 || defined __CYGWIN__
 #define API __declspec(dllexport)
+#ifndef __GNUC__
 #define snprintf sprintf_s
+#endif
 #else
 #define API
 #endif
