@@ -243,33 +243,33 @@ enum {
 };
 
 struct ImGuiStyle {
-    float       Alpha;
-    ImVec2      WindowPadding;
-    ImVec2      WindowMinSize;
-    float       WindowRounding;
-    ImGuiAlign  WindowTitleAlign;
-    float       ChildWindowRounding;
-    ImVec2      FramePadding;
-    float       FrameRounding;
-    ImVec2      ItemSpacing;
-    ImVec2      ItemInnerSpacing;
-    ImVec2      TouchExtraPadding;
-    float       IndentSpacing;
-    float       ColumnsMinSpacing;
-    float       ScrollbarSize;
-    float       ScrollbarRounding;
-    float       GrabMinSize;
-    float       GrabRounding;
-    ImVec2      DisplayWindowPadding;
-    ImVec2      DisplaySafeAreaPadding;
-    bool        AntiAliasedLines;
-    bool        AntiAliasedShapes;
-    float       CurveTessellationTol;
-    ImVec4      Colors[ImGuiCol_COUNT];
+    float          Alpha;
+    struct ImVec2  WindowPadding;
+    struct ImVec2  WindowMinSize;
+    float          WindowRounding;
+    ImGuiAlign     WindowTitleAlign;
+    float          ChildWindowRounding;
+    struct ImVec2  FramePadding;
+    float          FrameRounding;
+    struct ImVec2  ItemSpacing;
+    struct ImVec2  ItemInnerSpacing;
+    struct ImVec2  TouchExtraPadding;
+    float          IndentSpacing;
+    float          ColumnsMinSpacing;
+    float          ScrollbarSize;
+    float          ScrollbarRounding;
+    float          GrabMinSize;
+    float          GrabRounding;
+    struct ImVec2  DisplayWindowPadding;
+    struct ImVec2  DisplaySafeAreaPadding;
+    bool           AntiAliasedLines;
+    bool           AntiAliasedShapes;
+    float          CurveTessellationTol;
+    struct ImVec4  Colors[ImGuiCol_COUNT];
 };
 
 struct ImGuiIO {
-    ImVec2               DisplaySize;
+    struct ImVec2        DisplaySize;
     float                DeltaTime;
     float                IniSavingRate;
     const char*          IniFilename;
@@ -284,21 +284,21 @@ struct ImGuiIO {
     struct ImFontAtlas*  Fonts;
     float                FontGlobalScale;
     bool                 FontAllowUserScaling;
-    ImVec2               DisplayFramebufferScale;
-    ImVec2               DisplayVisibleMin;
-    ImVec2               DisplayVisibleMax;
+    struct ImVec2        DisplayFramebufferScale;
+    struct ImVec2        DisplayVisibleMin;
+    struct ImVec2        DisplayVisibleMax;
     bool                 WordMovementUsesAltKey;
     bool                 ShortcutsUseSuperKey;
     bool                 DoubleClickSelectsWord;
     bool                 MultiSelectUsesSuperKey;
-    void                 (*RenderDrawListsFn)(ImDrawData* data);
+    void                 (*RenderDrawListsFn)(struct ImDrawData* data);
     const char*          (*GetClipboardTextFn)();
     void                 (*SetClipboardTextFn)(const char* text);
     void*                (*MemAllocFn)(size_t sz);
     void                 (*MemFreeFn)(void* ptr);
     void                 (*ImeSetInputScreenPosFn)(int x, int y);
     void*                ImeWindowHandle;
-    ImVec2               MousePos;
+    struct ImVec2        MousePos;
     bool                 MouseDown[5];
     float                MouseWheel;
     bool                 MouseDrawCursor;
@@ -316,10 +316,10 @@ struct ImGuiIO {
     int                  MetricsRenderVertices;
     int                  MetricsRenderIndices;
     int                  MetricsActiveWindows;
-    ImVec2               MousePosPrev;
-    ImVec2               MouseDelta;
+    struct ImVec2        MousePosPrev;
+    struct ImVec2        MouseDelta;
     bool                 MouseClicked[5];
-    ImVec2               MouseClickedPos[5];
+    struct ImVec2        MouseClickedPos[5];
     float                MouseClickedTime[5];
     bool                 MouseDoubleClicked[5];
     bool                 MouseReleased[5];
@@ -332,42 +332,42 @@ struct ImGuiIO {
 };
 
 struct ImGuiTextEditCallbackData {
-    ImGuiInputTextFlags EventFlag;
-    ImGuiInputTextFlags Flags;
-    void*               UserData;
-    bool                ReadOnly;
-    ImWchar             EventChar;
-    ImGuiKey            EventKey;
-    char*               Buf;
-    int                 BufTextLen;
-    int                 BufSize;
-    bool                BufDirty;
-    int                 CursorPos;
-    int                 SelectionStart;
-    int                 SelectionEnd;
+    ImGuiInputTextFlags  EventFlag;
+    ImGuiInputTextFlags  Flags;
+    void*                UserData;
+    bool                 ReadOnly;
+    ImWchar              EventChar;
+    ImGuiKey             EventKey;
+    char*                Buf;
+    int                  BufTextLen;
+    int                  BufSize;
+    bool                 BufDirty;
+    int                  CursorPos;
+    int                  SelectionStart;
+    int                  SelectionEnd;
 };
 
 struct ImGuiSizeConstraintCallbackData {
-    void*   UserData;
-    ImVec2  Pos;
-    ImVec2  CurrentSize;
-    ImVec2  DesiredSize;
+    void*          UserData;
+    struct ImVec2  Pos;
+    struct ImVec2  CurrentSize;
+    struct ImVec2  DesiredSize;
 };
 
 struct ImDrawCmd {
     unsigned int    ElemCount;
-    ImVec4          ClipRect;
+    struct ImVec4   ClipRect;
     ImTextureID     TextureId;
     ImDrawCallback  UserCallback;
     void*           UserCallbackData;
 };
 
 struct ImDrawData {
-    bool            Valid;
-    ImDrawList**    CmdLists;
-    int             CmdListsCount;
-    int             TotalVtxCount;
-    int             TotalIdxCount;
+    bool                 Valid;
+    struct ImDrawList**  CmdLists;
+    int                  CmdListsCount;
+    int                  TotalVtxCount;
+    int                  TotalIdxCount;
 };
 
 struct ImFontConfig {
@@ -378,12 +378,12 @@ struct ImFontConfig {
     float           SizePixels;
     int             OversampleH, OversampleV;
     bool            PixelSnapH;
-    ImVec2          GlyphExtraSpacing;
+    struct ImVec2   GlyphExtraSpacing;
     const ImWchar*  GlyphRanges;
     bool            MergeMode;
     bool            MergeGlyphCenterV;
     char            Name[32];
-    ImFont*         DstFont;
+    struct ImFont*  DstFont;
 };
 #endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
