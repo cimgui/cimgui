@@ -32,6 +32,17 @@ ifeq ($(UNAME_S), Darwin) #APPLE
 	CFLAGS = $(CXXFLAGS)
 endif
 
+ifeq ($(OS), Windows_NT)
+	ECHO_MESSAGE = "Windows"
+
+	OUTPUTNAME = cimgui.dll
+	CXXFLAGS = -I../../
+	CXXFLAGS += -Wall
+	CXXFLAGS += -shared
+	LINKFLAGS = -limm32
+	CFLAGS = $(CXXFLAGS)
+endif
+
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
