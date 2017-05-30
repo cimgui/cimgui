@@ -34,6 +34,7 @@ struct ImFont;
 struct ImFontConfig;
 struct ImFontAtlas;
 struct ImDrawCmd;
+struct ImGuiListClipper;
 
 typedef unsigned short ImDrawIdx;
 typedef unsigned int ImU32;
@@ -491,3 +492,10 @@ CIMGUI_API void             ImDrawList_PrimWriteIdx(struct ImDrawList* list, ImD
 CIMGUI_API void             ImDrawList_PrimVtx(struct ImDrawList* list, CONST struct ImVec2 pos, CONST struct ImVec2 uv, ImU32 col);
 CIMGUI_API void             ImDrawList_UpdateClipRect(struct ImDrawList* list);
 CIMGUI_API void             ImDrawList_UpdateTextureID(struct ImDrawList* list);
+
+// ImGuiListClipper
+CIMGUI_API void ImGuiListClipper_Begin(ImGuiListClipper* clipper, int count, float items_height);
+CIMGUI_API void ImGuiListClipper_End(ImGuiListClipper* clipper);
+CIMGUI_API bool ImGuiListClipper_Step(ImGuiListClipper* clipper);
+CIMGUI_API int ImGuiListClipper_GetDisplayStart(ImGuiListClipper* clipper);
+CIMGUI_API int ImGuiListClipper_GetDisplayEnd(ImGuiListClipper* clipper);
