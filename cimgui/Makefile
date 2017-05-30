@@ -3,8 +3,9 @@
 # Compatible with Ubuntu 14.04.1 and Mac OS X
 
 OBJS = cimgui.o
-OBJS += fontAtlas.o 
+OBJS += fontAtlas.o
 OBJS += drawList.o
+OBJS += listClipper.o
 #OBJS += test.o
 OBJS += ../imgui/imgui.o
 OBJS += ../imgui/imgui_draw.o
@@ -29,6 +30,17 @@ ifeq ($(UNAME_S), Darwin) #APPLE
 	CXXFLAGS = -I/usr/local/include
 	CXXFLAGS += -Wall
 	LINKFLAGS = -dynamiclib
+	CFLAGS = $(CXXFLAGS)
+endif
+
+ifeq ($(OS), Windows_NT)
+	ECHO_MESSAGE = "Windows"
+
+	OUTPUTNAME = cimgui.dll
+	CXXFLAGS = -I../../
+	CXXFLAGS += -Wall
+	CXXFLAGS += -shared
+	LINKFLAGS = -limm32
 	CFLAGS = $(CXXFLAGS)
 endif
 
