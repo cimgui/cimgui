@@ -56,6 +56,338 @@ typedef int (*ImGuiTextEditCallback)(struct ImGuiTextEditCallbackData *data);
 typedef void (*ImGuiSizeConstraintCallback)(struct ImGuiSizeConstraintCallbackData* data);
 typedef void (*ImDrawCallback)(CONST struct ImDrawList* parent_list, CONST struct ImDrawCmd* cmd);
 
+#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+struct ImVec2 {
+    float x, y;
+};
+
+struct ImVec4 {
+    float x, y, z, w;
+};
+
+enum {
+    ImGuiWindowFlags_NoTitleBar             = 1 << 0,
+    ImGuiWindowFlags_NoResize               = 1 << 1,
+    ImGuiWindowFlags_NoMove                 = 1 << 2,
+    ImGuiWindowFlags_NoScrollbar            = 1 << 3,
+    ImGuiWindowFlags_NoScrollWithMouse      = 1 << 4,
+    ImGuiWindowFlags_NoCollapse             = 1 << 5,
+    ImGuiWindowFlags_AlwaysAutoResize       = 1 << 6,
+    ImGuiWindowFlags_ShowBorders            = 1 << 7,
+    ImGuiWindowFlags_NoSavedSettings        = 1 << 8,
+    ImGuiWindowFlags_NoInputs               = 1 << 9,
+    ImGuiWindowFlags_MenuBar                = 1 << 10,
+    ImGuiWindowFlags_HorizontalScrollbar    = 1 << 11,
+    ImGuiWindowFlags_NoFocusOnAppearing     = 1 << 12,
+    ImGuiWindowFlags_NoBringToFrontOnFocus  = 1 << 13,
+    ImGuiWindowFlags_AlwaysVerticalScrollbar = 1 << 14,
+    ImGuiWindowFlags_AlwaysHorizontalScrollbar = 1 << 15,
+    ImGuiWindowFlags_AlwaysUseWindowPadding = 1 << 16
+};
+
+enum {
+    ImGuiInputTextFlags_CharsDecimal        = 1 << 0,
+    ImGuiInputTextFlags_CharsHexadecimal    = 1 << 1,
+    ImGuiInputTextFlags_CharsUppercase      = 1 << 2,
+    ImGuiInputTextFlags_CharsNoBlank        = 1 << 3,
+    ImGuiInputTextFlags_AutoSelectAll       = 1 << 4,
+    ImGuiInputTextFlags_EnterReturnsTrue    = 1 << 5,
+    ImGuiInputTextFlags_CallbackCompletion  = 1 << 6,
+    ImGuiInputTextFlags_CallbackHistory     = 1 << 7,
+    ImGuiInputTextFlags_CallbackAlways      = 1 << 8,
+    ImGuiInputTextFlags_CallbackCharFilter  = 1 << 9,
+    ImGuiInputTextFlags_AllowTabInput       = 1 << 10,
+    ImGuiInputTextFlags_CtrlEnterForNewLine = 1 << 11,
+    ImGuiInputTextFlags_NoHorizontalScroll  = 1 << 12,
+    ImGuiInputTextFlags_AlwaysInsertMode    = 1 << 13,
+    ImGuiInputTextFlags_ReadOnly            = 1 << 14,
+    ImGuiInputTextFlags_Password            = 1 << 15
+};
+
+enum {
+    ImGuiTreeNodeFlags_Selected             = 1 << 0,
+    ImGuiTreeNodeFlags_Framed               = 1 << 1,
+    ImGuiTreeNodeFlags_AllowOverlapMode     = 1 << 2,
+    ImGuiTreeNodeFlags_NoTreePushOnOpen     = 1 << 3,
+    ImGuiTreeNodeFlags_NoAutoOpenOnLog      = 1 << 4,
+    ImGuiTreeNodeFlags_DefaultOpen          = 1 << 5,
+    ImGuiTreeNodeFlags_OpenOnDoubleClick    = 1 << 6,
+    ImGuiTreeNodeFlags_OpenOnArrow          = 1 << 7,
+    ImGuiTreeNodeFlags_Leaf                 = 1 << 8,
+    ImGuiTreeNodeFlags_Bullet               = 1 << 9,
+    ImGuiTreeNodeFlags_CollapsingHeader     = ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_NoAutoOpenOnLog
+};
+
+enum {
+    ImGuiSelectableFlags_DontClosePopups    = 1 << 0,
+    ImGuiSelectableFlags_SpanAllColumns     = 1 << 1,
+    ImGuiSelectableFlags_AllowDoubleClick   = 1 << 2
+};
+
+enum {
+    ImGuiKey_Tab,
+    ImGuiKey_LeftArrow,
+    ImGuiKey_RightArrow,
+    ImGuiKey_UpArrow,
+    ImGuiKey_DownArrow,
+    ImGuiKey_PageUp,
+    ImGuiKey_PageDown,
+    ImGuiKey_Home,
+    ImGuiKey_End,
+    ImGuiKey_Delete,
+    ImGuiKey_Backspace,
+    ImGuiKey_Enter,
+    ImGuiKey_Escape,
+    ImGuiKey_A,
+    ImGuiKey_C,
+    ImGuiKey_V,
+    ImGuiKey_X,
+    ImGuiKey_Y,
+    ImGuiKey_Z,
+    ImGuiKey_COUNT
+};
+
+enum {
+    ImGuiCol_Text,
+    ImGuiCol_TextDisabled,
+    ImGuiCol_WindowBg,
+    ImGuiCol_ChildWindowBg,
+    ImGuiCol_PopupBg,
+    ImGuiCol_Border,
+    ImGuiCol_BorderShadow,
+    ImGuiCol_FrameBg,
+    ImGuiCol_FrameBgHovered,
+    ImGuiCol_FrameBgActive,
+    ImGuiCol_TitleBg,
+    ImGuiCol_TitleBgCollapsed,
+    ImGuiCol_TitleBgActive,
+    ImGuiCol_MenuBarBg,
+    ImGuiCol_ScrollbarBg,
+    ImGuiCol_ScrollbarGrab,
+    ImGuiCol_ScrollbarGrabHovered,
+    ImGuiCol_ScrollbarGrabActive,
+    ImGuiCol_ComboBg,
+    ImGuiCol_CheckMark,
+    ImGuiCol_SliderGrab,
+    ImGuiCol_SliderGrabActive,
+    ImGuiCol_Button,
+    ImGuiCol_ButtonHovered,
+    ImGuiCol_ButtonActive,
+    ImGuiCol_Header,
+    ImGuiCol_HeaderHovered,
+    ImGuiCol_HeaderActive,
+    ImGuiCol_Column,
+    ImGuiCol_ColumnHovered,
+    ImGuiCol_ColumnActive,
+    ImGuiCol_ResizeGrip,
+    ImGuiCol_ResizeGripHovered,
+    ImGuiCol_ResizeGripActive,
+    ImGuiCol_CloseButton,
+    ImGuiCol_CloseButtonHovered,
+    ImGuiCol_CloseButtonActive,
+    ImGuiCol_PlotLines,
+    ImGuiCol_PlotLinesHovered,
+    ImGuiCol_PlotHistogram,
+    ImGuiCol_PlotHistogramHovered,
+    ImGuiCol_TextSelectedBg,
+    ImGuiCol_ModalWindowDarkening,
+    ImGuiCol_COUNT
+};
+
+enum {
+    ImGuiStyleVar_Alpha,
+    ImGuiStyleVar_WindowPadding,
+    ImGuiStyleVar_WindowRounding,
+    ImGuiStyleVar_WindowMinSize,
+    ImGuiStyleVar_ChildWindowRounding,
+    ImGuiStyleVar_FramePadding,
+    ImGuiStyleVar_FrameRounding,
+    ImGuiStyleVar_ItemSpacing,
+    ImGuiStyleVar_ItemInnerSpacing,
+    ImGuiStyleVar_IndentSpacing,
+    ImGuiStyleVar_GrabMinSize
+};
+
+enum {
+    ImGuiAlign_Left     = 1 << 0,
+    ImGuiAlign_Center   = 1 << 1,
+    ImGuiAlign_Right    = 1 << 2,
+    ImGuiAlign_Top      = 1 << 3,
+    ImGuiAlign_VCenter  = 1 << 4,
+    ImGuiAlign_Default  = ImGuiAlign_Left | ImGuiAlign_Top
+};
+
+enum {
+    ImGuiColorEditMode_UserSelect = -2,
+    ImGuiColorEditMode_UserSelectShowButton = -1,
+    ImGuiColorEditMode_RGB = 0,
+    ImGuiColorEditMode_HSV = 1,
+    ImGuiColorEditMode_HEX = 2
+};
+
+enum {
+    ImGuiMouseCursor_Arrow = 0,
+    ImGuiMouseCursor_TextInput,
+    ImGuiMouseCursor_Move,
+    ImGuiMouseCursor_ResizeNS,
+    ImGuiMouseCursor_ResizeEW,
+    ImGuiMouseCursor_ResizeNESW,
+    ImGuiMouseCursor_ResizeNWSE,
+    ImGuiMouseCursor_Count_
+};
+
+enum {
+    ImGuiSetCond_Always        = 1 << 0,
+    ImGuiSetCond_Once          = 1 << 1,
+    ImGuiSetCond_FirstUseEver  = 1 << 2,
+    ImGuiSetCond_Appearing     = 1 << 3
+};
+
+struct ImGuiStyle {
+    float          Alpha;
+    struct ImVec2  WindowPadding;
+    struct ImVec2  WindowMinSize;
+    float          WindowRounding;
+    ImGuiAlign     WindowTitleAlign;
+    float          ChildWindowRounding;
+    struct ImVec2  FramePadding;
+    float          FrameRounding;
+    struct ImVec2  ItemSpacing;
+    struct ImVec2  ItemInnerSpacing;
+    struct ImVec2  TouchExtraPadding;
+    float          IndentSpacing;
+    float          ColumnsMinSpacing;
+    float          ScrollbarSize;
+    float          ScrollbarRounding;
+    float          GrabMinSize;
+    float          GrabRounding;
+    struct ImVec2  DisplayWindowPadding;
+    struct ImVec2  DisplaySafeAreaPadding;
+    bool           AntiAliasedLines;
+    bool           AntiAliasedShapes;
+    float          CurveTessellationTol;
+    struct ImVec4  Colors[ImGuiCol_COUNT];
+};
+
+struct ImGuiIO {
+    struct ImVec2        DisplaySize;
+    float                DeltaTime;
+    float                IniSavingRate;
+    const char*          IniFilename;
+    const char*          LogFilename;
+    float                MouseDoubleClickTime;
+    float                MouseDoubleClickMaxDist;
+    float                MouseDragThreshold;
+    int                  KeyMap[ImGuiKey_COUNT];
+    float                KeyRepeatDelay;
+    float                KeyRepeatRate;
+    void*                UserData;
+    struct ImFontAtlas*  Fonts;
+    float                FontGlobalScale;
+    bool                 FontAllowUserScaling;
+    struct ImVec2        DisplayFramebufferScale;
+    struct ImVec2        DisplayVisibleMin;
+    struct ImVec2        DisplayVisibleMax;
+    bool                 WordMovementUsesAltKey;
+    bool                 ShortcutsUseSuperKey;
+    bool                 DoubleClickSelectsWord;
+    bool                 MultiSelectUsesSuperKey;
+    void                 (*RenderDrawListsFn)(struct ImDrawData* data);
+    const char*          (*GetClipboardTextFn)();
+    void                 (*SetClipboardTextFn)(const char* text);
+    void*                (*MemAllocFn)(size_t sz);
+    void                 (*MemFreeFn)(void* ptr);
+    void                 (*ImeSetInputScreenPosFn)(int x, int y);
+    void*                ImeWindowHandle;
+    struct ImVec2        MousePos;
+    bool                 MouseDown[5];
+    float                MouseWheel;
+    bool                 MouseDrawCursor;
+    bool                 KeyCtrl;
+    bool                 KeyShift;
+    bool                 KeyAlt;
+    bool                 KeySuper;
+    bool                 KeysDown[512];
+    ImWchar              InputCharacters[16 + 1];
+    bool                 WantCaptureMouse;
+    bool                 WantCaptureKeyboard;
+    bool                 WantTextInput;
+    float                Framerate;
+    int                  MetricsAllocs;
+    int                  MetricsRenderVertices;
+    int                  MetricsRenderIndices;
+    int                  MetricsActiveWindows;
+    struct ImVec2        MousePosPrev;
+    struct ImVec2        MouseDelta;
+    bool                 MouseClicked[5];
+    struct ImVec2        MouseClickedPos[5];
+    float                MouseClickedTime[5];
+    bool                 MouseDoubleClicked[5];
+    bool                 MouseReleased[5];
+    bool                 MouseDownOwned[5];
+    float                MouseDownDuration[5];
+    float                MouseDownDurationPrev[5];
+    float                MouseDragMaxDistanceSqr[5];
+    float                KeysDownDuration[512];
+    float                KeysDownDurationPrev[512];
+};
+
+struct ImGuiTextEditCallbackData {
+    ImGuiInputTextFlags  EventFlag;
+    ImGuiInputTextFlags  Flags;
+    void*                UserData;
+    bool                 ReadOnly;
+    ImWchar              EventChar;
+    ImGuiKey             EventKey;
+    char*                Buf;
+    int                  BufTextLen;
+    int                  BufSize;
+    bool                 BufDirty;
+    int                  CursorPos;
+    int                  SelectionStart;
+    int                  SelectionEnd;
+};
+
+struct ImGuiSizeConstraintCallbackData {
+    void*          UserData;
+    struct ImVec2  Pos;
+    struct ImVec2  CurrentSize;
+    struct ImVec2  DesiredSize;
+};
+
+struct ImDrawCmd {
+    unsigned int    ElemCount;
+    struct ImVec4   ClipRect;
+    ImTextureID     TextureId;
+    ImDrawCallback  UserCallback;
+    void*           UserCallbackData;
+};
+
+struct ImDrawData {
+    bool                 Valid;
+    struct ImDrawList**  CmdLists;
+    int                  CmdListsCount;
+    int                  TotalVtxCount;
+    int                  TotalIdxCount;
+};
+
+struct ImFontConfig {
+    void*           FontData;
+    int             FontDataSize;
+    bool            FontDataOwnedByAtlas;
+    int             FontNo;
+    float           SizePixels;
+    int             OversampleH, OversampleV;
+    bool            PixelSnapH;
+    struct ImVec2   GlyphExtraSpacing;
+    const ImWchar*  GlyphRanges;
+    bool            MergeMode;
+    bool            MergeGlyphCenterV;
+    char            Name[32];
+    struct ImFont*  DstFont;
+};
+#endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+
 CIMGUI_API struct ImGuiIO*         igGetIO();
 CIMGUI_API struct ImGuiStyle*      igGetStyle();
 CIMGUI_API struct ImDrawData*      igGetDrawData();
