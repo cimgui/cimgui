@@ -37,6 +37,11 @@ CIMGUI_API void ImDrawData_DeIndexAllBuffers(ImDrawData* drawData)
 	return drawData->DeIndexAllBuffers();
 }
 
+CIMGUI_API void ImDrawData_ScaleClipRects(ImDrawData* drawData, struct ImVec2 sc)
+{
+	return drawData->ScaleClipRects(sc);
+}
+
 CIMGUI_API void ImDrawList_Clear(ImDrawList* list)
 {
 	return list->Clear();

@@ -851,7 +851,7 @@ CIMGUI_API bool igSliderFloat(CONST char* label, float* v, float v_min, float v_
 
 CIMGUI_API bool igSliderFloat2(CONST char* label, float v[2], float v_min, float v_max, CONST char* display_format, float power)
 {
-    return ImGui::SliderFloat(label, v, v_min, v_max, display_format, power);
+    return ImGui::SliderFloat2(label, v, v_min, v_max, display_format, power);
 }
 
 CIMGUI_API bool igSliderFloat3(CONST char* label, float v[3], float v_min, float v_max, CONST char* display_format, float power)
@@ -1575,4 +1575,123 @@ CIMGUI_API void ImGuiIO_AddInputCharactersUTF8(CONST char* utf8_chars)
 CIMGUI_API void ImGuiIO_ClearInputCharacters()
 {
     return ImGui::GetIO().ClearInputCharacters();
+}
+
+CIMGUI_API void	ImGuiTextFilter_Init(struct ImGuiTextFilter* filter, const char* default_filter)
+{
+	*filter = ImGuiTextFilter(default_filter);
+}
+
+CIMGUI_API void	ImGuiTextFilter_Clear(struct ImGuiTextFilter* filter)
+{
+	filter->Clear();
+}
+
+CIMGUI_API bool	ImGuiTextFilter_Draw(struct ImGuiTextFilter* filter, const char* label, float width)
+{
+	return filter->Draw(label, width);
+}
+
+CIMGUI_API bool	ImGuiTextFilter_PassFilter(struct ImGuiTextFilter* filter, const char* text, const char* text_end)
+{
+	return filter->PassFilter(text, text_end);
+}
+
+CIMGUI_API bool	ImGuiTextFilter_IsActive(struct ImGuiTextFilter* filter)
+{
+	return filter->IsActive();
+}
+CIMGUI_API void	ImGuiTextFilter_Build(struct ImGuiTextFilter* filter)
+{
+	filter->Build();
+}
+
+CIMGUI_API void ImGuiTextEditCallbackData_DeleteChars(struct ImGuiTextEditCallbackData* data, int pos, int bytes_count)
+{
+	data->DeleteChars(pos, bytes_count);
+}
+
+CIMGUI_API void ImGuiTextEditCallbackData_InsertChars(struct ImGuiTextEditCallbackData* data, int pos, const char* text, const char* text_end)
+{
+	data->InsertChars(pos, text, text_end);
+}
+
+CIMGUI_API bool ImGuiTextEditCallbackData_HasSelection(struct ImGuiTextEditCallbackData* data)
+{
+	return data->HasSelection();
+}
+
+CIMGUI_API void ImGuiStorage_Init(struct ImGuiStorage* storage)
+{
+	*storage = ImGuiStorage();
+}
+
+CIMGUI_API void ImGuiStorage_Clear(struct ImGuiStorage* storage)
+{
+	storage->Clear();
+}
+
+CIMGUI_API int ImGuiStorage_GetInt(struct ImGuiStorage* storage, ImGuiID key, int default_val)
+{
+	return storage->GetInt(key, default_val);
+}
+
+CIMGUI_API void ImGuiStorage_SetInt(struct ImGuiStorage* storage, ImGuiID key, int val)
+{
+	storage->SetInt(key, val);
+}
+
+CIMGUI_API bool ImGuiStorage_GetBool(struct ImGuiStorage* storage, ImGuiID key, bool default_val)
+{
+	return storage->GetBool(key, default_val);
+}
+
+CIMGUI_API void ImGuiStorage_SetBool(struct ImGuiStorage* storage, ImGuiID key, bool val)
+{
+	storage->SetBool(key, val);
+}
+
+CIMGUI_API float ImGuiStorage_GetFloat(struct ImGuiStorage* storage, ImGuiID key, float default_val) 
+{
+	return storage->GetFloat(key, default_val);
+}
+
+CIMGUI_API void ImGuiStorage_SetFloat(struct ImGuiStorage* storage, ImGuiID key, float val)
+{
+	storage->SetFloat(key, val);
+}
+
+CIMGUI_API void* ImGuiStorage_GetVoidPtr(struct ImGuiStorage* storage, ImGuiID key) 
+{
+	return storage->GetVoidPtr(key);
+}
+
+CIMGUI_API void ImGuiStorage_SetVoidPtr(struct ImGuiStorage* storage, ImGuiID key, void* val)
+{
+	storage->SetVoidPtr(key, val);
+}
+
+CIMGUI_API int* ImGuiStorage_GetIntRef(struct ImGuiStorage* storage, ImGuiID key, int default_val)
+{
+	return storage->GetIntRef(key, default_val);
+}
+
+CIMGUI_API bool* ImGuiStorage_GetBoolRef(struct ImGuiStorage* storage, ImGuiID key, bool default_val) 
+{
+	return storage->GetBoolRef(key, default_val);
+}
+
+CIMGUI_API float* ImGuiStorage_GetFloatRef(struct ImGuiStorage* storage, ImGuiID key, float default_val)
+{
+	return storage->GetFloatRef(key, default_val);
+}
+
+CIMGUI_API void** ImGuiStorage_GetVoidPtrRef(struct ImGuiStorage* storage, ImGuiID key, void* default_val)
+{
+	return storage->GetVoidPtrRef(key, default_val);
+}
+
+CIMGUI_API void ImGuiStorage_SetAllInt(struct ImGuiStorage* storage, int val)
+{
+	storage->SetAllInt(val);
 }
