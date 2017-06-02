@@ -82,14 +82,14 @@ CIMGUI_API void ImDrawList_AddLine(ImDrawList* list, CONST struct ImVec2 a, CONS
 	return list->AddLine(a, b, col, thickness);
 }
 
-CIMGUI_API void ImDrawList_AddRect(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners, float thickness)
+CIMGUI_API void ImDrawList_AddRect(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners_flags, float thickness)
 {
-	return list->AddRect(a, b, col, rounding, rounding_corners, thickness);
+	return list->AddRect(a, b, col, rounding, rounding_corners_flags, thickness);
 }
 
-CIMGUI_API void ImDrawList_AddRectFilled(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners)
+CIMGUI_API void ImDrawList_AddRectFilled(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners_flags)
 {
-	return list->AddRectFilled(a, b, col, rounding, rounding_corners);
+	return list->AddRectFilled(a, b, col, rounding, rounding_corners_flags);
 }
 
 CIMGUI_API void ImDrawList_AddRectFilledMultiColor(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col_upr_left, ImU32 col_upr_right, ImU32 col_bot_right, ImU32 col_bot_left)
@@ -137,9 +137,14 @@ CIMGUI_API void ImDrawList_AddTextExt(ImDrawList* list, CONST ImFont* font, floa
 	return list->AddText(font, font_size, pos, col, text_begin, text_end, wrap_width, cpu_fine_clip_rect);
 }
 
-CIMGUI_API void ImDrawList_AddImage(ImDrawList* list, ImTextureID user_texture_id, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 uv0, CONST struct ImVec2 uv1, ImU32 col)
+CIMGUI_API void ImDrawList_AddImage(ImDrawList* list, ImTextureID user_texture_id, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 uv_a, CONST struct ImVec2 uv_b, ImU32 col)
 {
-	return list->AddImage(user_texture_id, a, b, uv0, uv1, col);
+	return list->AddImage(user_texture_id, a, b, uv_a, uv_b, col);
+}
+
+CIMGUI_API void ImDrawList_AddImageQuad(struct ImDrawList* list, ImTextureID user_texture_id, CONST struct ImVec2 a, CONST ImVec2 b, CONST ImVec2 c, CONST ImVec2 d, CONST ImVec2 uv_a, CONST ImVec2 uv_b, CONST ImVec2 uv_c, CONST ImVec2 uv_d, ImU32 col)
+{
+	return list->AddImageQuad(user_texture_id, a, b, c, d, uv_a, uv_b, uv_c, uv_d, col);
 }
 
 CIMGUI_API void ImDrawList_AddPolyline(ImDrawList* list, CONST ImVec2* points, CONST int num_points, ImU32 col, bool closed, float thickness, bool anti_aliased)
@@ -172,9 +177,9 @@ CIMGUI_API void ImDrawList_PathLineToMergeDuplicate(ImDrawList* list, CONST stru
 	return list->PathLineToMergeDuplicate(pos);
 }
 
-CIMGUI_API void ImDrawList_PathFill(ImDrawList* list, ImU32 col)
+CIMGUI_API void ImDrawList_PathFillConvex(ImDrawList* list, ImU32 col)
 {
-	return list->PathFill(col);
+	return list->PathFillConvex(col);
 }
 
 CIMGUI_API void ImDrawList_PathStroke(ImDrawList* list, ImU32 col, bool closed, float thickness)
@@ -197,9 +202,9 @@ CIMGUI_API void ImDrawList_PathBezierCurveTo(ImDrawList* list, CONST struct ImVe
 	return list->PathBezierCurveTo(p1, p2, p3, num_segments);
 }
 
-CIMGUI_API void ImDrawList_PathRect(ImDrawList* list, CONST struct ImVec2 rect_min, CONST struct ImVec2 rect_max, float rounding, int rounding_corners)
+CIMGUI_API void ImDrawList_PathRect(ImDrawList* list, CONST struct ImVec2 rect_min, CONST struct ImVec2 rect_max, float rounding, int rounding_corners_flags)
 {
-	return list->PathRect(rect_min, rect_max, rounding, rounding_corners);
+	return list->PathRect(rect_min, rect_max, rounding, rounding_corners_flags);
 }
 
 CIMGUI_API void ImDrawList_ChannelsSplit(ImDrawList* list, int channels_count)

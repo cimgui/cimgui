@@ -45,7 +45,6 @@ typedef ImU32 ImGuiID;
 typedef int ImGuiCol;               
 typedef int ImGuiStyleVar;          
 typedef int ImGuiKey;               
-typedef int ImGuiAlign;             
 typedef int ImGuiColorEditMode;     
 typedef int ImGuiMouseCursor;       
 typedef int ImGuiWindowFlags;       
@@ -206,16 +205,9 @@ enum {
     ImGuiStyleVar_ItemSpacing,
     ImGuiStyleVar_ItemInnerSpacing,
     ImGuiStyleVar_IndentSpacing,
-    ImGuiStyleVar_GrabMinSize
-};
-
-enum {
-    ImGuiAlign_Left     = 1 << 0,
-    ImGuiAlign_Center   = 1 << 1,
-    ImGuiAlign_Right    = 1 << 2,
-    ImGuiAlign_Top      = 1 << 3,
-    ImGuiAlign_VCenter  = 1 << 4,
-    ImGuiAlign_Default  = ImGuiAlign_Left | ImGuiAlign_Top
+    ImGuiStyleVar_GrabMinSize,
+    ImGuiStyleVar_ButtonTextAlign,
+    ImGuiStyleVar_Count_
 };
 
 enum {
@@ -227,6 +219,7 @@ enum {
 };
 
 enum {
+    ImGuiMouseCursor_None = -1,
     ImGuiMouseCursor_Arrow = 0,
     ImGuiMouseCursor_TextInput,
     ImGuiMouseCursor_Move,
@@ -249,7 +242,7 @@ struct ImGuiStyle {
     struct ImVec2  WindowPadding;
     struct ImVec2  WindowMinSize;
     float          WindowRounding;
-    ImGuiAlign     WindowTitleAlign;
+    ImVec2         WindowTitleAlign;
     float          ChildWindowRounding;
     struct ImVec2  FramePadding;
     float          FrameRounding;
@@ -262,6 +255,7 @@ struct ImGuiStyle {
     float          ScrollbarRounding;
     float          GrabMinSize;
     float          GrabRounding;
+    ImVec2         ButtonTextAlign;
     struct ImVec2  DisplayWindowPadding;
     struct ImVec2  DisplaySafeAreaPadding;
     bool           AntiAliasedLines;
@@ -286,16 +280,15 @@ struct ImGuiIO {
     struct ImFontAtlas*  Fonts;
     float                FontGlobalScale;
     bool                 FontAllowUserScaling;
+    ImFont*              FontDefault;
     struct ImVec2        DisplayFramebufferScale;
     struct ImVec2        DisplayVisibleMin;
     struct ImVec2        DisplayVisibleMax;
-    bool                 WordMovementUsesAltKey;
-    bool                 ShortcutsUseSuperKey;
-    bool                 DoubleClickSelectsWord;
-    bool                 MultiSelectUsesSuperKey;
+    bool                 OSXBehaviors;
     void                 (*RenderDrawListsFn)(struct ImDrawData* data);
     const char*          (*GetClipboardTextFn)();
     void                 (*SetClipboardTextFn)(const char* text);
+    void*                ClipboardUserData;
     void*                (*MemAllocFn)(size_t sz);
     void                 (*MemFreeFn)(void* ptr);
     void                 (*ImeSetInputScreenPosFn)(int x, int y);
@@ -318,8 +311,8 @@ struct ImGuiIO {
     int                  MetricsRenderVertices;
     int                  MetricsRenderIndices;
     int                  MetricsActiveWindows;
+    ImVec2               MouseDelta;
     struct ImVec2        MousePosPrev;
-    struct ImVec2        MouseDelta;
     bool                 MouseClicked[5];
     struct ImVec2        MouseClickedPos[5];
     float                MouseClickedTime[5];
@@ -381,9 +374,9 @@ struct ImFontConfig {
     int             OversampleH, OversampleV;
     bool            PixelSnapH;
     struct ImVec2   GlyphExtraSpacing;
+    ImVec2          GlyphOffset;
     const ImWchar*  GlyphRanges;
     bool            MergeMode;
-    bool            MergeGlyphCenterV;
     char            Name[32];
     struct ImFont*  DstFont;
 };
@@ -545,7 +538,7 @@ CIMGUI_API bool             igCheckbox(CONST char* label, bool* v);
 CIMGUI_API bool             igCheckboxFlags(CONST char* label, unsigned int* flags, unsigned int flags_value);
 CIMGUI_API bool             igRadioButtonBool(CONST char* label, bool active);
 CIMGUI_API bool             igRadioButton(CONST char* label, int* v, int v_button);
-CIMGUI_API bool             igCombo(CONST char* label, int* current_item, CONST char** items, int items_count, int height_in_items);
+CIMGUI_API bool             igCombo(CONST char* label, int* current_item, CONST char* CONST* items, int items_count, int height_in_items);
 CIMGUI_API bool             igCombo2(CONST char* label, int* current_item, CONST char* items_separated_by_zeros, int height_in_items);
 CIMGUI_API bool             igCombo3(CONST char* label, int* current_item, bool(*items_getter)(void* data, int idx, CONST char** out_text), void* data, int items_count, int height_in_items);
 CIMGUI_API bool             igColorButton(CONST struct ImVec4 col, bool small_height, bool outline_border);
@@ -620,7 +613,7 @@ CIMGUI_API bool             igCollapsingHeaderEx(CONST char* label, bool* p_open
 // Widgets: Selectable / Lists
 CIMGUI_API bool             igSelectable(CONST char* label, bool selected, ImGuiSelectableFlags flags, CONST struct ImVec2 size);
 CIMGUI_API bool             igSelectableEx(CONST char* label, bool* p_selected, ImGuiSelectableFlags flags, CONST struct ImVec2 size);
-CIMGUI_API bool             igListBox(CONST char* label, int* current_item, CONST char** items, int items_count, int height_in_items);
+CIMGUI_API bool             igListBox(CONST char* label, int* current_item, CONST char* CONST* items, int items_count, int height_in_items);
 CIMGUI_API bool             igListBox2(CONST char* label, int* current_item, bool(*items_getter)(void* data, int idx, CONST char** out_text), void* data, int items_count, int height_in_items);
 CIMGUI_API bool             igListBoxHeader(CONST char* label, CONST struct ImVec2 size);
 CIMGUI_API bool             igListBoxHeader2(CONST char* label, int items_count, int height_in_items);
@@ -632,7 +625,7 @@ CIMGUI_API void             igValueInt(CONST char* prefix, int v);
 CIMGUI_API void             igValueUInt(CONST char* prefix, unsigned int v);
 CIMGUI_API void             igValueFloat(CONST char* prefix, float v, CONST char* float_format);
 CIMGUI_API void             igValueColor(CONST char* prefix, CONST struct ImVec4 v);
-CIMGUI_API void             igValueColor2(CONST char* prefix, unsigned int v);
+CIMGUI_API void             igValueColor2(CONST char* prefix, ImU32 v);
 
 // Tooltip
 CIMGUI_API void             igSetTooltip(CONST char* fmt, ...);
@@ -690,6 +683,7 @@ CIMGUI_API bool             igIsRootWindowFocused();
 CIMGUI_API bool             igIsRootWindowOrAnyChildFocused();
 CIMGUI_API bool             igIsRootWindowOrAnyChildHovered();
 CIMGUI_API bool             igIsRectVisible(CONST struct ImVec2 item_size);
+CIMGUI_API bool             igIsRectVisible2(CONST struct ImVec2* rect_min, CONST struct ImVec2* rect_max);
 CIMGUI_API bool             igIsPosHoveringAnyWindow(CONST struct ImVec2 pos);
 CIMGUI_API float            igGetTime();
 CIMGUI_API int              igGetFrameCount();
@@ -706,10 +700,10 @@ CIMGUI_API ImU32            igColorConvertFloat4ToU32(CONST struct ImVec4 in);
 CIMGUI_API void             igColorConvertRGBtoHSV(float r, float g, float b, float* out_h, float* out_s, float* out_v);
 CIMGUI_API void             igColorConvertHSVtoRGB(float h, float s, float v, float* out_r, float* out_g, float* out_b);
 
-CIMGUI_API int              igGetKeyIndex(ImGuiKey key);
-CIMGUI_API bool             igIsKeyDown(int key_index);
-CIMGUI_API bool             igIsKeyPressed(int key_index, bool repeat);
-CIMGUI_API bool             igIsKeyReleased(int key_index);
+CIMGUI_API int              igGetKeyIndex(ImGuiKey imgui_key);
+CIMGUI_API bool             igIsKeyDown(int user_key_index);
+CIMGUI_API bool             igIsKeyPressed(int user_key_index, bool repeat);
+CIMGUI_API bool             igIsKeyReleased(int user_key_index);
 CIMGUI_API bool             igIsMouseDown(int button);
 CIMGUI_API bool             igIsMouseClicked(int button, bool repeat);
 CIMGUI_API bool             igIsMouseDoubleClicked(int button);
@@ -744,7 +738,7 @@ CIMGUI_API void             ImFontConfig_DefaultConstructor(struct ImFontConfig*
 
 CIMGUI_API void             ImFontAtlas_GetTexDataAsRGBA32(struct ImFontAtlas* atlas, unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel);
 CIMGUI_API void             ImFontAtlas_GetTexDataAsAlpha8(struct ImFontAtlas* atlas, unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel);
-CIMGUI_API void             ImFontAtlas_SetTexID(struct ImFontAtlas* atlas, void* tex);
+CIMGUI_API void             ImFontAtlas_SetTexID(struct ImFontAtlas* atlas, ImTextureID id);
 CIMGUI_API struct ImFont*   ImFontAtlas_AddFont(struct ImFontAtlas* atlas, CONST struct ImFontConfig* font_cfg);
 CIMGUI_API struct ImFont*   ImFontAtlas_AddFontDefault(struct ImFontAtlas* atlas, CONST struct ImFontConfig* font_cfg);
 CIMGUI_API struct ImFont*   ImFontAtlas_AddFontFromFileTTF(struct ImFontAtlas* atlas, CONST char* filename, float size_pixels, CONST struct ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges);
@@ -758,6 +752,7 @@ CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesKorean(struct ImFontAtlas*
 CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesJapanese(struct ImFontAtlas* atlas);
 CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesChinese(struct ImFontAtlas* atlas);
 CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesCyrillic(struct ImFontAtlas* atlas);
+CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesThai(struct ImFontAtlas* atlas);
 
 CIMGUI_API void             ImGuiIO_AddInputCharacter(unsigned short c);
 CIMGUI_API void             ImGuiIO_AddInputCharactersUTF8(CONST char* utf8_chars);
@@ -785,8 +780,8 @@ CIMGUI_API void             ImDrawList_PopTextureID(struct ImDrawList* list);
 
 // Primitives
 CIMGUI_API void             ImDrawList_AddLine(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float thickness);
-CIMGUI_API void             ImDrawList_AddRect(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners, float thickness);
-CIMGUI_API void             ImDrawList_AddRectFilled(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners);
+CIMGUI_API void             ImDrawList_AddRect(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners_flags, float thickness);
+CIMGUI_API void             ImDrawList_AddRectFilled(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float rounding, int rounding_corners_flags);
 CIMGUI_API void             ImDrawList_AddRectFilledMultiColor(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col_upr_left, ImU32 col_upr_right, ImU32 col_bot_right, ImU32 col_bot_left);
 CIMGUI_API void             ImDrawList_AddQuad(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, ImU32 col, float thickness);
 CIMGUI_API void             ImDrawList_AddQuadFilled(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, ImU32 col);
@@ -796,7 +791,8 @@ CIMGUI_API void             ImDrawList_AddCircle(struct ImDrawList* list, CONST 
 CIMGUI_API void             ImDrawList_AddCircleFilled(struct ImDrawList* list, CONST struct ImVec2 centre, float radius, ImU32 col, int num_segments);
 CIMGUI_API void             ImDrawList_AddText(struct ImDrawList* list, CONST struct ImVec2 pos, ImU32 col, CONST char* text_begin, CONST char* text_end);
 CIMGUI_API void             ImDrawList_AddTextExt(struct ImDrawList* list, CONST struct ImFont* font, float font_size, CONST struct ImVec2 pos, ImU32 col, CONST char* text_begin, CONST char* text_end, float wrap_width, CONST struct ImVec4* cpu_fine_clip_rect);
-CIMGUI_API void             ImDrawList_AddImage(struct ImDrawList* list, ImTextureID user_texture_id, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 uv0, CONST struct ImVec2 uv1, ImU32 col);
+CIMGUI_API void             ImDrawList_AddImage(struct ImDrawList* list, ImTextureID user_texture_id, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 uv_a, CONST struct ImVec2 uv_b, ImU32 col);
+CIMGUI_API void             ImDrawList_AddImageQuad(struct ImDrawList* list, ImTextureID user_texture_id, CONST struct ImVec2 a, CONST ImVec2 b, CONST ImVec2 c, CONST ImVec2 d, CONST ImVec2 uv_a, CONST ImVec2 uv_b, CONST ImVec2 uv_c, CONST ImVec2 uv_d, ImU32 col);
 CIMGUI_API void             ImDrawList_AddPolyline(struct ImDrawList* list, CONST struct ImVec2* points, CONST int num_points, ImU32 col, bool closed, float thickness, bool anti_aliased);
 CIMGUI_API void             ImDrawList_AddConvexPolyFilled(struct ImDrawList* list, CONST struct ImVec2* points, CONST int num_points, ImU32 col, bool anti_aliased);
 CIMGUI_API void             ImDrawList_AddBezierCurve(struct ImDrawList* list, CONST struct ImVec2 pos0, CONST struct ImVec2 cp0, CONST struct ImVec2 cp1, CONST struct ImVec2 pos1, ImU32 col, float thickness, int num_segments);
@@ -805,12 +801,12 @@ CIMGUI_API void             ImDrawList_AddBezierCurve(struct ImDrawList* list, C
 CIMGUI_API void             ImDrawList_PathClear(struct ImDrawList* list);
 CIMGUI_API void             ImDrawList_PathLineTo(struct ImDrawList* list, CONST struct ImVec2 pos);
 CIMGUI_API void             ImDrawList_PathLineToMergeDuplicate(struct ImDrawList* list, CONST struct ImVec2 pos);
-CIMGUI_API void             ImDrawList_PathFill(struct ImDrawList* list, ImU32 col);
+CIMGUI_API void             ImDrawList_PathFillConvex(struct ImDrawList* list, ImU32 col);
 CIMGUI_API void             ImDrawList_PathStroke(struct ImDrawList* list, ImU32 col, bool closed, float thickness);
 CIMGUI_API void             ImDrawList_PathArcTo(struct ImDrawList* list, CONST struct ImVec2 centre, float radius, float a_min, float a_max, int num_segments);
 CIMGUI_API void             ImDrawList_PathArcToFast(struct ImDrawList* list, CONST struct ImVec2 centre, float radius, int a_min_of_12, int a_max_of_12); // Use precomputed angles for a 12 steps circle
 CIMGUI_API void             ImDrawList_PathBezierCurveTo(struct ImDrawList* list, CONST struct ImVec2 p1, CONST struct ImVec2 p2, CONST struct ImVec2 p3, int num_segments);
-CIMGUI_API void             ImDrawList_PathRect(struct ImDrawList* list, CONST struct ImVec2 rect_min, CONST struct ImVec2 rect_max, float rounding, int rounding_corners);
+CIMGUI_API void             ImDrawList_PathRect(struct ImDrawList* list, CONST struct ImVec2 rect_min, CONST struct ImVec2 rect_max, float rounding, int rounding_corners_flags);
 
 // Channels
 CIMGUI_API void             ImDrawList_ChannelsSplit(struct ImDrawList* list, int channels_count);

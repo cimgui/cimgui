@@ -17,9 +17,9 @@ CIMGUI_API void ImFontAtlas_GetTexDataAsAlpha8(ImFontAtlas* atlas, unsigned char
 	atlas->GetTexDataAsAlpha8(out_pixels, out_width, out_height, out_bytes_per_pixel);
 }
 
-CIMGUI_API void ImFontAtlas_SetTexID(ImFontAtlas* atlas, void* tex)
+CIMGUI_API void ImFontAtlas_SetTexID(ImFontAtlas* atlas, ImTextureID id)
 {
-	atlas->TexID = tex;
+	atlas->TexID = id;
 }
 
 CIMGUI_API ImFont* ImFontAtlas_AddFont(ImFontAtlas* atlas, CONST ImFontConfig* font_cfg)
@@ -85,4 +85,9 @@ CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesChinese(struct ImFontAtlas
 CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesCyrillic(struct ImFontAtlas* atlas)
 {
 	return atlas->GetGlyphRangesCyrillic();
+}
+
+CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesThai(struct ImFontAtlas* atlas)
+{
+	return atlas->GetGlyphRangesThai();
 }

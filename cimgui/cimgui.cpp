@@ -783,7 +783,7 @@ CIMGUI_API bool igRadioButton(CONST char* label, int* v, int v_button)
     return ImGui::RadioButton(label, v, v_button);
 }
 
-CIMGUI_API bool igCombo(CONST char* label, int* current_item, CONST char** items, int items_count, int height_in_items)
+CIMGUI_API bool igCombo(CONST char* label, int* current_item, CONST char* CONST* items, int items_count, int height_in_items)
 {
     return ImGui::Combo(label, current_item, items, items_count, height_in_items);
 }
@@ -1124,7 +1124,7 @@ CIMGUI_API bool igSelectableEx(CONST char* label, bool* p_selected, ImGuiSelecta
     return ImGui::Selectable(label, p_selected, flags, size);
 }
 
-CIMGUI_API bool igListBox(CONST char* label, int* current_item, CONST char** items, int items_count, int height_in_items)
+CIMGUI_API bool igListBox(CONST char* label, int* current_item, CONST char* CONST* items, int items_count, int height_in_items)
 {
     return ImGui::ListBox(label, current_item, items, items_count, height_in_items);
 }
@@ -1215,7 +1215,7 @@ CIMGUI_API void igValueColor(CONST char* prefix, CONST ImVec4 v)
     ImGui::ValueColor(prefix,v);
 }
 
-CIMGUI_API void igValueColor2(CONST char* prefix, unsigned int v)
+CIMGUI_API void igValueColor2(CONST char* prefix, ImU32 v)
 {
     ImGui::ValueColor(prefix,v);
 }
@@ -1353,24 +1353,29 @@ CIMGUI_API bool igIsRectVisible(CONST ImVec2 item_size)
     return ImGui::IsRectVisible(item_size);
 }
 
-CIMGUI_API int igGetKeyIndex(ImGuiKey key)
+CIMGUI_API bool igIsRectVisible2(CONST struct ImVec2* rect_min, CONST struct ImVec2* rect_max)
 {
-    return ImGui::GetKeyIndex(key);
+    return ImGui::IsRectVisible(*rect_min, *rect_max);
 }
 
-CIMGUI_API bool igIsKeyDown(int key_index)
+CIMGUI_API int igGetKeyIndex(ImGuiKey imgui_key)
 {
-    return ImGui::IsKeyDown(key_index);
+    return ImGui::GetKeyIndex(imgui_key);
 }
 
-CIMGUI_API bool igIsKeyPressed(int key_index, bool repeat)
+CIMGUI_API bool igIsKeyDown(int user_key_index)
 {
-    return ImGui::IsKeyPressed(key_index,repeat);
+    return ImGui::IsKeyDown(user_key_index);
 }
 
-CIMGUI_API bool igIsKeyReleased(int key_index)
+CIMGUI_API bool igIsKeyPressed(int user_key_index, bool repeat)
 {
-    return ImGui::IsKeyReleased(key_index);
+    return ImGui::IsKeyPressed(user_key_index,repeat);
+}
+
+CIMGUI_API bool igIsKeyReleased(int user_key_index)
+{
+    return ImGui::IsKeyReleased(user_key_index);
 }
 
 CIMGUI_API bool igIsMouseDown(int button)
