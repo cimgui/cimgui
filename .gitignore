@@ -35,3 +35,4 @@ cimgui/Release/
 CMakeLists.txt
 cimgui/.vs/
 cimgui/cimgui.vcxproj.user
+cimgui/x64/
