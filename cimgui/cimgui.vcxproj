@@ -84,6 +84,7 @@
     <ClCompile Include="cimgui.cpp" />
     <ClCompile Include="drawList.cpp" />
     <ClCompile Include="fontAtlas.cpp" />
+    <ClCompile Include="listClipper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\imgui\imgui_internal.h" />
