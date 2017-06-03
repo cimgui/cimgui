@@ -242,7 +242,7 @@ struct ImGuiStyle {
     struct ImVec2  WindowPadding;
     struct ImVec2  WindowMinSize;
     float          WindowRounding;
-    ImVec2         WindowTitleAlign;
+    struct ImVec2         WindowTitleAlign;
     float          ChildWindowRounding;
     struct ImVec2  FramePadding;
     float          FrameRounding;
@@ -255,7 +255,7 @@ struct ImGuiStyle {
     float          ScrollbarRounding;
     float          GrabMinSize;
     float          GrabRounding;
-    ImVec2         ButtonTextAlign;
+    struct ImVec2         ButtonTextAlign;
     struct ImVec2  DisplayWindowPadding;
     struct ImVec2  DisplaySafeAreaPadding;
     bool           AntiAliasedLines;
@@ -280,7 +280,7 @@ struct ImGuiIO {
     struct ImFontAtlas*  Fonts;
     float                FontGlobalScale;
     bool                 FontAllowUserScaling;
-    ImFont*              FontDefault;
+    struct ImFont*              FontDefault;
     struct ImVec2        DisplayFramebufferScale;
     struct ImVec2        DisplayVisibleMin;
     struct ImVec2        DisplayVisibleMax;
@@ -311,7 +311,7 @@ struct ImGuiIO {
     int                  MetricsRenderVertices;
     int                  MetricsRenderIndices;
     int                  MetricsActiveWindows;
-    ImVec2               MouseDelta;
+    struct ImVec2               MouseDelta;
     struct ImVec2        MousePosPrev;
     bool                 MouseClicked[5];
     struct ImVec2        MouseClickedPos[5];
@@ -374,7 +374,7 @@ struct ImFontConfig {
     int             OversampleH, OversampleV;
     bool            PixelSnapH;
     struct ImVec2   GlyphExtraSpacing;
-    ImVec2          GlyphOffset;
+    struct ImVec2          GlyphOffset;
     const ImWchar*  GlyphRanges;
     bool            MergeMode;
     char            Name[32];
