@@ -792,7 +792,7 @@ CIMGUI_API void             ImDrawList_AddCircleFilled(struct ImDrawList* list, 
 CIMGUI_API void             ImDrawList_AddText(struct ImDrawList* list, CONST struct ImVec2 pos, ImU32 col, CONST char* text_begin, CONST char* text_end);
 CIMGUI_API void             ImDrawList_AddTextExt(struct ImDrawList* list, CONST struct ImFont* font, float font_size, CONST struct ImVec2 pos, ImU32 col, CONST char* text_begin, CONST char* text_end, float wrap_width, CONST struct ImVec4* cpu_fine_clip_rect);
 CIMGUI_API void             ImDrawList_AddImage(struct ImDrawList* list, ImTextureID user_texture_id, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 uv_a, CONST struct ImVec2 uv_b, ImU32 col);
-CIMGUI_API void             ImDrawList_AddImageQuad(struct ImDrawList* list, ImTextureID user_texture_id, CONST struct ImVec2 a, CONST ImVec2 b, CONST ImVec2 c, CONST ImVec2 d, CONST ImVec2 uv_a, CONST ImVec2 uv_b, CONST ImVec2 uv_c, CONST ImVec2 uv_d, ImU32 col);
+CIMGUI_API void             ImDrawList_AddImageQuad(struct ImDrawList* list, ImTextureID user_texture_id, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, CONST struct ImVec2 uv_a, CONST struct ImVec2 uv_b, CONST struct ImVec2 uv_c, CONST struct ImVec2 uv_d, ImU32 col);
 CIMGUI_API void             ImDrawList_AddPolyline(struct ImDrawList* list, CONST struct ImVec2* points, CONST int num_points, ImU32 col, bool closed, float thickness, bool anti_aliased);
 CIMGUI_API void             ImDrawList_AddConvexPolyFilled(struct ImDrawList* list, CONST struct ImVec2* points, CONST int num_points, ImU32 col, bool anti_aliased);
 CIMGUI_API void             ImDrawList_AddBezierCurve(struct ImDrawList* list, CONST struct ImVec2 pos0, CONST struct ImVec2 cp0, CONST struct ImVec2 cp1, CONST struct ImVec2 pos1, ImU32 col, float thickness, int num_segments);
@@ -829,11 +829,11 @@ CIMGUI_API void             ImDrawList_UpdateClipRect(struct ImDrawList* list);
 CIMGUI_API void             ImDrawList_UpdateTextureID(struct ImDrawList* list);
 
 // ImGuiListClipper
-CIMGUI_API void ImGuiListClipper_Begin(ImGuiListClipper* clipper, int count, float items_height);
-CIMGUI_API void ImGuiListClipper_End(ImGuiListClipper* clipper);
-CIMGUI_API bool ImGuiListClipper_Step(ImGuiListClipper* clipper);
-CIMGUI_API int ImGuiListClipper_GetDisplayStart(ImGuiListClipper* clipper);
-CIMGUI_API int ImGuiListClipper_GetDisplayEnd(ImGuiListClipper* clipper);
+CIMGUI_API void ImGuiListClipper_Begin(struct ImGuiListClipper* clipper, int count, float items_height);
+CIMGUI_API void ImGuiListClipper_End(struct ImGuiListClipper* clipper);
+CIMGUI_API bool ImGuiListClipper_Step(struct ImGuiListClipper* clipper);
+CIMGUI_API int ImGuiListClipper_GetDisplayStart(struct ImGuiListClipper* clipper);
+CIMGUI_API int ImGuiListClipper_GetDisplayEnd(struct ImGuiListClipper* clipper);
 
 // ImGuiTextFilter
 CIMGUI_API void	ImGuiTextFilter_Init(struct ImGuiTextFilter* filter, const char* default_filter);
