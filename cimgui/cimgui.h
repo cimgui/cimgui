@@ -286,8 +286,8 @@ struct ImGuiIO {
     struct ImVec2        DisplayVisibleMax;
     bool                 OSXBehaviors;
     void                 (*RenderDrawListsFn)(struct ImDrawData* data);
-    const char*          (*GetClipboardTextFn)();
-    void                 (*SetClipboardTextFn)(const char* text);
+    const char*          (*GetClipboardTextFn)(void* user_data);
+    void                 (*SetClipboardTextFn)(void* user_data, const char* text);
     void*                ClipboardUserData;
     void*                (*MemAllocFn)(size_t sz);
     void                 (*MemFreeFn)(void* ptr);
