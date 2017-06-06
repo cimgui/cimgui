@@ -365,6 +365,13 @@ struct ImDrawData {
     int                  TotalIdxCount;
 };
 
+struct ImDrawVert
+{
+    struct ImVec2  pos;
+    struct ImVec2  uv;
+    ImU32          col;
+};
+
 struct ImFontConfig {
     void*           FontData;
     int             FontDataSize;
