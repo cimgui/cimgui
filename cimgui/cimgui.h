@@ -387,6 +387,13 @@ struct ImFontConfig {
     char            Name[32];
     struct ImFont*  DstFont;
 };
+
+struct ImGuiListClipper
+{
+    float   StartPosY;
+    float   ItemsHeight;
+    int     ItemsCount, StepNo, DisplayStart, DisplayEnd;
+};
 #endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
 CIMGUI_API struct ImGuiIO*         igGetIO();
