@@ -77,6 +77,16 @@ CIMGUI_API void ImDrawList_PopTextureID(ImDrawList* list)
 	return list->PopTextureID();
 }
 
+CIMGUI_API ImVec2 ImDrawList_GetClipRectMin(ImDrawList* list)
+{
+	return list->GetClipRectMin();
+}
+
+CIMGUI_API ImVec2 ImDrawList_GetClipRectMax(ImDrawList* list)
+{
+	return list->GetClipRectMax();
+}
+
 CIMGUI_API void ImDrawList_AddLine(ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float thickness)
 {
 	return list->AddLine(a, b, col, thickness);
