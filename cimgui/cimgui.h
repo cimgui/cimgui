@@ -452,21 +452,21 @@ CIMGUI_API float            igGetWindowHeight();
 CIMGUI_API bool             igIsWindowCollapsed();
 CIMGUI_API void             igSetWindowFontScale(float scale);
 
-CIMGUI_API void             igSetNextWindowPos(CONST struct ImVec2 pos, ImGuiSetCond cond);
-CIMGUI_API void             igSetNextWindowPosCenter(ImGuiSetCond cond);
-CIMGUI_API void             igSetNextWindowSize(CONST struct ImVec2 size, ImGuiSetCond cond);
+CIMGUI_API void             igSetNextWindowPos(CONST struct ImVec2 pos, ImGuiCond cond);
+CIMGUI_API void             igSetNextWindowPosCenter(ImGuiCond cond);
+CIMGUI_API void             igSetNextWindowSize(CONST struct ImVec2 size, ImGuiCond cond);
 CIMGUI_API void             igSetNextWindowSizeConstraints(CONST struct ImVec2 size_min, CONST struct ImVec2 size_max, ImGuiSizeConstraintCallback custom_callback, void* custom_callback_data);
 CIMGUI_API void             igSetNextWindowContentSize(CONST struct ImVec2 size);
 CIMGUI_API void             igSetNextWindowContentWidth(float width);
-CIMGUI_API void             igSetNextWindowCollapsed(bool collapsed, ImGuiSetCond cond);
+CIMGUI_API void             igSetNextWindowCollapsed(bool collapsed, ImGuiCond cond);
 CIMGUI_API void             igSetNextWindowFocus();
-CIMGUI_API void             igSetWindowPos(CONST struct ImVec2 pos, ImGuiSetCond cond);
-CIMGUI_API void             igSetWindowSize(CONST struct ImVec2 size, ImGuiSetCond cond);
-CIMGUI_API void             igSetWindowCollapsed(bool collapsed, ImGuiSetCond cond);
+CIMGUI_API void             igSetWindowPos(CONST struct ImVec2 pos, ImGuiCond cond);
+CIMGUI_API void             igSetWindowSize(CONST struct ImVec2 size, ImGuiCond cond);
+CIMGUI_API void             igSetWindowCollapsed(bool collapsed, ImGuiCond cond);
 CIMGUI_API void             igSetWindowFocus();
-CIMGUI_API void             igSetWindowPosByName(CONST char* name, CONST struct ImVec2 pos, ImGuiSetCond cond);
-CIMGUI_API void             igSetWindowSize2(CONST char* name, CONST struct ImVec2 size, ImGuiSetCond cond);
-CIMGUI_API void             igSetWindowCollapsed2(CONST char* name, bool collapsed, ImGuiSetCond cond);
+CIMGUI_API void             igSetWindowPosByName(CONST char* name, CONST struct ImVec2 pos, ImGuiCond cond);
+CIMGUI_API void             igSetWindowSize2(CONST char* name, CONST struct ImVec2 size, ImGuiCond cond);
+CIMGUI_API void             igSetWindowCollapsed2(CONST char* name, bool collapsed, ImGuiCond cond);
 CIMGUI_API void             igSetWindowFocus2(CONST char* name);
 
 CIMGUI_API float            igGetScrollX();
@@ -484,19 +484,19 @@ CIMGUI_API struct ImGuiStorage*    igGetStateStorage();
 // Parameters stacks (shared)
 CIMGUI_API void             igPushFont(struct ImFont* font);
 CIMGUI_API void             igPopFont();
-CIMGUI_API void             igPushStyleColor(ImGuiCol idx, ImU32 col);
+CIMGUI_API void             igPushStyleColorU32(ImGuiCol idx, ImU32 col);
 CIMGUI_API void             igPushStyleColor(ImGuiCol idx, CONST struct ImVec4 col);
 CIMGUI_API void             igPopStyleColor(int count);
 CIMGUI_API void             igPushStyleVar(ImGuiStyleVar idx, float val);
 CIMGUI_API void             igPushStyleVarVec(ImGuiStyleVar idx, CONST struct ImVec2 val);
 CIMGUI_API void             igPopStyleVar(int count);
-CIMGUI_API CONST struct ImVec4 igGetStyleColorVec4(ImGuiCol idx);
-CIMGUI_API struct ImFont*          igGetFont();
+CIMGUI_API void             igGetStyleColorVec4(struct ImVec4 *pOut, ImGuiCol idx);
+CIMGUI_API struct ImFont*   igGetFont();
 CIMGUI_API float            igGetFontSize();
 CIMGUI_API void             igGetFontTexUvWhitePixel(struct ImVec2* pOut);
 CIMGUI_API ImU32            igGetColorU32(ImGuiCol idx, float alpha_mul);
 CIMGUI_API ImU32            igGetColorU32Vec(CONST struct ImVec4* col);
-CIMGUI_API ImU32            igGetColorU32(ImU32 col);
+CIMGUI_API ImU32            igGetColorU32U32(ImU32 col);
 
 
 // Parameters stacks (current window)
@@ -671,8 +671,6 @@ CIMGUI_API void             igValueBool(CONST char* prefix, bool b);
 CIMGUI_API void             igValueInt(CONST char* prefix, int v);
 CIMGUI_API void             igValueUInt(CONST char* prefix, unsigned int v);
 CIMGUI_API void             igValueFloat(CONST char* prefix, float v, CONST char* float_format);
-CIMGUI_API void             igValueColor(CONST char* prefix, CONST struct ImVec4 v);
-CIMGUI_API void             igValueColor2(CONST char* prefix, ImU32 v);
 
 // Tooltip
 CIMGUI_API void             igSetTooltip(CONST char* fmt, ...);
@@ -715,7 +713,7 @@ CIMGUI_API void             igPopClipRect();
 
 // Utilities
 CIMGUI_API bool             igIsItemHovered();
-CIMGUI_API bool             igIsRectItemHovered();
+CIMGUI_API bool             igIsItemRectHovered();
 CIMGUI_API bool             igIsItemActive();
 CIMGUI_API bool             igIsItemClicked(int mouse_button);
 CIMGUI_API bool             igIsItemVisible();
@@ -824,8 +822,8 @@ CIMGUI_API void             ImDrawList_PushClipRectFullScreen(struct ImDrawList*
 CIMGUI_API void             ImDrawList_PopClipRect(struct ImDrawList* list);
 CIMGUI_API void             ImDrawList_PushTextureID(struct ImDrawList* list, CONST ImTextureID texture_id);
 CIMGUI_API void             ImDrawList_PopTextureID(struct ImDrawList* list);
-CIMGUI_API struct ImVec2    ImDrawList_GetClipRectMin(struct ImDrawList* list);
-CIMGUI_API struct ImVec2    ImDrawList_GetClipRectMax(struct ImDrawList* list);
+CIMGUI_API void             ImDrawList_GetClipRectMin(struct ImVec2 *pOut, struct ImDrawList* list);
+CIMGUI_API void             ImDrawList_GetClipRectMax(struct ImVec2 *pOut, struct ImDrawList* list);
 
 // Primitives
 CIMGUI_API void             ImDrawList_AddLine(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col, float thickness);

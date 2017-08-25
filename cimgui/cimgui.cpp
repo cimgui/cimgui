@@ -149,17 +149,17 @@ CIMGUI_API void igSetWindowFontScale(float scale)
     ImGui::SetWindowFontScale(scale);
 }
 
-CIMGUI_API void igSetNextWindowPos(CONST ImVec2 pos, ImGuiSetCond cond)
+CIMGUI_API void igSetNextWindowPos(CONST ImVec2 pos, ImGuiCond cond)
 {
     ImGui::SetNextWindowPos(pos, cond);
 }
 
-CIMGUI_API void igSetNextWindowPosCenter(ImGuiSetCond cond)
+CIMGUI_API void igSetNextWindowPosCenter(ImGuiCond cond)
 {
     ImGui::SetNextWindowPosCenter(cond);
 }
 
-CIMGUI_API void igSetNextWindowSize(CONST ImVec2 size, ImGuiSetCond cond)
+CIMGUI_API void igSetNextWindowSize(CONST ImVec2 size, ImGuiCond cond)
 {
     ImGui::SetNextWindowSize(size, cond);
 }
@@ -179,7 +179,7 @@ CIMGUI_API void igSetNextWindowContentWidth(float width)
     ImGui::SetNextWindowContentWidth(width);
 }
 
-CIMGUI_API void igSetNextWindowCollapsed(bool collapsed, ImGuiSetCond cond)
+CIMGUI_API void igSetNextWindowCollapsed(bool collapsed, ImGuiCond cond)
 {
     ImGui::SetNextWindowCollapsed(collapsed,cond);
 }
@@ -189,17 +189,17 @@ CIMGUI_API void igSetNextWindowFocus()
     ImGui::SetNextWindowFocus();
 }
 
-CIMGUI_API void igSetWindowPos(CONST ImVec2 pos, ImGuiSetCond cond)
+CIMGUI_API void igSetWindowPos(CONST ImVec2 pos, ImGuiCond cond)
 {
     ImGui::SetWindowPos(pos,cond);
 }
 
-CIMGUI_API void igSetWindowSize(CONST ImVec2 size, ImGuiSetCond cond)
+CIMGUI_API void igSetWindowSize(CONST ImVec2 size, ImGuiCond cond)
 {
     ImGui::SetWindowSize(size, cond);
 }
 
-CIMGUI_API void igSetWindowCollapsed(bool collapsed, ImGuiSetCond cond)
+CIMGUI_API void igSetWindowCollapsed(bool collapsed, ImGuiCond cond)
 {
     ImGui::SetWindowCollapsed(collapsed,cond);
 }
@@ -209,17 +209,17 @@ CIMGUI_API void igSetWindowFocus()
     ImGui::SetWindowFocus();
 }
 
-CIMGUI_API void igSetWindowPosByName(CONST char* name, CONST ImVec2 pos, ImGuiSetCond cond)
+CIMGUI_API void igSetWindowPosByName(CONST char* name, CONST ImVec2 pos, ImGuiCond cond)
 {
     ImGui::SetWindowPos(name,pos,cond);
 }
 
-CIMGUI_API void igSetWindowSize2(CONST char* name, CONST ImVec2 size, ImGuiSetCond cond)
+CIMGUI_API void igSetWindowSize2(CONST char* name, CONST ImVec2 size, ImGuiCond cond)
 {
     ImGui::SetWindowSize(name, size, cond);
 }
 
-CIMGUI_API void igSetWindowCollapsed2(CONST char* name, bool collapsed, ImGuiSetCond cond)
+CIMGUI_API void igSetWindowCollapsed2(CONST char* name, bool collapsed, ImGuiCond cond)
 {
     ImGui::SetWindowCollapsed(name, collapsed, cond);
 }
@@ -295,7 +295,7 @@ CIMGUI_API void igPopFont()
     return ImGui::PopFont();
 }
 
-CIMGUI_API void igPushStyleColor(ImGuiCol idx, ImU32 col)
+CIMGUI_API void igPushStyleColorU32(ImGuiCol idx, ImU32 col)
 {
     return ImGui::PushStyleColor(idx, col);
 }
@@ -325,9 +325,9 @@ CIMGUI_API void igPopStyleVar(int count)
     return ImGui::PopStyleVar(count);
 }
 
-CIMGUI_API const ImVec4 igGetStyleColorVec4(ImGuiCol idx)
+CIMGUI_API void igGetStyleColorVec4(ImVec4* pOut, ImGuiCol idx)
 {
-    return ImGui::GetStyleColorVec4(idx);
+    *pOut = ImGui::GetStyleColorVec4(idx);
 }
 
 CIMGUI_API ImFont* igGetFont()
@@ -355,7 +355,7 @@ CIMGUI_API ImU32 igGetColorU32Vec(CONST ImVec4* col)
     return ImGui::GetColorU32(*col);
 }
 
-CIMGUI_API ImU32 igGetColorU32(ImU32 col)
+CIMGUI_API ImU32 igGetColorU32U32(ImU32 col)
 {
     return ImGui::GetColorU32(col);
 }
@@ -1246,16 +1246,6 @@ CIMGUI_API void igValueFloat(CONST char* prefix, float v, CONST char* float_form
     ImGui::Value(prefix,v,float_format);
 }
 
-CIMGUI_API void igValueColor(CONST char* prefix, CONST ImVec4 v)
-{
-    ImGui::ValueColor(prefix,v);
-}
-
-CIMGUI_API void igValueColor2(CONST char* prefix, ImU32 v)
-{
-    ImGui::ValueColor(prefix,v);
-}
-
 // Logging: all text output from interface is redirected to tty/file/clipboard. Tree nodes are automatically opened.
 CIMGUI_API void igLogToTTY(int max_depth)
 {
@@ -1309,9 +1299,9 @@ CIMGUI_API bool igIsItemHovered()
     return ImGui::IsItemHovered();
 }
 
-CIMGUI_API bool igIsRectItemHovered()
+CIMGUI_API bool igIsItemRectHovered()
 {
-    return ImGui::IsRectItemHovered();
+    return ImGui::IsItemRectHovered();
 }
 
 CIMGUI_API bool igIsItemActive()
