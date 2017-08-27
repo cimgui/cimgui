@@ -436,9 +436,9 @@ CIMGUI_API bool igBeginPopupContextItem(CONST char* str_id, int mouse_button)
     return ImGui::BeginPopupContextItem(str_id, mouse_button);
 }
 
-CIMGUI_API bool igBeginPopupContextWindow(bool also_over_items, CONST char* str_id, int mouse_button)
+CIMGUI_API bool igBeginPopupContextWindow(CONST char* str_id, int mouse_button, bool also_over_items)
 {
-    return ImGui::BeginPopupContextWindow(also_over_items, str_id, mouse_button);
+    return ImGui::BeginPopupContextWindow(str_id, mouse_button, also_over_items);
 }
 
 CIMGUI_API bool igBeginPopupContextVoid(CONST char* str_id, int mouse_button)
@@ -798,24 +798,19 @@ CIMGUI_API bool igCombo3(CONST char* label, int* current_item, bool(*items_gette
     return ImGui::Combo(label, current_item, items_getter, data, items_count, height_in_items);
 }
 
-CIMGUI_API bool igColorButton(CONST ImVec4 col, bool small_height, bool outline_border)
+CIMGUI_API bool igColorButton(CONST char* desc_id, CONST struct ImVec4 col, ImGuiColorEditFlags flags, ImVec2 size)
 {
-    return ImGui::ColorButton(col, small_height, outline_border);
+    return ImGui::ColorButton(desc_id, col, flags, size);
 }
 
-CIMGUI_API bool igColorEdit3(CONST char* label, float col[3])
+CIMGUI_API bool igColorEdit3(CONST char* label, float col[3], ImGuiColorEditFlags flags)
 {
     return ImGui::ColorEdit3(label, col);
 }
 
-CIMGUI_API bool igColorEdit4(CONST char* label, float col[4], bool show_alpha)
+CIMGUI_API bool igColorEdit4(CONST char* label, float col[4], ImGuiColorEditFlags flags)
 {
-    return ImGui::ColorEdit4(label, col, show_alpha);
-}
-
-CIMGUI_API void igColorEditMode(ImGuiColorEditMode mode)
-{
-    return ImGui::ColorEditMode(mode);
+    return ImGui::ColorEdit4(label, col, flags);
 }
 
 CIMGUI_API void igPlotLines(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, ImVec2 graph_size, int stride)
@@ -1210,16 +1205,6 @@ CIMGUI_API void igValueFloat(CONST char* prefix, float v, CONST char* float_form
     ImGui::Value(prefix,v,float_format);
 }
 
-CIMGUI_API void igValueColor(CONST char* prefix, CONST ImVec4 v)
-{
-    ImGui::ValueColor(prefix,v);
-}
-
-CIMGUI_API void igValueColor2(CONST char* prefix, ImU32 v)
-{
-    ImGui::ValueColor(prefix,v);
-}
-
 // Logging: all text output from interface is redirected to tty/file/clipboard. Tree nodes are automatically opened.
 CIMGUI_API void igLogToTTY(int max_depth)
 {
@@ -1416,10 +1401,6 @@ CIMGUI_API bool igIsMouseHoveringRect(CONST ImVec2 r_min, CONST ImVec2 r_max, bo
 CIMGUI_API bool igIsMouseDragging(int button, float lock_threshold)
 {
     return ImGui::IsMouseDragging(button,lock_threshold);
-}
-CIMGUI_API bool igIsPosHoveringAnyWindow(CONST ImVec2 pos)
-{
-    return ImGui::IsPosHoveringAnyWindow(pos);
 }
 
 CIMGUI_API void igGetMousePos(ImVec2* pOut)

@@ -49,7 +49,7 @@ typedef ImU32 ImGuiID;
 typedef int ImGuiCol;               
 typedef int ImGuiStyleVar;          
 typedef int ImGuiKey;               
-typedef int ImGuiColorEditMode;     
+typedef int ImGuiColorEditFlags;
 typedef int ImGuiMouseCursor;       
 typedef int ImGuiWindowFlags;       
 typedef int ImGuiCond;           
@@ -220,6 +220,33 @@ enum {
     ImGuiColorEditMode_RGB = 0,
     ImGuiColorEditMode_HSV = 1,
     ImGuiColorEditMode_HEX = 2
+};
+
+enum
+{
+    ImGuiColorEditFlags_NoAlpha         = 1 << 1,
+    ImGuiColorEditFlags_NoPicker        = 1 << 2,
+    ImGuiColorEditFlags_NoOptions       = 1 << 3,
+    ImGuiColorEditFlags_NoSmallPreview  = 1 << 4,
+    ImGuiColorEditFlags_NoInputs        = 1 << 5,
+    ImGuiColorEditFlags_NoTooltip       = 1 << 6,
+    ImGuiColorEditFlags_NoLabel         = 1 << 7,
+    ImGuiColorEditFlags_NoSidePreview   = 1 << 8,
+    ImGuiColorEditFlags_AlphaBar        = 1 << 9,
+    ImGuiColorEditFlags_AlphaPreview    = 1 << 10,
+    ImGuiColorEditFlags_AlphaPreviewHalf= 1 << 11,
+    ImGuiColorEditFlags_HDR             = 1 << 12,
+    ImGuiColorEditFlags_RGB             = 1 << 13,
+    ImGuiColorEditFlags_HSV             = 1 << 14,
+    ImGuiColorEditFlags_HEX             = 1 << 15,
+    ImGuiColorEditFlags_Uint8           = 1 << 16,
+    ImGuiColorEditFlags_Float           = 1 << 17,
+    ImGuiColorEditFlags_PickerHueBar    = 1 << 18,
+    ImGuiColorEditFlags_PickerHueWheel  = 1 << 19,
+    ImGuiColorEditFlags__InputsMask     = ImGuiColorEditFlags_RGB|ImGuiColorEditFlags_HSV|ImGuiColorEditFlags_HEX,
+    ImGuiColorEditFlags__DataTypeMask   = ImGuiColorEditFlags_Uint8|ImGuiColorEditFlags_Float,
+    ImGuiColorEditFlags__PickerMask     = ImGuiColorEditFlags_PickerHueWheel|ImGuiColorEditFlags_PickerHueBar,
+    ImGuiColorEditFlags__OptionsDefault = ImGuiColorEditFlags_Uint8|ImGuiColorEditFlags_RGB|ImGuiColorEditFlags_PickerHueBar
 };
 
 enum {
@@ -559,10 +586,9 @@ CIMGUI_API bool             igRadioButton(CONST char* label, int* v, int v_butto
 CIMGUI_API bool             igCombo(CONST char* label, int* current_item, CONST char* CONST* items, int items_count, int height_in_items);
 CIMGUI_API bool             igCombo2(CONST char* label, int* current_item, CONST char* items_separated_by_zeros, int height_in_items);
 CIMGUI_API bool             igCombo3(CONST char* label, int* current_item, bool(*items_getter)(void* data, int idx, CONST char** out_text), void* data, int items_count, int height_in_items);
-CIMGUI_API bool             igColorButton(CONST struct ImVec4 col, bool small_height, bool outline_border);
-CIMGUI_API bool             igColorEdit3(CONST char* label, float col[3]);
-CIMGUI_API bool             igColorEdit4(CONST char* label, float col[4], bool show_alpha);
-CIMGUI_API void             igColorEditMode(ImGuiColorEditMode mode);
+CIMGUI_API bool             igColorButton(CONST char* desc_id, CONST struct ImVec4 col, ImGuiColorEditFlags flags, ImVec2 size);
+CIMGUI_API bool             igColorEdit3(CONST char* label, float col[3], ImGuiColorEditFlags flags);
+CIMGUI_API bool             igColorEdit4(CONST char* label, float col[4], ImGuiColorEditFlags flags);
 CIMGUI_API void             igPlotLines(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size, int stride);
 CIMGUI_API void             igPlotLines2(CONST char* label, float(*values_getter)(void* data, int idx), void* data, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size);
 CIMGUI_API void             igPlotHistogram(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size, int stride);
@@ -642,8 +668,6 @@ CIMGUI_API void             igValueBool(CONST char* prefix, bool b);
 CIMGUI_API void             igValueInt(CONST char* prefix, int v);
 CIMGUI_API void             igValueUInt(CONST char* prefix, unsigned int v);
 CIMGUI_API void             igValueFloat(CONST char* prefix, float v, CONST char* float_format);
-CIMGUI_API void             igValueColor(CONST char* prefix, CONST struct ImVec4 v);
-CIMGUI_API void             igValueColor2(CONST char* prefix, ImU32 v);
 
 // Tooltip
 CIMGUI_API void             igSetTooltip(CONST char* fmt, ...);
@@ -666,7 +690,7 @@ CIMGUI_API void             igOpenPopup(CONST char* str_id);
 CIMGUI_API bool             igBeginPopup(CONST char* str_id);
 CIMGUI_API bool             igBeginPopupModal(CONST char* name, bool* p_open, ImGuiWindowFlags extra_flags);
 CIMGUI_API bool             igBeginPopupContextItem(CONST char* str_id, int mouse_button);
-CIMGUI_API bool             igBeginPopupContextWindow(bool also_over_items, CONST char* str_id, int mouse_button);
+CIMGUI_API bool             igBeginPopupContextWindow(CONST char* str_id, int mouse_button, bool also_over_items);
 CIMGUI_API bool             igBeginPopupContextVoid(CONST char* str_id, int mouse_button);
 CIMGUI_API void             igEndPopup();
 CIMGUI_API void             igCloseCurrentPopup();
@@ -702,7 +726,6 @@ CIMGUI_API bool             igIsRootWindowOrAnyChildFocused();
 CIMGUI_API bool             igIsRootWindowOrAnyChildHovered();
 CIMGUI_API bool             igIsRectVisible(CONST struct ImVec2 item_size);
 CIMGUI_API bool             igIsRectVisible2(CONST struct ImVec2* rect_min, CONST struct ImVec2* rect_max);
-CIMGUI_API bool             igIsPosHoveringAnyWindow(CONST struct ImVec2 pos);
 CIMGUI_API float            igGetTime();
 CIMGUI_API int              igGetFrameCount();
 CIMGUI_API CONST char*      igGetStyleColorName(ImGuiCol idx);
