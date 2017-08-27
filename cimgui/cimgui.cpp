@@ -149,17 +149,17 @@ CIMGUI_API void igSetWindowFontScale(float scale)
     ImGui::SetWindowFontScale(scale);
 }
 
-CIMGUI_API void igSetNextWindowPos(CONST ImVec2 pos, ImGuiSetCond cond)
+CIMGUI_API void igSetNextWindowPos(CONST ImVec2 pos, ImGuiCond cond)
 {
     ImGui::SetNextWindowPos(pos, cond);
 }
 
-CIMGUI_API void igSetNextWindowPosCenter(ImGuiSetCond cond)
+CIMGUI_API void igSetNextWindowPosCenter(ImGuiCond cond)
 {
     ImGui::SetNextWindowPosCenter(cond);
 }
 
-CIMGUI_API void igSetNextWindowSize(CONST ImVec2 size, ImGuiSetCond cond)
+CIMGUI_API void igSetNextWindowSize(CONST ImVec2 size, ImGuiCond cond)
 {
     ImGui::SetNextWindowSize(size, cond);
 }
@@ -179,7 +179,7 @@ CIMGUI_API void igSetNextWindowContentWidth(float width)
     ImGui::SetNextWindowContentWidth(width);
 }
 
-CIMGUI_API void igSetNextWindowCollapsed(bool collapsed, ImGuiSetCond cond)
+CIMGUI_API void igSetNextWindowCollapsed(bool collapsed, ImGuiCond cond)
 {
     ImGui::SetNextWindowCollapsed(collapsed,cond);
 }
@@ -189,17 +189,17 @@ CIMGUI_API void igSetNextWindowFocus()
     ImGui::SetNextWindowFocus();
 }
 
-CIMGUI_API void igSetWindowPos(CONST ImVec2 pos, ImGuiSetCond cond)
+CIMGUI_API void igSetWindowPos(CONST ImVec2 pos, ImGuiCond cond)
 {
     ImGui::SetWindowPos(pos,cond);
 }
 
-CIMGUI_API void igSetWindowSize(CONST ImVec2 size, ImGuiSetCond cond)
+CIMGUI_API void igSetWindowSize(CONST ImVec2 size, ImGuiCond cond)
 {
     ImGui::SetWindowSize(size, cond);
 }
 
-CIMGUI_API void igSetWindowCollapsed(bool collapsed, ImGuiSetCond cond)
+CIMGUI_API void igSetWindowCollapsed(bool collapsed, ImGuiCond cond)
 {
     ImGui::SetWindowCollapsed(collapsed,cond);
 }
@@ -209,17 +209,17 @@ CIMGUI_API void igSetWindowFocus()
     ImGui::SetWindowFocus();
 }
 
-CIMGUI_API void igSetWindowPosByName(CONST char* name, CONST ImVec2 pos, ImGuiSetCond cond)
+CIMGUI_API void igSetWindowPosByName(CONST char* name, CONST ImVec2 pos, ImGuiCond cond)
 {
     ImGui::SetWindowPos(name,pos,cond);
 }
 
-CIMGUI_API void igSetWindowSize2(CONST char* name, CONST ImVec2 size, ImGuiSetCond cond)
+CIMGUI_API void igSetWindowSize2(CONST char* name, CONST ImVec2 size, ImGuiCond cond)
 {
     ImGui::SetWindowSize(name, size, cond);
 }
 
-CIMGUI_API void igSetWindowCollapsed2(CONST char* name, bool collapsed, ImGuiSetCond cond)
+CIMGUI_API void igSetWindowCollapsed2(CONST char* name, bool collapsed, ImGuiCond cond)
 {
     ImGui::SetWindowCollapsed(name, collapsed, cond);
 }
@@ -1098,7 +1098,7 @@ CIMGUI_API float igGetTreeNodeToLabelSpacing()
     return ImGui::GetTreeNodeToLabelSpacing();
 }
 
-CIMGUI_API void igSetNextTreeNodeOpen(bool opened, ImGuiSetCond cond)
+CIMGUI_API void igSetNextTreeNodeOpen(bool opened, ImGuiCond cond)
 {
     return ImGui::SetNextTreeNodeOpen(opened, cond);
 }
@@ -1273,9 +1273,9 @@ CIMGUI_API bool igIsItemHovered()
     return ImGui::IsItemHovered();
 }
 
-CIMGUI_API bool igIsItemHoveredRect()
+CIMGUI_API bool igIsItemRectHovered()
 {
-    return ImGui::IsItemHoveredRect();
+    return ImGui::IsItemRectHovered();
 }
 
 CIMGUI_API bool igIsItemActive()
@@ -1398,14 +1398,14 @@ CIMGUI_API bool igIsMouseReleased(int button)
     return ImGui::IsMouseReleased(button);
 }
 
-CIMGUI_API bool igIsMouseHoveringWindow()
+CIMGUI_API bool igIsWindowRectHovered()
 {
-    return ImGui::IsMouseHoveringWindow();
+    return ImGui::IsWindowRectHovered();
 }
 
-CIMGUI_API bool igIsMouseHoveringAnyWindow()
+CIMGUI_API bool igIsAnyWindowHovered()
 {
-    return ImGui::IsMouseHoveringAnyWindow();
+    return ImGui::IsAnyWindowHovered();
 }
 
 CIMGUI_API bool igIsMouseHoveringRect(CONST ImVec2 r_min, CONST ImVec2 r_max, bool clip)
@@ -1492,9 +1492,9 @@ CIMGUI_API int igGetFrameCount()
     return ImGui::GetFrameCount();
 }
 
-CIMGUI_API CONST char* igGetStyleColName(ImGuiCol idx)
+CIMGUI_API CONST char* igGetStyleColorName(ImGuiCol idx)
 {
-    return ImGui::GetStyleColName(idx);
+    return ImGui::GetStyleColorName(idx);
 }
 
 CIMGUI_API void igCalcItemRectClosestPoint(ImVec2* pOut, CONST ImVec2 pos, bool on_edge, float outward)
