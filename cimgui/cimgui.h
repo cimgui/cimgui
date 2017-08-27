@@ -49,10 +49,10 @@ typedef ImU32 ImGuiID;
 typedef int ImGuiCol;               
 typedef int ImGuiStyleVar;          
 typedef int ImGuiKey;               
-typedef int ImGuiColorEditMode;     
+typedef int ImGuiColorEditFlags;
 typedef int ImGuiMouseCursor;       
 typedef int ImGuiWindowFlags;       
-typedef int ImGuiSetCond;           
+typedef int ImGuiCond;           
 typedef int ImGuiInputTextFlags;    
 typedef int ImGuiSelectableFlags;   
 typedef int ImGuiTreeNodeFlags;     
@@ -180,9 +180,9 @@ enum {
     ImGuiCol_Header,
     ImGuiCol_HeaderHovered,
     ImGuiCol_HeaderActive,
-    ImGuiCol_Column,
-    ImGuiCol_ColumnHovered,
-    ImGuiCol_ColumnActive,
+    ImGuiCol_Separator,
+    ImGuiCol_SeparatorHovered,
+    ImGuiCol_SeparatorActive,
     ImGuiCol_ResizeGrip,
     ImGuiCol_ResizeGripHovered,
     ImGuiCol_ResizeGripActive,
@@ -222,6 +222,33 @@ enum {
     ImGuiColorEditMode_HEX = 2
 };
 
+enum
+{
+    ImGuiColorEditFlags_NoAlpha         = 1 << 1,
+    ImGuiColorEditFlags_NoPicker        = 1 << 2,
+    ImGuiColorEditFlags_NoOptions       = 1 << 3,
+    ImGuiColorEditFlags_NoSmallPreview  = 1 << 4,
+    ImGuiColorEditFlags_NoInputs        = 1 << 5,
+    ImGuiColorEditFlags_NoTooltip       = 1 << 6,
+    ImGuiColorEditFlags_NoLabel         = 1 << 7,
+    ImGuiColorEditFlags_NoSidePreview   = 1 << 8,
+    ImGuiColorEditFlags_AlphaBar        = 1 << 9,
+    ImGuiColorEditFlags_AlphaPreview    = 1 << 10,
+    ImGuiColorEditFlags_AlphaPreviewHalf= 1 << 11,
+    ImGuiColorEditFlags_HDR             = 1 << 12,
+    ImGuiColorEditFlags_RGB             = 1 << 13,
+    ImGuiColorEditFlags_HSV             = 1 << 14,
+    ImGuiColorEditFlags_HEX             = 1 << 15,
+    ImGuiColorEditFlags_Uint8           = 1 << 16,
+    ImGuiColorEditFlags_Float           = 1 << 17,
+    ImGuiColorEditFlags_PickerHueBar    = 1 << 18,
+    ImGuiColorEditFlags_PickerHueWheel  = 1 << 19,
+    ImGuiColorEditFlags__InputsMask     = ImGuiColorEditFlags_RGB|ImGuiColorEditFlags_HSV|ImGuiColorEditFlags_HEX,
+    ImGuiColorEditFlags__DataTypeMask   = ImGuiColorEditFlags_Uint8|ImGuiColorEditFlags_Float,
+    ImGuiColorEditFlags__PickerMask     = ImGuiColorEditFlags_PickerHueWheel|ImGuiColorEditFlags_PickerHueBar,
+    ImGuiColorEditFlags__OptionsDefault = ImGuiColorEditFlags_Uint8|ImGuiColorEditFlags_RGB|ImGuiColorEditFlags_PickerHueBar
+};
+
 enum {
     ImGuiMouseCursor_None = -1,
     ImGuiMouseCursor_Arrow = 0,
@@ -235,10 +262,10 @@ enum {
 };
 
 enum {
-    ImGuiSetCond_Always        = 1 << 0,
-    ImGuiSetCond_Once          = 1 << 1,
-    ImGuiSetCond_FirstUseEver  = 1 << 2,
-    ImGuiSetCond_Appearing     = 1 << 3
+    ImGuiCond_Always        = 1 << 0,
+    ImGuiCond_Once          = 1 << 1,
+    ImGuiCond_FirstUseEver  = 1 << 2,
+    ImGuiCond_Appearing     = 1 << 3
 };
 
 struct ImGuiStyle {
@@ -432,21 +459,21 @@ CIMGUI_API float            igGetWindowHeight();
 CIMGUI_API bool             igIsWindowCollapsed();
 CIMGUI_API void             igSetWindowFontScale(float scale);
 
-CIMGUI_API void             igSetNextWindowPos(CONST struct ImVec2 pos, ImGuiSetCond cond);
-CIMGUI_API void             igSetNextWindowPosCenter(ImGuiSetCond cond);
-CIMGUI_API void             igSetNextWindowSize(CONST struct ImVec2 size, ImGuiSetCond cond);
+CIMGUI_API void             igSetNextWindowPos(CONST struct ImVec2 pos, ImGuiCond cond);
+CIMGUI_API void             igSetNextWindowPosCenter(ImGuiCond cond);
+CIMGUI_API void             igSetNextWindowSize(CONST struct ImVec2 size, ImGuiCond cond);
 CIMGUI_API void             igSetNextWindowSizeConstraints(CONST struct ImVec2 size_min, CONST struct ImVec2 size_max, ImGuiSizeConstraintCallback custom_callback, void* custom_callback_data);
 CIMGUI_API void             igSetNextWindowContentSize(CONST struct ImVec2 size);
 CIMGUI_API void             igSetNextWindowContentWidth(float width);
-CIMGUI_API void             igSetNextWindowCollapsed(bool collapsed, ImGuiSetCond cond);
+CIMGUI_API void             igSetNextWindowCollapsed(bool collapsed, ImGuiCond cond);
 CIMGUI_API void             igSetNextWindowFocus();
-CIMGUI_API void             igSetWindowPos(CONST struct ImVec2 pos, ImGuiSetCond cond);
-CIMGUI_API void             igSetWindowSize(CONST struct ImVec2 size, ImGuiSetCond cond);
-CIMGUI_API void             igSetWindowCollapsed(bool collapsed, ImGuiSetCond cond);
+CIMGUI_API void             igSetWindowPos(CONST struct ImVec2 pos, ImGuiCond cond);
+CIMGUI_API void             igSetWindowSize(CONST struct ImVec2 size, ImGuiCond cond);
+CIMGUI_API void             igSetWindowCollapsed(bool collapsed, ImGuiCond cond);
 CIMGUI_API void             igSetWindowFocus();
-CIMGUI_API void             igSetWindowPosByName(CONST char* name, CONST struct ImVec2 pos, ImGuiSetCond cond);
-CIMGUI_API void             igSetWindowSize2(CONST char* name, CONST struct ImVec2 size, ImGuiSetCond cond);
-CIMGUI_API void             igSetWindowCollapsed2(CONST char* name, bool collapsed, ImGuiSetCond cond);
+CIMGUI_API void             igSetWindowPosByName(CONST char* name, CONST struct ImVec2 pos, ImGuiCond cond);
+CIMGUI_API void             igSetWindowSize2(CONST char* name, CONST struct ImVec2 size, ImGuiCond cond);
+CIMGUI_API void             igSetWindowCollapsed2(CONST char* name, bool collapsed, ImGuiCond cond);
 CIMGUI_API void             igSetWindowFocus2(CONST char* name);
 
 CIMGUI_API float            igGetScrollX();
@@ -515,9 +542,10 @@ CIMGUI_API float            igGetItemsLineHeightWithSpacing();
 CIMGUI_API void             igColumns(int count, CONST char* id, bool border);
 CIMGUI_API void             igNextColumn();
 CIMGUI_API int              igGetColumnIndex();
+CIMGUI_API float            igGetColumnWidth(int column_index);
+CIMGUI_API void             igSetColumnWidth(int column_index, float width);
 CIMGUI_API float            igGetColumnOffset(int column_index);
 CIMGUI_API void             igSetColumnOffset(int column_index, float offset_x);
-CIMGUI_API float            igGetColumnWidth(int column_index);
 CIMGUI_API int              igGetColumnsCount();
 
 // ID scopes
@@ -559,10 +587,12 @@ CIMGUI_API bool             igRadioButton(CONST char* label, int* v, int v_butto
 CIMGUI_API bool             igCombo(CONST char* label, int* current_item, CONST char* CONST* items, int items_count, int height_in_items);
 CIMGUI_API bool             igCombo2(CONST char* label, int* current_item, CONST char* items_separated_by_zeros, int height_in_items);
 CIMGUI_API bool             igCombo3(CONST char* label, int* current_item, bool(*items_getter)(void* data, int idx, CONST char** out_text), void* data, int items_count, int height_in_items);
-CIMGUI_API bool             igColorButton(CONST struct ImVec4 col, bool small_height, bool outline_border);
-CIMGUI_API bool             igColorEdit3(CONST char* label, float col[3]);
-CIMGUI_API bool             igColorEdit4(CONST char* label, float col[4], bool show_alpha);
-CIMGUI_API void             igColorEditMode(ImGuiColorEditMode mode);
+CIMGUI_API bool             igColorButton(CONST char* desc_id, CONST struct ImVec4 col, ImGuiColorEditFlags flags, ImVec2 size);
+CIMGUI_API bool             igColorEdit3(CONST char* label, float col[3], ImGuiColorEditFlags flags);
+CIMGUI_API bool             igColorEdit4(CONST char* label, float col[4], ImGuiColorEditFlags flags);
+CIMGUI_API bool             igColorPicker3(CONST char* label, float col[3], ImGuiColorEditFlags flags);
+CIMGUI_API bool             igColorPicker4(CONST char* label, float col[4], ImGuiColorEditFlags flags, CONST float* ref_col);
+CIMGUI_API void             igSetColorEditOptions(ImGuiColorEditFlags flags);
 CIMGUI_API void             igPlotLines(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size, int stride);
 CIMGUI_API void             igPlotLines2(CONST char* label, float(*values_getter)(void* data, int idx), void* data, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size);
 CIMGUI_API void             igPlotHistogram(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size, int stride);
@@ -624,7 +654,7 @@ CIMGUI_API void             igTreePushPtr(CONST void* ptr_id);
 CIMGUI_API void             igTreePop();
 CIMGUI_API void             igTreeAdvanceToLabelPos();
 CIMGUI_API float            igGetTreeNodeToLabelSpacing();
-CIMGUI_API void             igSetNextTreeNodeOpen(bool opened, ImGuiSetCond cond);
+CIMGUI_API void             igSetNextTreeNodeOpen(bool opened, ImGuiCond cond);
 CIMGUI_API bool             igCollapsingHeader(CONST char* label, ImGuiTreeNodeFlags flags);
 CIMGUI_API bool             igCollapsingHeaderEx(CONST char* label, bool* p_open, ImGuiTreeNodeFlags flags);
 
@@ -642,8 +672,6 @@ CIMGUI_API void             igValueBool(CONST char* prefix, bool b);
 CIMGUI_API void             igValueInt(CONST char* prefix, int v);
 CIMGUI_API void             igValueUInt(CONST char* prefix, unsigned int v);
 CIMGUI_API void             igValueFloat(CONST char* prefix, float v, CONST char* float_format);
-CIMGUI_API void             igValueColor(CONST char* prefix, CONST struct ImVec4 v);
-CIMGUI_API void             igValueColor2(CONST char* prefix, ImU32 v);
 
 // Tooltip
 CIMGUI_API void             igSetTooltip(CONST char* fmt, ...);
@@ -666,9 +694,10 @@ CIMGUI_API void             igOpenPopup(CONST char* str_id);
 CIMGUI_API bool             igBeginPopup(CONST char* str_id);
 CIMGUI_API bool             igBeginPopupModal(CONST char* name, bool* p_open, ImGuiWindowFlags extra_flags);
 CIMGUI_API bool             igBeginPopupContextItem(CONST char* str_id, int mouse_button);
-CIMGUI_API bool             igBeginPopupContextWindow(bool also_over_items, CONST char* str_id, int mouse_button);
+CIMGUI_API bool             igBeginPopupContextWindow(CONST char* str_id, int mouse_button, bool also_over_items);
 CIMGUI_API bool             igBeginPopupContextVoid(CONST char* str_id, int mouse_button);
 CIMGUI_API void             igEndPopup();
+CIMGUI_API bool             igIsPopupOpen(CONST char* str_id);
 CIMGUI_API void             igCloseCurrentPopup();
 
 // Logging: all text output from interface is redirected to tty/file/clipboard. Tree nodes are automatically opened.
@@ -685,7 +714,7 @@ CIMGUI_API void             igPopClipRect();
 
 // Utilities
 CIMGUI_API bool             igIsItemHovered();
-CIMGUI_API bool             igIsItemHoveredRect();
+CIMGUI_API bool             igIsItemRectHovered();
 CIMGUI_API bool             igIsItemActive();
 CIMGUI_API bool             igIsItemClicked(int mouse_button);
 CIMGUI_API bool             igIsItemVisible();
@@ -702,10 +731,9 @@ CIMGUI_API bool             igIsRootWindowOrAnyChildFocused();
 CIMGUI_API bool             igIsRootWindowOrAnyChildHovered();
 CIMGUI_API bool             igIsRectVisible(CONST struct ImVec2 item_size);
 CIMGUI_API bool             igIsRectVisible2(CONST struct ImVec2* rect_min, CONST struct ImVec2* rect_max);
-CIMGUI_API bool             igIsPosHoveringAnyWindow(CONST struct ImVec2 pos);
 CIMGUI_API float            igGetTime();
 CIMGUI_API int              igGetFrameCount();
-CIMGUI_API CONST char*      igGetStyleColName(ImGuiCol idx);
+CIMGUI_API CONST char*      igGetStyleColorName(ImGuiCol idx);
 CIMGUI_API void             igCalcItemRectClosestPoint(struct ImVec2* pOut, CONST struct ImVec2 pos, bool on_edge, float outward);
 CIMGUI_API void             igCalcTextSize(struct ImVec2* pOut, CONST char* text, CONST char* text_end, bool hide_text_after_double_hash, float wrap_width);
 CIMGUI_API void             igCalcListClipping(int items_count, float items_height, int* out_items_display_start, int* out_items_display_end);
@@ -726,8 +754,8 @@ CIMGUI_API bool             igIsMouseDown(int button);
 CIMGUI_API bool             igIsMouseClicked(int button, bool repeat);
 CIMGUI_API bool             igIsMouseDoubleClicked(int button);
 CIMGUI_API bool             igIsMouseReleased(int button);
-CIMGUI_API bool             igIsMouseHoveringWindow();
-CIMGUI_API bool             igIsMouseHoveringAnyWindow();
+CIMGUI_API bool             igIsWindowRectHovered();
+CIMGUI_API bool             igIsAnyWindowHovered();
 CIMGUI_API bool             igIsMouseHoveringRect(CONST struct ImVec2 r_min, CONST struct ImVec2 r_max, bool clip);
 CIMGUI_API bool             igIsMouseDragging(int button, float lock_threshold);
 CIMGUI_API void             igGetMousePos(struct ImVec2* pOut);
