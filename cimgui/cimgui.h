@@ -542,9 +542,10 @@ CIMGUI_API float            igGetItemsLineHeightWithSpacing();
 CIMGUI_API void             igColumns(int count, CONST char* id, bool border);
 CIMGUI_API void             igNextColumn();
 CIMGUI_API int              igGetColumnIndex();
+CIMGUI_API float            igGetColumnWidth(int column_index);
+CIMGUI_API void             igSetColumnWidth(int column_index, float width);
 CIMGUI_API float            igGetColumnOffset(int column_index);
 CIMGUI_API void             igSetColumnOffset(int column_index, float offset_x);
-CIMGUI_API float            igGetColumnWidth(int column_index);
 CIMGUI_API int              igGetColumnsCount();
 
 // ID scopes
@@ -589,6 +590,9 @@ CIMGUI_API bool             igCombo3(CONST char* label, int* current_item, bool(
 CIMGUI_API bool             igColorButton(CONST char* desc_id, CONST struct ImVec4 col, ImGuiColorEditFlags flags, ImVec2 size);
 CIMGUI_API bool             igColorEdit3(CONST char* label, float col[3], ImGuiColorEditFlags flags);
 CIMGUI_API bool             igColorEdit4(CONST char* label, float col[4], ImGuiColorEditFlags flags);
+CIMGUI_API bool             igColorPicker3(CONST char* label, float col[3], ImGuiColorEditFlags flags);
+CIMGUI_API bool             igColorPicker4(CONST char* label, float col[4], ImGuiColorEditFlags flags, CONST float* ref_col);
+CIMGUI_API void             igSetColorEditOptions(ImGuiColorEditFlags flags);
 CIMGUI_API void             igPlotLines(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size, int stride);
 CIMGUI_API void             igPlotLines2(CONST char* label, float(*values_getter)(void* data, int idx), void* data, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size);
 CIMGUI_API void             igPlotHistogram(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size, int stride);
@@ -693,6 +697,7 @@ CIMGUI_API bool             igBeginPopupContextItem(CONST char* str_id, int mous
 CIMGUI_API bool             igBeginPopupContextWindow(CONST char* str_id, int mouse_button, bool also_over_items);
 CIMGUI_API bool             igBeginPopupContextVoid(CONST char* str_id, int mouse_button);
 CIMGUI_API void             igEndPopup();
+CIMGUI_API bool             igIsPopupOpen(CONST char* str_id);
 CIMGUI_API void             igCloseCurrentPopup();
 
 // Logging: all text output from interface is redirected to tty/file/clipboard. Tree nodes are automatically opened.

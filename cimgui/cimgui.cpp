@@ -451,6 +451,11 @@ CIMGUI_API void igEndPopup()
     return ImGui::EndPopup();
 }
 
+CIMGUI_API bool igIsPopupOpen(CONST char* str_id)
+{
+	return ImGui::IsPopupOpen(str_id);
+}
+
 CIMGUI_API void igCloseCurrentPopup()
 {
     return ImGui::CloseCurrentPopup();
@@ -598,6 +603,11 @@ CIMGUI_API void igSetColumnOffset(int column_index, float offset_x)
 CIMGUI_API float igGetColumnWidth(int column_index)
 {
     return ImGui::GetColumnWidth(column_index);
+}
+
+CIMGUI_API void igSetColumnWidth(int column_index, float width)
+{
+	ImGui::SetColumnWidth(column_index, width);
 }
 
 CIMGUI_API int igGetColumnsCount()
@@ -811,6 +821,21 @@ CIMGUI_API bool igColorEdit3(CONST char* label, float col[3], ImGuiColorEditFlag
 CIMGUI_API bool igColorEdit4(CONST char* label, float col[4], ImGuiColorEditFlags flags)
 {
     return ImGui::ColorEdit4(label, col, flags);
+}
+
+CIMGUI_API bool igColorPicker3(CONST char* label, float col[3], ImGuiColorEditFlags flags)
+{
+	return ImGui::ColorPicker3(label, col, flags);
+}
+
+CIMGUI_API bool igColorPicker4(CONST char* label, float col[4], ImGuiColorEditFlags flags, CONST float* ref_col)
+{
+	return ImGui::ColorPicker4(label, col, flags, ref_col);
+}
+
+CIMGUI_API void igSetColorEditOptions(ImGuiColorEditFlags flags)
+{
+	ImGui::SetColorEditOptions(flags);
 }
 
 CIMGUI_API void igPlotLines(CONST char* label, CONST float* values, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, ImVec2 graph_size, int stride)
