@@ -37,19 +37,19 @@ CIMGUI_API ImFont* ImFontAtlas_AddFontFromFileTTF(ImFontAtlas* atlas,CONST char*
 	return atlas->AddFontFromFileTTF(filename, size_pixels, font_cfg, glyph_ranges);
 }
 
-CIMGUI_API ImFont* ImFontAtlas_AddFontFromMemoryTTF(ImFontAtlas* atlas, void* ttf_data, int ttf_size, float size_pixels, CONST ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges)
+CIMGUI_API ImFont* ImFontAtlas_AddFontFromMemoryTTF(ImFontAtlas* atlas, void* font_data, int font_size, float size_pixels, CONST ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges)
 {
-	return atlas->AddFontFromMemoryTTF(ttf_data, ttf_size, size_pixels, font_cfg, glyph_ranges);
+	return atlas->AddFontFromMemoryTTF(font_data, font_size, size_pixels, font_cfg, glyph_ranges);
 }
 
-CIMGUI_API ImFont* ImFontAtlas_AddFontFromMemoryCompressedTTF(ImFontAtlas* atlas, CONST void* compressed_ttf_data, int compressed_ttf_size, float size_pixels, CONST ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges)
+CIMGUI_API ImFont* ImFontAtlas_AddFontFromMemoryCompressedTTF(ImFontAtlas* atlas, CONST void* compressed_font_data, int compressed_font_size, float size_pixels, CONST ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges)
 {
-	return atlas->AddFontFromMemoryCompressedTTF(compressed_ttf_data, compressed_ttf_size, size_pixels, font_cfg, glyph_ranges);
+	return atlas->AddFontFromMemoryCompressedTTF(compressed_font_data, compressed_font_size, size_pixels, font_cfg, glyph_ranges);
 }
 
-CIMGUI_API ImFont* ImFontAtlas_AddFontFromMemoryCompressedBase85TTF(ImFontAtlas* atlas, CONST char* compressed_ttf_data_base85, float size_pixels, CONST ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges)
+CIMGUI_API ImFont* ImFontAtlas_AddFontFromMemoryCompressedBase85TTF(ImFontAtlas* atlas, CONST char* compressed_font_data_base85, float size_pixels, CONST ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges)
 {
-	return atlas->AddFontFromMemoryCompressedBase85TTF(compressed_ttf_data_base85, size_pixels, font_cfg, glyph_ranges);
+	return atlas->AddFontFromMemoryCompressedBase85TTF(compressed_font_data_base85, size_pixels, font_cfg, glyph_ranges);
 }
 
 CIMGUI_API void ImFontAtlas_ClearTexData(ImFontAtlas* atlas)
