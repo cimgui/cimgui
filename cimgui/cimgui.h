@@ -7,7 +7,7 @@
 #else
 #define API __declspec(dllexport)
 #endif
-#ifdef __GNUC__
+#ifndef __GNUC__
 #define snprintf sprintf_s
 #endif
 #else
