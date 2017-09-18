@@ -2,6 +2,10 @@
 #include "../imgui/imgui.h"
 #include "cimgui.h"
 
+// to use placement new
+#define IMGUI_DEFINE_PLACEMENT_NEW
+#include "../imgui/imgui_internal.h"
+
 CIMGUI_API ImGuiIO* igGetIO()
 {
     return &ImGui::GetIO();
@@ -633,43 +637,43 @@ CIMGUI_API int igGetColumnsCount()
 // ID scopes
 // If you are creating widgets in a loop you most likely want to push a unique identifier so ImGui can differentiate them
 // You can also use "##extra" within your widget name to distinguish them from each others (see 'Programmer Guide')
-CIMGUI_API void igPushIdStr(CONST char* str_id)
+CIMGUI_API void igPushIDStr(CONST char* str_id)
 {
     return ImGui::PushID(str_id);
 }
 
-CIMGUI_API void igPushIdStrRange(CONST char* str_begin, CONST char* str_end)
+CIMGUI_API void igPushIDStrRange(CONST char* str_begin, CONST char* str_end)
 {
     return ImGui::PushID(str_begin, str_end);
 }
 
 
-CIMGUI_API void igPushIdPtr(CONST void* ptr_id)
+CIMGUI_API void igPushIDPtr(CONST void* ptr_id)
 {
     return ImGui::PushID(ptr_id);
 }
 
-CIMGUI_API void igPushIdInt(int int_id)
+CIMGUI_API void igPushIDInt(int int_id)
 {
     return ImGui::PushID(int_id);
 }
 
-CIMGUI_API void igPopId()
+CIMGUI_API void igPopID()
 {
     return ImGui::PopID();
 }
 
-CIMGUI_API ImGuiID igGetIdStr(CONST char* str_id)
+CIMGUI_API ImGuiID igGetIDStr(CONST char* str_id)
 {
     return ImGui::GetID(str_id);
 }
 
-CIMGUI_API ImGuiID igGetIdStrRange(CONST char* str_begin, CONST char* str_end)
+CIMGUI_API ImGuiID igGetIDStrRange(CONST char* str_begin, CONST char* str_end)
 {
     return ImGui::GetID(str_begin, str_end);
 }
 
-CIMGUI_API ImGuiID igGetIdPtr(CONST void* ptr_id)
+CIMGUI_API ImGuiID igGetIDPtr(CONST void* ptr_id)
 {
     return ImGui::GetID(ptr_id);
 }
@@ -1277,7 +1281,7 @@ CIMGUI_API void igLogText(CONST char* fmt, ...)
     char buffer[256];
     va_list args;
     va_start(args, fmt);
-    snprintf(buffer, 256, fmt, args);
+    vsnprintf(buffer, 256, fmt, args);
     va_end(args);
 
     ImGui::LogText("%s",buffer);
@@ -1604,121 +1608,202 @@ CIMGUI_API void ImGuiIO_ClearInputCharacters()
     return ImGui::GetIO().ClearInputCharacters();
 }
 
-CIMGUI_API void	ImGuiTextFilter_Init(struct ImGuiTextFilter* filter, const char* default_filter)
+CIMGUI_API struct ImGuiTextFilter* ImGuiTextFilter_Create(const char* default_filter)
 {
-	*filter = ImGuiTextFilter(default_filter);
+    ImGuiTextFilter* filter = (ImGuiTextFilter*)ImGui::MemAlloc(sizeof(ImGuiTextFilter));
+    IM_PLACEMENT_NEW(filter) ImGuiTextFilter();
+    return filter;
 }
 
-CIMGUI_API void	ImGuiTextFilter_Clear(struct ImGuiTextFilter* filter)
+CIMGUI_API void ImGuiTextFilter_Destroy(struct ImGuiTextFilter* filter)
 {
-	filter->Clear();
+    filter->~ImGuiTextFilter();
+    ImGui::MemFree(filter);
 }
 
-CIMGUI_API bool	ImGuiTextFilter_Draw(struct ImGuiTextFilter* filter, const char* label, float width)
+CIMGUI_API void ImGuiTextFilter_Clear(struct ImGuiTextFilter* filter)
 {
-	return filter->Draw(label, width);
+    filter->Clear();
 }
 
-CIMGUI_API bool	ImGuiTextFilter_PassFilter(struct ImGuiTextFilter* filter, const char* text, const char* text_end)
+CIMGUI_API bool ImGuiTextFilter_Draw(struct ImGuiTextFilter* filter, const char* label, float width)
 {
-	return filter->PassFilter(text, text_end);
+    return filter->Draw(label, width);
 }
 
-CIMGUI_API bool	ImGuiTextFilter_IsActive(struct ImGuiTextFilter* filter)
+CIMGUI_API bool ImGuiTextFilter_PassFilter(const struct ImGuiTextFilter* filter, const char* text, const char* text_end)
 {
-	return filter->IsActive();
-}
-CIMGUI_API void	ImGuiTextFilter_Build(struct ImGuiTextFilter* filter)
-{
-	filter->Build();
+    return filter->PassFilter(text, text_end);
 }
 
-CIMGUI_API void ImGuiTextEditCallbackData_DeleteChars(struct ImGuiTextEditCallbackData* data, int pos, int bytes_count)
+CIMGUI_API bool ImGuiTextFilter_IsActive(const struct ImGuiTextFilter* filter)
 {
-	data->DeleteChars(pos, bytes_count);
+    return filter->IsActive();
 }
 
-CIMGUI_API void ImGuiTextEditCallbackData_InsertChars(struct ImGuiTextEditCallbackData* data, int pos, const char* text, const char* text_end)
+CIMGUI_API void ImGuiTextFilter_Build(struct ImGuiTextFilter* filter)
 {
-	data->InsertChars(pos, text, text_end);
+    filter->Build();
 }
 
-CIMGUI_API bool ImGuiTextEditCallbackData_HasSelection(struct ImGuiTextEditCallbackData* data)
+CIMGUI_API const char* ImGuiTextFilter_GetInputBuf(struct ImGuiTextFilter* filter)
 {
-	return data->HasSelection();
+    return filter->InputBuf;
 }
 
-CIMGUI_API void ImGuiStorage_Init(struct ImGuiStorage* storage)
+CIMGUI_API struct ImGuiTextBuffer* ImGuiTextBuffer_Create()
 {
-	*storage = ImGuiStorage();
+    ImGuiTextBuffer* buffer = (ImGuiTextBuffer*)ImGui::MemAlloc(sizeof(ImGuiTextBuffer));
+    IM_PLACEMENT_NEW(buffer) ImGuiTextBuffer();
+    return buffer;
+}
+
+CIMGUI_API void ImGuiTextBuffer_Destroy(struct ImGuiTextBuffer* buffer)
+{
+    buffer->~ImGuiTextBuffer();
+    ImGui::MemFree(buffer);
+}
+
+CIMGUI_API char ImGuiTextBuffer_index(struct ImGuiTextBuffer* buffer, int i)
+{
+    return (*buffer)[i];
+}
+
+CIMGUI_API const char* ImGuiTextBuffer_begin(const struct ImGuiTextBuffer* buffer)
+{
+    return buffer->begin();
+}
+
+CIMGUI_API const char* ImGuiTextBuffer_end(const struct ImGuiTextBuffer* buffer)
+{
+    return buffer->end();
+}
+
+CIMGUI_API int ImGuiTextBuffer_size(const struct ImGuiTextBuffer* buffer)
+{
+    return buffer->size();
+}
+
+CIMGUI_API bool ImGuiTextBuffer_empty(struct ImGuiTextBuffer* buffer)
+{
+    return buffer->empty();
+}
+
+CIMGUI_API void ImGuiTextBuffer_clear(struct ImGuiTextBuffer* buffer)
+{
+    buffer->clear();
+}
+
+CIMGUI_API const char* ImGuiTextBuffer_c_str(const struct ImGuiTextBuffer* buffer)
+{
+    return buffer->c_str();
+}
+
+CIMGUI_API void ImGuiTextBuffer_append(struct ImGuiTextBuffer* buffer, const char* fmt, ...)
+{
+    va_list args;
+    va_start(args, fmt);
+    buffer->appendv(fmt, args);
+    va_end(args);
+}
+
+CIMGUI_API void ImGuiTextBuffer_appendv(struct ImGuiTextBuffer* buffer, const char* fmt, va_list args)
+{
+    buffer->appendv(fmt, args);
+}
+
+CIMGUI_API struct ImGuiStorage* ImGuiStorage_Create() {
+    ImGuiStorage* storage = (ImGuiStorage*)ImGui::MemAlloc(sizeof(ImGuiStorage));
+    IM_PLACEMENT_NEW(storage) ImGuiStorage();
+    return storage;
+}
+
+CIMGUI_API void ImGuiStorage_Destroy(struct ImGuiStorage* storage) {
+    storage->~ImGuiStorage();
+    ImGui::MemFree(storage);
 }
 
 CIMGUI_API void ImGuiStorage_Clear(struct ImGuiStorage* storage)
 {
-	storage->Clear();
+    storage->Clear();
 }
 
 CIMGUI_API int ImGuiStorage_GetInt(struct ImGuiStorage* storage, ImGuiID key, int default_val)
 {
-	return storage->GetInt(key, default_val);
+    return storage->GetInt(key, default_val);
 }
 
 CIMGUI_API void ImGuiStorage_SetInt(struct ImGuiStorage* storage, ImGuiID key, int val)
 {
-	storage->SetInt(key, val);
+    storage->SetInt(key, val);
 }
 
 CIMGUI_API bool ImGuiStorage_GetBool(struct ImGuiStorage* storage, ImGuiID key, bool default_val)
 {
-	return storage->GetBool(key, default_val);
+    return storage->GetBool(key, default_val);
 }
 
 CIMGUI_API void ImGuiStorage_SetBool(struct ImGuiStorage* storage, ImGuiID key, bool val)
 {
-	storage->SetBool(key, val);
+    storage->SetBool(key, val);
 }
 
 CIMGUI_API float ImGuiStorage_GetFloat(struct ImGuiStorage* storage, ImGuiID key, float default_val)
 {
-	return storage->GetFloat(key, default_val);
+    return storage->GetFloat(key, default_val);
 }
 
 CIMGUI_API void ImGuiStorage_SetFloat(struct ImGuiStorage* storage, ImGuiID key, float val)
 {
-	storage->SetFloat(key, val);
+    storage->SetFloat(key, val);
 }
 
 CIMGUI_API void* ImGuiStorage_GetVoidPtr(struct ImGuiStorage* storage, ImGuiID key)
 {
-	return storage->GetVoidPtr(key);
+    return storage->GetVoidPtr(key);
 }
 
 CIMGUI_API void ImGuiStorage_SetVoidPtr(struct ImGuiStorage* storage, ImGuiID key, void* val)
 {
-	storage->SetVoidPtr(key, val);
+    storage->SetVoidPtr(key, val);
 }
 
 CIMGUI_API int* ImGuiStorage_GetIntRef(struct ImGuiStorage* storage, ImGuiID key, int default_val)
 {
-	return storage->GetIntRef(key, default_val);
+    return storage->GetIntRef(key, default_val);
 }
 
 CIMGUI_API bool* ImGuiStorage_GetBoolRef(struct ImGuiStorage* storage, ImGuiID key, bool default_val)
 {
-	return storage->GetBoolRef(key, default_val);
+    return storage->GetBoolRef(key, default_val);
 }
 
 CIMGUI_API float* ImGuiStorage_GetFloatRef(struct ImGuiStorage* storage, ImGuiID key, float default_val)
 {
-	return storage->GetFloatRef(key, default_val);
+    return storage->GetFloatRef(key, default_val);
 }
 
 CIMGUI_API void** ImGuiStorage_GetVoidPtrRef(struct ImGuiStorage* storage, ImGuiID key, void* default_val)
 {
-	return storage->GetVoidPtrRef(key, default_val);
+    return storage->GetVoidPtrRef(key, default_val);
 }
 
 CIMGUI_API void ImGuiStorage_SetAllInt(struct ImGuiStorage* storage, int val)
 {
-	storage->SetAllInt(val);
+    storage->SetAllInt(val);
+}
+
+CIMGUI_API void ImGuiTextEditCallbackData_DeleteChars(struct ImGuiTextEditCallbackData* data, int pos, int bytes_count)
+{
+    data->DeleteChars(pos, bytes_count);
+}
+
+CIMGUI_API void ImGuiTextEditCallbackData_InsertChars(struct ImGuiTextEditCallbackData* data, int pos, const char* text, const char* text_end)
+{
+    data->InsertChars(pos, text, text_end);
+}
+
+CIMGUI_API bool ImGuiTextEditCallbackData_HasSelection(struct ImGuiTextEditCallbackData* data)
+{
+    return data->HasSelection();
 }

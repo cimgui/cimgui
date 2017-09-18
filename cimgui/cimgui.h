@@ -547,14 +547,14 @@ CIMGUI_API int              igGetColumnsCount();
 // ID scopes
 // If you are creating widgets in a loop you most likely want to push a unique identifier so ImGui can differentiate them
 // You can also use "##extra" within your widget name to distinguish them from each others (see 'Programmer Guide')
-CIMGUI_API void             igPushIdStr(CONST char* str_id);
-CIMGUI_API void             igPushIdStrRange(CONST char* str_begin, CONST char* str_end);
-CIMGUI_API void             igPushIdPtr(CONST void* ptr_id);
-CIMGUI_API void             igPushIdInt(int int_id);
-CIMGUI_API void             igPopId();
-CIMGUI_API ImGuiID          igGetIdStr(CONST char* str_id);
-CIMGUI_API ImGuiID          igGetIdStrRange(CONST char* str_begin,CONST char* str_end);
-CIMGUI_API ImGuiID          igGetIdPtr(CONST void* ptr_id);
+CIMGUI_API void             igPushIDStr(CONST char* str_id);
+CIMGUI_API void             igPushIDStrRange(CONST char* str_begin, CONST char* str_end);
+CIMGUI_API void             igPushIDPtr(CONST void* ptr_id);
+CIMGUI_API void             igPushIDInt(int int_id);
+CIMGUI_API void             igPopID();
+CIMGUI_API ImGuiID          igGetIDStr(CONST char* str_id);
+CIMGUI_API ImGuiID          igGetIDStrRange(CONST char* str_begin,CONST char* str_end);
+CIMGUI_API ImGuiID          igGetIDPtr(CONST void* ptr_id);
 
 // Widgets
 CIMGUI_API void             igText(CONST char* fmt, ...);
@@ -773,47 +773,76 @@ CIMGUI_API CONST char*      igGetClipboardText();
 CIMGUI_API void             igSetClipboardText(CONST char* text);
 
 // Internal state access - if you want to share ImGui state between modules (e.g. DLL) or allocate it yourself
-CIMGUI_API CONST char*             igGetVersion();
-CIMGUI_API struct ImGuiContext*    igCreateContext(void* (*malloc_fn)(size_t), void (*free_fn)(void*));
-CIMGUI_API void                    igDestroyContext(struct ImGuiContext* ctx);
-CIMGUI_API struct ImGuiContext*    igGetCurrentContext();
-CIMGUI_API void                    igSetCurrentContext(struct ImGuiContext* ctx);
+CIMGUI_API CONST char*              igGetVersion();
+CIMGUI_API struct ImGuiContext*     igCreateContext(void* (*malloc_fn)(size_t), void (*free_fn)(void*));
+CIMGUI_API void                     igDestroyContext(struct ImGuiContext* ctx);
+CIMGUI_API struct ImGuiContext*     igGetCurrentContext();
+CIMGUI_API void                     igSetCurrentContext(struct ImGuiContext* ctx);
 
-CIMGUI_API void             ImFontConfig_DefaultConstructor(struct ImFontConfig* config);
+// ImGuiIO
+CIMGUI_API void                     ImGuiIO_AddInputCharacter(unsigned short c);
+CIMGUI_API void                     ImGuiIO_AddInputCharactersUTF8(CONST char* utf8_chars);
+CIMGUI_API void                     ImGuiIO_ClearInputCharacters();
 
-CIMGUI_API void             ImFontAtlas_GetTexDataAsRGBA32(struct ImFontAtlas* atlas, unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel);
-CIMGUI_API void             ImFontAtlas_GetTexDataAsAlpha8(struct ImFontAtlas* atlas, unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel);
-CIMGUI_API void             ImFontAtlas_SetTexID(struct ImFontAtlas* atlas, ImTextureID id);
-CIMGUI_API struct ImFont*   ImFontAtlas_AddFont(struct ImFontAtlas* atlas, CONST struct ImFontConfig* font_cfg);
-CIMGUI_API struct ImFont*   ImFontAtlas_AddFontDefault(struct ImFontAtlas* atlas, CONST struct ImFontConfig* font_cfg);
-CIMGUI_API struct ImFont*   ImFontAtlas_AddFontFromFileTTF(struct ImFontAtlas* atlas, CONST char* filename, float size_pixels, CONST struct ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges);
-CIMGUI_API struct ImFont*   ImFontAtlas_AddFontFromMemoryTTF(struct ImFontAtlas* atlas, void* font_data, int font_size, float size_pixels, CONST struct ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges);
-CIMGUI_API struct ImFont*   ImFontAtlas_AddFontFromMemoryCompressedTTF(struct ImFontAtlas* atlas, CONST void* compressed_font_data, int compressed_font_size, float size_pixels, CONST struct ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges);
-CIMGUI_API struct ImFont*   ImFontAtlas_AddFontFromMemoryCompressedBase85TTF(struct ImFontAtlas* atlas, CONST char* compressed_font_data_base85, float size_pixels, CONST struct ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges);
-CIMGUI_API void             ImFontAtlas_ClearTexData(struct ImFontAtlas* atlas);
-CIMGUI_API void             ImFontAtlas_Clear(struct ImFontAtlas* atlas);
-CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesDefault(struct ImFontAtlas* atlas);
-CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesKorean(struct ImFontAtlas* atlas);
-CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesJapanese(struct ImFontAtlas* atlas);
-CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesChinese(struct ImFontAtlas* atlas);
-CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesCyrillic(struct ImFontAtlas* atlas);
-CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesThai(struct ImFontAtlas* atlas);
+// ImGuiTextFilter
+CIMGUI_API struct ImGuiTextFilter*  ImGuiTextFilter_Create(const char* default_filter);
+CIMGUI_API void                     ImGuiTextFilter_Destroy(struct ImGuiTextFilter* filter);
+CIMGUI_API void                     ImGuiTextFilter_Clear(struct ImGuiTextFilter* filter);
+CIMGUI_API bool                     ImGuiTextFilter_Draw(struct ImGuiTextFilter* filter, const char* label, float width);
+CIMGUI_API bool                     ImGuiTextFilter_PassFilter(const struct ImGuiTextFilter* filter, const char* text, const char* text_end);
+CIMGUI_API bool                     ImGuiTextFilter_IsActive(const struct ImGuiTextFilter* filter);
+CIMGUI_API void                     ImGuiTextFilter_Build(struct ImGuiTextFilter* filter);
+CIMGUI_API const char*              ImGuiTextFilter_GetInputBuf(struct ImGuiTextFilter* filter);
 
-CIMGUI_API void             ImGuiIO_AddInputCharacter(unsigned short c);
-CIMGUI_API void             ImGuiIO_AddInputCharactersUTF8(CONST char* utf8_chars);
-CIMGUI_API void             ImGuiIO_ClearInputCharacters();
+// ImGuiTextBuffer
+CIMGUI_API struct ImGuiTextBuffer*  ImGuiTextBuffer_Create();
+CIMGUI_API void                     ImGuiTextBuffer_Destroy(struct ImGuiTextBuffer* buffer);
+CIMGUI_API char                     ImGuiTextBuffer_index(struct ImGuiTextBuffer* buffer, int i);
+CIMGUI_API const char*              ImGuiTextBuffer_begin(const struct ImGuiTextBuffer* buffer);
+CIMGUI_API const char*              ImGuiTextBuffer_end(const struct ImGuiTextBuffer* buffer);
+CIMGUI_API int                      ImGuiTextBuffer_size(const struct ImGuiTextBuffer* buffer);
+CIMGUI_API bool                     ImGuiTextBuffer_empty(struct ImGuiTextBuffer* buffer);
+CIMGUI_API void                     ImGuiTextBuffer_clear(struct ImGuiTextBuffer* buffer);
+CIMGUI_API const char*              ImGuiTextBuffer_c_str(const struct ImGuiTextBuffer* buffer);
+CIMGUI_API void                     ImGuiTextBuffer_append(struct ImGuiTextBuffer* buffer, const char* fmt, ...);
+CIMGUI_API void                     ImGuiTextBuffer_appendv(struct ImGuiTextBuffer* buffer, const char* fmt, va_list args);
 
-//ImDrawData
-CIMGUI_API void                 ImDrawData_DeIndexAllBuffers(struct ImDrawData* drawData);
-CIMGUI_API void					ImDrawData_ScaleClipRects(struct ImDrawData* drawData, struct ImVec2 sc);
+// ImGuiStorage
+CIMGUI_API struct ImGuiStorage*     ImGuiStorage_Create();
+CIMGUI_API void                     ImGuiStorage_Destroy(struct ImGuiStorage* storage);
+CIMGUI_API int                      ImGuiStorage_GetInt(struct ImGuiStorage* storage, ImGuiID key, int default_val);
+CIMGUI_API void                     ImGuiStorage_SetInt(struct ImGuiStorage* storage, ImGuiID key, int val);
+CIMGUI_API bool                     ImGuiStorage_GetBool(struct ImGuiStorage* storage, ImGuiID key, bool default_val);
+CIMGUI_API void                     ImGuiStorage_SetBool(struct ImGuiStorage* storage, ImGuiID key, bool val);
+CIMGUI_API float                    ImGuiStorage_GetFloat(struct ImGuiStorage* storage, ImGuiID key, float default_val);
+CIMGUI_API void                     ImGuiStorage_SetFloat(struct ImGuiStorage* storage, ImGuiID key, float val);
+CIMGUI_API void*                    ImGuiStorage_GetVoidPtr(struct ImGuiStorage* storage, ImGuiID key);
+CIMGUI_API void                     ImGuiStorage_SetVoidPtr(struct ImGuiStorage* storage, ImGuiID key, void* val);
+CIMGUI_API int*                     ImGuiStorage_GetIntRef(struct ImGuiStorage* storage, ImGuiID key, int default_val);
+CIMGUI_API bool*                    ImGuiStorage_GetBoolRef(struct ImGuiStorage* storage, ImGuiID key, bool default_val);
+CIMGUI_API float*                   ImGuiStorage_GetFloatRef(struct ImGuiStorage* storage, ImGuiID key, float default_val);
+CIMGUI_API void**                   ImGuiStorage_GetVoidPtrRef(struct ImGuiStorage* storage, ImGuiID key, void* default_val);
+CIMGUI_API void                     ImGuiStorage_SetAllInt(struct ImGuiStorage* storage, int val);
+
+// ImGuiTextEditCallbackData
+CIMGUI_API void                     ImGuiTextEditCallbackData_DeleteChars(struct ImGuiTextEditCallbackData* data, int pos, int bytes_count);
+CIMGUI_API void                     ImGuiTextEditCallbackData_InsertChars(struct ImGuiTextEditCallbackData* data, int pos, const char* text, const char* text_end);
+CIMGUI_API bool                     ImGuiTextEditCallbackData_HasSelection(struct ImGuiTextEditCallbackData* data);
+
+// ImGuiListClipper
+CIMGUI_API void                     ImGuiListClipper_Begin(struct ImGuiListClipper* clipper, int count, float items_height);
+CIMGUI_API void                     ImGuiListClipper_End(struct ImGuiListClipper* clipper);
+CIMGUI_API bool                     ImGuiListClipper_Step(struct ImGuiListClipper* clipper);
+CIMGUI_API int                      ImGuiListClipper_GetDisplayStart(struct ImGuiListClipper* clipper);
+CIMGUI_API int                      ImGuiListClipper_GetDisplayEnd(struct ImGuiListClipper* clipper);
 
 //ImDrawList
-CIMGUI_API int                  ImDrawList_GetVertexBufferSize(struct ImDrawList* list);
-CIMGUI_API struct ImDrawVert*   ImDrawList_GetVertexPtr(struct ImDrawList* list, int n);
-CIMGUI_API int                  ImDrawList_GetIndexBufferSize(struct ImDrawList* list);
-CIMGUI_API ImDrawIdx*           ImDrawList_GetIndexPtr(struct ImDrawList* list, int n);
-CIMGUI_API int                  ImDrawList_GetCmdSize(struct ImDrawList* list);
-CIMGUI_API struct ImDrawCmd*    ImDrawList_GetCmdPtr(struct ImDrawList* list, int n);
+CIMGUI_API int                      ImDrawList_GetVertexBufferSize(struct ImDrawList* list);
+CIMGUI_API struct ImDrawVert*       ImDrawList_GetVertexPtr(struct ImDrawList* list, int n);
+CIMGUI_API int                      ImDrawList_GetIndexBufferSize(struct ImDrawList* list);
+CIMGUI_API ImDrawIdx*               ImDrawList_GetIndexPtr(struct ImDrawList* list, int n);
+CIMGUI_API int                      ImDrawList_GetCmdSize(struct ImDrawList* list);
+CIMGUI_API struct ImDrawCmd*        ImDrawList_GetCmdPtr(struct ImDrawList* list, int n);
 
 CIMGUI_API void             ImDrawList_Clear(struct ImDrawList* list);
 CIMGUI_API void             ImDrawList_ClearFreeMemory(struct ImDrawList* list);
@@ -868,46 +897,83 @@ CIMGUI_API void             ImDrawList_AddDrawCmd(struct ImDrawList* list); // T
 CIMGUI_API void             ImDrawList_PrimReserve(struct ImDrawList* list, int idx_count, int vtx_count);
 CIMGUI_API void             ImDrawList_PrimRect(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, ImU32 col);
 CIMGUI_API void             ImDrawList_PrimRectUV(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 uv_a, CONST struct ImVec2 uv_b, ImU32 col);
-CIMGUI_API void             ImDrawList_PrimQuadUV(struct ImDrawList* list,CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, CONST struct ImVec2 uv_a, CONST struct ImVec2 uv_b, CONST struct ImVec2 uv_c, CONST struct ImVec2 uv_d, ImU32 col);
+CIMGUI_API void             ImDrawList_PrimQuadUV(struct ImDrawList* list, CONST struct ImVec2 a, CONST struct ImVec2 b, CONST struct ImVec2 c, CONST struct ImVec2 d, CONST struct ImVec2 uv_a, CONST struct ImVec2 uv_b, CONST struct ImVec2 uv_c, CONST struct ImVec2 uv_d, ImU32 col);
 CIMGUI_API void             ImDrawList_PrimWriteVtx(struct ImDrawList* list, CONST struct ImVec2 pos, CONST struct ImVec2 uv, ImU32 col);
 CIMGUI_API void             ImDrawList_PrimWriteIdx(struct ImDrawList* list, ImDrawIdx idx);
 CIMGUI_API void             ImDrawList_PrimVtx(struct ImDrawList* list, CONST struct ImVec2 pos, CONST struct ImVec2 uv, ImU32 col);
 CIMGUI_API void             ImDrawList_UpdateClipRect(struct ImDrawList* list);
 CIMGUI_API void             ImDrawList_UpdateTextureID(struct ImDrawList* list);
 
-// ImGuiListClipper
-CIMGUI_API void ImGuiListClipper_Begin(struct ImGuiListClipper* clipper, int count, float items_height);
-CIMGUI_API void ImGuiListClipper_End(struct ImGuiListClipper* clipper);
-CIMGUI_API bool ImGuiListClipper_Step(struct ImGuiListClipper* clipper);
-CIMGUI_API int ImGuiListClipper_GetDisplayStart(struct ImGuiListClipper* clipper);
-CIMGUI_API int ImGuiListClipper_GetDisplayEnd(struct ImGuiListClipper* clipper);
+// ImDrawData
+CIMGUI_API void             ImDrawData_DeIndexAllBuffers(struct ImDrawData* drawData);
+CIMGUI_API void             ImDrawData_ScaleClipRects(struct ImDrawData* drawData, const struct ImVec2 sc);
 
-// ImGuiTextFilter
-CIMGUI_API void	ImGuiTextFilter_Init(struct ImGuiTextFilter* filter, const char* default_filter);
-CIMGUI_API void	ImGuiTextFilter_Clear(struct ImGuiTextFilter* filter);
-CIMGUI_API bool	ImGuiTextFilter_Draw(struct ImGuiTextFilter* filter, const char* label, float width);
-CIMGUI_API bool	ImGuiTextFilter_PassFilter(struct ImGuiTextFilter* filter, const char* text, const char* text_end);
-CIMGUI_API bool	ImGuiTextFilter_IsActive(struct ImGuiTextFilter* filter);
-CIMGUI_API void	ImGuiTextFilter_Build(struct ImGuiTextFilter* filter);
+// ImFontAtlas
+CIMGUI_API void             ImFontAtlas_GetTexDataAsRGBA32(struct ImFontAtlas* atlas, unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel);
+CIMGUI_API void             ImFontAtlas_GetTexDataAsAlpha8(struct ImFontAtlas* atlas, unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel);
+CIMGUI_API void             ImFontAtlas_SetTexID(struct ImFontAtlas* atlas, ImTextureID id);
+CIMGUI_API struct ImFont*   ImFontAtlas_AddFont(struct ImFontAtlas* atlas, CONST struct ImFontConfig* font_cfg);
+CIMGUI_API struct ImFont*   ImFontAtlas_AddFontDefault(struct ImFontAtlas* atlas, CONST struct ImFontConfig* font_cfg);
+CIMGUI_API struct ImFont*   ImFontAtlas_AddFontFromFileTTF(struct ImFontAtlas* atlas, CONST char* filename, float size_pixels, CONST struct ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges);
+CIMGUI_API struct ImFont*   ImFontAtlas_AddFontFromMemoryTTF(struct ImFontAtlas* atlas, void* font_data, int font_size, float size_pixels, CONST struct ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges);
+CIMGUI_API struct ImFont*   ImFontAtlas_AddFontFromMemoryCompressedTTF(struct ImFontAtlas* atlas, CONST void* compressed_font_data, int compressed_font_size, float size_pixels, CONST struct ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges);
+CIMGUI_API struct ImFont*   ImFontAtlas_AddFontFromMemoryCompressedBase85TTF(struct ImFontAtlas* atlas, CONST char* compressed_font_data_base85, float size_pixels, CONST struct ImFontConfig* font_cfg, CONST ImWchar* glyph_ranges);
+CIMGUI_API void             ImFontAtlas_ClearTexData(struct ImFontAtlas* atlas);
+CIMGUI_API void             ImFontAtlas_Clear(struct ImFontAtlas* atlas);
+CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesDefault(struct ImFontAtlas* atlas);
+CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesKorean(struct ImFontAtlas* atlas);
+CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesJapanese(struct ImFontAtlas* atlas);
+CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesChinese(struct ImFontAtlas* atlas);
+CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesCyrillic(struct ImFontAtlas* atlas);
+CIMGUI_API CONST ImWchar*   ImFontAtlas_GetGlyphRangesThai(struct ImFontAtlas* atlas);
 
-// ImGuiTextEditCallbackData
-CIMGUI_API void ImGuiTextEditCallbackData_DeleteChars(struct ImGuiTextEditCallbackData* data, int pos, int bytes_count);
-CIMGUI_API void ImGuiTextEditCallbackData_InsertChars(struct ImGuiTextEditCallbackData* data, int pos, const char* text, const char* text_end);
-CIMGUI_API bool ImGuiTextEditCallbackData_HasSelection(struct ImGuiTextEditCallbackData* data);
+CIMGUI_API ImTextureID      ImFontAtlas_GetTexID(struct ImFontAtlas* atlas);
+CIMGUI_API unsigned char*   ImFontAtlas_GetTexPixelsAlpha8(struct ImFontAtlas* atlas);
+CIMGUI_API unsigned int*    ImFontAtlas_GetTexPixelsRGBA32(struct ImFontAtlas* atlas);
+CIMGUI_API int              ImFontAtlas_GetTexWidth(struct ImFontAtlas* atlas);
+CIMGUI_API int              ImFontAtlas_GetTexHeight(struct ImFontAtlas* atlas);
+CIMGUI_API int              ImFontAtlas_GetTexDesiredWidth(struct ImFontAtlas* atlas);
+CIMGUI_API void             ImFontAtlas_SetTexDesiredWidth(struct ImFontAtlas* atlas, int TexDesiredWidth_);
+CIMGUI_API int              ImFontAtlas_GetTexGlyphPadding(struct ImFontAtlas* atlas);
+CIMGUI_API void             ImFontAtlas_SetTexGlyphPadding(struct ImFontAtlas* atlas, int TexGlyphPadding_);
+CIMGUI_API void             ImFontAtlas_GetTexUvWhitePixel(struct ImFontAtlas* atlas, ImVec2* pOut);
 
-// ImGuiStorage
-CIMGUI_API void ImGuiStorage_Init(struct ImGuiStorage* storage);
-CIMGUI_API void ImGuiStorage_Clear(struct ImGuiStorage* storage);
-CIMGUI_API int ImGuiStorage_GetInt(struct ImGuiStorage* storage, ImGuiID key, int default_val);
-CIMGUI_API void ImGuiStorage_SetInt(struct ImGuiStorage* storage, ImGuiID key, int val);
-CIMGUI_API bool ImGuiStorage_GetBool(struct ImGuiStorage* storage, ImGuiID key, bool default_val);
-CIMGUI_API void ImGuiStorage_SetBool(struct ImGuiStorage* storage, ImGuiID key, bool val);
-CIMGUI_API float ImGuiStorage_GetFloat(struct ImGuiStorage* storage, ImGuiID key, float default_val);
-CIMGUI_API void ImGuiStorage_SetFloat(struct ImGuiStorage* storage, ImGuiID key, float val);
-CIMGUI_API void* ImGuiStorage_GetVoidPtr(struct ImGuiStorage* storage, ImGuiID key);
-CIMGUI_API void ImGuiStorage_SetVoidPtr(struct ImGuiStorage* storage, ImGuiID key, void* val);
-CIMGUI_API int* ImGuiStorage_GetIntRef(struct ImGuiStorage* storage, ImGuiID key, int default_val);
-CIMGUI_API bool* ImGuiStorage_GetBoolRef(struct ImGuiStorage* storage, ImGuiID key, bool default_val);
-CIMGUI_API float* ImGuiStorage_GetFloatRef(struct ImGuiStorage* storage, ImGuiID key, float default_val);
-CIMGUI_API void** ImGuiStorage_GetVoidPtrRef(struct ImGuiStorage* storage, ImGuiID key, void* default_val);
-CIMGUI_API void ImGuiStorage_SetAllInt(struct ImGuiStorage* storage, int val);
+// ImFontAtlas::Fonts;
+CIMGUI_API int              ImFontAtlas_Fonts_size(struct ImFontAtlas* atlas);
+CIMGUI_API ImFont*          ImFontAtlas_Fonts_index(struct ImFontAtlas* atlas, int index);
+
+// ImFont
+CIMGUI_API float            ImFont_GetFontSize(const struct ImFont* font);
+CIMGUI_API void             ImFont_SetFontSize(struct ImFont* font, float FontSize_);
+CIMGUI_API float            ImFont_GetScale(const struct ImFont* font);
+CIMGUI_API void             ImFont_SetScale(struct ImFont* font, float Scale_);
+CIMGUI_API void             ImFont_GetDisplayOffset(const struct ImFont* font, ImVec2* pOut);
+CIMGUI_API const struct ImFont::Glyph* ImFont_GetFallbackGlyph(const struct ImFont* font);
+CIMGUI_API void             ImFont_SetFallbackGlyph(struct ImFont* font, const struct ImFont::Glyph* FallbackGlyph_);
+CIMGUI_API float            ImFont_GetFallbackXAdvance(const struct ImFont* font);
+CIMGUI_API ImWchar          ImFont_GetFallbackChar(const struct ImFont* font);
+CIMGUI_API short            ImFont_GetConfigDataCount(const struct ImFont* font);
+CIMGUI_API struct ImFontConfig* ImFont_GetConfigData(struct ImFont* font);
+CIMGUI_API struct ImFontAtlas* ImFont_GetContainerAtlas(struct ImFont* font);
+CIMGUI_API float            ImFont_GetAscent(const struct ImFont* font);
+CIMGUI_API float            ImFont_GetDescent(const struct ImFont* font);
+CIMGUI_API int              ImFont_GetMetricsTotalSurface(const struct ImFont* font);
+CIMGUI_API void             ImFont_Clear(struct ImFont* font);
+CIMGUI_API void             ImFont_BuildLookupTable(struct ImFont* font);
+CIMGUI_API const struct ImFont::Glyph* ImFont_FindGlyph(const struct ImFont* font, ImWchar c);
+CIMGUI_API void             ImFont_SetFallbackChar(struct ImFont* font, ImWchar c);
+CIMGUI_API float            ImFont_GetCharAdvance(const struct ImFont* font, ImWchar c);
+CIMGUI_API bool             ImFont_IsLoaded(const struct ImFont* font);
+CIMGUI_API void             ImFont_CalcTextSizeA(const struct ImFont* font, ImVec2* pOut, float size, float max_width, float wrap_width, const char* text_begin, const char* text_end = NULL, const char** remaining = NULL); // utf8
+CIMGUI_API const char*      ImFont_CalcWordWrapPositionA(const struct ImFont* font, float scale, const char* text, const char* text_end, float wrap_width);
+CIMGUI_API void             ImFont_RenderChar(const struct ImFont* font, ImDrawList* draw_list, float size, ImVec2 pos, ImU32 col, unsigned short c);
+CIMGUI_API void             ImFont_RenderText(const struct ImFont* font, ImDrawList* draw_list, float size, ImVec2 pos, ImU32 col, const ImVec4* clip_rect, const char* text_begin, const char* text_end, float wrap_width = 0.0f, bool cpu_fine_clip = false);
+// ImFont::Glyph
+CIMGUI_API int              ImFont_Glyphs_size(const struct ImFont* font);
+CIMGUI_API struct ImFont::Glyph* ImFont_Glyphs_index(struct ImFont* font, int index);
+// ImFont::IndexXAdvance
+CIMGUI_API int              ImFont_IndexXAdvance_size(const struct ImFont* font);
+CIMGUI_API float            ImFont_IndexXAdvance_index(const struct ImFont* font, int index);
+// ImFont::IndexLookup
+CIMGUI_API int              ImFont_IndexLookup_size(const struct ImFont* font);
+CIMGUI_API unsigned short   ImFont_IndexLookup_index(const struct ImFont* font, int index);
