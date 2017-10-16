@@ -41,6 +41,13 @@ struct ImDrawCmd;
 struct ImGuiListClipper;
 struct ImGuiTextFilter;
 
+#if defined __cplusplus
+#define IMFONTGLYPH ImFont::Glyph
+#else
+struct Glyph;
+#define IMFONTGLYPH Glyph
+#endif
+
 typedef unsigned short ImDrawIdx;
 typedef unsigned int ImU32;
 typedef unsigned short ImWchar;
@@ -936,20 +943,20 @@ CIMGUI_API int              ImFontAtlas_GetTexDesiredWidth(struct ImFontAtlas* a
 CIMGUI_API void             ImFontAtlas_SetTexDesiredWidth(struct ImFontAtlas* atlas, int TexDesiredWidth_);
 CIMGUI_API int              ImFontAtlas_GetTexGlyphPadding(struct ImFontAtlas* atlas);
 CIMGUI_API void             ImFontAtlas_SetTexGlyphPadding(struct ImFontAtlas* atlas, int TexGlyphPadding_);
-CIMGUI_API void             ImFontAtlas_GetTexUvWhitePixel(struct ImFontAtlas* atlas, ImVec2* pOut);
+CIMGUI_API void             ImFontAtlas_GetTexUvWhitePixel(struct ImFontAtlas* atlas, struct ImVec2* pOut);
 
 // ImFontAtlas::Fonts;
 CIMGUI_API int              ImFontAtlas_Fonts_size(struct ImFontAtlas* atlas);
-CIMGUI_API ImFont*          ImFontAtlas_Fonts_index(struct ImFontAtlas* atlas, int index);
+CIMGUI_API struct ImFont*   ImFontAtlas_Fonts_index(struct ImFontAtlas* atlas, int index);
 
 // ImFont
 CIMGUI_API float            ImFont_GetFontSize(const struct ImFont* font);
 CIMGUI_API void             ImFont_SetFontSize(struct ImFont* font, float FontSize_);
 CIMGUI_API float            ImFont_GetScale(const struct ImFont* font);
 CIMGUI_API void             ImFont_SetScale(struct ImFont* font, float Scale_);
-CIMGUI_API void             ImFont_GetDisplayOffset(const struct ImFont* font, ImVec2* pOut);
-CIMGUI_API const struct ImFont::Glyph* ImFont_GetFallbackGlyph(const struct ImFont* font);
-CIMGUI_API void             ImFont_SetFallbackGlyph(struct ImFont* font, const struct ImFont::Glyph* FallbackGlyph_);
+CIMGUI_API void             ImFont_GetDisplayOffset(const struct ImFont* font, struct ImVec2* pOut);
+CIMGUI_API const struct IMFONTGLYPH* ImFont_GetFallbackGlyph(const struct ImFont* font);
+CIMGUI_API void             ImFont_SetFallbackGlyph(struct ImFont* font, const struct IMFONTGLYPH* FallbackGlyph_);
 CIMGUI_API float            ImFont_GetFallbackXAdvance(const struct ImFont* font);
 CIMGUI_API ImWchar          ImFont_GetFallbackChar(const struct ImFont* font);
 CIMGUI_API short            ImFont_GetConfigDataCount(const struct ImFont* font);
@@ -960,17 +967,17 @@ CIMGUI_API float            ImFont_GetDescent(const struct ImFont* font);
 CIMGUI_API int              ImFont_GetMetricsTotalSurface(const struct ImFont* font);
 CIMGUI_API void             ImFont_Clear(struct ImFont* font);
 CIMGUI_API void             ImFont_BuildLookupTable(struct ImFont* font);
-CIMGUI_API const struct ImFont::Glyph* ImFont_FindGlyph(const struct ImFont* font, ImWchar c);
+CIMGUI_API const struct IMFONTGLYPH* ImFont_FindGlyph(const struct ImFont* font, ImWchar c);
 CIMGUI_API void             ImFont_SetFallbackChar(struct ImFont* font, ImWchar c);
 CIMGUI_API float            ImFont_GetCharAdvance(const struct ImFont* font, ImWchar c);
 CIMGUI_API bool             ImFont_IsLoaded(const struct ImFont* font);
-CIMGUI_API void             ImFont_CalcTextSizeA(const struct ImFont* font, ImVec2* pOut, float size, float max_width, float wrap_width, const char* text_begin, const char* text_end = NULL, const char** remaining = NULL); // utf8
+CIMGUI_API void             ImFont_CalcTextSizeA(const struct ImFont* font, struct ImVec2* pOut, float size, float max_width, float wrap_width, const char* text_begin, const char* text_end, const char** remaining); // utf8
 CIMGUI_API const char*      ImFont_CalcWordWrapPositionA(const struct ImFont* font, float scale, const char* text, const char* text_end, float wrap_width);
-CIMGUI_API void             ImFont_RenderChar(const struct ImFont* font, ImDrawList* draw_list, float size, ImVec2 pos, ImU32 col, unsigned short c);
-CIMGUI_API void             ImFont_RenderText(const struct ImFont* font, ImDrawList* draw_list, float size, ImVec2 pos, ImU32 col, const ImVec4* clip_rect, const char* text_begin, const char* text_end, float wrap_width = 0.0f, bool cpu_fine_clip = false);
+CIMGUI_API void             ImFont_RenderChar(const struct ImFont* font, struct ImDrawList* draw_list, float size, struct ImVec2 pos, ImU32 col, unsigned short c);
+CIMGUI_API void             ImFont_RenderText(const struct ImFont* font, struct ImDrawList* draw_list, float size, struct ImVec2 pos, ImU32 col, const struct ImVec4* clip_rect, const char* text_begin, const char* text_end, float wrap_width, bool cpu_fine_clip);
 // ImFont::Glyph
 CIMGUI_API int              ImFont_Glyphs_size(const struct ImFont* font);
-CIMGUI_API struct ImFont::Glyph* ImFont_Glyphs_index(struct ImFont* font, int index);
+CIMGUI_API struct IMFONTGLYPH* ImFont_Glyphs_index(struct ImFont* font, int index);
 // ImFont::IndexXAdvance
 CIMGUI_API int              ImFont_IndexXAdvance_size(const struct ImFont* font);
 CIMGUI_API float            ImFont_IndexXAdvance_index(const struct ImFont* font, int index);
