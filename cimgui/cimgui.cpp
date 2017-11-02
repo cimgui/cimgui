@@ -926,7 +926,7 @@ CIMGUI_API bool igColorPicker3(CONST char* label, float col[3], ImGuiColorEditFl
 
 CIMGUI_API bool igColorPicker4(CONST char* label, float col[4], ImGuiColorEditFlags flags, CONST float* ref_col)
 {
-    return ImGui::ColorPicker4(label, col, flags);
+    return ImGui::ColorPicker4(label, col, flags, ref_col);
 }
 
 CIMGUI_API bool igColorButton(CONST char* desc_id, CONST ImVec4 col, ImGuiColorEditFlags flags, CONST ImVec2 size)
