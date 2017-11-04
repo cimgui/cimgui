@@ -1611,7 +1611,7 @@ CIMGUI_API void ImGuiIO_ClearInputCharacters()
 CIMGUI_API struct ImGuiTextFilter* ImGuiTextFilter_Create(const char* default_filter)
 {
     ImGuiTextFilter* filter = (ImGuiTextFilter*)ImGui::MemAlloc(sizeof(ImGuiTextFilter));
-    IM_PLACEMENT_NEW(filter) ImGuiTextFilter();
+    IM_PLACEMENT_NEW(filter) ImGuiTextFilter(default_filter);
     return filter;
 }
 
