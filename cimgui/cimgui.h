@@ -741,7 +741,7 @@ CIMGUI_API void             igPushClipRect(CONST struct ImVec2 clip_rect_min, CO
 CIMGUI_API void             igPopClipRect();
 
 // Styles
-CIMGUI_API void              igStyleColorsClassic(ImGuiStyle* dst);
+CIMGUI_API void              igStyleColorsClassic(struct ImGuiStyle* dst);
 
 // Utilities
 CIMGUI_API bool             igIsItemHovered(ImGuiHoveredFlags flags);

@@ -1302,7 +1302,7 @@ CIMGUI_API void igPopClipRect()
     return ImGui::PopClipRect();
 }
 
-CIMGUI_API void igStyleColorsClassic(ImGuiStyle * dst)
+CIMGUI_API void igStyleColorsClassic(struct ImGuiStyle * dst)
 {
 	ImGui::StyleColorsClassic(dst);
 }
