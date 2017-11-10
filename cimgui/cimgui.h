@@ -64,6 +64,7 @@ typedef int ImGuiColumnsFlags;
 typedef int ImGuiInputTextFlags;
 typedef int ImGuiSelectableFlags;
 typedef int ImGuiTreeNodeFlags;
+typedef int ImGuiHoveredFlags;
 typedef int (*ImGuiTextEditCallback)(struct ImGuiTextEditCallbackData *data);
 typedef void (*ImGuiSizeConstraintCallback)(struct ImGuiSizeConstraintCallbackData* data);
 typedef void (*ImDrawCallback)(CONST struct ImDrawList* parent_list, CONST struct ImDrawCmd* cmd);
@@ -132,6 +133,7 @@ enum {
     ImGuiTreeNodeFlags_OpenOnArrow          = 1 << 7,
     ImGuiTreeNodeFlags_Leaf                 = 1 << 8,
     ImGuiTreeNodeFlags_Bullet               = 1 << 9,
+    ImGuiTreeNodeFlags_FramePadding         = 1 << 10,
     ImGuiTreeNodeFlags_CollapsingHeader     = ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_NoAutoOpenOnLog
 };
 
@@ -139,6 +141,15 @@ enum {
     ImGuiSelectableFlags_DontClosePopups    = 1 << 0,
     ImGuiSelectableFlags_SpanAllColumns     = 1 << 1,
     ImGuiSelectableFlags_AllowDoubleClick   = 1 << 2
+};
+
+enum ImGuiHoveredFlags_
+{
+    ImGuiHoveredFlags_Default                       = 0,        
+    ImGuiHoveredFlags_AllowWhenBlockedByPopup       = 1 << 0,   
+    ImGuiHoveredFlags_AllowWhenBlockedByActiveItem  = 1 << 2, 
+    ImGuiHoveredFlags_AllowWhenOverlapped           = 1 << 3,   
+    ImGuiHoveredFlags_RectOnly                      = ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem | ImGuiHoveredFlags_AllowWhenOverlapped
 };
 
 enum {
@@ -427,20 +438,24 @@ struct ImGuiListClipper
 };
 #endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
+// Main
 CIMGUI_API struct ImGuiIO*         igGetIO();
 CIMGUI_API struct ImGuiStyle*      igGetStyle();
 CIMGUI_API struct ImDrawData*      igGetDrawData();
 CIMGUI_API void                    igNewFrame();
 CIMGUI_API void                    igRender();
 CIMGUI_API void                    igShutdown();
-CIMGUI_API void                    igShowUserGuide();
-CIMGUI_API void                    igShowStyleEditor(struct ImGuiStyle* ref);
+
+// Demo/Debug/Info
 CIMGUI_API void                    igShowTestWindow(bool* opened);
 CIMGUI_API void                    igShowMetricsWindow(bool* opened);
+CIMGUI_API void                    igShowStyleEditor(struct ImGuiStyle* ref);
+CIMGUI_API void                    igShowUserGuide();
 
 // Window
 CIMGUI_API bool             igBegin(CONST char* name, bool* p_open, ImGuiWindowFlags flags);
-CIMGUI_API bool             igBegin2(CONST char* name, bool* p_open, CONST struct ImVec2 size_on_first_use, float bg_alpha, ImGuiWindowFlags flags);
+//Is going to be obsolete,
+//CIMGUI_API bool             igBegin2(CONST char* name, bool* p_open, CONST struct ImVec2 size_on_first_use, float bg_alpha, ImGuiWindowFlags flags);
 CIMGUI_API void             igEnd();
 CIMGUI_API bool             igBeginChild(CONST char* str_id, CONST struct ImVec2 size, bool border, ImGuiWindowFlags extra_flags);
 CIMGUI_API bool             igBeginChildEx(ImGuiID id, CONST struct ImVec2 size, bool border, ImGuiWindowFlags extra_flags);
@@ -457,10 +472,12 @@ CIMGUI_API void             igGetWindowSize(struct ImVec2* out);
 CIMGUI_API float            igGetWindowWidth();
 CIMGUI_API float            igGetWindowHeight();
 CIMGUI_API bool             igIsWindowCollapsed();
+CIMGUI_API bool             igIsWindowAppearing();
 CIMGUI_API void             igSetWindowFontScale(float scale);
 
-CIMGUI_API void             igSetNextWindowPos(CONST struct ImVec2 pos, ImGuiCond cond);
-CIMGUI_API void             igSetNextWindowPosCenter(ImGuiCond cond);
+CIMGUI_API void             igSetNextWindowPos(CONST struct ImVec2 pos, ImGuiCond cond, CONST struct ImVec2 pivot);
+//Is going to be obsolete
+//CIMGUI_API void             igSetNextWindowPosCenter(ImGuiCond cond);
 CIMGUI_API void             igSetNextWindowSize(CONST struct ImVec2 size, ImGuiCond cond);
 CIMGUI_API void             igSetNextWindowSizeConstraints(CONST struct ImVec2 size_min, CONST struct ImVec2 size_max, ImGuiSizeConstraintCallback custom_callback, void* custom_callback_data);
 CIMGUI_API void             igSetNextWindowContentSize(CONST struct ImVec2 size);
@@ -517,7 +534,7 @@ CIMGUI_API void             igPopAllowKeyboardFocus();
 CIMGUI_API void             igPushButtonRepeat(bool repeat);
 CIMGUI_API void             igPopButtonRepeat();
 
-// Layout
+// Cursor / Layout
 CIMGUI_API void             igSeparator();
 CIMGUI_API void             igSameLine(float pos_x, float spacing_w);
 CIMGUI_API void             igNewLine();
@@ -536,12 +553,15 @@ CIMGUI_API void             igSetCursorPosY(float y);
 CIMGUI_API void             igGetCursorStartPos(struct ImVec2* pOut);
 CIMGUI_API void             igGetCursorScreenPos(struct ImVec2* pOut);
 CIMGUI_API void             igSetCursorScreenPos(CONST struct ImVec2 pos);
-CIMGUI_API void             igAlignFirstTextHeightToWidgets();
+//Is going to be obsolete
+//CIMGUI_API void             igAlignFirstTextHeightToWidgets();
+CIMGUI_API void            igAlignTextToFramePadding();
 CIMGUI_API float            igGetTextLineHeight();
 CIMGUI_API float            igGetTextLineHeightWithSpacing();
 CIMGUI_API float            igGetItemsLineHeightWithSpacing();
 
 //Columns
+// You can also use SameLine(pos_x) for simplified columns. The columns API is still work-in-progress and rather lacking.
 CIMGUI_API void             igColumns(int count, CONST char* id, bool border);
 CIMGUI_API void             igNextColumn();
 CIMGUI_API int              igGetColumnIndex();
@@ -563,7 +583,8 @@ CIMGUI_API ImGuiID          igGetIDStr(CONST char* str_id);
 CIMGUI_API ImGuiID          igGetIDStrRange(CONST char* str_begin,CONST char* str_end);
 CIMGUI_API ImGuiID          igGetIDPtr(CONST void* ptr_id);
 
-// Widgets
+// Widgets: Text
+CIMGUI_API void             igTextUnformatted(CONST char* text, CONST char* text_end);
 CIMGUI_API void             igText(CONST char* fmt, ...);
 CIMGUI_API void             igTextV(CONST char* fmt, va_list args);
 CIMGUI_API void             igTextColored(CONST struct ImVec4 col, CONST char* fmt, ...);
@@ -572,12 +593,13 @@ CIMGUI_API void             igTextDisabled(CONST char* fmt, ...);
 CIMGUI_API void             igTextDisabledV(CONST char* fmt, va_list args);
 CIMGUI_API void             igTextWrapped(CONST char* fmt, ...);
 CIMGUI_API void             igTextWrappedV(CONST char* fmt, va_list args);
-CIMGUI_API void             igTextUnformatted(CONST char* text, CONST char* text_end);
 CIMGUI_API void             igLabelText(CONST char* label, CONST char* fmt, ...);
 CIMGUI_API void             igLabelTextV(CONST char* label, CONST char* fmt, va_list args);
-CIMGUI_API void             igBullet();
 CIMGUI_API void             igBulletText(CONST char* fmt, ...);
 CIMGUI_API void             igBulletTextV(CONST char* fmt, va_list args);
+CIMGUI_API void             igBullet();
+
+// Widgets: Main
 CIMGUI_API bool             igButton(CONST char* label, CONST struct ImVec2 size);
 CIMGUI_API bool             igSmallButton(CONST char* label);
 CIMGUI_API bool             igInvisibleButton(CONST char* str_id, CONST struct ImVec2 size);
@@ -596,8 +618,32 @@ CIMGUI_API void             igPlotHistogram(CONST char* label, CONST float* valu
 CIMGUI_API void             igPlotHistogram2(CONST char* label, float(*values_getter)(void* data, int idx), void* data, int values_count, int values_offset, CONST char* overlay_text, float scale_min, float scale_max, struct ImVec2 graph_size);
 CIMGUI_API void             igProgressBar(float fraction, CONST struct ImVec2* size_arg, CONST char* overlay);
 
+// Widgets: Drags (tip: ctrl+click on a drag box to input with keyboard. manually input values aren't clamped, can go off-bounds)
+// For all the Float2/Float3/Float4/Int2/Int3/Int4 versions of every functions, note that a 'float v[X]' function argument is the same as 'float* v', the array syntax is just a way to document the number of elements that are expected to be accessible. You can pass address of your first element out of a contiguous set, e.g. &myvector.x
+CIMGUI_API bool             igDragFloat(CONST char* label, float* v, float v_speed, float v_min, float v_max, CONST char* display_format, float power);     // If v_max >= v_max we have no bound
+CIMGUI_API bool             igDragFloat2(CONST char* label, float v[2], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
+CIMGUI_API bool             igDragFloat3(CONST char* label, float v[3], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
+CIMGUI_API bool             igDragFloat4(CONST char* label, float v[4], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
+CIMGUI_API bool             igDragFloatRange2(CONST char* label, float* v_current_min, float* v_current_max, float v_speed, float v_min, float v_max, CONST char* display_format, CONST char* display_format_max, float power);
+CIMGUI_API bool             igDragInt(CONST char* label, int* v, float v_speed, int v_min, int v_max, CONST char* display_format);                                       // If v_max >= v_max we have no bound
+CIMGUI_API bool             igDragInt2(CONST char* label, int v[2], float v_speed, int v_min, int v_max, CONST char* display_format);
+CIMGUI_API bool             igDragInt3(CONST char* label, int v[3], float v_speed, int v_min, int v_max, CONST char* display_format);
+CIMGUI_API bool             igDragInt4(CONST char* label, int v[4], float v_speed, int v_min, int v_max, CONST char* display_format);
+CIMGUI_API bool             igDragIntRange2(CONST char* label, int* v_current_min, int* v_current_max, float v_speed, int v_min, int v_max, CONST char* display_format, CONST char* display_format_max);
 
-// Widgets: Sliders (tip: ctrl+click on a slider to input text)
+// Widgets: Input with Keyboard
+CIMGUI_API bool             igInputText(CONST char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags, ImGuiTextEditCallback callback, void* user_data);
+CIMGUI_API bool             igInputTextMultiline(CONST char* label, char* buf, size_t buf_size, CONST struct ImVec2 size, ImGuiInputTextFlags flags, ImGuiTextEditCallback callback, void* user_data);
+CIMGUI_API bool             igInputFloat(CONST char* label, float* v, float step, float step_fast, int decimal_precision, ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool             igInputFloat2(CONST char* label, float v[2], int decimal_precision, ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool             igInputFloat3(CONST char* label, float v[3], int decimal_precision, ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool             igInputFloat4(CONST char* label, float v[4], int decimal_precision, ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool             igInputInt(CONST char* label, int* v, int step, int step_fast, ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool             igInputInt2(CONST char* label, int v[2], ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool             igInputInt3(CONST char* label, int v[3], ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool             igInputInt4(CONST char* label, int v[4], ImGuiInputTextFlags extra_flags);
+
+// Widgets: Sliders (tip: ctrl+click on a slider to input with keyboard. manually input values aren't clamped, can go off-bounds)
 CIMGUI_API bool             igSliderFloat(CONST char* label, float* v, float v_min, float v_max, CONST char* display_format, float power);
 CIMGUI_API bool             igSliderFloat2(CONST char* label, float v[2], float v_min, float v_max, CONST char* display_format, float power);
 CIMGUI_API bool             igSliderFloat3(CONST char* label, float v[3], float v_min, float v_max, CONST char* display_format, float power);
@@ -611,38 +657,13 @@ CIMGUI_API bool             igVSliderFloat(CONST char* label, CONST struct ImVec
 CIMGUI_API bool             igVSliderInt(CONST char* label, CONST struct ImVec2 size, int* v, int v_min, int v_max, CONST char* display_format);
 
 // Widgets: Color Editor/Picker (tip: the ColorEdit* functions have a little colored preview square that can be left-clicked to open a picker, and right-clicked to open an option menu.)
+// Note that a 'float v[X]' function argument is the same as 'float* v', the array syntax is just a way to document the number of elements that are expected to be accessible. You can the pass the address of a first float element out of a contiguous structure, e.g. &myvector.x
 CIMGUI_API bool             igColorEdit3(CONST char* label, float col[3], ImGuiColorEditFlags flags);
 CIMGUI_API bool             igColorEdit4(CONST char* label, float col[4], ImGuiColorEditFlags flags);
 CIMGUI_API bool             igColorPicker3(CONST char* label, float col[3], ImGuiColorEditFlags flags);
 CIMGUI_API bool             igColorPicker4(CONST char* label, float col[4], ImGuiColorEditFlags flags, CONST float* ref_col);
 CIMGUI_API bool             igColorButton(CONST char* desc_id, CONST struct ImVec4 col, ImGuiColorEditFlags flags, CONST struct ImVec2 size);
 CIMGUI_API void             igSetColorEditOptions(ImGuiColorEditFlags flags);
-
-
-// Widgets: Drags (tip: ctrl+click on a drag box to input text)
-CIMGUI_API bool             igDragFloat(CONST char* label, float* v, float v_speed, float v_min, float v_max, CONST char* display_format, float power);     // If v_max >= v_max we have no bound
-CIMGUI_API bool             igDragFloat2(CONST char* label, float v[2], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
-CIMGUI_API bool             igDragFloat3(CONST char* label, float v[3], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
-CIMGUI_API bool             igDragFloat4(CONST char* label, float v[4], float v_speed, float v_min, float v_max, CONST char* display_format, float power);
-CIMGUI_API bool             igDragFloatRange2(CONST char* label, float* v_current_min, float* v_current_max, float v_speed, float v_min, float v_max, CONST char* display_format, CONST char* display_format_max, float power);
-CIMGUI_API bool             igDragInt(CONST char* label, int* v, float v_speed, int v_min, int v_max, CONST char* display_format);                                       // If v_max >= v_max we have no bound
-CIMGUI_API bool             igDragInt2(CONST char* label, int v[2], float v_speed, int v_min, int v_max, CONST char* display_format);
-CIMGUI_API bool             igDragInt3(CONST char* label, int v[3], float v_speed, int v_min, int v_max, CONST char* display_format);
-CIMGUI_API bool             igDragInt4(CONST char* label, int v[4], float v_speed, int v_min, int v_max, CONST char* display_format);
-CIMGUI_API bool             igDragIntRange2(CONST char* label, int* v_current_min, int* v_current_max, float v_speed, int v_min, int v_max, CONST char* display_format, CONST char* display_format_max);
-
-
-// Widgets: Input
-CIMGUI_API bool             igInputText(CONST char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags, ImGuiTextEditCallback callback, void* user_data);
-CIMGUI_API bool             igInputTextMultiline(CONST char* label, char* buf, size_t buf_size, CONST struct ImVec2 size, ImGuiInputTextFlags flags, ImGuiTextEditCallback callback, void* user_data);
-CIMGUI_API bool             igInputFloat(CONST char* label, float* v, float step, float step_fast, int decimal_precision, ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool             igInputFloat2(CONST char* label, float v[2], int decimal_precision, ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool             igInputFloat3(CONST char* label, float v[3], int decimal_precision, ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool             igInputFloat4(CONST char* label, float v[4], int decimal_precision, ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool             igInputInt(CONST char* label, int* v, int step, int step_fast, ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool             igInputInt2(CONST char* label, int v[2], ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool             igInputInt3(CONST char* label, int v[3], ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool             igInputInt4(CONST char* label, int v[4], ImGuiInputTextFlags extra_flags);
 
 // Widgets: Trees
 CIMGUI_API bool             igTreeNode(CONST char* label);
@@ -697,6 +718,7 @@ CIMGUI_API bool             igMenuItemPtr(CONST char* label, CONST char* shortcu
 
 // Popup
 CIMGUI_API void             igOpenPopup(CONST char* str_id);
+CIMGUI_API bool             igOpenPopupOnItemClick(const char* str_id, int mouse_button);
 CIMGUI_API bool             igBeginPopup(CONST char* str_id);
 CIMGUI_API bool             igBeginPopupModal(CONST char* name, bool* p_open, ImGuiWindowFlags extra_flags);
 CIMGUI_API bool             igBeginPopupContextItem(CONST char* str_id, int mouse_button);
@@ -718,9 +740,13 @@ CIMGUI_API void             igLogText(CONST char* fmt, ...);
 CIMGUI_API void             igPushClipRect(CONST struct ImVec2 clip_rect_min, CONST struct ImVec2 clip_rect_max, bool intersect_with_current_clip_rect);
 CIMGUI_API void             igPopClipRect();
 
+// Styles
+IMGUI_API void              StyleColorsClassic(ImGuiStyle* dst);
+
 // Utilities
-CIMGUI_API bool             igIsItemHovered();
-CIMGUI_API bool             igIsItemRectHovered();
+CIMGUI_API bool             igIsItemHovered(ImGuiHoveredFlags flags);
+//Is going to be obsolete
+//CIMGUI_API bool             igIsItemRectHovered();
 CIMGUI_API bool             igIsItemActive();
 CIMGUI_API bool             igIsItemClicked(int mouse_button);
 CIMGUI_API bool             igIsItemVisible();
@@ -731,11 +757,12 @@ CIMGUI_API void             igGetItemRectMax(struct ImVec2* pOut);
 CIMGUI_API void             igGetItemRectSize(struct ImVec2* pOut);
 CIMGUI_API void             igSetItemAllowOverlap();
 CIMGUI_API bool             igIsWindowFocused();
-CIMGUI_API bool             igIsWindowHovered();
-CIMGUI_API bool             igIsWindowRectHovered();
+CIMGUI_API bool             igIsWindowHovered(ImGuiHoveredFlags falgs);
+//Is going to be obsolete
+//CIMGUI_API bool             igIsWindowRectHovered();
 CIMGUI_API bool             igIsRootWindowFocused();
 CIMGUI_API bool             igIsRootWindowOrAnyChildFocused();
-CIMGUI_API bool             igIsRootWindowOrAnyChildHovered();
+CIMGUI_API bool             igIsRootWindowOrAnyChildHovered(ImGuiHoveredFlags flags);
 CIMGUI_API bool             igIsAnyWindowHovered();
 CIMGUI_API bool             igIsRectVisible(CONST struct ImVec2 item_size);
 CIMGUI_API bool             igIsRectVisible2(CONST struct ImVec2* rect_min, CONST struct ImVec2* rect_max);
@@ -754,16 +781,19 @@ CIMGUI_API ImU32            igColorConvertFloat4ToU32(CONST struct ImVec4 in);
 CIMGUI_API void             igColorConvertRGBtoHSV(float r, float g, float b, float* out_h, float* out_s, float* out_v);
 CIMGUI_API void             igColorConvertHSVtoRGB(float h, float s, float v, float* out_r, float* out_g, float* out_b);
 
+// Inputs
 CIMGUI_API int              igGetKeyIndex(ImGuiKey imgui_key);
 CIMGUI_API bool             igIsKeyDown(int user_key_index);
 CIMGUI_API bool             igIsKeyPressed(int user_key_index, bool repeat);
 CIMGUI_API bool             igIsKeyReleased(int user_key_index);
+CIMGUI_API int              igGetKeyPressedAmount(int key_index, float repeat_delay, float rate);
 CIMGUI_API bool             igIsMouseDown(int button);
 CIMGUI_API bool             igIsMouseClicked(int button, bool repeat);
 CIMGUI_API bool             igIsMouseDoubleClicked(int button);
 CIMGUI_API bool             igIsMouseReleased(int button);
 CIMGUI_API bool             igIsMouseDragging(int button, float lock_threshold);
 CIMGUI_API bool             igIsMouseHoveringRect(CONST struct ImVec2 r_min, CONST struct ImVec2 r_max, bool clip);
+CIMGUI_API bool             igIsMousePosValid(CONST ImVec2* mouse_pos);;
 CIMGUI_API void             igGetMousePos(struct ImVec2* pOut);
 CIMGUI_API void             igGetMousePosOnOpeningCurrentPopup(struct ImVec2* pOut);
 CIMGUI_API void             igGetMouseDragDelta(struct ImVec2* pOut, int button, float lock_threshold);
@@ -837,9 +867,9 @@ CIMGUI_API void                     ImGuiTextEditCallbackData_InsertChars(struct
 CIMGUI_API bool                     ImGuiTextEditCallbackData_HasSelection(struct ImGuiTextEditCallbackData* data);
 
 // ImGuiListClipper
+CIMGUI_API bool                     ImGuiListClipper_Step(struct ImGuiListClipper* clipper);
 CIMGUI_API void                     ImGuiListClipper_Begin(struct ImGuiListClipper* clipper, int count, float items_height);
 CIMGUI_API void                     ImGuiListClipper_End(struct ImGuiListClipper* clipper);
-CIMGUI_API bool                     ImGuiListClipper_Step(struct ImGuiListClipper* clipper);
 CIMGUI_API int                      ImGuiListClipper_GetDisplayStart(struct ImGuiListClipper* clipper);
 CIMGUI_API int                      ImGuiListClipper_GetDisplayEnd(struct ImGuiListClipper* clipper);
 
@@ -965,7 +995,7 @@ CIMGUI_API struct ImFontAtlas* ImFont_GetContainerAtlas(struct ImFont* font);
 CIMGUI_API float            ImFont_GetAscent(const struct ImFont* font);
 CIMGUI_API float            ImFont_GetDescent(const struct ImFont* font);
 CIMGUI_API int              ImFont_GetMetricsTotalSurface(const struct ImFont* font);
-CIMGUI_API void             ImFont_Clear(struct ImFont* font);
+CIMGUI_API void             ImFont_ClearOutputData(struct ImFont* font);
 CIMGUI_API void             ImFont_BuildLookupTable(struct ImFont* font);
 CIMGUI_API const struct IMFONTGLYPH* ImFont_FindGlyph(const struct ImFont* font, ImWchar c);
 CIMGUI_API void             ImFont_SetFallbackChar(struct ImFont* font, ImWchar c);

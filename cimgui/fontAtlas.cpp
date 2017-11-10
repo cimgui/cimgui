@@ -194,9 +194,9 @@ CIMGUI_API void ImFont_SetFallbackGlyph(struct ImFont* font, const struct ImFont
     font->FallbackGlyph = FallbackGlyph_;
 }
 
-CIMGUI_API float ImFont_GetFallbackXAdvance(const struct ImFont* font)
+CIMGUI_API float ImFont_GetFallbackAdvanceX(const struct ImFont* font)
 {
-    return font->FallbackXAdvance;
+    return font->FallbackAdvanceX;
 }
 
 CIMGUI_API ImWchar ImFont_GetFallbackChar(const struct ImFont* font)
@@ -234,9 +234,9 @@ CIMGUI_API int ImFont_GetMetricsTotalSurface(const struct ImFont* font)
     return font->MetricsTotalSurface;
 }
 
-CIMGUI_API void ImFont_Clear(struct ImFont* font)
+CIMGUI_API void ImFont_ClearOutputData(struct ImFont* font)
 {
-    font->Clear();
+    font->ClearOutputData();
 }
 
 CIMGUI_API void ImFont_BuildLookupTable(struct ImFont* font)
@@ -298,12 +298,12 @@ CIMGUI_API struct ImFont::Glyph* ImFont_Glyphs_index(struct ImFont* font, int in
 // ImFont::IndexXAdvance
 CIMGUI_API int ImFont_IndexXAdvance_size(const struct ImFont* font)
 {
-    return font->IndexXAdvance.size();
+    return font->IndexAdvanceX.size();
 }
 
 CIMGUI_API float ImFont_IndexXAdvance_index(const struct ImFont* font, int index)
 {
-    return font->IndexXAdvance[index];
+    return font->IndexAdvanceX[index];
 }
 
 // ImFont::IndexLookup
