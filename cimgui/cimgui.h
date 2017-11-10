@@ -741,7 +741,7 @@ CIMGUI_API void             igPushClipRect(CONST struct ImVec2 clip_rect_min, CO
 CIMGUI_API void             igPopClipRect();
 
 // Styles
-IMGUI_API void              StyleColorsClassic(ImGuiStyle* dst);
+CIMGUI_API void              igStyleColorsClassic(ImGuiStyle* dst);
 
 // Utilities
 CIMGUI_API bool             igIsItemHovered(ImGuiHoveredFlags flags);
@@ -793,7 +793,7 @@ CIMGUI_API bool             igIsMouseDoubleClicked(int button);
 CIMGUI_API bool             igIsMouseReleased(int button);
 CIMGUI_API bool             igIsMouseDragging(int button, float lock_threshold);
 CIMGUI_API bool             igIsMouseHoveringRect(CONST struct ImVec2 r_min, CONST struct ImVec2 r_max, bool clip);
-CIMGUI_API bool             igIsMousePosValid(CONST ImVec2* mouse_pos);;
+CIMGUI_API bool             igIsMousePosValid(CONST struct ImVec2* mouse_pos);;
 CIMGUI_API void             igGetMousePos(struct ImVec2* pOut);
 CIMGUI_API void             igGetMousePosOnOpeningCurrentPopup(struct ImVec2* pOut);
 CIMGUI_API void             igGetMouseDragDelta(struct ImVec2* pOut, int button, float lock_threshold);

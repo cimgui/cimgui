@@ -1302,7 +1302,7 @@ CIMGUI_API void igPopClipRect()
     return ImGui::PopClipRect();
 }
 
-IMGUI_API void StyleColorsClassic(ImGuiStyle * dst)
+CIMGUI_API void igStyleColorsClassic(ImGuiStyle * dst)
 {
 	ImGui::StyleColorsClassic(dst);
 }
@@ -1453,7 +1453,7 @@ CIMGUI_API bool igIsMouseHoveringRect(CONST ImVec2 r_min, CONST ImVec2 r_max, bo
     return ImGui::IsMouseHoveringRect(r_min,r_max,clip);
 }
 
-CIMGUI_API bool igIsMousePosValid(CONST ImVec2 * mouse_pos)
+CIMGUI_API bool igIsMousePosValid(CONST struct ImVec2 * mouse_pos)
 {
 	return ImGui::IsMousePosValid(mouse_pos);
 }
