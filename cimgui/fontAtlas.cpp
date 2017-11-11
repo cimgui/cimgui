@@ -184,12 +184,12 @@ CIMGUI_API void ImFont_GetDisplayOffset(const struct ImFont* font, ImVec2* pOut)
     *pOut = font->DisplayOffset;
 }
 
-CIMGUI_API const struct ImFont::Glyph* ImFont_GetFallbackGlyph(const struct ImFont* font)
+CIMGUI_API const struct IMFONTGLYPH* ImFont_GetFallbackGlyph(const struct ImFont* font)
 {
     return font->FallbackGlyph;
 }
 
-CIMGUI_API void ImFont_SetFallbackGlyph(struct ImFont* font, const struct ImFont::Glyph* FallbackGlyph_)
+CIMGUI_API void ImFont_SetFallbackGlyph(struct ImFont* font, const struct IMFONTGLYPH* FallbackGlyph_)
 {
     font->FallbackGlyph = FallbackGlyph_;
 }
@@ -244,7 +244,7 @@ CIMGUI_API void ImFont_BuildLookupTable(struct ImFont* font)
     font->BuildLookupTable();
 }
 
-CIMGUI_API const struct ImFont::Glyph* ImFont_FindGlyph(const struct ImFont* font, ImWchar c)
+CIMGUI_API const struct IMFONTGLYPH* ImFont_FindGlyph(const struct ImFont* font, ImWchar c)
 {
     return font->FindGlyph(c);
 }
@@ -290,7 +290,7 @@ CIMGUI_API int ImFont_Glyphs_size(const struct ImFont* font)
     return font->Glyphs.size();
 }
 
-CIMGUI_API struct ImFont::Glyph* ImFont_Glyphs_index(struct ImFont* font, int index)
+CIMGUI_API struct IMFONTGLYPH* ImFont_Glyphs_index(struct ImFont* font, int index)
 {
     return &font->Glyphs[index];
 }
