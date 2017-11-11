@@ -187,8 +187,8 @@ enum {
     ImGuiCol_FrameBgHovered,
     ImGuiCol_FrameBgActive,
     ImGuiCol_TitleBg,
-    ImGuiCol_TitleBgCollapsed,
     ImGuiCol_TitleBgActive,
+	ImGuiCol_TitleBgCollapsed,
     ImGuiCol_MenuBarBg,
     ImGuiCol_ScrollbarBg,
     ImGuiCol_ScrollbarGrab,
@@ -322,7 +322,7 @@ struct ImGuiIO {
     struct ImFontAtlas*  Fonts;
     float                FontGlobalScale;
     bool                 FontAllowUserScaling;
-    struct ImFont*              FontDefault;
+    struct ImFont*       FontDefault;
     struct ImVec2        DisplayFramebufferScale;
     struct ImVec2        DisplayVisibleMin;
     struct ImVec2        DisplayVisibleMax;
