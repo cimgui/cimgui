@@ -184,19 +184,19 @@ CIMGUI_API void ImFont_GetDisplayOffset(const struct ImFont* font, ImVec2* pOut)
     *pOut = font->DisplayOffset;
 }
 
-CIMGUI_API const struct ImFont::Glyph* ImFont_GetFallbackGlyph(const struct ImFont* font)
+CIMGUI_API const struct IMFONTGLYPH* ImFont_GetFallbackGlyph(const struct ImFont* font)
 {
     return font->FallbackGlyph;
 }
 
-CIMGUI_API void ImFont_SetFallbackGlyph(struct ImFont* font, const struct ImFont::Glyph* FallbackGlyph_)
+CIMGUI_API void ImFont_SetFallbackGlyph(struct ImFont* font, const struct IMFONTGLYPH* FallbackGlyph_)
 {
     font->FallbackGlyph = FallbackGlyph_;
 }
 
-CIMGUI_API float ImFont_GetFallbackXAdvance(const struct ImFont* font)
+CIMGUI_API float ImFont_GetFallbackAdvanceX(const struct ImFont* font)
 {
-    return font->FallbackXAdvance;
+    return font->FallbackAdvanceX;
 }
 
 CIMGUI_API ImWchar ImFont_GetFallbackChar(const struct ImFont* font)
@@ -234,9 +234,9 @@ CIMGUI_API int ImFont_GetMetricsTotalSurface(const struct ImFont* font)
     return font->MetricsTotalSurface;
 }
 
-CIMGUI_API void ImFont_Clear(struct ImFont* font)
+CIMGUI_API void ImFont_ClearOutputData(struct ImFont* font)
 {
-    font->Clear();
+    font->ClearOutputData();
 }
 
 CIMGUI_API void ImFont_BuildLookupTable(struct ImFont* font)
@@ -244,7 +244,7 @@ CIMGUI_API void ImFont_BuildLookupTable(struct ImFont* font)
     font->BuildLookupTable();
 }
 
-CIMGUI_API const struct ImFont::Glyph* ImFont_FindGlyph(const struct ImFont* font, ImWchar c)
+CIMGUI_API const struct IMFONTGLYPH* ImFont_FindGlyph(const struct ImFont* font, ImWchar c)
 {
     return font->FindGlyph(c);
 }
@@ -290,7 +290,7 @@ CIMGUI_API int ImFont_Glyphs_size(const struct ImFont* font)
     return font->Glyphs.size();
 }
 
-CIMGUI_API struct ImFont::Glyph* ImFont_Glyphs_index(struct ImFont* font, int index)
+CIMGUI_API struct IMFONTGLYPH* ImFont_Glyphs_index(struct ImFont* font, int index)
 {
     return &font->Glyphs[index];
 }
@@ -298,12 +298,12 @@ CIMGUI_API struct ImFont::Glyph* ImFont_Glyphs_index(struct ImFont* font, int in
 // ImFont::IndexXAdvance
 CIMGUI_API int ImFont_IndexXAdvance_size(const struct ImFont* font)
 {
-    return font->IndexXAdvance.size();
+    return font->IndexAdvanceX.size();
 }
 
 CIMGUI_API float ImFont_IndexXAdvance_index(const struct ImFont* font, int index)
 {
-    return font->IndexXAdvance[index];
+    return font->IndexAdvanceX[index];
 }
 
 // ImFont::IndexLookup

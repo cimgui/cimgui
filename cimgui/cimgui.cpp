@@ -148,19 +148,19 @@ CIMGUI_API bool igIsWindowCollapsed()
     return ImGui::IsWindowCollapsed();
 }
 
+CIMGUI_API bool igIsWindowAppearing()
+{
+	return ImGui::IsWindowAppearing();
+}
+
 CIMGUI_API void igSetWindowFontScale(float scale)
 {
     ImGui::SetWindowFontScale(scale);
 }
 
-CIMGUI_API void igSetNextWindowPos(CONST ImVec2 pos, ImGuiCond cond)
+CIMGUI_API void igSetNextWindowPos(CONST struct ImVec2 pos, ImGuiCond cond, CONST struct ImVec2 pivot)
 {
-    ImGui::SetNextWindowPos(pos, cond);
-}
-
-CIMGUI_API void igSetNextWindowPosCenter(ImGuiCond cond)
-{
-    ImGui::SetNextWindowPosCenter(cond);
+    ImGui::SetNextWindowPos(pos, cond, pivot);
 }
 
 CIMGUI_API void igSetNextWindowSize(CONST ImVec2 size, ImGuiCond cond)
@@ -440,6 +440,11 @@ CIMGUI_API void igOpenPopup(CONST char* str_id)
     return ImGui::OpenPopup(str_id);
 }
 
+CIMGUI_API bool igOpenPopupOnItemClick(const char * str_id, int mouse_button)
+{
+	return ImGui::OpenPopupOnItemClick(str_id, mouse_button);
+}
+
 CIMGUI_API bool igBeginPopup(CONST char* str_id)
 {
     return ImGui::BeginPopup(str_id);
@@ -572,9 +577,9 @@ CIMGUI_API void igSetCursorScreenPos(CONST ImVec2 pos)
     return ImGui::SetCursorScreenPos(pos);
 }
 
-CIMGUI_API void igAlignFirstTextHeightToWidgets()
+CIMGUI_API void igAlignTextToFramePadding()
 {
-    return ImGui::AlignFirstTextHeightToWidgets();
+	return ImGui::AlignTextToFramePadding();
 }
 
 CIMGUI_API float igGetTextLineHeight()
@@ -847,7 +852,7 @@ CIMGUI_API void igPlotHistogram2(CONST char* label, float(*values_getter)(void* 
     return ImGui::PlotHistogram(label, values_getter, data, values_count, values_offset, overlay_text, scale_min, scale_max, graph_size);
 }
 
-CIMGUI_API void igProgressBar(float fraction, CONST ImVec2* size_arg, const char* overlay)
+CIMGUI_API void igProgressBar(float fraction, CONST ImVec2* size_arg, CONST char* overlay)
 {
     return ImGui::ProgressBar(fraction,*size_arg,overlay);
 }
@@ -1297,15 +1302,15 @@ CIMGUI_API void igPopClipRect()
     return ImGui::PopClipRect();
 }
 
-// Utilities
-CIMGUI_API bool igIsItemHovered()
+CIMGUI_API void igStyleColorsClassic(struct ImGuiStyle * dst)
 {
-    return ImGui::IsItemHovered();
+	ImGui::StyleColorsClassic(dst);
 }
 
-CIMGUI_API bool igIsItemRectHovered()
+// Utilities
+CIMGUI_API bool igIsItemHovered(ImGuiHoveredFlags flags)
 {
-    return ImGui::IsItemRectHovered();
+    return ImGui::IsItemHovered(flags);
 }
 
 CIMGUI_API bool igIsItemActive()
@@ -1358,14 +1363,9 @@ CIMGUI_API bool igIsWindowFocused()
     return ImGui::IsWindowFocused();
 }
 
-CIMGUI_API bool igIsWindowHovered()
+CIMGUI_API bool igIsWindowHovered(ImGuiHoveredFlags)
 {
     return ImGui::IsWindowHovered();
-}
-
-CIMGUI_API bool igIsWindowRectHovered()
-{
-    return ImGui::IsWindowRectHovered();
 }
 
 CIMGUI_API bool igIsRootWindowFocused()
@@ -1378,9 +1378,9 @@ CIMGUI_API bool igIsRootWindowOrAnyChildFocused()
     return ImGui::IsRootWindowOrAnyChildFocused();
 }
 
-CIMGUI_API bool igIsRootWindowOrAnyChildHovered()
+CIMGUI_API bool igIsRootWindowOrAnyChildHovered(ImGuiHoveredFlags flags)
 {
-    return ImGui::IsRootWindowOrAnyChildHovered();
+    return ImGui::IsRootWindowOrAnyChildHovered(flags);
 }
 
 CIMGUI_API bool igIsAnyWindowHovered()
@@ -1418,6 +1418,11 @@ CIMGUI_API bool igIsKeyReleased(int user_key_index)
     return ImGui::IsKeyReleased(user_key_index);
 }
 
+CIMGUI_API int igGetKeyPressedAmount(int key_index, float repeat_delay, float rate)
+{
+	return ImGui::GetKeyPressedAmount(key_index, repeat_delay, rate);
+}
+
 CIMGUI_API bool igIsMouseDown(int button)
 {
     return ImGui::IsMouseDown(button);
@@ -1446,6 +1451,11 @@ CIMGUI_API bool igIsMouseDragging(int button, float lock_threshold)
 CIMGUI_API bool igIsMouseHoveringRect(CONST ImVec2 r_min, CONST ImVec2 r_max, bool clip)
 {
     return ImGui::IsMouseHoveringRect(r_min,r_max,clip);
+}
+
+CIMGUI_API bool igIsMousePosValid(CONST struct ImVec2 * mouse_pos)
+{
+	return ImGui::IsMousePosValid(mouse_pos);
 }
 
 CIMGUI_API void igGetMousePos(ImVec2* pOut)
