@@ -476,8 +476,6 @@ CIMGUI_API bool             igIsWindowAppearing();
 CIMGUI_API void             igSetWindowFontScale(float scale);
 
 CIMGUI_API void             igSetNextWindowPos(CONST struct ImVec2 pos, ImGuiCond cond, CONST struct ImVec2 pivot);
-//Is going to be obsolete
-//CIMGUI_API void             igSetNextWindowPosCenter(ImGuiCond cond);
 CIMGUI_API void             igSetNextWindowSize(CONST struct ImVec2 size, ImGuiCond cond);
 CIMGUI_API void             igSetNextWindowSizeConstraints(CONST struct ImVec2 size_min, CONST struct ImVec2 size_max, ImGuiSizeConstraintCallback custom_callback, void* custom_callback_data);
 CIMGUI_API void             igSetNextWindowContentSize(CONST struct ImVec2 size);
@@ -553,15 +551,12 @@ CIMGUI_API void             igSetCursorPosY(float y);
 CIMGUI_API void             igGetCursorStartPos(struct ImVec2* pOut);
 CIMGUI_API void             igGetCursorScreenPos(struct ImVec2* pOut);
 CIMGUI_API void             igSetCursorScreenPos(CONST struct ImVec2 pos);
-//Is going to be obsolete
-//CIMGUI_API void             igAlignFirstTextHeightToWidgets();
 CIMGUI_API void            igAlignTextToFramePadding();
 CIMGUI_API float            igGetTextLineHeight();
 CIMGUI_API float            igGetTextLineHeightWithSpacing();
 CIMGUI_API float            igGetItemsLineHeightWithSpacing();
 
 //Columns
-// You can also use SameLine(pos_x) for simplified columns. The columns API is still work-in-progress and rather lacking.
 CIMGUI_API void             igColumns(int count, CONST char* id, bool border);
 CIMGUI_API void             igNextColumn();
 CIMGUI_API int              igGetColumnIndex();
@@ -745,8 +740,6 @@ CIMGUI_API void              igStyleColorsClassic(struct ImGuiStyle* dst);
 
 // Utilities
 CIMGUI_API bool             igIsItemHovered(ImGuiHoveredFlags flags);
-//Is going to be obsolete
-//CIMGUI_API bool             igIsItemRectHovered();
 CIMGUI_API bool             igIsItemActive();
 CIMGUI_API bool             igIsItemClicked(int mouse_button);
 CIMGUI_API bool             igIsItemVisible();
@@ -758,8 +751,6 @@ CIMGUI_API void             igGetItemRectSize(struct ImVec2* pOut);
 CIMGUI_API void             igSetItemAllowOverlap();
 CIMGUI_API bool             igIsWindowFocused();
 CIMGUI_API bool             igIsWindowHovered(ImGuiHoveredFlags falgs);
-//Is going to be obsolete
-//CIMGUI_API bool             igIsWindowRectHovered();
 CIMGUI_API bool             igIsRootWindowFocused();
 CIMGUI_API bool             igIsRootWindowOrAnyChildFocused();
 CIMGUI_API bool             igIsRootWindowOrAnyChildHovered(ImGuiHoveredFlags flags);
