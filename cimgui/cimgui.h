@@ -42,7 +42,7 @@ struct ImGuiListClipper;
 struct ImGuiTextFilter;
 
 #if defined __cplusplus
-#define IMFONTGLYPH ImFont::Glyph
+#define IMFONTGLYPH ImFontGlyph
 #else
 struct Glyph;
 #define IMFONTGLYPH Glyph
