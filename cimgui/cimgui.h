@@ -807,6 +807,8 @@ CIMGUI_API void                     igDestroyContext(struct ImGuiContext* ctx);
 CIMGUI_API struct ImGuiContext*     igGetCurrentContext();
 CIMGUI_API void                     igSetCurrentContext(struct ImGuiContext* ctx);
 
+CIMGUI_API void                     ImFontConfig_DefaultConstructor(struct ImFontConfig* config);
+
 // ImGuiIO
 CIMGUI_API void                     ImGuiIO_AddInputCharacter(unsigned short c);
 CIMGUI_API void                     ImGuiIO_AddInputCharactersUTF8(CONST char* utf8_chars);
@@ -978,7 +980,7 @@ CIMGUI_API void             ImFont_SetScale(struct ImFont* font, float Scale_);
 CIMGUI_API void             ImFont_GetDisplayOffset(const struct ImFont* font, struct ImVec2* pOut);
 CIMGUI_API const struct IMFONTGLYPH* ImFont_GetFallbackGlyph(const struct ImFont* font);
 CIMGUI_API void             ImFont_SetFallbackGlyph(struct ImFont* font, const struct IMFONTGLYPH* FallbackGlyph_);
-CIMGUI_API float            ImFont_GetFallbackXAdvance(const struct ImFont* font);
+CIMGUI_API float            ImFont_GetFallbackAdvanceX(const struct ImFont* font);
 CIMGUI_API ImWchar          ImFont_GetFallbackChar(const struct ImFont* font);
 CIMGUI_API short            ImFont_GetConfigDataCount(const struct ImFont* font);
 CIMGUI_API struct ImFontConfig* ImFont_GetConfigData(struct ImFont* font);

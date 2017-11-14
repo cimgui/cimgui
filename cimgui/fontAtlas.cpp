@@ -2,6 +2,11 @@
 #include "../imgui/imgui.h"
 #include "cimgui.h"
 
+CIMGUI_API void ImFontConfig_DefaultConstructor(ImFontConfig* config)
+{
+	*config = ImFontConfig();
+}
+
 CIMGUI_API void ImFontAtlas_GetTexDataAsRGBA32(ImFontAtlas* atlas, unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel)
 {
     atlas->GetTexDataAsRGBA32(out_pixels, out_width, out_height, out_bytes_per_pixel);
