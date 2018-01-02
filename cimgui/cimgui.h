@@ -516,6 +516,8 @@ struct ImFontConfig
     struct ImVec2 GlyphOffset;
     CONST ImWchar *GlyphRanges;
     bool MergeMode;
+    unsigned int RasterizerFlags;
+    float RasterizerMultiply;
     char Name[32];
     struct ImFont *DstFont;
 };
