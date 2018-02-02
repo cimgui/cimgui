@@ -361,7 +361,7 @@ struct ImGuiStyle
     struct ImVec2 WindowPadding;
     float WindowRounding;
     float WindowBorderSize;
-    ImVec2 WindowMinSize;
+    struct ImVec2 WindowMinSize;
     struct ImVec2 WindowTitleAlign;
     float ChildRounding;
     float ChildBorderSize;
@@ -447,7 +447,7 @@ struct ImGuiIO
     bool MouseDownOwned[5];
     float MouseDownDuration[5];
     float MouseDownDurationPrev[5];
-    ImVec2 MouseDragMaxDistanceAbs[5];
+    struct ImVec2 MouseDragMaxDistanceAbs[5];
     float MouseDragMaxDistanceSqr[5];
     float KeysDownDuration[512];
     float KeysDownDurationPrev[512];
