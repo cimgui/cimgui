@@ -1431,9 +1431,9 @@ CIMGUI_API bool igIsWindowFocused(ImGuiFocusedFlags flags)
     return ImGui::IsWindowFocused(flags);
 }
 
-CIMGUI_API bool igIsWindowHovered(ImGuiHoveredFlags)
+CIMGUI_API bool igIsWindowHovered(ImGuiHoveredFlags flags)
 {
-    return ImGui::IsWindowHovered();
+    return ImGui::IsWindowHovered(flags);
 }
 
 CIMGUI_API bool igIsAnyWindowFocused()
