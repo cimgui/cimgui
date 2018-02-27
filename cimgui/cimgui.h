@@ -170,21 +170,24 @@ enum ImGuiComboFlags_
 
 enum ImGuiFocusedFlags_
 {
-    ImGuiFocusedFlags_ChildWindows = 1 << 0,
-    ImGuiFocusedFlags_RootWindow = 1 << 1,
-    ImGuiFocusedFlags_RootAndChildWindows = ImGuiFocusedFlags_RootWindow | ImGuiFocusedFlags_ChildWindows
+    ImGuiFocusedFlags_ChildWindows                  = 1 << 0,   
+    ImGuiFocusedFlags_RootWindow                    = 1 << 1,   
+    ImGuiFocusedFlags_AnyWindow                     = 1 << 2,   
+    ImGuiFocusedFlags_RootAndChildWindows           = ImGuiFocusedFlags_RootWindow | ImGuiFocusedFlags_ChildWindows
 };
 
 enum ImGuiHoveredFlags_
 {
-    ImGuiHoveredFlags_ChildWindows = 1 << 0,
-    ImGuiHoveredFlags_RootWindow = 1 << 1,
-    ImGuiHoveredFlags_AllowWhenBlockedByPopup = 1 << 2,
-    //ImGuiHoveredFlags_AllowWhenBlockedByModal     = 1 << 3,
-    ImGuiHoveredFlags_AllowWhenBlockedByActiveItem = 1 << 4,
-    ImGuiHoveredFlags_AllowWhenOverlapped = 1 << 5,
-    ImGuiHoveredFlags_RectOnly = ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem | ImGuiHoveredFlags_AllowWhenOverlapped,
-    ImGuiHoveredFlags_RootAndChildWindows = ImGuiHoveredFlags_RootWindow | ImGuiHoveredFlags_ChildWindows
+    ImGuiHoveredFlags_Default                       = 0,     
+    ImGuiHoveredFlags_ChildWindows                  = 1 << 0,  
+    ImGuiHoveredFlags_RootWindow                    = 1 << 1,   
+    ImGuiHoveredFlags_AnyWindow                     = 1 << 2,   
+    ImGuiHoveredFlags_AllowWhenBlockedByPopup       = 1 << 3,  
+    //ImGuiHoveredFlags_AllowWhenBlockedByModal     = 1 << 4,   
+    ImGuiHoveredFlags_AllowWhenBlockedByActiveItem  = 1 << 5,   
+    ImGuiHoveredFlags_AllowWhenOverlapped           = 1 << 6,   
+    ImGuiHoveredFlags_RectOnly                      = ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem | ImGuiHoveredFlags_AllowWhenOverlapped,
+    ImGuiHoveredFlags_RootAndChildWindows           = ImGuiHoveredFlags_RootWindow | ImGuiHoveredFlags_ChildWindows
 };
 
 enum ImGuiDragDropFlags_
