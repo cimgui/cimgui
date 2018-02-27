@@ -210,16 +210,18 @@ enum
     ImGuiKey_PageDown,
     ImGuiKey_Home,
     ImGuiKey_End,
+    ImGuiKey_Insert,
     ImGuiKey_Delete,
     ImGuiKey_Backspace,
+    ImGuiKey_Space,
     ImGuiKey_Enter,
     ImGuiKey_Escape,
-    ImGuiKey_A,
-    ImGuiKey_C,
-    ImGuiKey_V,
-    ImGuiKey_X,
-    ImGuiKey_Y,
-    ImGuiKey_Z,
+    ImGuiKey_A,         // for text edit CTRL+A: select all
+    ImGuiKey_C,         // for text edit CTRL+C: copy
+    ImGuiKey_V,         // for text edit CTRL+V: paste
+    ImGuiKey_X,         // for text edit CTRL+X: cut
+    ImGuiKey_Y,         // for text edit CTRL+Y: redo
+    ImGuiKey_Z,         // for text edit CTRL+Z: undo
     ImGuiKey_COUNT
 };
 
