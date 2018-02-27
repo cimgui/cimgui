@@ -456,10 +456,9 @@ struct ImGuiIO
     CONST char *(*GetClipboardTextFn)(void *user_data);
     void (*SetClipboardTextFn)(void *user_data, CONST char *text);
     void *ClipboardUserData;
-   // void *(*MemAllocFn)(size_t sz);
-   // void (*MemFreeFn)(void *ptr);
     void (*ImeSetInputScreenPosFn)(int x, int y);
     void *ImeWindowHandle;
+	void (*RenderDrawListsFn)(struct ImDrawData* data);
     struct ImVec2 MousePos;
     bool MouseDown[5];
     float MouseWheel;
@@ -485,7 +484,6 @@ struct ImGuiIO
     int MetricsActiveWindows;
     struct ImVec2 MouseDelta;
     struct ImVec2 MousePosPrev;
-    
     struct ImVec2 MouseClickedPos[5];
     float MouseClickedTime[5];
 	bool MouseClicked[5];
