@@ -31,7 +31,7 @@ struct ImDrawData;
 struct ImVec2;
 struct ImVec4;
 struct ImGuiTextEditCallbackData;
-struct ImGuiSizeConstraintCallbackData;
+struct ImGuiSizeCallbackData;
 struct ImDrawList;
 struct ImGuiStorage;
 struct ImFont;
@@ -66,13 +66,14 @@ typedef int ImGuiInputTextFlags;
 typedef int ImGuiSelectableFlags;
 typedef int ImGuiTreeNodeFlags;
 typedef int ImGuiHoveredFlags;
+typedef int ImGuiNavFlags;
 typedef int ImGuiComboFlags;
 typedef int ImGuiDragDropFlags;
 typedef int ImGuiFocusedFlags;
 typedef int ImDrawCornerFlags;
 typedef int ImDrawListFlags;
 typedef int (*ImGuiTextEditCallback)(struct ImGuiTextEditCallbackData *data);
-typedef void (*ImGuiSizeConstraintCallback)(struct ImGuiSizeConstraintCallbackData *data);
+typedef void (*ImGuiSizeCallback)(struct ImGuiSizeCallbackData *data);
 typedef void (*ImDrawCallback)(CONST struct ImDrawList *parent_list, CONST struct ImDrawCmd *cmd);
 #ifdef _MSC_VER
 typedef unsigned __int64 ImU64;
@@ -169,21 +170,24 @@ enum ImGuiComboFlags_
 
 enum ImGuiFocusedFlags_
 {
-    ImGuiFocusedFlags_ChildWindows = 1 << 0,
-    ImGuiFocusedFlags_RootWindow = 1 << 1,
-    ImGuiFocusedFlags_RootAndChildWindows = ImGuiFocusedFlags_RootWindow | ImGuiFocusedFlags_ChildWindows
+    ImGuiFocusedFlags_ChildWindows                  = 1 << 0,   
+    ImGuiFocusedFlags_RootWindow                    = 1 << 1,   
+    ImGuiFocusedFlags_AnyWindow                     = 1 << 2,   
+    ImGuiFocusedFlags_RootAndChildWindows           = ImGuiFocusedFlags_RootWindow | ImGuiFocusedFlags_ChildWindows
 };
 
 enum ImGuiHoveredFlags_
 {
-    ImGuiHoveredFlags_ChildWindows = 1 << 0,
-    ImGuiHoveredFlags_RootWindow = 1 << 1,
-    ImGuiHoveredFlags_AllowWhenBlockedByPopup = 1 << 2,
-    //ImGuiHoveredFlags_AllowWhenBlockedByModal     = 1 << 3,
-    ImGuiHoveredFlags_AllowWhenBlockedByActiveItem = 1 << 4,
-    ImGuiHoveredFlags_AllowWhenOverlapped = 1 << 5,
-    ImGuiHoveredFlags_RectOnly = ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem | ImGuiHoveredFlags_AllowWhenOverlapped,
-    ImGuiHoveredFlags_RootAndChildWindows = ImGuiHoveredFlags_RootWindow | ImGuiHoveredFlags_ChildWindows
+    ImGuiHoveredFlags_Default                       = 0,     
+    ImGuiHoveredFlags_ChildWindows                  = 1 << 0,  
+    ImGuiHoveredFlags_RootWindow                    = 1 << 1,   
+    ImGuiHoveredFlags_AnyWindow                     = 1 << 2,   
+    ImGuiHoveredFlags_AllowWhenBlockedByPopup       = 1 << 3,  
+    //ImGuiHoveredFlags_AllowWhenBlockedByModal     = 1 << 4,   
+    ImGuiHoveredFlags_AllowWhenBlockedByActiveItem  = 1 << 5,   
+    ImGuiHoveredFlags_AllowWhenOverlapped           = 1 << 6,   
+    ImGuiHoveredFlags_RectOnly                      = ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem | ImGuiHoveredFlags_AllowWhenOverlapped,
+    ImGuiHoveredFlags_RootAndChildWindows           = ImGuiHoveredFlags_RootWindow | ImGuiHoveredFlags_ChildWindows
 };
 
 enum ImGuiDragDropFlags_
@@ -209,16 +213,18 @@ enum
     ImGuiKey_PageDown,
     ImGuiKey_Home,
     ImGuiKey_End,
+    ImGuiKey_Insert,
     ImGuiKey_Delete,
     ImGuiKey_Backspace,
+    ImGuiKey_Space,
     ImGuiKey_Enter,
     ImGuiKey_Escape,
-    ImGuiKey_A,
-    ImGuiKey_C,
-    ImGuiKey_V,
-    ImGuiKey_X,
-    ImGuiKey_Y,
-    ImGuiKey_Z,
+    ImGuiKey_A,         // for text edit CTRL+A: select all
+    ImGuiKey_C,         // for text edit CTRL+C: copy
+    ImGuiKey_V,         // for text edit CTRL+V: paste
+    ImGuiKey_X,         // for text edit CTRL+X: cut
+    ImGuiKey_Y,         // for text edit CTRL+Y: redo
+    ImGuiKey_Z,         // for text edit CTRL+Z: undo
     ImGuiKey_COUNT
 };
 
@@ -355,6 +361,45 @@ enum ImDrawListFlags_
     ImDrawListFlags_AntiAliasedFill = 1 << 1
 };
 
+enum ImGuiNavInput_
+{
+    // Gamepad Mapping
+    ImGuiNavInput_Activate,      // activate / open / toggle / tweak value       // e.g. Circle (PS4), A (Xbox), B (Switch), Space (Keyboard)
+    ImGuiNavInput_Cancel,        // cancel / close / exit                        // e.g. Cross  (PS4), B (Xbox), A (Switch), Escape (Keyboard)
+    ImGuiNavInput_Input,         // text input / on-screen keyboard              // e.g. Triang.(PS4), Y (Xbox), X (Switch), Return (Keyboard)
+    ImGuiNavInput_Menu,          // tap: toggle menu / hold: focus, move, resize // e.g. Square (PS4), X (Xbox), Y (Switch), Alt (Keyboard)
+    ImGuiNavInput_DpadLeft,      // move / tweak / resize window (w/ PadMenu)    // e.g. D-pad Left/Right/Up/Down (Gamepads), Arrow keys (Keyboard)
+    ImGuiNavInput_DpadRight,     // 
+    ImGuiNavInput_DpadUp,        // 
+    ImGuiNavInput_DpadDown,      // 
+    ImGuiNavInput_LStickLeft,    // scroll / move window (w/ PadMenu)            // e.g. Left Analog Stick Left/Right/Up/Down
+    ImGuiNavInput_LStickRight,   // 
+    ImGuiNavInput_LStickUp,      // 
+    ImGuiNavInput_LStickDown,    // 
+    ImGuiNavInput_FocusPrev,     // next window (w/ PadMenu)                     // e.g. L1 or L2 (PS4), LB or LT (Xbox), L or ZL (Switch)
+    ImGuiNavInput_FocusNext,     // prev window (w/ PadMenu)                     // e.g. R1 or R2 (PS4), RB or RT (Xbox), R or ZL (Switch) 
+    ImGuiNavInput_TweakSlow,     // slower tweaks                                // e.g. L1 or L2 (PS4), LB or LT (Xbox), L or ZL (Switch)
+    ImGuiNavInput_TweakFast,     // faster tweaks                                // e.g. R1 or R2 (PS4), RB or RT (Xbox), R or ZL (Switch)
+
+    // [Internal] Don't use directly! This is used internally to differentiate keyboard from gamepad inputs for behaviors that require to differentiate them.
+    // Keyboard behavior that have no corresponding gamepad mapping (e.g. CTRL+TAB) may be directly reading from io.KeyDown[] instead of io.NavInputs[].
+    ImGuiNavInput_KeyMenu_,      // toggle menu                                  // = io.KeyAlt
+    ImGuiNavInput_KeyLeft_,      // move left                                    // = Arrow keys
+    ImGuiNavInput_KeyRight_,     // move right
+    ImGuiNavInput_KeyUp_,        // move up
+    ImGuiNavInput_KeyDown_,      // move down
+    ImGuiNavInput_COUNT,
+    ImGuiNavInput_InternalStart_ = ImGuiNavInput_KeyMenu_
+};
+
+enum ImGuiNavFlags_
+{
+    ImGuiNavFlags_EnableKeyboard    = 1 << 0,   // Master keyboard navigation enable flag. NewFrame() will automatically fill io.NavInputs[] based on io.KeyDown[].
+    ImGuiNavFlags_EnableGamepad     = 1 << 1,   // Master gamepad navigation enable flag. This is mostly to instruct your imgui back-end to fill io.NavInputs[].
+    ImGuiNavFlags_MoveMouse         = 1 << 2,   // Request navigation to allow moving the mouse cursor. May be useful on TV/console systems where moving a virtual mouse is awkward. Will update io.MousePos and set io.WantMoveMouse=true. If enabled you MUST honor io.WantMoveMouse requests in your binding, otherwise ImGui will react as if the mouse is jumping around back and forth.
+    ImGuiNavFlags_NoCaptureKeyboard = 1 << 3    // Do not set the io.WantCaptureKeyboard flag with io.NavActive is set. 
+};
+
 struct ImGuiStyle
 {
     float Alpha;
@@ -392,6 +437,7 @@ struct ImGuiIO
 {
     struct ImVec2 DisplaySize;
     float DeltaTime;
+	ImGuiNavFlags NavFlags;
     float IniSavingRate;
     CONST char *IniFilename;
     CONST char *LogFilename;
@@ -411,17 +457,17 @@ struct ImGuiIO
     struct ImVec2 DisplayVisibleMax;
     bool OptMacOSXBehaviors;
     bool OptCursorBlink;
-    void (*RenderDrawListsFn)(struct ImDrawData *data);
+    //void (*RenderDrawListsFn)(struct ImDrawData *data); obsolete
     CONST char *(*GetClipboardTextFn)(void *user_data);
     void (*SetClipboardTextFn)(void *user_data, CONST char *text);
     void *ClipboardUserData;
-    void *(*MemAllocFn)(size_t sz);
-    void (*MemFreeFn)(void *ptr);
     void (*ImeSetInputScreenPosFn)(int x, int y);
     void *ImeWindowHandle;
+	void (*RenderDrawListsFn)(struct ImDrawData* data);
     struct ImVec2 MousePos;
     bool MouseDown[5];
     float MouseWheel;
+	float MouseWheelH;
     bool MouseDrawCursor;
     bool KeyCtrl;
     bool KeyShift;
@@ -429,19 +475,23 @@ struct ImGuiIO
     bool KeySuper;
     bool KeysDown[512];
     ImWchar InputCharacters[16 + 1];
+	float  NavInputs[ImGuiNavInput_COUNT];
     bool WantCaptureMouse;
     bool WantCaptureKeyboard;
     bool WantTextInput;
+	bool WantMoveMouse;
+	bool        NavActive;                  // Directional navigation is currently allowed (will handle ImGuiKey_NavXXX events) = a window is focused and it doesn't use the ImGuiWindowFlags_NoNavInputs flag.
+    bool        NavVisible;                 // Directional navigation is visible and allowed (will handle ImGuiKey_NavXXX events).
     float Framerate;
-    int MetricsAllocs;
+    //int MetricsAllocs;
     int MetricsRenderVertices;
     int MetricsRenderIndices;
     int MetricsActiveWindows;
     struct ImVec2 MouseDelta;
     struct ImVec2 MousePosPrev;
-    bool MouseClicked[5];
     struct ImVec2 MouseClickedPos[5];
     float MouseClickedTime[5];
+	bool MouseClicked[5];
     bool MouseDoubleClicked[5];
     bool MouseReleased[5];
     bool MouseDownOwned[5];
@@ -451,6 +501,8 @@ struct ImGuiIO
     float MouseDragMaxDistanceSqr[5];
     float KeysDownDuration[512];
     float KeysDownDurationPrev[512];
+	float       NavInputsDownDuration[ImGuiNavInput_COUNT];
+    float       NavInputsDownDurationPrev[ImGuiNavInput_COUNT];
 };
 
 struct ImGuiTextEditCallbackData
@@ -470,7 +522,7 @@ struct ImGuiTextEditCallbackData
     int SelectionEnd;
 };
 
-struct ImGuiSizeConstraintCallbackData
+struct ImGuiSizeCallbackData
 {
     void *UserData;
     struct ImVec2 Pos;
@@ -550,7 +602,7 @@ CIMGUI_API struct ImDrawData *igGetDrawData();
 CIMGUI_API void igNewFrame();
 CIMGUI_API void igRender();
 CIMGUI_API void igEndFrame();
-CIMGUI_API void igShutdown();
+
 
 // Demo/Debug/Info
 CIMGUI_API void igShowDemoWindow(bool *opened);
@@ -585,7 +637,7 @@ CIMGUI_API void igSetWindowFontScale(float scale);
 
 CIMGUI_API void igSetNextWindowPos(CONST struct ImVec2 pos, ImGuiCond cond, CONST struct ImVec2 pivot);
 CIMGUI_API void igSetNextWindowSize(CONST struct ImVec2 size, ImGuiCond cond);
-CIMGUI_API void igSetNextWindowSizeConstraints(CONST struct ImVec2 size_min, CONST struct ImVec2 size_max, ImGuiSizeConstraintCallback custom_callback, void *custom_callback_data);
+CIMGUI_API void igSetNextWindowSizeConstraints(CONST struct ImVec2 size_min, CONST struct ImVec2 size_max, ImGuiSizeCallback custom_callback, void *custom_callback_data);
 CIMGUI_API void igSetNextWindowContentSize(CONST struct ImVec2 size);
 CIMGUI_API void igSetNextWindowCollapsed(bool collapsed, ImGuiCond cond);
 CIMGUI_API void igSetNextWindowFocus();
@@ -840,7 +892,7 @@ CIMGUI_API void igLogFinish();
 CIMGUI_API void igLogButtons();
 CIMGUI_API void igLogText(CONST char *fmt, ...);
 
-CIMGUI_API bool igBeginDragDropSource(ImGuiDragDropFlags flags, int mouse_button);
+CIMGUI_API bool igBeginDragDropSource(ImGuiDragDropFlags flags);
 CIMGUI_API bool igSetDragDropPayload(CONST char *type, CONST void *data, size_t size, ImGuiCond cond);
 CIMGUI_API void igEndDragDropSource();
 CIMGUI_API bool igBeginDragDropTarget();
@@ -926,7 +978,7 @@ CIMGUI_API void igSetClipboardText(CONST char *text);
 
 // Internal state access - if you want to share ImGui state between modules (e.g. DLL) or allocate it yourself
 CIMGUI_API CONST char *igGetVersion();
-CIMGUI_API struct ImGuiContext *igCreateContext(void *(*malloc_fn)(size_t), void (*free_fn)(void *));
+CIMGUI_API struct ImGuiContext *igCreateContext(struct ImFontAtlas* shared_font_atlas);
 CIMGUI_API void igDestroyContext(struct ImGuiContext *ctx);
 CIMGUI_API struct ImGuiContext *igGetCurrentContext();
 CIMGUI_API void igSetCurrentContext(struct ImGuiContext *ctx);
