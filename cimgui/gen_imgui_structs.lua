@@ -23,7 +23,7 @@ for line in io.lines() do
 repeat -- simulate continue with break
 
     --print(line)
-    line = strip(line)
+    --line = strip(line)
     if #line == 0 then break end
     -- Is this a preprocessor statement?
     if line:sub(1,1) == "#" then
@@ -71,8 +71,8 @@ end
 
 local namespace_re = "namespace"
 local in_namespace = false
-local struct_re = "^struct%s+([^%s;]+)$"
-local struct_closed_re = "^struct%s+([^%s]+);$"
+local struct_re = "^%s*struct%s+([^%s;]+)$"
+local struct_closed_re = "^%s*struct%s+([^%s]+);$"
 local struct_closing_re = "};"
 local struct_op_close_re = "%b{}"
 local structnames = {}
@@ -113,7 +113,6 @@ typedef struct ImVector ImVector;]]
         
         if in_namespace then
             if line:match(function_closing_re) then
-                --io.write( line,"\n")
                 in_namespace = false
             end
             break -- dont write anything inside
@@ -124,7 +123,7 @@ typedef struct ImVector ImVector;]]
                 if line:match("typedef") then --dont allow inner typedefs
                     break
                 elseif not line:match("^{$") and not line:match(struct_closing_re) then --avoid tab { and };
-                    line = "    "..line
+                    --line = "    "..line
                 end
             end
             io.write( line,"\n")
@@ -139,7 +138,7 @@ typedef struct ImVector ImVector;]]
                 innerstructs[structnames[#structnames]] = innerstructs[structnames[#structnames]] or {}
                 local st = innerstructs[structnames[#structnames]]
                 if not line:match("struct") and not line:match("^{$") and not line:match(struct_closing_re) then --avoid tab in struct { and };
-                    line = "    "..line
+                    --line = "    "..line
                 end
                 st[#st + 1] = line
                 if line:match(struct_closing_re) and not line:match(struct_op_close_re) then
