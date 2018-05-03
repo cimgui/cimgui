@@ -10,6 +10,14 @@ local function clean_spaces(cad)
 	return cad
 end
 
+local cimgui_manuals = {
+	igLogText = true,
+	ImGuiTextBuffer_appendf = true
+}
+
+local function get_manuals(def)
+	return cimgui_manuals[def.ov_cimguiname] or cimgui_manuals[def.cimguiname]
+end
 
 local cimgui_overloads = {
 	igPushID = {
@@ -31,7 +39,7 @@ local function getcimguiname_overload(stname,funcname,signature)
 end
 
 cdefs = {}
-
+local embeded_structs = {}
 location_re = '^# %d+ "([^"]*)"'
 cimpath_re = '^(.*[\\/])(imgui)%.h$' 
 define_re = "^#define%s+([^%s]+)%s+([^%s]+)$"
@@ -77,6 +85,7 @@ repeat -- simulate continue with break
 	
 	elseif in_imgui then
 		--print(line)
+		if line:match"template" then break end
 		line = line:gsub("%S+",{class="struct",mutable=""}) --class -> struct
 		if in_function then 
             if line:match(function_closing_re) then
@@ -106,30 +115,53 @@ repeat -- simulate continue with break
 				structnames[#structnames] = nil
 			end
 			stname = structnames[#structnames] or ""
+			if #structnames > 1 then
+				local embeded_name = table.concat(structnames,"::")
+				embeded_structs[stname] = embeded_name
+			end
 		end
 		--print("pre func re:",line)
 		local func = line:match(function_re)
 		if func and not in_function and not line:match("typedef.*%b().*%b().*") then--not line:match("typedef.*%b().*%b().*") then
 			--print(2,line)
 			
-			if stname~="ImVector" and not line:match("operator") then
+			if stname~="ImVector" 
+			--and stname~="GlyphRangesBuilder" and stname~="CustomRect"  and stname~="TextRange" and stname~="Pair"
+			and not line:match("operator") then
 			
 				--clean implemetation
 				line = line:gsub("%s*%b{}","")
 				--clean attribute
 				line = line:gsub("%s*__attribute__%b()","")
+				--clean static
+				line = line:gsub("static","")
 				
-				local ret = line:match("([^%(%)]+)[%s%*]~?[_%w]+(%b())") --"(^.+)(%w+)(%b())"
+				--local ret = line:match("([^%(%)]+)[%s%*]~?[_%w]+(%b())") 
+				--local ret = line:match("([^%(%)]+%*?)%s?~?[_%w]+%b()") 
+				local ret = line:match("([^%(%)]+[%*%s])%s?~?[_%w]+%b()")
 				local funcname, args = line:match("(~?[_%w]+)(%b())")
 				
 				local argscsinpars = args:gsub("(=[^,%(%)]*)(%b())","%1")
 				argscsinpars = argscsinpars:gsub("(=[^,%(%)]*)([,%)])","%2")
 				argscsinpars = argscsinpars:gsub("&","")
 				--print(funcname,ret,args,argscsinpars)
+				-- local signature = argscsinpars:gsub("([%w%s%*_]+)%s[%w_]+%s*([,%)])","%1%2")
+				-- signature = signature:gsub("%s*([,%)])","%1")
+				-- signature = signature:gsub(",%s*",",")
+				-- signature = signature:gsub("([%w_]+)%s[%w_]+(%[%d*%])","%1%2") --float[2]
+				
 				local signature = argscsinpars:gsub("([%w%s%*_]+)%s[%w_]+%s*([,%)])","%1%2")
-				signature = signature:gsub("%s*([,%)])","%1")
-				signature = signature:gsub(",%s*",",")
-			    local call_args = argscsinpars:gsub("[^%(].-([%w_]+)%s*([,%)])","%1%2")
+				signature = signature:gsub("%s*([,%)])","%1") --space before , and )
+				signature = signature:gsub(",%s*",",")--space after ,
+				signature = signature:gsub("([%w_]+)%s[%w_]+(%[%d*%])","%1%2") -- float[2]
+				signature = signature:gsub("(%(%*)[%w_]+(%)%([^%(%)]*%))","%1%2") --func defs
+				
+			   -- local call_args = argscsinpars:gsub("[^%(].-([%w_]+)%s*([,%)])","%1%2")
+			    --local call_args = argscsinpars:gsub("([%w_]+%s[%w_]+)%[%d*%]","%1")
+				--call_args = call_args:gsub("[^%(].-([%w_]+)%s*([,%)])","%1%2")
+				local call_args = argscsinpars:gsub("([%w_]+%s[%w_]+)%[%d*%]","%1") --float[2]
+				call_args = call_args:gsub("%(%*([%w_]+)%)%([^%(%)]*%)"," %1") --func type
+				call_args = call_args:gsub("[^%(].-([%w_]+)%s*([,%)])","%1%2")
 				
 				--if line:match(".*%b()%b().*") then print("bb:",line);print("b2:",ret,funcname,args) end
 				if not ret then --must be constructors
@@ -159,6 +191,7 @@ repeat -- simulate continue with break
 				defT.args=argscsinpars
 				defT.signature = signature
 				defT.call_args = call_args
+				defT.isvararg = signature:match("%.%.%.%)$")
 				if ret then
 					defT.ret = ret:gsub("&","*")
 					defT.retref = ret:match("&")
@@ -297,7 +330,10 @@ print"//------------------------------------------------------------------------
 for i,t in ipairs(cdefs) do
 	print(t.cimguiname,"   ",t.funcname,"\t",t.signature,"\t",t.args,"\t",t.argsc,"\t",t.call_args,"\t",t.ret) --,"\n")
 end
-print"//-------------------------------------------------------------------------------------"
+print"//embeded_structs---------------------------------------------------------------------------"
+for k,v in pairs(embeded_structs) do
+	print(k,v)
+end
 --[[
 print"//constructors------------------------------------------------------------------"
 for i,t in ipairs(cdefs) do
@@ -310,11 +346,14 @@ local hfile = io.open("./auto_funcs.h","w")
 for _,t in ipairs(cdefs) do
 	local cimf = defsT[t.cimguiname]
 	local def = cimf[t.signature]
-	if def.ret then --not constructor
+	local manual = get_manuals(def)
+	if not manual and def.ret then --not constructor
 		if def.stname == "ImGui" then
 			hfile:write("CIMGUI_API"," ",def.ret," ",def.ov_cimguiname or def.cimguiname,def.args,";\n")
 		else
-			local args = def.args:gsub("^%(","("..def.stname.."* self,")
+			local empty = def.args:match("^%(%)") --no args
+			local imgui_stname = embeded_structs[def.stname] or def.stname
+			local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
 			hfile:write("CIMGUI_API"," ",def.ret," ",def.ov_cimguiname or def.cimguiname,args,";\n")
 		end
 	end
@@ -327,18 +366,51 @@ for _,t in ipairs(cdefs) do
 	--for i,def in ipairs(cimf) do
 	--prtable(cimf)
 	local def = cimf[t.signature]
-	if def.ret then --not constructor
+	local manual = get_manuals(def)
+	if not manual and def.ret then --not constructor
+		local ptret = def.retref and "&" or ""
+		local castret = def.ret:gsub("[^%s]+",function(x)
+				local y = x:gsub("%*","")
+				local typ = embeded_structs[y]
+				if typ then return "("..x..")" else return "" end
+			end)
 		if def.stname == "ImGui" then
-			cppfile:write("CIMGUI_API"," ",def.ret," ",def.ov_cimguiname or def.cimguiname,def.args,"\n")
-			cppfile:write("{\n")
-			cppfile:write("    return ImGui::",def.funcname,def.call_args,";\n")
-			cppfile:write("}\n")
+			if def.isvararg then
+				local call_args = def.call_args:gsub("%.%.%.","args")
+				cppfile:write("CIMGUI_API"," ",def.ret," ",def.ov_cimguiname or def.cimguiname,def.args,"\n")
+				cppfile:write("{\n")
+				cppfile:write("    va_list args;\n")
+				cppfile:write("    va_start(args, fmt);\n")
+				cppfile:write("    ImGui::"..def.funcname.."V"..call_args..";\n")
+				cppfile:write("    va_end(args);\n")
+				--cppfile:write("    return ImGui::",def.funcname,def.call_args,";\n")
+				cppfile:write("}\n")
+			else
+				cppfile:write("CIMGUI_API"," ",def.ret," ",def.ov_cimguiname or def.cimguiname,def.args,"\n")
+				cppfile:write("{\n")
+				cppfile:write("    return "..castret..ptret.."ImGui::",def.funcname,def.call_args,";\n")
+				cppfile:write("}\n")
+			end
 		else
-			local args = def.args:gsub("^%(","("..def.stname.."* self,")
-			cppfile:write("CIMGUI_API"," ",def.ret," ",def.ov_cimguiname or def.cimguiname,args,"\n")
-			cppfile:write("{\n")
-			cppfile:write("    return self->",def.funcname,def.call_args,";\n")
-			cppfile:write("}\n")
+			local empty = def.args:match("^%(%)") --no args
+			local imgui_stname = embeded_structs[def.stname] or def.stname
+			local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
+			if def.isvararg then
+				local call_args = def.call_args:gsub("%.%.%.","args")
+				cppfile:write("CIMGUI_API"," ",def.ret," ",def.ov_cimguiname or def.cimguiname,args,"\n")
+				cppfile:write("{\n")
+				cppfile:write("    va_list args;\n")
+				cppfile:write("    va_start(args, fmt);\n")
+				cppfile:write("    self->"..def.funcname.."V"..call_args..";\n")
+				cppfile:write("    va_end(args);\n")
+				--cppfile:write("    return self->",def.funcname,def.call_args,";\n")
+				cppfile:write("}\n")
+			else
+				cppfile:write("CIMGUI_API"," ",def.ret," ",def.ov_cimguiname or def.cimguiname,args,"\n")
+				cppfile:write("{\n")
+				cppfile:write("    return "..castret..ptret.."self->",def.funcname,def.call_args,";\n")
+				cppfile:write("}\n")
+			end
 		end
 	end
 	--end
