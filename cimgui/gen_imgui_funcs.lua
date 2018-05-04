@@ -12,7 +12,10 @@ end
 
 local cimgui_manuals = {
 	igLogText = true,
-	ImGuiTextBuffer_appendf = true
+	ImGuiTextBuffer_appendf = true,
+	-------------------------
+	--TextRange_split = true,
+	--ImFontAtlas_CalcCustomRectUV = true
 }
 
 local function get_manuals(def)
@@ -25,6 +28,9 @@ local cimgui_overloads = {
 		["(const char*,const char*)"] = "igPushIDRange",
 		["(const void*)"] = 			"igPushIDPtr",
 		["(int)"] = 					"igPushIDInt"
+	},
+	igCollapsingHeader = {
+		["(const char*,ImGuiTreeNodeFlags)"] =		"igCollapsingHeader"
 	}
 }
 
@@ -40,6 +46,7 @@ end
 
 cdefs = {}
 local embeded_structs = {}
+local ImVector_templates = {}
 location_re = '^# %d+ "([^"]*)"'
 cimpath_re = '^(.*[\\/])(imgui)%.h$' 
 define_re = "^#define%s+([^%s]+)%s+([^%s]+)$"
@@ -144,6 +151,13 @@ repeat -- simulate continue with break
 				local argscsinpars = args:gsub("(=[^,%(%)]*)(%b())","%1")
 				argscsinpars = argscsinpars:gsub("(=[^,%(%)]*)([,%)])","%2")
 				argscsinpars = argscsinpars:gsub("&","")
+				
+				local template = argscsinpars:match("ImVector<([%w_]+)>")
+				if template then
+					ImVector_templates[template] = true
+				end
+				
+				argscsinpars = argscsinpars:gsub("<([%w_]+)>","_%1") --ImVector
 				--print(funcname,ret,args,argscsinpars)
 				-- local signature = argscsinpars:gsub("([%w%s%*_]+)%s[%w_]+%s*([,%)])","%1%2")
 				-- signature = signature:gsub("%s*([,%)])","%1")
@@ -228,7 +242,25 @@ local function get_types(v)
 		end
 	end
 end
-
+local function typetoStr(typ)
+	--typ = typ:gsub("[^%(%)]+%(%*?(.+)%).+","%1") -- funcs
+	typ = typ:gsub("[^%(%)]+%(%*?(.+)%).+","FnPtr")
+	typ = typ:gsub("[%w_]+%[(%d*)%]","arr%1")
+	typ = typ:gsub("%*","Ptr")
+	typ = typ:gsub("void","")
+	typ = typ:gsub("unsigned%s","u")
+	typ = typ:gsub("const%s","")--"c")
+	typ = typ:gsub("%s+","_")
+	typ = typ:gsub("charPtr","Str")
+	typ = typ:gsub("int","Int")
+	typ = typ:gsub("bool","Bool")
+	typ = typ:gsub("float","Float")
+	typ = typ:gsub("uInt","Uint")
+	typ = typ:gsub("ImGui","")
+	typ = typ:gsub("Im","")
+	typ = typ:gsub("[<>]","")
+	return typ
+end
 local function name_overloadsAlgo(v)
 	local aa = {}
 	local bb = {}
@@ -288,24 +320,7 @@ local function name_overloadsAlgo(v)
 	end
 	return aa,bb
 end
-local function typetoStr(typ)
-	typ = typ:gsub("[^%(%)]+%(%*?(.+)%).+","%1") -- funcs
-	typ = typ:gsub("[%w_]+%[(%d*)%]","arr%1")
-	typ = typ:gsub("%*","Ptr")
-	typ = typ:gsub("void","")
-	typ = typ:gsub("unsigned%s","u")
-	typ = typ:gsub("const%s","")--"c")
-	typ = typ:gsub("%s+","_")
-	typ = typ:gsub("charPtr","Str")
-	typ = typ:gsub("int","Int")
-	typ = typ:gsub("bool","Bool")
-	typ = typ:gsub("float","Float")
-	typ = typ:gsub("uInt","Uint")
-	typ = typ:gsub("ImGui","")
-	typ = typ:gsub("Im","")
-	typ = typ:gsub("[<>]","")
-	return typ
-end
+
 local numoverloaded = 0
 print"overloading"
 for k,v in pairs(defsT) do
@@ -316,7 +331,7 @@ for k,v in pairs(defsT) do
 		local typesc,post = name_overloadsAlgo(v)
 		for i,t in ipairs(v) do
 			t.ov_cimguiname = getcimguiname_overload(t.stname,t.funcname,t.signature) or k..typetoStr(post[i])
-			print(i,t.signature,t.ret,t.ov_cimguiname)--post[i],typetoStr(post[i]))
+			print(i,t.signature,t.ret,t.ov_cimguiname,post[i])--,typetoStr(post[i]))
 			--prtable(typesc[i])
 		end
 	end
@@ -332,9 +347,14 @@ for i,t in ipairs(cdefs) do
 end
 print"//embeded_structs---------------------------------------------------------------------------"
 for k,v in pairs(embeded_structs) do
-	print(k,v)
+	--print(k,v)
+	io.write("typedef ",v," ",k,";\n")
 end
---[[
+for k,v in pairs(ImVector_templates) do
+	--print(k,v)
+	io.write("typedef ImVector<",k,"> ImVector_",k,";\n")
+end
+---[[
 print"//constructors------------------------------------------------------------------"
 for i,t in ipairs(cdefs) do
 	if not t.ret then
@@ -342,7 +362,22 @@ for i,t in ipairs(cdefs) do
 	end
 end
 --]]
+---------------------------------------------------------------------------------------------
+-- auto_funcs.h
 local hfile = io.open("./auto_funcs.h","w")
+hfile:write("#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
+for k,v in pairs(embeded_structs) do
+	--print(k,v)
+	hfile:write("typedef ",v," ",k,";\n")
+end
+for k,v in pairs(ImVector_templates) do
+	hfile:write("typedef ImVector<",k,"> ImVector_",k,";\n")
+end
+hfile:write("#else //CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
+for k,v in pairs(ImVector_templates) do
+	hfile:write("typedef ImVector ImVector_",k,";\n")
+end
+hfile:write("#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
 for _,t in ipairs(cdefs) do
 	local cimf = defsT[t.cimguiname]
 	local def = cimf[t.signature]
@@ -352,7 +387,8 @@ for _,t in ipairs(cdefs) do
 			hfile:write("CIMGUI_API"," ",def.ret," ",def.ov_cimguiname or def.cimguiname,def.args,";\n")
 		else
 			local empty = def.args:match("^%(%)") --no args
-			local imgui_stname = embeded_structs[def.stname] or def.stname
+			--local imgui_stname = embeded_structs[def.stname] or def.stname
+			local imgui_stname = def.stname
 			local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
 			hfile:write("CIMGUI_API"," ",def.ret," ",def.ov_cimguiname or def.cimguiname,args,";\n")
 		end
@@ -369,11 +405,12 @@ for _,t in ipairs(cdefs) do
 	local manual = get_manuals(def)
 	if not manual and def.ret then --not constructor
 		local ptret = def.retref and "&" or ""
-		local castret = def.ret:gsub("[^%s]+",function(x)
-				local y = x:gsub("%*","")
-				local typ = embeded_structs[y]
-				if typ then return "("..x..")" else return "" end
-			end)
+		-- local castret = def.ret:gsub("[^%s]+",function(x)
+				-- local y = x:gsub("%*","")
+				-- local typ = embeded_structs[y]
+				-- if typ then return "("..x..")" else return "" end
+			-- end)
+			local castret = ""
 		if def.stname == "ImGui" then
 			if def.isvararg then
 				local call_args = def.call_args:gsub("%.%.%.","args")
@@ -393,7 +430,8 @@ for _,t in ipairs(cdefs) do
 			end
 		else
 			local empty = def.args:match("^%(%)") --no args
-			local imgui_stname = embeded_structs[def.stname] or def.stname
+			--local imgui_stname = embeded_structs[def.stname] or def.stname
+			local imgui_stname = def.stname
 			local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
 			if def.isvararg then
 				local call_args = def.call_args:gsub("%.%.%.","args")

@@ -13,6 +13,7 @@ define_re = "^#define%s+([^%s]+)%s+([^%s]+)$"
 function_re = "%b()"
 function_closed_re = "[;}]$"
 function_closing_re = "}"
+functype_re = "(%(%*)[%w_]+(%)%([^%(%)]*%))"
 
 number_re = "^-?[0-9]+$"
 hex_re = "0x[0-9a-fA-F]+$"
@@ -48,7 +49,8 @@ repeat -- simulate continue with break
             break
         end
         
-        if line:match(function_re) and not line:match("typedef.*%b().*%b().*") then
+        if line:match(function_re) and not line:match("typedef.*%b().*%b().*") 
+		and not line:match(functype_re) then
             -- function and functypedef
             if not line:match(function_closed_re) then
                 in_function = true

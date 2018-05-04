@@ -35,7 +35,7 @@ typedef unsigned long long ImU64;
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 #include "imgui_structs.h"
 #endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
-
+/*
     struct GlyphRangesBuilder
     {
         ImVector<unsigned char> UsedChars;
@@ -67,10 +67,17 @@ typedef struct TextRange TextRange;
     };
 typedef struct Pair Pair;
 
-
+typedef ImFontAtlas::GlyphRangesBuilder GlyphRangesBuilder;
+typedef ImFontAtlas::CustomRect CustomRect;
+typedef ImGuiTextFilter::TextRange TextRange;
+typedef ImGuiStorage::Pair Pair;
+*/
 
 #include "auto_funcs.h"
 
+//no LogTextV
 CIMGUI_API void igLogText(CONST char *fmt, ...);
+//no appendfV
 CIMGUI_API void ImGuiTextBuffer_appendf(struct ImGuiTextBuffer *buffer, const char *fmt, ...);
+CIMGUI_API void ImFontConfig_DefaultConstructor(ImFontConfig *config);
 
