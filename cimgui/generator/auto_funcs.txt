@@ -1,0 +1,745 @@
+bb:	void(*SetClipboardTextFn)(void* user_data,const char* text);
+b2:	nil	ImGuiIO	void	(*SetClipboardTextFn)
+bb:	void(*ImeSetInputScreenPosFn)(int x,int y);
+b2:	nil	ImGuiIO	void	(*ImeSetInputScreenPosFn)
+overloading
+igCombo	3
+1	(const char*,int*,const char* const[],int,int)	bool 	igComboStr_arr	const char* const[]
+2	(const char*,int*,const char*,int)	bool 	igComboStr	const char*
+3	(const char*,int*,bool(*)(void*,int,const char**),void*,int,int)	bool 	igComboFnPtr	bool(*)(void*,int,const char**)
+ImVec4_ImVec4	2
+1	()	nil	ImVec4_ImVec4	
+2	(float,float,float,float)	nil	ImVec4_ImVec4Float	float
+igValue	4
+1	(const char*,bool)	void 	igValueBool	bool
+2	(const char*,int)	void 	igValueInt	int
+3	(const char*,unsigned int)	void 	igValueUint	unsigned int
+4	(const char*,float,const char*)	void 	igValueFloat	float
+igPushStyleVar	2
+1	(ImGuiStyleVar,float)	void 	igPushStyleVarFloat	float
+2	(ImGuiStyleVar,const ImVec2)	void 	igPushStyleVarVec2	const ImVec2
+igIsRectVisible	2
+1	(const ImVec2)	bool 	igIsRectVisible	
+2	(const ImVec2,const ImVec2)	bool 	igIsRectVisibleVec2	const ImVec2
+igRadioButton	2
+1	(const char*,bool)	bool 	igRadioButtonBool	bool
+2	(const char*,int*,int)	bool 	igRadioButtonIntPtr	int*
+TextRange_TextRange	2
+1	()	nil	TextRange_TextRange	
+2	(const char*,const char*)	nil	TextRange_TextRangeStr	const char*
+igSetWindowCollapsed	2
+1	(bool,ImGuiCond)	void 	igSetWindowCollapsedBool	bool
+2	(const char*,bool,ImGuiCond)	void 	igSetWindowCollapsedStr	const char*
+igPlotLines	2
+1	(const char*,const float*,int,int,const char*,float,float,ImVec2,int)	void 	igPlotLinesFloatPtr	const float*
+2	(const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)	void 	igPlotLinesFnPtr	float(*)(void*,int)
+ImVec2_ImVec2	2
+1	()	nil	ImVec2_ImVec2	
+2	(float,float)	nil	ImVec2_ImVec2Float	float
+igPlotHistogram	2
+1	(const char*,const float*,int,int,const char*,float,float,ImVec2,int)	void 	igPlotHistogramFloatPtr	const float*
+2	(const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)	void 	igPlotHistogramFnPtr	float(*)(void*,int)
+igTreeNodeExV	2
+1	(const char*,ImGuiTreeNodeFlags,const char*,va_list)	bool 	igTreeNodeExVStr	const char*
+2	(const void*,ImGuiTreeNodeFlags,const char*,va_list)	bool 	igTreeNodeExVPtr	const void*
+igSetWindowSize	2
+1	(const ImVec2,ImGuiCond)	void 	igSetWindowSizeVec2	const ImVec2
+2	(const char*,const ImVec2,ImGuiCond)	void 	igSetWindowSizeStr	const char*
+igGetID	3
+1	(const char*)	ImGuiID 	igGetIDStr	const char*
+2	(const char*,const char*)	ImGuiID 	igGetIDStrStr	const char*const char*
+3	(const void*)	ImGuiID 	igGetIDPtr	const void*
+igPushStyleColor	2
+1	(ImGuiCol,ImU32)	void 	igPushStyleColorU32	ImU32
+2	(ImGuiCol,const ImVec4)	void 	igPushStyleColorVec4	const ImVec4
+igBeginChild	2
+1	(const char*,const ImVec2,bool,ImGuiWindowFlags)	bool 	igBeginChildStr	const char*
+2	(ImGuiID,const ImVec2,bool,ImGuiWindowFlags)	bool 	igBeginChildID	ImGuiID
+igSelectable	2
+1	(const char*,bool,ImGuiSelectableFlags,const ImVec2)	bool 	igSelectableBool	bool
+2	(const char*,bool*,ImGuiSelectableFlags,const ImVec2)	bool 	igSelectableBoolPtr	bool*
+igListBox	2
+1	(const char*,int*,const char* const[],int,int)	bool 	igListBoxStr_arr	const char* const[]
+2	(const char*,int*,bool(*)(void*,int,const char**),void*,int,int)	bool 	igListBoxFnPtr	bool(*)(void*,int,const char**)
+ImDrawList_AddText	2
+1	(const ImVec2,ImU32,const char*,const char*)	void 	ImDrawList_AddTextVec2	const ImVec2
+2	(const ImFont*,float,const ImVec2,ImU32,const char*,const char*,float,const ImVec4*)	void 	ImDrawList_AddTextFontPtr	const ImFont*
+igPushID	4
+1	(const char*)	void 	igPushIDStr	const char*
+2	(const char*,const char*)	void 	igPushIDRange	const char*const char*
+3	(const void*)	void 	igPushIDPtr	const void*
+4	(int)	void 	igPushIDInt	int
+igGetColorU32	3
+1	(ImGuiCol,float)	ImU32 	igGetColorU32Col	ImGuiCol
+2	(const ImVec4)	ImU32 	igGetColorU32Vec4	const ImVec4
+3	(ImU32)	ImU32 	igGetColorU32U32	ImU32
+Pair_Pair	3
+1	(ImGuiID,int)	nil	Pair_PairInt	int
+2	(ImGuiID,float)	nil	Pair_PairFloat	float
+3	(ImGuiID,void*)	nil	Pair_PairPtr	void*
+igSetWindowFocus	2
+1	()	void 	igSetWindowFocus	
+2	(const char*)	void 	igSetWindowFocusStr	const char*
+igMenuItem	2
+1	(const char*,const char*,bool,bool)	bool 	igMenuItemBool	bool
+2	(const char*,const char*,bool*,bool)	bool 	igMenuItemBoolPtr	bool*
+ImColor_ImColor	5
+1	()	nil	ImColor_ImColor	
+2	(int,int,int,int)	nil	ImColor_ImColorInt	int
+3	(ImU32)	nil	ImColor_ImColorU32	ImU32
+4	(float,float,float,float)	nil	ImColor_ImColorFloat	float
+5	(const ImVec4)	nil	ImColor_ImColorVec4	const ImVec4
+igCollapsingHeader	2
+1	(const char*,ImGuiTreeNodeFlags)	bool 	igCollapsingHeader	ImGuiTreeNodeFlags
+2	(const char*,bool*,ImGuiTreeNodeFlags)	bool 	igCollapsingHeaderBoolPtr	bool*
+igSetWindowPos	2
+1	(const ImVec2,ImGuiCond)	void 	igSetWindowPosVec2	const ImVec2
+2	(const char*,const ImVec2,ImGuiCond)	void 	igSetWindowPosStr	const char*
+igTreeNodeEx	3
+1	(const char*,ImGuiTreeNodeFlags)	bool 	igTreeNodeExStr	const char*
+2	(const char*,ImGuiTreeNodeFlags,const char*,...)	bool 	igTreeNodeExStrStr	const char*const char*
+3	(const void*,ImGuiTreeNodeFlags,const char*,...)	bool 	igTreeNodeExPtr	const void*
+igTreePush	2
+1	(const char*)	void 	igTreePushStr	const char*
+2	(const void*)	void 	igTreePushPtr	const void*
+igListBoxHeader	2
+1	(const char*,const ImVec2)	bool 	igListBoxHeaderVec2	const ImVec2
+2	(const char*,int,int)	bool 	igListBoxHeaderInt	int
+igTreeNode	3
+1	(const char*)	bool 	igTreeNodeStr	const char*
+2	(const char*,const char*,...)	bool 	igTreeNodeStrStr	const char*const char*
+3	(const void*,const char*,...)	bool 	igTreeNodePtr	const void*
+igTreeNodeV	2
+1	(const char*,const char*,va_list)	bool 	igTreeNodeVStr	const char*
+2	(const void*,const char*,va_list)	bool 	igTreeNodeVPtr	const void*
+77	overloaded
+//-------------------------------------------------------------------------------------
+float	Float
+const ImFontConfig*	FontConfigPtr
+...	...
+ImGuiTreeNodeFlags	TreeNodeFlags
+ImGuiFocusedFlags	FocusedFlags
+ImGuiHoveredFlags	HoveredFlags
+const ImVec2*	Vec2Ptr
+const ImVec2	Vec2
+ImVec2*	Vec2Ptr
+unsigned char**	uStrPtr
+const ImWchar*	WStr
+const ImVec4	Vec4
+double*	doublePtr
+const int	Int
+ImGuiColorEditFlags	ColorEditFlags
+int[2]	arr2
+ImGuiDir	Dir
+ImVector_ImWchar*	Vector_WStr
+const void*	Ptr
+const CustomRect*	CustomRectPtr
+double	double
+ImGuiCol	Col
+float*	FloatPtr
+const char* const[]	Str_arr
+ImGuiInputTextFlags	InputTextFlags
+ImFont*	FontPtr
+ImGuiWindowFlags	WindowFlags
+ImGuiComboFlags	ComboFlags
+ImWchar	Wchar
+ImGuiTextEditCallback	TextEditCallback
+char*	Str
+int[4]	arr4
+va_list	va_list
+float(*)(void*,int)	FnPtr
+char	char
+const char*	Str
+const char**	StrPtr
+ImDrawIdx	DrawIdx
+int[3]	arr3
+void(*)(void*,void*)	FnPtr
+void*(*)(size_t,void*)	FnPtr
+ImGuiStyle*	StylePtr
+ImFontAtlas*	FontAtlasPtr
+ImGuiMouseCursor	MouseCursor
+void*	Ptr
+bool	Bool
+float[3]	arr3
+unsigned int*	UintPtr
+const ImDrawListSharedData*	DrawListSharedDataPtr
+ImDrawCallback	DrawCallback
+const ImVec4*	Vec4Ptr
+unsigned int	Uint
+const ImFont*	FontPtr
+bool(*)(void*,int,const char**)	FnPtr
+ImVec2[2]	arr2
+ImVec2	Vec2
+ImGuiSelectableFlags	SelectableFlags
+ImDrawList*	DrawListPtr
+unsigned short	ushort
+ImGuiCond	Cond
+ImU32	U32
+ImGuiStyleVar	StyleVar
+ImGuiStorage*	StoragePtr
+float[2]	arr2
+ImGuiContext*	ContextPtr
+float[4]	arr4
+ImTextureID	TextureID
+int*	IntPtr
+const float*	FloatPtr
+size_t	size_t
+ImGuiSizeCallback	SizeCallback
+bool*	BoolPtr
+int	Int
+ImGuiKey	Key
+ImGuiID	ID
+ImGuiDragDropFlags	DragDropFlags
+ImVector_TextRange	Vector_TextRange
+//-------------------------------------------------------------------------------------
+ImVec2_ImVec2	   	ImVec2			()			()			()			()			nil
+ImVec2_ImVec2	   	ImVec2			(float,float)			(float _x,float _y)			(float _x,float _y)			(_x,_y)			nil
+ImVec4_ImVec4	   	ImVec4			()			()			()			()			nil
+ImVec4_ImVec4	   	ImVec4			(float,float,float,float)			(float _x,float _y,float _z,float _w)			(float _x,float _y,float _z,float _w)			(_x,_y,_z,_w)			nil
+igCreateContext	   	CreateContext			(ImFontAtlas*)			(ImFontAtlas* shared_font_atlas=((void *)0))			(ImFontAtlas* shared_font_atlas)			(shared_font_atlas)			ImGuiContext* 
+igDestroyContext	   	DestroyContext			(ImGuiContext*)			(ImGuiContext* ctx=((void *)0))			(ImGuiContext* ctx)			(ctx)			void 
+igGetCurrentContext	   	GetCurrentContext			()			()			()			()			ImGuiContext* 
+igSetCurrentContext	   	SetCurrentContext			(ImGuiContext*)			(ImGuiContext* ctx)			(ImGuiContext* ctx)			(ctx)			void 
+igGetIO	   	GetIO			()			()			()			()			ImGuiIO& 
+igGetStyle	   	GetStyle			()			()			()			()			ImGuiStyle& 
+igNewFrame	   	NewFrame			()			()			()			()			void 
+igRender	   	Render			()			()			()			()			void 
+igGetDrawData	   	GetDrawData			()			()			()			()			ImDrawData* 
+igEndFrame	   	EndFrame			()			()			()			()			void 
+igShowDemoWindow	   	ShowDemoWindow			(bool*)			(bool* p_open=((void *)0))			(bool* p_open)			(p_open)			void 
+igShowMetricsWindow	   	ShowMetricsWindow			(bool*)			(bool* p_open=((void *)0))			(bool* p_open)			(p_open)			void 
+igShowStyleEditor	   	ShowStyleEditor			(ImGuiStyle*)			(ImGuiStyle* ref=((void *)0))			(ImGuiStyle* ref)			(ref)			void 
+igShowStyleSelector	   	ShowStyleSelector			(const char*)			(const char* label)			(const char* label)			(label)			bool 
+igShowFontSelector	   	ShowFontSelector			(const char*)			(const char* label)			(const char* label)			(label)			void 
+igShowUserGuide	   	ShowUserGuide			()			()			()			()			void 
+igGetVersion	   	GetVersion			()			()			()			()			const char* 
+igStyleColorsDark	   	StyleColorsDark			(ImGuiStyle*)			(ImGuiStyle* dst=((void *)0))			(ImGuiStyle* dst)			(dst)			void 
+igStyleColorsClassic	   	StyleColorsClassic			(ImGuiStyle*)			(ImGuiStyle* dst=((void *)0))			(ImGuiStyle* dst)			(dst)			void 
+igStyleColorsLight	   	StyleColorsLight			(ImGuiStyle*)			(ImGuiStyle* dst=((void *)0))			(ImGuiStyle* dst)			(dst)			void 
+igBegin	   	Begin			(const char*,bool*,ImGuiWindowFlags)			(const char* name,bool* p_open=((void *)0),ImGuiWindowFlags flags=0)			(const char* name,bool* p_open,ImGuiWindowFlags flags)			(name,p_open,flags)			bool 
+igEnd	   	End			()			()			()			()			void 
+igBeginChild	   	BeginChild			(const char*,const ImVec2,bool,ImGuiWindowFlags)			(const char* str_id,const ImVec2& size=ImVec2(0,0),bool border=false,ImGuiWindowFlags flags=0)			(const char* str_id,const ImVec2 size,bool border,ImGuiWindowFlags flags)			(str_id,size,border,flags)			bool 
+igBeginChild	   	BeginChild			(ImGuiID,const ImVec2,bool,ImGuiWindowFlags)			(ImGuiID id,const ImVec2& size=ImVec2(0,0),bool border=false,ImGuiWindowFlags flags=0)			(ImGuiID id,const ImVec2 size,bool border,ImGuiWindowFlags flags)			(id,size,border,flags)			bool 
+igEndChild	   	EndChild			()			()			()			()			void 
+igIsWindowAppearing	   	IsWindowAppearing			()			()			()			()			bool 
+igIsWindowCollapsed	   	IsWindowCollapsed			()			()			()			()			bool 
+igIsWindowFocused	   	IsWindowFocused			(ImGuiFocusedFlags)			(ImGuiFocusedFlags flags=0)			(ImGuiFocusedFlags flags)			(flags)			bool 
+igIsWindowHovered	   	IsWindowHovered			(ImGuiHoveredFlags)			(ImGuiHoveredFlags flags=0)			(ImGuiHoveredFlags flags)			(flags)			bool 
+igGetWindowDrawList	   	GetWindowDrawList			()			()			()			()			ImDrawList* 
+igGetWindowPos	   	GetWindowPos			()			()			()			()			ImVec2 
+igGetWindowSize	   	GetWindowSize			()			()			()			()			ImVec2 
+igGetWindowWidth	   	GetWindowWidth			()			()			()			()			float 
+igGetWindowHeight	   	GetWindowHeight			()			()			()			()			float 
+igGetContentRegionMax	   	GetContentRegionMax			()			()			()			()			ImVec2 
+igGetContentRegionAvail	   	GetContentRegionAvail			()			()			()			()			ImVec2 
+igGetContentRegionAvailWidth	   	GetContentRegionAvailWidth			()			()			()			()			float 
+igGetWindowContentRegionMin	   	GetWindowContentRegionMin			()			()			()			()			ImVec2 
+igGetWindowContentRegionMax	   	GetWindowContentRegionMax			()			()			()			()			ImVec2 
+igGetWindowContentRegionWidth	   	GetWindowContentRegionWidth			()			()			()			()			float 
+igSetNextWindowPos	   	SetNextWindowPos			(const ImVec2,ImGuiCond,const ImVec2)			(const ImVec2& pos,ImGuiCond cond=0,const ImVec2& pivot=ImVec2(0,0))			(const ImVec2 pos,ImGuiCond cond,const ImVec2 pivot)			(pos,cond,pivot)			void 
+igSetNextWindowSize	   	SetNextWindowSize			(const ImVec2,ImGuiCond)			(const ImVec2& size,ImGuiCond cond=0)			(const ImVec2 size,ImGuiCond cond)			(size,cond)			void 
+igSetNextWindowSizeConstraints	   	SetNextWindowSizeConstraints			(const ImVec2,const ImVec2,ImGuiSizeCallback,void*)			(const ImVec2& size_min,const ImVec2& size_max,ImGuiSizeCallback custom_callback=((void *)0),void* custom_callback_data=((void *)0))			(const ImVec2 size_min,const ImVec2 size_max,ImGuiSizeCallback custom_callback,void* custom_callback_data)			(size_min,size_max,custom_callback,custom_callback_data)			void 
+igSetNextWindowContentSize	   	SetNextWindowContentSize			(const ImVec2)			(const ImVec2& size)			(const ImVec2 size)			(size)			void 
+igSetNextWindowCollapsed	   	SetNextWindowCollapsed			(bool,ImGuiCond)			(bool collapsed,ImGuiCond cond=0)			(bool collapsed,ImGuiCond cond)			(collapsed,cond)			void 
+igSetNextWindowFocus	   	SetNextWindowFocus			()			()			()			()			void 
+igSetNextWindowBgAlpha	   	SetNextWindowBgAlpha			(float)			(float alpha)			(float alpha)			(alpha)			void 
+igSetWindowPos	   	SetWindowPos			(const ImVec2,ImGuiCond)			(const ImVec2& pos,ImGuiCond cond=0)			(const ImVec2 pos,ImGuiCond cond)			(pos,cond)			void 
+igSetWindowSize	   	SetWindowSize			(const ImVec2,ImGuiCond)			(const ImVec2& size,ImGuiCond cond=0)			(const ImVec2 size,ImGuiCond cond)			(size,cond)			void 
+igSetWindowCollapsed	   	SetWindowCollapsed			(bool,ImGuiCond)			(bool collapsed,ImGuiCond cond=0)			(bool collapsed,ImGuiCond cond)			(collapsed,cond)			void 
+igSetWindowFocus	   	SetWindowFocus			()			()			()			()			void 
+igSetWindowFontScale	   	SetWindowFontScale			(float)			(float scale)			(float scale)			(scale)			void 
+igSetWindowPos	   	SetWindowPos			(const char*,const ImVec2,ImGuiCond)			(const char* name,const ImVec2& pos,ImGuiCond cond=0)			(const char* name,const ImVec2 pos,ImGuiCond cond)			(name,pos,cond)			void 
+igSetWindowSize	   	SetWindowSize			(const char*,const ImVec2,ImGuiCond)			(const char* name,const ImVec2& size,ImGuiCond cond=0)			(const char* name,const ImVec2 size,ImGuiCond cond)			(name,size,cond)			void 
+igSetWindowCollapsed	   	SetWindowCollapsed			(const char*,bool,ImGuiCond)			(const char* name,bool collapsed,ImGuiCond cond=0)			(const char* name,bool collapsed,ImGuiCond cond)			(name,collapsed,cond)			void 
+igSetWindowFocus	   	SetWindowFocus			(const char*)			(const char* name)			(const char* name)			(name)			void 
+igGetScrollX	   	GetScrollX			()			()			()			()			float 
+igGetScrollY	   	GetScrollY			()			()			()			()			float 
+igGetScrollMaxX	   	GetScrollMaxX			()			()			()			()			float 
+igGetScrollMaxY	   	GetScrollMaxY			()			()			()			()			float 
+igSetScrollX	   	SetScrollX			(float)			(float scroll_x)			(float scroll_x)			(scroll_x)			void 
+igSetScrollY	   	SetScrollY			(float)			(float scroll_y)			(float scroll_y)			(scroll_y)			void 
+igSetScrollHere	   	SetScrollHere			(float)			(float center_y_ratio=0.5f)			(float center_y_ratio)			(center_y_ratio)			void 
+igSetScrollFromPosY	   	SetScrollFromPosY			(float,float)			(float pos_y,float center_y_ratio=0.5f)			(float pos_y,float center_y_ratio)			(pos_y,center_y_ratio)			void 
+igPushFont	   	PushFont			(ImFont*)			(ImFont* font)			(ImFont* font)			(font)			void 
+igPopFont	   	PopFont			()			()			()			()			void 
+igPushStyleColor	   	PushStyleColor			(ImGuiCol,ImU32)			(ImGuiCol idx,ImU32 col)			(ImGuiCol idx,ImU32 col)			(idx,col)			void 
+igPushStyleColor	   	PushStyleColor			(ImGuiCol,const ImVec4)			(ImGuiCol idx,const ImVec4& col)			(ImGuiCol idx,const ImVec4 col)			(idx,col)			void 
+igPopStyleColor	   	PopStyleColor			(int)			(int count=1)			(int count)			(count)			void 
+igPushStyleVar	   	PushStyleVar			(ImGuiStyleVar,float)			(ImGuiStyleVar idx,float val)			(ImGuiStyleVar idx,float val)			(idx,val)			void 
+igPushStyleVar	   	PushStyleVar			(ImGuiStyleVar,const ImVec2)			(ImGuiStyleVar idx,const ImVec2& val)			(ImGuiStyleVar idx,const ImVec2 val)			(idx,val)			void 
+igPopStyleVar	   	PopStyleVar			(int)			(int count=1)			(int count)			(count)			void 
+igGetStyleColorVec4	   	GetStyleColorVec4			(ImGuiCol)			(ImGuiCol idx)			(ImGuiCol idx)			(idx)			const ImVec4& 
+igGetFont	   	GetFont			()			()			()			()			ImFont* 
+igGetFontSize	   	GetFontSize			()			()			()			()			float 
+igGetFontTexUvWhitePixel	   	GetFontTexUvWhitePixel			()			()			()			()			ImVec2 
+igGetColorU32	   	GetColorU32			(ImGuiCol,float)			(ImGuiCol idx,float alpha_mul=1.0f)			(ImGuiCol idx,float alpha_mul)			(idx,alpha_mul)			ImU32 
+igGetColorU32	   	GetColorU32			(const ImVec4)			(const ImVec4& col)			(const ImVec4 col)			(col)			ImU32 
+igGetColorU32	   	GetColorU32			(ImU32)			(ImU32 col)			(ImU32 col)			(col)			ImU32 
+igPushItemWidth	   	PushItemWidth			(float)			(float item_width)			(float item_width)			(item_width)			void 
+igPopItemWidth	   	PopItemWidth			()			()			()			()			void 
+igCalcItemWidth	   	CalcItemWidth			()			()			()			()			float 
+igPushTextWrapPos	   	PushTextWrapPos			(float)			(float wrap_pos_x=0.0f)			(float wrap_pos_x)			(wrap_pos_x)			void 
+igPopTextWrapPos	   	PopTextWrapPos			()			()			()			()			void 
+igPushAllowKeyboardFocus	   	PushAllowKeyboardFocus			(bool)			(bool allow_keyboard_focus)			(bool allow_keyboard_focus)			(allow_keyboard_focus)			void 
+igPopAllowKeyboardFocus	   	PopAllowKeyboardFocus			()			()			()			()			void 
+igPushButtonRepeat	   	PushButtonRepeat			(bool)			(bool repeat)			(bool repeat)			(repeat)			void 
+igPopButtonRepeat	   	PopButtonRepeat			()			()			()			()			void 
+igSeparator	   	Separator			()			()			()			()			void 
+igSameLine	   	SameLine			(float,float)			(float pos_x=0.0f,float spacing_w=-1.0f)			(float pos_x,float spacing_w)			(pos_x,spacing_w)			void 
+igNewLine	   	NewLine			()			()			()			()			void 
+igSpacing	   	Spacing			()			()			()			()			void 
+igDummy	   	Dummy			(const ImVec2)			(const ImVec2& size)			(const ImVec2 size)			(size)			void 
+igIndent	   	Indent			(float)			(float indent_w=0.0f)			(float indent_w)			(indent_w)			void 
+igUnindent	   	Unindent			(float)			(float indent_w=0.0f)			(float indent_w)			(indent_w)			void 
+igBeginGroup	   	BeginGroup			()			()			()			()			void 
+igEndGroup	   	EndGroup			()			()			()			()			void 
+igGetCursorPos	   	GetCursorPos			()			()			()			()			ImVec2 
+igGetCursorPosX	   	GetCursorPosX			()			()			()			()			float 
+igGetCursorPosY	   	GetCursorPosY			()			()			()			()			float 
+igSetCursorPos	   	SetCursorPos			(const ImVec2)			(const ImVec2& local_pos)			(const ImVec2 local_pos)			(local_pos)			void 
+igSetCursorPosX	   	SetCursorPosX			(float)			(float x)			(float x)			(x)			void 
+igSetCursorPosY	   	SetCursorPosY			(float)			(float y)			(float y)			(y)			void 
+igGetCursorStartPos	   	GetCursorStartPos			()			()			()			()			ImVec2 
+igGetCursorScreenPos	   	GetCursorScreenPos			()			()			()			()			ImVec2 
+igSetCursorScreenPos	   	SetCursorScreenPos			(const ImVec2)			(const ImVec2& screen_pos)			(const ImVec2 screen_pos)			(screen_pos)			void 
+igAlignTextToFramePadding	   	AlignTextToFramePadding			()			()			()			()			void 
+igGetTextLineHeight	   	GetTextLineHeight			()			()			()			()			float 
+igGetTextLineHeightWithSpacing	   	GetTextLineHeightWithSpacing			()			()			()			()			float 
+igGetFrameHeight	   	GetFrameHeight			()			()			()			()			float 
+igGetFrameHeightWithSpacing	   	GetFrameHeightWithSpacing			()			()			()			()			float 
+igPushID	   	PushID			(const char*)			(const char* str_id)			(const char* str_id)			(str_id)			void 
+igPushID	   	PushID			(const char*,const char*)			(const char* str_id_begin,const char* str_id_end)			(const char* str_id_begin,const char* str_id_end)			(str_id_begin,str_id_end)			void 
+igPushID	   	PushID			(const void*)			(const void* ptr_id)			(const void* ptr_id)			(ptr_id)			void 
+igPushID	   	PushID			(int)			(int int_id)			(int int_id)			(int_id)			void 
+igPopID	   	PopID			()			()			()			()			void 
+igGetID	   	GetID			(const char*)			(const char* str_id)			(const char* str_id)			(str_id)			ImGuiID 
+igGetID	   	GetID			(const char*,const char*)			(const char* str_id_begin,const char* str_id_end)			(const char* str_id_begin,const char* str_id_end)			(str_id_begin,str_id_end)			ImGuiID 
+igGetID	   	GetID			(const void*)			(const void* ptr_id)			(const void* ptr_id)			(ptr_id)			ImGuiID 
+igTextUnformatted	   	TextUnformatted			(const char*,const char*)			(const char* text,const char* text_end=((void *)0))			(const char* text,const char* text_end)			(text,text_end)			void 
+igText	   	Text			(const char*,...)			(const char* fmt,...)			(const char* fmt,...)			(fmt,...)			void 
+igTextV	   	TextV			(const char*,va_list)			(const char* fmt,va_list args)			(const char* fmt,va_list args)			(fmt,args)			void 
+igTextColored	   	TextColored			(const ImVec4,const char*,...)			(const ImVec4& col,const char* fmt,...)			(const ImVec4 col,const char* fmt,...)			(col,fmt,...)			void 
+igTextColoredV	   	TextColoredV			(const ImVec4,const char*,va_list)			(const ImVec4& col,const char* fmt,va_list args)			(const ImVec4 col,const char* fmt,va_list args)			(col,fmt,args)			void 
+igTextDisabled	   	TextDisabled			(const char*,...)			(const char* fmt,...)			(const char* fmt,...)			(fmt,...)			void 
+igTextDisabledV	   	TextDisabledV			(const char*,va_list)			(const char* fmt,va_list args)			(const char* fmt,va_list args)			(fmt,args)			void 
+igTextWrapped	   	TextWrapped			(const char*,...)			(const char* fmt,...)			(const char* fmt,...)			(fmt,...)			void 
+igTextWrappedV	   	TextWrappedV			(const char*,va_list)			(const char* fmt,va_list args)			(const char* fmt,va_list args)			(fmt,args)			void 
+igLabelText	   	LabelText			(const char*,const char*,...)			(const char* label,const char* fmt,...)			(const char* label,const char* fmt,...)			(label,fmt,...)			void 
+igLabelTextV	   	LabelTextV			(const char*,const char*,va_list)			(const char* label,const char* fmt,va_list args)			(const char* label,const char* fmt,va_list args)			(label,fmt,args)			void 
+igBulletText	   	BulletText			(const char*,...)			(const char* fmt,...)			(const char* fmt,...)			(fmt,...)			void 
+igBulletTextV	   	BulletTextV			(const char*,va_list)			(const char* fmt,va_list args)			(const char* fmt,va_list args)			(fmt,args)			void 
+igButton	   	Button			(const char*,const ImVec2)			(const char* label,const ImVec2& size=ImVec2(0,0))			(const char* label,const ImVec2 size)			(label,size)			bool 
+igSmallButton	   	SmallButton			(const char*)			(const char* label)			(const char* label)			(label)			bool 
+igArrowButton	   	ArrowButton			(const char*,ImGuiDir)			(const char* str_id,ImGuiDir dir)			(const char* str_id,ImGuiDir dir)			(str_id,dir)			bool 
+igInvisibleButton	   	InvisibleButton			(const char*,const ImVec2)			(const char* str_id,const ImVec2& size)			(const char* str_id,const ImVec2 size)			(str_id,size)			bool 
+igImage	   	Image			(ImTextureID,const ImVec2,const ImVec2,const ImVec2,const ImVec4,const ImVec4)			(ImTextureID user_texture_id,const ImVec2& size,const ImVec2& uv0=ImVec2(0,0),const ImVec2& uv1=ImVec2(1,1),const ImVec4& tint_col=ImVec4(1,1,1,1),const ImVec4& border_col=ImVec4(0,0,0,0))			(ImTextureID user_texture_id,const ImVec2 size,const ImVec2 uv0,const ImVec2 uv1,const ImVec4 tint_col,const ImVec4 border_col)			(user_texture_id,size,uv0,uv1,tint_col,border_col)			void 
+igImageButton	   	ImageButton			(ImTextureID,const ImVec2,const ImVec2,const ImVec2,int,const ImVec4,const ImVec4)			(ImTextureID user_texture_id,const ImVec2& size,const ImVec2& uv0=ImVec2(0,0),const ImVec2& uv1=ImVec2(1,1),int frame_padding=-1,const ImVec4& bg_col=ImVec4(0,0,0,0),const ImVec4& tint_col=ImVec4(1,1,1,1))			(ImTextureID user_texture_id,const ImVec2 size,const ImVec2 uv0,const ImVec2 uv1,int frame_padding,const ImVec4 bg_col,const ImVec4 tint_col)			(user_texture_id,size,uv0,uv1,frame_padding,bg_col,tint_col)			bool 
+igCheckbox	   	Checkbox			(const char*,bool*)			(const char* label,bool* v)			(const char* label,bool* v)			(label,v)			bool 
+igCheckboxFlags	   	CheckboxFlags			(const char*,unsigned int*,unsigned int)			(const char* label,unsigned int* flags,unsigned int flags_value)			(const char* label,unsigned int* flags,unsigned int flags_value)			(label,flags,flags_value)			bool 
+igRadioButton	   	RadioButton			(const char*,bool)			(const char* label,bool active)			(const char* label,bool active)			(label,active)			bool 
+igRadioButton	   	RadioButton			(const char*,int*,int)			(const char* label,int* v,int v_button)			(const char* label,int* v,int v_button)			(label,v,v_button)			bool 
+igPlotLines	   	PlotLines			(const char*,const float*,int,int,const char*,float,float,ImVec2,int)			(const char* label,const float* values,int values_count,int values_offset=0,const char* overlay_text=((void *)0),float scale_min=3.40282346638528859812e+38F,float scale_max=3.40282346638528859812e+38F,ImVec2 graph_size=ImVec2(0,0),int stride=sizeof(float))			(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride)			(label,values,values_count,values_offset,overlay_text,scale_min,scale_max,graph_size,stride)			void 
+igPlotLines	   	PlotLines			(const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)			(const char* label,float(*values_getter)(void* data,int idx),void* data,int values_count,int values_offset=0,const char* overlay_text=((void *)0),float scale_min=3.40282346638528859812e+38F,float scale_max=3.40282346638528859812e+38F,ImVec2 graph_size=ImVec2(0,0))			(const char* label,float(*values_getter)(void* data,int idx),void* data,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size)			(label,values_getter,data,values_count,values_offset,overlay_text,scale_min,scale_max,graph_size)			void 
+igPlotHistogram	   	PlotHistogram			(const char*,const float*,int,int,const char*,float,float,ImVec2,int)			(const char* label,const float* values,int values_count,int values_offset=0,const char* overlay_text=((void *)0),float scale_min=3.40282346638528859812e+38F,float scale_max=3.40282346638528859812e+38F,ImVec2 graph_size=ImVec2(0,0),int stride=sizeof(float))			(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride)			(label,values,values_count,values_offset,overlay_text,scale_min,scale_max,graph_size,stride)			void 
+igPlotHistogram	   	PlotHistogram			(const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)			(const char* label,float(*values_getter)(void* data,int idx),void* data,int values_count,int values_offset=0,const char* overlay_text=((void *)0),float scale_min=3.40282346638528859812e+38F,float scale_max=3.40282346638528859812e+38F,ImVec2 graph_size=ImVec2(0,0))			(const char* label,float(*values_getter)(void* data,int idx),void* data,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size)			(label,values_getter,data,values_count,values_offset,overlay_text,scale_min,scale_max,graph_size)			void 
+igProgressBar	   	ProgressBar			(float,const ImVec2,const char*)			(float fraction,const ImVec2& size_arg=ImVec2(-1,0),const char* overlay=((void *)0))			(float fraction,const ImVec2 size_arg,const char* overlay)			(fraction,size_arg,overlay)			void 
+igBullet	   	Bullet			()			()			()			()			void 
+igBeginCombo	   	BeginCombo			(const char*,const char*,ImGuiComboFlags)			(const char* label,const char* preview_value,ImGuiComboFlags flags=0)			(const char* label,const char* preview_value,ImGuiComboFlags flags)			(label,preview_value,flags)			bool 
+igEndCombo	   	EndCombo			()			()			()			()			void 
+igCombo	   	Combo			(const char*,int*,const char* const[],int,int)			(const char* label,int* current_item,const char* const items[],int items_count,int popup_max_height_in_items=-1)			(const char* label,int* current_item,const char* const items[],int items_count,int popup_max_height_in_items)			(label,current_item,items,items_count,popup_max_height_in_items)			bool 
+igCombo	   	Combo			(const char*,int*,const char*,int)			(const char* label,int* current_item,const char* items_separated_by_zeros,int popup_max_height_in_items=-1)			(const char* label,int* current_item,const char* items_separated_by_zeros,int popup_max_height_in_items)			(label,current_item,items_separated_by_zeros,popup_max_height_in_items)			bool 
+igCombo	   	Combo			(const char*,int*,bool(*)(void*,int,const char**),void*,int,int)			(const char* label,int* current_item,bool(*items_getter)(void* data,int idx,const char** out_text),void* data,int items_count,int popup_max_height_in_items=-1)			(const char* label,int* current_item,bool(*items_getter)(void* data,int idx,const char** out_text),void* data,int items_count,int popup_max_height_in_items)			(label,current_item,items_getter,data,items_count,popup_max_height_in_items)			bool 
+igDragFloat	   	DragFloat			(const char*,float*,float,float,float,const char*,float)			(const char* label,float* v,float v_speed=1.0f,float v_min=0.0f,float v_max=0.0f,const char* display_format="%.3f",float power=1.0f)			(const char* label,float* v,float v_speed,float v_min,float v_max,const char* display_format,float power)			(label,v,v_speed,v_min,v_max,display_format,power)			bool 
+igDragFloat2	   	DragFloat2			(const char*,float[2],float,float,float,const char*,float)			(const char* label,float v[2],float v_speed=1.0f,float v_min=0.0f,float v_max=0.0f,const char* display_format="%.3f",float power=1.0f)			(const char* label,float v[2],float v_speed,float v_min,float v_max,const char* display_format,float power)			(label,v,v_speed,v_min,v_max,display_format,power)			bool 
+igDragFloat3	   	DragFloat3			(const char*,float[3],float,float,float,const char*,float)			(const char* label,float v[3],float v_speed=1.0f,float v_min=0.0f,float v_max=0.0f,const char* display_format="%.3f",float power=1.0f)			(const char* label,float v[3],float v_speed,float v_min,float v_max,const char* display_format,float power)			(label,v,v_speed,v_min,v_max,display_format,power)			bool 
+igDragFloat4	   	DragFloat4			(const char*,float[4],float,float,float,const char*,float)			(const char* label,float v[4],float v_speed=1.0f,float v_min=0.0f,float v_max=0.0f,const char* display_format="%.3f",float power=1.0f)			(const char* label,float v[4],float v_speed,float v_min,float v_max,const char* display_format,float power)			(label,v,v_speed,v_min,v_max,display_format,power)			bool 
+igDragFloatRange2	   	DragFloatRange2			(const char*,float*,float*,float,float,float,const char*,const char*,float)			(const char* label,float* v_current_min,float* v_current_max,float v_speed=1.0f,float v_min=0.0f,float v_max=0.0f,const char* display_format="%.3f",const char* display_format_max=((void *)0),float power=1.0f)			(const char* label,float* v_current_min,float* v_current_max,float v_speed,float v_min,float v_max,const char* display_format,const char* display_format_max,float power)			(label,v_current_min,v_current_max,v_speed,v_min,v_max,display_format,display_format_max,power)			bool 
+igDragInt	   	DragInt			(const char*,int*,float,int,int,const char*)			(const char* label,int* v,float v_speed=1.0f,int v_min=0,int v_max=0,const char* display_format="%.0f")			(const char* label,int* v,float v_speed,int v_min,int v_max,const char* display_format)			(label,v,v_speed,v_min,v_max,display_format)			bool 
+igDragInt2	   	DragInt2			(const char*,int[2],float,int,int,const char*)			(const char* label,int v[2],float v_speed=1.0f,int v_min=0,int v_max=0,const char* display_format="%.0f")			(const char* label,int v[2],float v_speed,int v_min,int v_max,const char* display_format)			(label,v,v_speed,v_min,v_max,display_format)			bool 
+igDragInt3	   	DragInt3			(const char*,int[3],float,int,int,const char*)			(const char* label,int v[3],float v_speed=1.0f,int v_min=0,int v_max=0,const char* display_format="%.0f")			(const char* label,int v[3],float v_speed,int v_min,int v_max,const char* display_format)			(label,v,v_speed,v_min,v_max,display_format)			bool 
+igDragInt4	   	DragInt4			(const char*,int[4],float,int,int,const char*)			(const char* label,int v[4],float v_speed=1.0f,int v_min=0,int v_max=0,const char* display_format="%.0f")			(const char* label,int v[4],float v_speed,int v_min,int v_max,const char* display_format)			(label,v,v_speed,v_min,v_max,display_format)			bool 
+igDragIntRange2	   	DragIntRange2			(const char*,int*,int*,float,int,int,const char*,const char*)			(const char* label,int* v_current_min,int* v_current_max,float v_speed=1.0f,int v_min=0,int v_max=0,const char* display_format="%.0f",const char* display_format_max=((void *)0))			(const char* label,int* v_current_min,int* v_current_max,float v_speed,int v_min,int v_max,const char* display_format,const char* display_format_max)			(label,v_current_min,v_current_max,v_speed,v_min,v_max,display_format,display_format_max)			bool 
+igInputText	   	InputText			(const char*,char*,size_t,ImGuiInputTextFlags,ImGuiTextEditCallback,void*)			(const char* label,char* buf,size_t buf_size,ImGuiInputTextFlags flags=0,ImGuiTextEditCallback callback=((void *)0),void* user_data=((void *)0))			(const char* label,char* buf,size_t buf_size,ImGuiInputTextFlags flags,ImGuiTextEditCallback callback,void* user_data)			(label,buf,buf_size,flags,callback,user_data)			bool 
+igInputTextMultiline	   	InputTextMultiline			(const char*,char*,size_t,const ImVec2,ImGuiInputTextFlags,ImGuiTextEditCallback,void*)			(const char* label,char* buf,size_t buf_size,const ImVec2& size=ImVec2(0,0),ImGuiInputTextFlags flags=0,ImGuiTextEditCallback callback=((void *)0),void* user_data=((void *)0))			(const char* label,char* buf,size_t buf_size,const ImVec2 size,ImGuiInputTextFlags flags,ImGuiTextEditCallback callback,void* user_data)			(label,buf,buf_size,size,flags,callback,user_data)			bool 
+igInputFloat	   	InputFloat			(const char*,float*,float,float,int,ImGuiInputTextFlags)			(const char* label,float* v,float step=0.0f,float step_fast=0.0f,int decimal_precision=-1,ImGuiInputTextFlags extra_flags=0)			(const char* label,float* v,float step,float step_fast,int decimal_precision,ImGuiInputTextFlags extra_flags)			(label,v,step,step_fast,decimal_precision,extra_flags)			bool 
+igInputFloat2	   	InputFloat2			(const char*,float[2],int,ImGuiInputTextFlags)			(const char* label,float v[2],int decimal_precision=-1,ImGuiInputTextFlags extra_flags=0)			(const char* label,float v[2],int decimal_precision,ImGuiInputTextFlags extra_flags)			(label,v,decimal_precision,extra_flags)			bool 
+igInputFloat3	   	InputFloat3			(const char*,float[3],int,ImGuiInputTextFlags)			(const char* label,float v[3],int decimal_precision=-1,ImGuiInputTextFlags extra_flags=0)			(const char* label,float v[3],int decimal_precision,ImGuiInputTextFlags extra_flags)			(label,v,decimal_precision,extra_flags)			bool 
+igInputFloat4	   	InputFloat4			(const char*,float[4],int,ImGuiInputTextFlags)			(const char* label,float v[4],int decimal_precision=-1,ImGuiInputTextFlags extra_flags=0)			(const char* label,float v[4],int decimal_precision,ImGuiInputTextFlags extra_flags)			(label,v,decimal_precision,extra_flags)			bool 
+igInputInt	   	InputInt			(const char*,int*,int,int,ImGuiInputTextFlags)			(const char* label,int* v,int step=1,int step_fast=100,ImGuiInputTextFlags extra_flags=0)			(const char* label,int* v,int step,int step_fast,ImGuiInputTextFlags extra_flags)			(label,v,step,step_fast,extra_flags)			bool 
+igInputInt2	   	InputInt2			(const char*,int[2],ImGuiInputTextFlags)			(const char* label,int v[2],ImGuiInputTextFlags extra_flags=0)			(const char* label,int v[2],ImGuiInputTextFlags extra_flags)			(label,v,extra_flags)			bool 
+igInputInt3	   	InputInt3			(const char*,int[3],ImGuiInputTextFlags)			(const char* label,int v[3],ImGuiInputTextFlags extra_flags=0)			(const char* label,int v[3],ImGuiInputTextFlags extra_flags)			(label,v,extra_flags)			bool 
+igInputInt4	   	InputInt4			(const char*,int[4],ImGuiInputTextFlags)			(const char* label,int v[4],ImGuiInputTextFlags extra_flags=0)			(const char* label,int v[4],ImGuiInputTextFlags extra_flags)			(label,v,extra_flags)			bool 
+igInputDouble	   	InputDouble			(const char*,double*,double,double,const char*,ImGuiInputTextFlags)			(const char* label,double* v,double step=0.0f,double step_fast=0.0f,const char* display_format="%.6f",ImGuiInputTextFlags extra_flags=0)			(const char* label,double* v,double step,double step_fast,const char* display_format,ImGuiInputTextFlags extra_flags)			(label,v,step,step_fast,display_format,extra_flags)			bool 
+igSliderFloat	   	SliderFloat			(const char*,float*,float,float,const char*,float)			(const char* label,float* v,float v_min,float v_max,const char* display_format="%.3f",float power=1.0f)			(const char* label,float* v,float v_min,float v_max,const char* display_format,float power)			(label,v,v_min,v_max,display_format,power)			bool 
+igSliderFloat2	   	SliderFloat2			(const char*,float[2],float,float,const char*,float)			(const char* label,float v[2],float v_min,float v_max,const char* display_format="%.3f",float power=1.0f)			(const char* label,float v[2],float v_min,float v_max,const char* display_format,float power)			(label,v,v_min,v_max,display_format,power)			bool 
+igSliderFloat3	   	SliderFloat3			(const char*,float[3],float,float,const char*,float)			(const char* label,float v[3],float v_min,float v_max,const char* display_format="%.3f",float power=1.0f)			(const char* label,float v[3],float v_min,float v_max,const char* display_format,float power)			(label,v,v_min,v_max,display_format,power)			bool 
+igSliderFloat4	   	SliderFloat4			(const char*,float[4],float,float,const char*,float)			(const char* label,float v[4],float v_min,float v_max,const char* display_format="%.3f",float power=1.0f)			(const char* label,float v[4],float v_min,float v_max,const char* display_format,float power)			(label,v,v_min,v_max,display_format,power)			bool 
+igSliderAngle	   	SliderAngle			(const char*,float*,float,float)			(const char* label,float* v_rad,float v_degrees_min=-360.0f,float v_degrees_max=+360.0f)			(const char* label,float* v_rad,float v_degrees_min,float v_degrees_max)			(label,v_rad,v_degrees_min,v_degrees_max)			bool 
+igSliderInt	   	SliderInt			(const char*,int*,int,int,const char*)			(const char* label,int* v,int v_min,int v_max,const char* display_format="%.0f")			(const char* label,int* v,int v_min,int v_max,const char* display_format)			(label,v,v_min,v_max,display_format)			bool 
+igSliderInt2	   	SliderInt2			(const char*,int[2],int,int,const char*)			(const char* label,int v[2],int v_min,int v_max,const char* display_format="%.0f")			(const char* label,int v[2],int v_min,int v_max,const char* display_format)			(label,v,v_min,v_max,display_format)			bool 
+igSliderInt3	   	SliderInt3			(const char*,int[3],int,int,const char*)			(const char* label,int v[3],int v_min,int v_max,const char* display_format="%.0f")			(const char* label,int v[3],int v_min,int v_max,const char* display_format)			(label,v,v_min,v_max,display_format)			bool 
+igSliderInt4	   	SliderInt4			(const char*,int[4],int,int,const char*)			(const char* label,int v[4],int v_min,int v_max,const char* display_format="%.0f")			(const char* label,int v[4],int v_min,int v_max,const char* display_format)			(label,v,v_min,v_max,display_format)			bool 
+igVSliderFloat	   	VSliderFloat			(const char*,const ImVec2,float*,float,float,const char*,float)			(const char* label,const ImVec2& size,float* v,float v_min,float v_max,const char* display_format="%.3f",float power=1.0f)			(const char* label,const ImVec2 size,float* v,float v_min,float v_max,const char* display_format,float power)			(label,size,v,v_min,v_max,display_format,power)			bool 
+igVSliderInt	   	VSliderInt			(const char*,const ImVec2,int*,int,int,const char*)			(const char* label,const ImVec2& size,int* v,int v_min,int v_max,const char* display_format="%.0f")			(const char* label,const ImVec2 size,int* v,int v_min,int v_max,const char* display_format)			(label,size,v,v_min,v_max,display_format)			bool 
+igColorEdit3	   	ColorEdit3			(const char*,float[3],ImGuiColorEditFlags)			(const char* label,float col[3],ImGuiColorEditFlags flags=0)			(const char* label,float col[3],ImGuiColorEditFlags flags)			(label,col,flags)			bool 
+igColorEdit4	   	ColorEdit4			(const char*,float[4],ImGuiColorEditFlags)			(const char* label,float col[4],ImGuiColorEditFlags flags=0)			(const char* label,float col[4],ImGuiColorEditFlags flags)			(label,col,flags)			bool 
+igColorPicker3	   	ColorPicker3			(const char*,float[3],ImGuiColorEditFlags)			(const char* label,float col[3],ImGuiColorEditFlags flags=0)			(const char* label,float col[3],ImGuiColorEditFlags flags)			(label,col,flags)			bool 
+igColorPicker4	   	ColorPicker4			(const char*,float[4],ImGuiColorEditFlags,const float*)			(const char* label,float col[4],ImGuiColorEditFlags flags=0,const float* ref_col=((void *)0))			(const char* label,float col[4],ImGuiColorEditFlags flags,const float* ref_col)			(label,col,flags,ref_col)			bool 
+igColorButton	   	ColorButton			(const char*,const ImVec4,ImGuiColorEditFlags,ImVec2)			(const char* desc_id,const ImVec4& col,ImGuiColorEditFlags flags=0,ImVec2 size=ImVec2(0,0))			(const char* desc_id,const ImVec4 col,ImGuiColorEditFlags flags,ImVec2 size)			(desc_id,col,flags,size)			bool 
+igSetColorEditOptions	   	SetColorEditOptions			(ImGuiColorEditFlags)			(ImGuiColorEditFlags flags)			(ImGuiColorEditFlags flags)			(flags)			void 
+igTreeNode	   	TreeNode			(const char*)			(const char* label)			(const char* label)			(label)			bool 
+igTreeNode	   	TreeNode			(const char*,const char*,...)			(const char* str_id,const char* fmt,...)			(const char* str_id,const char* fmt,...)			(str_id,fmt,...)			bool 
+igTreeNode	   	TreeNode			(const void*,const char*,...)			(const void* ptr_id,const char* fmt,...)			(const void* ptr_id,const char* fmt,...)			(ptr_id,fmt,...)			bool 
+igTreeNodeV	   	TreeNodeV			(const char*,const char*,va_list)			(const char* str_id,const char* fmt,va_list args)			(const char* str_id,const char* fmt,va_list args)			(str_id,fmt,args)			bool 
+igTreeNodeV	   	TreeNodeV			(const void*,const char*,va_list)			(const void* ptr_id,const char* fmt,va_list args)			(const void* ptr_id,const char* fmt,va_list args)			(ptr_id,fmt,args)			bool 
+igTreeNodeEx	   	TreeNodeEx			(const char*,ImGuiTreeNodeFlags)			(const char* label,ImGuiTreeNodeFlags flags=0)			(const char* label,ImGuiTreeNodeFlags flags)			(label,flags)			bool 
+igTreeNodeEx	   	TreeNodeEx			(const char*,ImGuiTreeNodeFlags,const char*,...)			(const char* str_id,ImGuiTreeNodeFlags flags,const char* fmt,...)			(const char* str_id,ImGuiTreeNodeFlags flags,const char* fmt,...)			(str_id,flags,fmt,...)			bool 
+igTreeNodeEx	   	TreeNodeEx			(const void*,ImGuiTreeNodeFlags,const char*,...)			(const void* ptr_id,ImGuiTreeNodeFlags flags,const char* fmt,...)			(const void* ptr_id,ImGuiTreeNodeFlags flags,const char* fmt,...)			(ptr_id,flags,fmt,...)			bool 
+igTreeNodeExV	   	TreeNodeExV			(const char*,ImGuiTreeNodeFlags,const char*,va_list)			(const char* str_id,ImGuiTreeNodeFlags flags,const char* fmt,va_list args)			(const char* str_id,ImGuiTreeNodeFlags flags,const char* fmt,va_list args)			(str_id,flags,fmt,args)			bool 
+igTreeNodeExV	   	TreeNodeExV			(const void*,ImGuiTreeNodeFlags,const char*,va_list)			(const void* ptr_id,ImGuiTreeNodeFlags flags,const char* fmt,va_list args)			(const void* ptr_id,ImGuiTreeNodeFlags flags,const char* fmt,va_list args)			(ptr_id,flags,fmt,args)			bool 
+igTreePush	   	TreePush			(const char*)			(const char* str_id)			(const char* str_id)			(str_id)			void 
+igTreePush	   	TreePush			(const void*)			(const void* ptr_id=((void *)0))			(const void* ptr_id)			(ptr_id)			void 
+igTreePop	   	TreePop			()			()			()			()			void 
+igTreeAdvanceToLabelPos	   	TreeAdvanceToLabelPos			()			()			()			()			void 
+igGetTreeNodeToLabelSpacing	   	GetTreeNodeToLabelSpacing			()			()			()			()			float 
+igSetNextTreeNodeOpen	   	SetNextTreeNodeOpen			(bool,ImGuiCond)			(bool is_open,ImGuiCond cond=0)			(bool is_open,ImGuiCond cond)			(is_open,cond)			void 
+igCollapsingHeader	   	CollapsingHeader			(const char*,ImGuiTreeNodeFlags)			(const char* label,ImGuiTreeNodeFlags flags=0)			(const char* label,ImGuiTreeNodeFlags flags)			(label,flags)			bool 
+igCollapsingHeader	   	CollapsingHeader			(const char*,bool*,ImGuiTreeNodeFlags)			(const char* label,bool* p_open,ImGuiTreeNodeFlags flags=0)			(const char* label,bool* p_open,ImGuiTreeNodeFlags flags)			(label,p_open,flags)			bool 
+igSelectable	   	Selectable			(const char*,bool,ImGuiSelectableFlags,const ImVec2)			(const char* label,bool selected=false,ImGuiSelectableFlags flags=0,const ImVec2& size=ImVec2(0,0))			(const char* label,bool selected,ImGuiSelectableFlags flags,const ImVec2 size)			(label,selected,flags,size)			bool 
+igSelectable	   	Selectable			(const char*,bool*,ImGuiSelectableFlags,const ImVec2)			(const char* label,bool* p_selected,ImGuiSelectableFlags flags=0,const ImVec2& size=ImVec2(0,0))			(const char* label,bool* p_selected,ImGuiSelectableFlags flags,const ImVec2 size)			(label,p_selected,flags,size)			bool 
+igListBox	   	ListBox			(const char*,int*,const char* const[],int,int)			(const char* label,int* current_item,const char* const items[],int items_count,int height_in_items=-1)			(const char* label,int* current_item,const char* const items[],int items_count,int height_in_items)			(label,current_item,items,items_count,height_in_items)			bool 
+igListBox	   	ListBox			(const char*,int*,bool(*)(void*,int,const char**),void*,int,int)			(const char* label,int* current_item,bool(*items_getter)(void* data,int idx,const char** out_text),void* data,int items_count,int height_in_items=-1)			(const char* label,int* current_item,bool(*items_getter)(void* data,int idx,const char** out_text),void* data,int items_count,int height_in_items)			(label,current_item,items_getter,data,items_count,height_in_items)			bool 
+igListBoxHeader	   	ListBoxHeader			(const char*,const ImVec2)			(const char* label,const ImVec2& size=ImVec2(0,0))			(const char* label,const ImVec2 size)			(label,size)			bool 
+igListBoxHeader	   	ListBoxHeader			(const char*,int,int)			(const char* label,int items_count,int height_in_items=-1)			(const char* label,int items_count,int height_in_items)			(label,items_count,height_in_items)			bool 
+igListBoxFooter	   	ListBoxFooter			()			()			()			()			void 
+igValue	   	Value			(const char*,bool)			(const char* prefix,bool b)			(const char* prefix,bool b)			(prefix,b)			void 
+igValue	   	Value			(const char*,int)			(const char* prefix,int v)			(const char* prefix,int v)			(prefix,v)			void 
+igValue	   	Value			(const char*,unsigned int)			(const char* prefix,unsigned int v)			(const char* prefix,unsigned int v)			(prefix,v)			void 
+igValue	   	Value			(const char*,float,const char*)			(const char* prefix,float v,const char* float_format=((void *)0))			(const char* prefix,float v,const char* float_format)			(prefix,v,float_format)			void 
+igSetTooltip	   	SetTooltip			(const char*,...)			(const char* fmt,...)			(const char* fmt,...)			(fmt,...)			void 
+igSetTooltipV	   	SetTooltipV			(const char*,va_list)			(const char* fmt,va_list args)			(const char* fmt,va_list args)			(fmt,args)			void 
+igBeginTooltip	   	BeginTooltip			()			()			()			()			void 
+igEndTooltip	   	EndTooltip			()			()			()			()			void 
+igBeginMainMenuBar	   	BeginMainMenuBar			()			()			()			()			bool 
+igEndMainMenuBar	   	EndMainMenuBar			()			()			()			()			void 
+igBeginMenuBar	   	BeginMenuBar			()			()			()			()			bool 
+igEndMenuBar	   	EndMenuBar			()			()			()			()			void 
+igBeginMenu	   	BeginMenu			(const char*,bool)			(const char* label,bool enabled=true)			(const char* label,bool enabled)			(label,enabled)			bool 
+igEndMenu	   	EndMenu			()			()			()			()			void 
+igMenuItem	   	MenuItem			(const char*,const char*,bool,bool)			(const char* label,const char* shortcut=((void *)0),bool selected=false,bool enabled=true)			(const char* label,const char* shortcut,bool selected,bool enabled)			(label,shortcut,selected,enabled)			bool 
+igMenuItem	   	MenuItem			(const char*,const char*,bool*,bool)			(const char* label,const char* shortcut,bool* p_selected,bool enabled=true)			(const char* label,const char* shortcut,bool* p_selected,bool enabled)			(label,shortcut,p_selected,enabled)			bool 
+igOpenPopup	   	OpenPopup			(const char*)			(const char* str_id)			(const char* str_id)			(str_id)			void 
+igBeginPopup	   	BeginPopup			(const char*,ImGuiWindowFlags)			(const char* str_id,ImGuiWindowFlags flags=0)			(const char* str_id,ImGuiWindowFlags flags)			(str_id,flags)			bool 
+igBeginPopupContextItem	   	BeginPopupContextItem			(const char*,int)			(const char* str_id=((void *)0),int mouse_button=1)			(const char* str_id,int mouse_button)			(str_id,mouse_button)			bool 
+igBeginPopupContextWindow	   	BeginPopupContextWindow			(const char*,int,bool)			(const char* str_id=((void *)0),int mouse_button=1,bool also_over_items=true)			(const char* str_id,int mouse_button,bool also_over_items)			(str_id,mouse_button,also_over_items)			bool 
+igBeginPopupContextVoid	   	BeginPopupContextVoid			(const char*,int)			(const char* str_id=((void *)0),int mouse_button=1)			(const char* str_id,int mouse_button)			(str_id,mouse_button)			bool 
+igBeginPopupModal	   	BeginPopupModal			(const char*,bool*,ImGuiWindowFlags)			(const char* name,bool* p_open=((void *)0),ImGuiWindowFlags flags=0)			(const char* name,bool* p_open,ImGuiWindowFlags flags)			(name,p_open,flags)			bool 
+igEndPopup	   	EndPopup			()			()			()			()			void 
+igOpenPopupOnItemClick	   	OpenPopupOnItemClick			(const char*,int)			(const char* str_id=((void *)0),int mouse_button=1)			(const char* str_id,int mouse_button)			(str_id,mouse_button)			bool 
+igIsPopupOpen	   	IsPopupOpen			(const char*)			(const char* str_id)			(const char* str_id)			(str_id)			bool 
+igCloseCurrentPopup	   	CloseCurrentPopup			()			()			()			()			void 
+igColumns	   	Columns			(int,const char*,bool)			(int count=1,const char* id=((void *)0),bool border=true)			(int count,const char* id,bool border)			(count,id,border)			void 
+igNextColumn	   	NextColumn			()			()			()			()			void 
+igGetColumnIndex	   	GetColumnIndex			()			()			()			()			int 
+igGetColumnWidth	   	GetColumnWidth			(int)			(int column_index=-1)			(int column_index)			(column_index)			float 
+igSetColumnWidth	   	SetColumnWidth			(int,float)			(int column_index,float width)			(int column_index,float width)			(column_index,width)			void 
+igGetColumnOffset	   	GetColumnOffset			(int)			(int column_index=-1)			(int column_index)			(column_index)			float 
+igSetColumnOffset	   	SetColumnOffset			(int,float)			(int column_index,float offset_x)			(int column_index,float offset_x)			(column_index,offset_x)			void 
+igGetColumnsCount	   	GetColumnsCount			()			()			()			()			int 
+igLogToTTY	   	LogToTTY			(int)			(int max_depth=-1)			(int max_depth)			(max_depth)			void 
+igLogToFile	   	LogToFile			(int,const char*)			(int max_depth=-1,const char* filename=((void *)0))			(int max_depth,const char* filename)			(max_depth,filename)			void 
+igLogToClipboard	   	LogToClipboard			(int)			(int max_depth=-1)			(int max_depth)			(max_depth)			void 
+igLogFinish	   	LogFinish			()			()			()			()			void 
+igLogButtons	   	LogButtons			()			()			()			()			void 
+igLogText	   	LogText			(const char*,...)			(const char* fmt,...)			(const char* fmt,...)			(fmt,...)			void 
+igBeginDragDropSource	   	BeginDragDropSource			(ImGuiDragDropFlags)			(ImGuiDragDropFlags flags=0)			(ImGuiDragDropFlags flags)			(flags)			bool 
+igSetDragDropPayload	   	SetDragDropPayload			(const char*,const void*,size_t,ImGuiCond)			(const char* type,const void* data,size_t size,ImGuiCond cond=0)			(const char* type,const void* data,size_t size,ImGuiCond cond)			(type,data,size,cond)			bool 
+igEndDragDropSource	   	EndDragDropSource			()			()			()			()			void 
+igBeginDragDropTarget	   	BeginDragDropTarget			()			()			()			()			bool 
+igAcceptDragDropPayload	   	AcceptDragDropPayload			(const char*,ImGuiDragDropFlags)			(const char* type,ImGuiDragDropFlags flags=0)			(const char* type,ImGuiDragDropFlags flags)			(type,flags)			const ImGuiPayload* 
+igEndDragDropTarget	   	EndDragDropTarget			()			()			()			()			void 
+igPushClipRect	   	PushClipRect			(const ImVec2,const ImVec2,bool)			(const ImVec2& clip_rect_min,const ImVec2& clip_rect_max,bool intersect_with_current_clip_rect)			(const ImVec2 clip_rect_min,const ImVec2 clip_rect_max,bool intersect_with_current_clip_rect)			(clip_rect_min,clip_rect_max,intersect_with_current_clip_rect)			void 
+igPopClipRect	   	PopClipRect			()			()			()			()			void 
+igSetItemDefaultFocus	   	SetItemDefaultFocus			()			()			()			()			void 
+igSetKeyboardFocusHere	   	SetKeyboardFocusHere			(int)			(int offset=0)			(int offset)			(offset)			void 
+igIsItemHovered	   	IsItemHovered			(ImGuiHoveredFlags)			(ImGuiHoveredFlags flags=0)			(ImGuiHoveredFlags flags)			(flags)			bool 
+igIsItemActive	   	IsItemActive			()			()			()			()			bool 
+igIsItemFocused	   	IsItemFocused			()			()			()			()			bool 
+igIsItemClicked	   	IsItemClicked			(int)			(int mouse_button=0)			(int mouse_button)			(mouse_button)			bool 
+igIsItemVisible	   	IsItemVisible			()			()			()			()			bool 
+igIsAnyItemHovered	   	IsAnyItemHovered			()			()			()			()			bool 
+igIsAnyItemActive	   	IsAnyItemActive			()			()			()			()			bool 
+igIsAnyItemFocused	   	IsAnyItemFocused			()			()			()			()			bool 
+igGetItemRectMin	   	GetItemRectMin			()			()			()			()			ImVec2 
+igGetItemRectMax	   	GetItemRectMax			()			()			()			()			ImVec2 
+igGetItemRectSize	   	GetItemRectSize			()			()			()			()			ImVec2 
+igSetItemAllowOverlap	   	SetItemAllowOverlap			()			()			()			()			void 
+igIsRectVisible	   	IsRectVisible			(const ImVec2)			(const ImVec2& size)			(const ImVec2 size)			(size)			bool 
+igIsRectVisible	   	IsRectVisible			(const ImVec2,const ImVec2)			(const ImVec2& rect_min,const ImVec2& rect_max)			(const ImVec2 rect_min,const ImVec2 rect_max)			(rect_min,rect_max)			bool 
+igGetTime	   	GetTime			()			()			()			()			float 
+igGetFrameCount	   	GetFrameCount			()			()			()			()			int 
+igGetOverlayDrawList	   	GetOverlayDrawList			()			()			()			()			ImDrawList* 
+igGetDrawListSharedData	   	GetDrawListSharedData			()			()			()			()			ImDrawListSharedData* 
+igGetStyleColorName	   	GetStyleColorName			(ImGuiCol)			(ImGuiCol idx)			(ImGuiCol idx)			(idx)			const char* 
+igSetStateStorage	   	SetStateStorage			(ImGuiStorage*)			(ImGuiStorage* storage)			(ImGuiStorage* storage)			(storage)			void 
+igGetStateStorage	   	GetStateStorage			()			()			()			()			ImGuiStorage* 
+igCalcTextSize	   	CalcTextSize			(const char*,const char*,bool,float)			(const char* text,const char* text_end=((void *)0),bool hide_text_after_double_hash=false,float wrap_width=-1.0f)			(const char* text,const char* text_end,bool hide_text_after_double_hash,float wrap_width)			(text,text_end,hide_text_after_double_hash,wrap_width)			ImVec2 
+igCalcListClipping	   	CalcListClipping			(int,float,int*,int*)			(int items_count,float items_height,int* out_items_display_start,int* out_items_display_end)			(int items_count,float items_height,int* out_items_display_start,int* out_items_display_end)			(items_count,items_height,out_items_display_start,out_items_display_end)			void 
+igBeginChildFrame	   	BeginChildFrame			(ImGuiID,const ImVec2,ImGuiWindowFlags)			(ImGuiID id,const ImVec2& size,ImGuiWindowFlags flags=0)			(ImGuiID id,const ImVec2 size,ImGuiWindowFlags flags)			(id,size,flags)			bool 
+igEndChildFrame	   	EndChildFrame			()			()			()			()			void 
+igColorConvertU32ToFloat4	   	ColorConvertU32ToFloat4			(ImU32)			(ImU32 in)			(ImU32 in)			(in)			ImVec4 
+igColorConvertFloat4ToU32	   	ColorConvertFloat4ToU32			(const ImVec4)			(const ImVec4& in)			(const ImVec4 in)			(in)			ImU32 
+igColorConvertRGBtoHSV	   	ColorConvertRGBtoHSV			(float,float,float,float,float,float)			(float r,float g,float b,float& out_h,float& out_s,float& out_v)			(float r,float g,float b,float out_h,float out_s,float out_v)			(r,g,b,out_h,out_s,out_v)			void 
+igColorConvertHSVtoRGB	   	ColorConvertHSVtoRGB			(float,float,float,float,float,float)			(float h,float s,float v,float& out_r,float& out_g,float& out_b)			(float h,float s,float v,float out_r,float out_g,float out_b)			(h,s,v,out_r,out_g,out_b)			void 
+igGetKeyIndex	   	GetKeyIndex			(ImGuiKey)			(ImGuiKey imgui_key)			(ImGuiKey imgui_key)			(imgui_key)			int 
+igIsKeyDown	   	IsKeyDown			(int)			(int user_key_index)			(int user_key_index)			(user_key_index)			bool 
+igIsKeyPressed	   	IsKeyPressed			(int,bool)			(int user_key_index,bool repeat=true)			(int user_key_index,bool repeat)			(user_key_index,repeat)			bool 
+igIsKeyReleased	   	IsKeyReleased			(int)			(int user_key_index)			(int user_key_index)			(user_key_index)			bool 
+igGetKeyPressedAmount	   	GetKeyPressedAmount			(int,float,float)			(int key_index,float repeat_delay,float rate)			(int key_index,float repeat_delay,float rate)			(key_index,repeat_delay,rate)			int 
+igIsMouseDown	   	IsMouseDown			(int)			(int button)			(int button)			(button)			bool 
+igIsAnyMouseDown	   	IsAnyMouseDown			()			()			()			()			bool 
+igIsMouseClicked	   	IsMouseClicked			(int,bool)			(int button,bool repeat=false)			(int button,bool repeat)			(button,repeat)			bool 
+igIsMouseDoubleClicked	   	IsMouseDoubleClicked			(int)			(int button)			(int button)			(button)			bool 
+igIsMouseReleased	   	IsMouseReleased			(int)			(int button)			(int button)			(button)			bool 
+igIsMouseDragging	   	IsMouseDragging			(int,float)			(int button=0,float lock_threshold=-1.0f)			(int button,float lock_threshold)			(button,lock_threshold)			bool 
+igIsMouseHoveringRect	   	IsMouseHoveringRect			(const ImVec2,const ImVec2,bool)			(const ImVec2& r_min,const ImVec2& r_max,bool clip=true)			(const ImVec2 r_min,const ImVec2 r_max,bool clip)			(r_min,r_max,clip)			bool 
+igIsMousePosValid	   	IsMousePosValid			(const ImVec2*)			(const ImVec2* mouse_pos=((void *)0))			(const ImVec2* mouse_pos)			(mouse_pos)			bool 
+igGetMousePos	   	GetMousePos			()			()			()			()			ImVec2 
+igGetMousePosOnOpeningCurrentPopup	   	GetMousePosOnOpeningCurrentPopup			()			()			()			()			ImVec2 
+igGetMouseDragDelta	   	GetMouseDragDelta			(int,float)			(int button=0,float lock_threshold=-1.0f)			(int button,float lock_threshold)			(button,lock_threshold)			ImVec2 
+igResetMouseDragDelta	   	ResetMouseDragDelta			(int)			(int button=0)			(int button)			(button)			void 
+igGetMouseCursor	   	GetMouseCursor			()			()			()			()			ImGuiMouseCursor 
+igSetMouseCursor	   	SetMouseCursor			(ImGuiMouseCursor)			(ImGuiMouseCursor type)			(ImGuiMouseCursor type)			(type)			void 
+igCaptureKeyboardFromApp	   	CaptureKeyboardFromApp			(bool)			(bool capture=true)			(bool capture)			(capture)			void 
+igCaptureMouseFromApp	   	CaptureMouseFromApp			(bool)			(bool capture=true)			(bool capture)			(capture)			void 
+igGetClipboardText	   	GetClipboardText			()			()			()			()			const char* 
+igSetClipboardText	   	SetClipboardText			(const char*)			(const char* text)			(const char* text)			(text)			void 
+igSetAllocatorFunctions	   	SetAllocatorFunctions			(void*(*)(size_t,void*),void(*)(void*,void*),void*)			(void*(*alloc_func)(size_t sz,void* user_data),void(*free_func)(void* ptr,void* user_data),void* user_data=((void *)0))			(void*(*alloc_func)(size_t sz,void* user_data),void(*free_func)(void* ptr,void* user_data),void* user_data)			(alloc_func,free_func,user_data)			void 
+igMemAlloc	   	MemAlloc			(size_t)			(size_t size)			(size_t size)			(size)			void* 
+igMemFree	   	MemFree			(void*)			(void* ptr)			(void* ptr)			(ptr)			void 
+ImGuiStyle_ImGuiStyle	   	ImGuiStyle			()			()			()			()			nil
+ImGuiStyle_ScaleAllSizes	   	ScaleAllSizes			(float)			(float scale_factor)			(float scale_factor)			(scale_factor)			void 
+ImGuiIO_AddInputCharacter	   	AddInputCharacter			(ImWchar)			(ImWchar c)			(ImWchar c)			(c)			void 
+ImGuiIO_AddInputCharactersUTF8	   	AddInputCharactersUTF8			(const char*)			(const char* utf8_chars)			(const char* utf8_chars)			(utf8_chars)			void 
+ImGuiIO_ClearInputCharacters	   	ClearInputCharacters			()			()			()			()			inline void 
+ImGuiIO_ImGuiIO	   	ImGuiIO			()			()			()			()			nil
+ImGuiOnceUponAFrame_ImGuiOnceUponAFrame	   	ImGuiOnceUponAFrame			()			()			()			()			nil
+TextRange_TextRange	   	TextRange			()			()			()			()			nil
+TextRange_TextRange	   	TextRange			(const char*,const char*)			(const char* _b,const char* _e)			(const char* _b,const char* _e)			(_b,_e)			nil
+TextRange_begin	   	begin			()			()			()			()			const char* 
+TextRange_end	   	end			()			()			()			()			const char* 
+TextRange_empty	   	empty			()			()			()			()			bool 
+TextRange_front	   	front			()			()			()			()			char 
+TextRange_is_blank	   	is_blank			(char)			(char c)			(char c)			(c)			 bool 
+TextRange_trim_blanks	   	trim_blanks			()			()			()			()			void 
+TextRange_split	   	split			(char,ImVector_TextRange)			(char separator,ImVector<TextRange>& out)			(char separator,ImVector_TextRange out)			(separator,out)			void 
+ImGuiTextFilter_ImGuiTextFilter	   	ImGuiTextFilter			(const char*)			(const char* default_filter="")			(const char* default_filter)			(default_filter)			nil
+ImGuiTextFilter_Draw	   	Draw			(const char*,float)			(const char* label="Filter(inc,-exc)",float width=0.0f)			(const char* label,float width)			(label,width)			bool 
+ImGuiTextFilter_PassFilter	   	PassFilter			(const char*,const char*)			(const char* text,const char* text_end=((void *)0))			(const char* text,const char* text_end)			(text,text_end)			bool 
+ImGuiTextFilter_Build	   	Build			()			()			()			()			void 
+ImGuiTextFilter_Clear	   	Clear			()			()			()			()			void 
+ImGuiTextFilter_IsActive	   	IsActive			()			()			()			()			bool 
+ImGuiTextBuffer_ImGuiTextBuffer	   	ImGuiTextBuffer			()			()			()			()			nil
+ImGuiTextBuffer_begin	   	begin			()			()			()			()			const char* 
+ImGuiTextBuffer_end	   	end			()			()			()			()			const char* 
+ImGuiTextBuffer_size	   	size			()			()			()			()			int 
+ImGuiTextBuffer_empty	   	empty			()			()			()			()			bool 
+ImGuiTextBuffer_clear	   	clear			()			()			()			()			void 
+ImGuiTextBuffer_reserve	   	reserve			(int)			(int capacity)			(int capacity)			(capacity)			void 
+ImGuiTextBuffer_c_str	   	c_str			()			()			()			()			const char* 
+ImGuiTextBuffer_appendf	   	appendf			(const char*,...)			(const char* fmt,...)			(const char* fmt,...)			(fmt,...)			void 
+ImGuiTextBuffer_appendfv	   	appendfv			(const char*,va_list)			(const char* fmt,va_list args)			(const char* fmt,va_list args)			(fmt,args)			void 
+Pair_Pair	   	Pair			(ImGuiID,int)			(ImGuiID _key,int _val_i)			(ImGuiID _key,int _val_i)			(_key,_val_i)			nil
+Pair_Pair	   	Pair			(ImGuiID,float)			(ImGuiID _key,float _val_f)			(ImGuiID _key,float _val_f)			(_key,_val_f)			nil
+Pair_Pair	   	Pair			(ImGuiID,void*)			(ImGuiID _key,void* _val_p)			(ImGuiID _key,void* _val_p)			(_key,_val_p)			nil
+ImGuiStorage_Clear	   	Clear			()			()			()			()			void 
+ImGuiStorage_GetInt	   	GetInt			(ImGuiID,int)			(ImGuiID key,int default_val=0)			(ImGuiID key,int default_val)			(key,default_val)			int 
+ImGuiStorage_SetInt	   	SetInt			(ImGuiID,int)			(ImGuiID key,int val)			(ImGuiID key,int val)			(key,val)			void 
+ImGuiStorage_GetBool	   	GetBool			(ImGuiID,bool)			(ImGuiID key,bool default_val=false)			(ImGuiID key,bool default_val)			(key,default_val)			bool 
+ImGuiStorage_SetBool	   	SetBool			(ImGuiID,bool)			(ImGuiID key,bool val)			(ImGuiID key,bool val)			(key,val)			void 
+ImGuiStorage_GetFloat	   	GetFloat			(ImGuiID,float)			(ImGuiID key,float default_val=0.0f)			(ImGuiID key,float default_val)			(key,default_val)			float 
+ImGuiStorage_SetFloat	   	SetFloat			(ImGuiID,float)			(ImGuiID key,float val)			(ImGuiID key,float val)			(key,val)			void 
+ImGuiStorage_GetVoidPtr	   	GetVoidPtr			(ImGuiID)			(ImGuiID key)			(ImGuiID key)			(key)			void* 
+ImGuiStorage_SetVoidPtr	   	SetVoidPtr			(ImGuiID,void*)			(ImGuiID key,void* val)			(ImGuiID key,void* val)			(key,val)			void 
+ImGuiStorage_GetIntRef	   	GetIntRef			(ImGuiID,int)			(ImGuiID key,int default_val=0)			(ImGuiID key,int default_val)			(key,default_val)			int* 
+ImGuiStorage_GetBoolRef	   	GetBoolRef			(ImGuiID,bool)			(ImGuiID key,bool default_val=false)			(ImGuiID key,bool default_val)			(key,default_val)			bool* 
+ImGuiStorage_GetFloatRef	   	GetFloatRef			(ImGuiID,float)			(ImGuiID key,float default_val=0.0f)			(ImGuiID key,float default_val)			(key,default_val)			float* 
+ImGuiStorage_GetVoidPtrRef	   	GetVoidPtrRef			(ImGuiID,void*)			(ImGuiID key,void* default_val=((void *)0))			(ImGuiID key,void* default_val)			(key,default_val)			void** 
+ImGuiStorage_SetAllInt	   	SetAllInt			(int)			(int val)			(int val)			(val)			void 
+ImGuiStorage_BuildSortByKey	   	BuildSortByKey			()			()			()			()			void 
+ImGuiTextEditCallbackData_DeleteChars	   	DeleteChars			(int,int)			(int pos,int bytes_count)			(int pos,int bytes_count)			(pos,bytes_count)			void 
+ImGuiTextEditCallbackData_InsertChars	   	InsertChars			(int,const char*,const char*)			(int pos,const char* text,const char* text_end=((void *)0))			(int pos,const char* text,const char* text_end)			(pos,text,text_end)			void 
+ImGuiTextEditCallbackData_HasSelection	   	HasSelection			()			()			()			()			bool 
+ImGuiPayload_ImGuiPayload	   	ImGuiPayload			()			()			()			()			nil
+ImGuiPayload_Clear	   	Clear			()			()			()			()			void 
+ImGuiPayload_IsDataType	   	IsDataType			(const char*)			(const char* type)			(const char* type)			(type)			bool 
+ImGuiPayload_IsPreview	   	IsPreview			()			()			()			()			bool 
+ImGuiPayload_IsDelivery	   	IsDelivery			()			()			()			()			bool 
+ImColor_ImColor	   	ImColor			()			()			()			()			nil
+ImColor_ImColor	   	ImColor			(int,int,int,int)			(int r,int g,int b,int a=255)			(int r,int g,int b,int a)			(r,g,b,a)			nil
+ImColor_ImColor	   	ImColor			(ImU32)			(ImU32 rgba)			(ImU32 rgba)			(rgba)			nil
+ImColor_ImColor	   	ImColor			(float,float,float,float)			(float r,float g,float b,float a=1.0f)			(float r,float g,float b,float a)			(r,g,b,a)			nil
+ImColor_ImColor	   	ImColor			(const ImVec4)			(const ImVec4& col)			(const ImVec4 col)			(col)			nil
+ImColor_SetHSV	   	SetHSV			(float,float,float,float)			(float h,float s,float v,float a=1.0f)			(float h,float s,float v,float a)			(h,s,v,a)			inline void 
+ImColor_HSV	   	HSV			(float,float,float,float)			(float h,float s,float v,float a=1.0f)			(float h,float s,float v,float a)			(h,s,v,a)			 ImColor 
+ImGuiListClipper_ImGuiListClipper	   	ImGuiListClipper			(int,float)			(int items_count=-1,float items_height=-1.0f)			(int items_count,float items_height)			(items_count,items_height)			nil
+ImGuiListClipper_~ImGuiListClipper	   	~ImGuiListClipper			()			()			()			()			nil
+ImGuiListClipper_Step	   	Step			()			()			()			()			bool 
+ImGuiListClipper_Begin	   	Begin			(int,float)			(int items_count,float items_height=-1.0f)			(int items_count,float items_height)			(items_count,items_height)			void 
+ImGuiListClipper_End	   	End			()			()			()			()			void 
+ImDrawCmd_ImDrawCmd	   	ImDrawCmd			()			()			()			()			nil
+ImDrawList_ImDrawList	   	ImDrawList			(const ImDrawListSharedData*)			(const ImDrawListSharedData* shared_data)			(const ImDrawListSharedData* shared_data)			(shared_data)			nil
+ImDrawList_~ImDrawList	   	~ImDrawList			()			()			()			()			nil
+ImDrawList_PushClipRect	   	PushClipRect			(ImVec2,ImVec2,bool)			(ImVec2 clip_rect_min,ImVec2 clip_rect_max,bool intersect_with_current_clip_rect=false)			(ImVec2 clip_rect_min,ImVec2 clip_rect_max,bool intersect_with_current_clip_rect)			(clip_rect_min,clip_rect_max,intersect_with_current_clip_rect)			void 
+ImDrawList_PushClipRectFullScreen	   	PushClipRectFullScreen			()			()			()			()			void 
+ImDrawList_PopClipRect	   	PopClipRect			()			()			()			()			void 
+ImDrawList_PushTextureID	   	PushTextureID			(ImTextureID)			(ImTextureID texture_id)			(ImTextureID texture_id)			(texture_id)			void 
+ImDrawList_PopTextureID	   	PopTextureID			()			()			()			()			void 
+ImDrawList_GetClipRectMin	   	GetClipRectMin			()			()			()			()			inline ImVec2 
+ImDrawList_GetClipRectMax	   	GetClipRectMax			()			()			()			()			inline ImVec2 
+ImDrawList_AddLine	   	AddLine			(const ImVec2,const ImVec2,ImU32,float)			(const ImVec2& a,const ImVec2& b,ImU32 col,float thickness=1.0f)			(const ImVec2 a,const ImVec2 b,ImU32 col,float thickness)			(a,b,col,thickness)			void 
+ImDrawList_AddRect	   	AddRect			(const ImVec2,const ImVec2,ImU32,float,int,float)			(const ImVec2& a,const ImVec2& b,ImU32 col,float rounding=0.0f,int rounding_corners_flags=ImDrawCornerFlags_All,float thickness=1.0f)			(const ImVec2 a,const ImVec2 b,ImU32 col,float rounding,int rounding_corners_flags,float thickness)			(a,b,col,rounding,rounding_corners_flags,thickness)			void 
+ImDrawList_AddRectFilled	   	AddRectFilled			(const ImVec2,const ImVec2,ImU32,float,int)			(const ImVec2& a,const ImVec2& b,ImU32 col,float rounding=0.0f,int rounding_corners_flags=ImDrawCornerFlags_All)			(const ImVec2 a,const ImVec2 b,ImU32 col,float rounding,int rounding_corners_flags)			(a,b,col,rounding,rounding_corners_flags)			void 
+ImDrawList_AddRectFilledMultiColor	   	AddRectFilledMultiColor			(const ImVec2,const ImVec2,ImU32,ImU32,ImU32,ImU32)			(const ImVec2& a,const ImVec2& b,ImU32 col_upr_left,ImU32 col_upr_right,ImU32 col_bot_right,ImU32 col_bot_left)			(const ImVec2 a,const ImVec2 b,ImU32 col_upr_left,ImU32 col_upr_right,ImU32 col_bot_right,ImU32 col_bot_left)			(a,b,col_upr_left,col_upr_right,col_bot_right,col_bot_left)			void 
+ImDrawList_AddQuad	   	AddQuad			(const ImVec2,const ImVec2,const ImVec2,const ImVec2,ImU32,float)			(const ImVec2& a,const ImVec2& b,const ImVec2& c,const ImVec2& d,ImU32 col,float thickness=1.0f)			(const ImVec2 a,const ImVec2 b,const ImVec2 c,const ImVec2 d,ImU32 col,float thickness)			(a,b,c,d,col,thickness)			void 
+ImDrawList_AddQuadFilled	   	AddQuadFilled			(const ImVec2,const ImVec2,const ImVec2,const ImVec2,ImU32)			(const ImVec2& a,const ImVec2& b,const ImVec2& c,const ImVec2& d,ImU32 col)			(const ImVec2 a,const ImVec2 b,const ImVec2 c,const ImVec2 d,ImU32 col)			(a,b,c,d,col)			void 
+ImDrawList_AddTriangle	   	AddTriangle			(const ImVec2,const ImVec2,const ImVec2,ImU32,float)			(const ImVec2& a,const ImVec2& b,const ImVec2& c,ImU32 col,float thickness=1.0f)			(const ImVec2 a,const ImVec2 b,const ImVec2 c,ImU32 col,float thickness)			(a,b,c,col,thickness)			void 
+ImDrawList_AddTriangleFilled	   	AddTriangleFilled			(const ImVec2,const ImVec2,const ImVec2,ImU32)			(const ImVec2& a,const ImVec2& b,const ImVec2& c,ImU32 col)			(const ImVec2 a,const ImVec2 b,const ImVec2 c,ImU32 col)			(a,b,c,col)			void 
+ImDrawList_AddCircle	   	AddCircle			(const ImVec2,float,ImU32,int,float)			(const ImVec2& centre,float radius,ImU32 col,int num_segments=12,float thickness=1.0f)			(const ImVec2 centre,float radius,ImU32 col,int num_segments,float thickness)			(centre,radius,col,num_segments,thickness)			void 
+ImDrawList_AddCircleFilled	   	AddCircleFilled			(const ImVec2,float,ImU32,int)			(const ImVec2& centre,float radius,ImU32 col,int num_segments=12)			(const ImVec2 centre,float radius,ImU32 col,int num_segments)			(centre,radius,col,num_segments)			void 
+ImDrawList_AddText	   	AddText			(const ImVec2,ImU32,const char*,const char*)			(const ImVec2& pos,ImU32 col,const char* text_begin,const char* text_end=((void *)0))			(const ImVec2 pos,ImU32 col,const char* text_begin,const char* text_end)			(pos,col,text_begin,text_end)			void 
+ImDrawList_AddText	   	AddText			(const ImFont*,float,const ImVec2,ImU32,const char*,const char*,float,const ImVec4*)			(const ImFont* font,float font_size,const ImVec2& pos,ImU32 col,const char* text_begin,const char* text_end=((void *)0),float wrap_width=0.0f,const ImVec4* cpu_fine_clip_rect=((void *)0))			(const ImFont* font,float font_size,const ImVec2 pos,ImU32 col,const char* text_begin,const char* text_end,float wrap_width,const ImVec4* cpu_fine_clip_rect)			(font,font_size,pos,col,text_begin,text_end,wrap_width,cpu_fine_clip_rect)			void 
+ImDrawList_AddImage	   	AddImage			(ImTextureID,const ImVec2,const ImVec2,const ImVec2,const ImVec2,ImU32)			(ImTextureID user_texture_id,const ImVec2& a,const ImVec2& b,const ImVec2& uv_a=ImVec2(0,0),const ImVec2& uv_b=ImVec2(1,1),ImU32 col=0xFFFFFFFF)			(ImTextureID user_texture_id,const ImVec2 a,const ImVec2 b,const ImVec2 uv_a,const ImVec2 uv_b,ImU32 col)			(user_texture_id,a,b,uv_a,uv_b,col)			void 
+ImDrawList_AddImageQuad	   	AddImageQuad			(ImTextureID,const ImVec2,const ImVec2,const ImVec2,const ImVec2,const ImVec2,const ImVec2,const ImVec2,const ImVec2,ImU32)			(ImTextureID user_texture_id,const ImVec2& a,const ImVec2& b,const ImVec2& c,const ImVec2& d,const ImVec2& uv_a=ImVec2(0,0),const ImVec2& uv_b=ImVec2(1,0),const ImVec2& uv_c=ImVec2(1,1),const ImVec2& uv_d=ImVec2(0,1),ImU32 col=0xFFFFFFFF)			(ImTextureID user_texture_id,const ImVec2 a,const ImVec2 b,const ImVec2 c,const ImVec2 d,const ImVec2 uv_a,const ImVec2 uv_b,const ImVec2 uv_c,const ImVec2 uv_d,ImU32 col)			(user_texture_id,a,b,c,d,uv_a,uv_b,uv_c,uv_d,col)			void 
+ImDrawList_AddImageRounded	   	AddImageRounded			(ImTextureID,const ImVec2,const ImVec2,const ImVec2,const ImVec2,ImU32,float,int)			(ImTextureID user_texture_id,const ImVec2& a,const ImVec2& b,const ImVec2& uv_a,const ImVec2& uv_b,ImU32 col,float rounding,int rounding_corners=ImDrawCornerFlags_All)			(ImTextureID user_texture_id,const ImVec2 a,const ImVec2 b,const ImVec2 uv_a,const ImVec2 uv_b,ImU32 col,float rounding,int rounding_corners)			(user_texture_id,a,b,uv_a,uv_b,col,rounding,rounding_corners)			void 
+ImDrawList_AddPolyline	   	AddPolyline			(const ImVec2*,const int,ImU32,bool,float)			(const ImVec2* points,const int num_points,ImU32 col,bool closed,float thickness)			(const ImVec2* points,const int num_points,ImU32 col,bool closed,float thickness)			(points,num_points,col,closed,thickness)			void 
+ImDrawList_AddConvexPolyFilled	   	AddConvexPolyFilled			(const ImVec2*,const int,ImU32)			(const ImVec2* points,const int num_points,ImU32 col)			(const ImVec2* points,const int num_points,ImU32 col)			(points,num_points,col)			void 
+ImDrawList_AddBezierCurve	   	AddBezierCurve			(const ImVec2,const ImVec2,const ImVec2,const ImVec2,ImU32,float,int)			(const ImVec2& pos0,const ImVec2& cp0,const ImVec2& cp1,const ImVec2& pos1,ImU32 col,float thickness,int num_segments=0)			(const ImVec2 pos0,const ImVec2 cp0,const ImVec2 cp1,const ImVec2 pos1,ImU32 col,float thickness,int num_segments)			(pos0,cp0,cp1,pos1,col,thickness,num_segments)			void 
+ImDrawList_PathClear	   	PathClear			()			()			()			()			inline void 
+ImDrawList_PathLineTo	   	PathLineTo			(const ImVec2)			(const ImVec2& pos)			(const ImVec2 pos)			(pos)			inline void 
+ImDrawList_PathLineToMergeDuplicate	   	PathLineToMergeDuplicate			(const ImVec2)			(const ImVec2& pos)			(const ImVec2 pos)			(pos)			inline void 
+ImDrawList_PathFillConvex	   	PathFillConvex			(ImU32)			(ImU32 col)			(ImU32 col)			(col)			inline void 
+ImDrawList_PathStroke	   	PathStroke			(ImU32,bool,float)			(ImU32 col,bool closed,float thickness=1.0f)			(ImU32 col,bool closed,float thickness)			(col,closed,thickness)			inline void 
+ImDrawList_PathArcTo	   	PathArcTo			(const ImVec2,float,float,float,int)			(const ImVec2& centre,float radius,float a_min,float a_max,int num_segments=10)			(const ImVec2 centre,float radius,float a_min,float a_max,int num_segments)			(centre,radius,a_min,a_max,num_segments)			void 
+ImDrawList_PathArcToFast	   	PathArcToFast			(const ImVec2,float,int,int)			(const ImVec2& centre,float radius,int a_min_of_12,int a_max_of_12)			(const ImVec2 centre,float radius,int a_min_of_12,int a_max_of_12)			(centre,radius,a_min_of_12,a_max_of_12)			void 
+ImDrawList_PathBezierCurveTo	   	PathBezierCurveTo			(const ImVec2,const ImVec2,const ImVec2,int)			(const ImVec2& p1,const ImVec2& p2,const ImVec2& p3,int num_segments=0)			(const ImVec2 p1,const ImVec2 p2,const ImVec2 p3,int num_segments)			(p1,p2,p3,num_segments)			void 
+ImDrawList_PathRect	   	PathRect			(const ImVec2,const ImVec2,float,int)			(const ImVec2& rect_min,const ImVec2& rect_max,float rounding=0.0f,int rounding_corners_flags=ImDrawCornerFlags_All)			(const ImVec2 rect_min,const ImVec2 rect_max,float rounding,int rounding_corners_flags)			(rect_min,rect_max,rounding,rounding_corners_flags)			void 
+ImDrawList_ChannelsSplit	   	ChannelsSplit			(int)			(int channels_count)			(int channels_count)			(channels_count)			void 
+ImDrawList_ChannelsMerge	   	ChannelsMerge			()			()			()			()			void 
+ImDrawList_ChannelsSetCurrent	   	ChannelsSetCurrent			(int)			(int channel_index)			(int channel_index)			(channel_index)			void 
+ImDrawList_AddCallback	   	AddCallback			(ImDrawCallback,void*)			(ImDrawCallback callback,void* callback_data)			(ImDrawCallback callback,void* callback_data)			(callback,callback_data)			void 
+ImDrawList_AddDrawCmd	   	AddDrawCmd			()			()			()			()			void 
+ImDrawList_CloneOutput	   	CloneOutput			()			()			()			()			ImDrawList* 
+ImDrawList_Clear	   	Clear			()			()			()			()			void 
+ImDrawList_ClearFreeMemory	   	ClearFreeMemory			()			()			()			()			void 
+ImDrawList_PrimReserve	   	PrimReserve			(int,int)			(int idx_count,int vtx_count)			(int idx_count,int vtx_count)			(idx_count,vtx_count)			void 
+ImDrawList_PrimRect	   	PrimRect			(const ImVec2,const ImVec2,ImU32)			(const ImVec2& a,const ImVec2& b,ImU32 col)			(const ImVec2 a,const ImVec2 b,ImU32 col)			(a,b,col)			void 
+ImDrawList_PrimRectUV	   	PrimRectUV			(const ImVec2,const ImVec2,const ImVec2,const ImVec2,ImU32)			(const ImVec2& a,const ImVec2& b,const ImVec2& uv_a,const ImVec2& uv_b,ImU32 col)			(const ImVec2 a,const ImVec2 b,const ImVec2 uv_a,const ImVec2 uv_b,ImU32 col)			(a,b,uv_a,uv_b,col)			void 
+ImDrawList_PrimQuadUV	   	PrimQuadUV			(const ImVec2,const ImVec2,const ImVec2,const ImVec2,const ImVec2,const ImVec2,const ImVec2,const ImVec2,ImU32)			(const ImVec2& a,const ImVec2& b,const ImVec2& c,const ImVec2& d,const ImVec2& uv_a,const ImVec2& uv_b,const ImVec2& uv_c,const ImVec2& uv_d,ImU32 col)			(const ImVec2 a,const ImVec2 b,const ImVec2 c,const ImVec2 d,const ImVec2 uv_a,const ImVec2 uv_b,const ImVec2 uv_c,const ImVec2 uv_d,ImU32 col)			(a,b,c,d,uv_a,uv_b,uv_c,uv_d,col)			void 
+ImDrawList_PrimWriteVtx	   	PrimWriteVtx			(const ImVec2,const ImVec2,ImU32)			(const ImVec2& pos,const ImVec2& uv,ImU32 col)			(const ImVec2 pos,const ImVec2 uv,ImU32 col)			(pos,uv,col)			inline void 
+ImDrawList_PrimWriteIdx	   	PrimWriteIdx			(ImDrawIdx)			(ImDrawIdx idx)			(ImDrawIdx idx)			(idx)			inline void 
+ImDrawList_PrimVtx	   	PrimVtx			(const ImVec2,const ImVec2,ImU32)			(const ImVec2& pos,const ImVec2& uv,ImU32 col)			(const ImVec2 pos,const ImVec2 uv,ImU32 col)			(pos,uv,col)			inline void 
+ImDrawList_UpdateClipRect	   	UpdateClipRect			()			()			()			()			void 
+ImDrawList_UpdateTextureID	   	UpdateTextureID			()			()			()			()			void 
+ImDrawData_ImDrawData	   	ImDrawData			()			()			()			()			nil
+ImDrawData_~ImDrawData	   	~ImDrawData			()			()			()			()			nil
+ImDrawData_Clear	   	Clear			()			()			()			()			void 
+ImDrawData_DeIndexAllBuffers	   	DeIndexAllBuffers			()			()			()			()			void 
+ImDrawData_ScaleClipRects	   	ScaleClipRects			(const ImVec2)			(const ImVec2& sc)			(const ImVec2 sc)			(sc)			void 
+ImFontConfig_ImFontConfig	   	ImFontConfig			()			()			()			()			nil
+ImFontAtlas_ImFontAtlas	   	ImFontAtlas			()			()			()			()			nil
+ImFontAtlas_~ImFontAtlas	   	~ImFontAtlas			()			()			()			()			nil
+ImFontAtlas_AddFont	   	AddFont			(const ImFontConfig*)			(const ImFontConfig* font_cfg)			(const ImFontConfig* font_cfg)			(font_cfg)			ImFont* 
+ImFontAtlas_AddFontDefault	   	AddFontDefault			(const ImFontConfig*)			(const ImFontConfig* font_cfg=((void *)0))			(const ImFontConfig* font_cfg)			(font_cfg)			ImFont* 
+ImFontAtlas_AddFontFromFileTTF	   	AddFontFromFileTTF			(const char*,float,const ImFontConfig*,const ImWchar*)			(const char* filename,float size_pixels,const ImFontConfig* font_cfg=((void *)0),const ImWchar* glyph_ranges=((void *)0))			(const char* filename,float size_pixels,const ImFontConfig* font_cfg,const ImWchar* glyph_ranges)			(filename,size_pixels,font_cfg,glyph_ranges)			ImFont* 
+ImFontAtlas_AddFontFromMemoryTTF	   	AddFontFromMemoryTTF			(void*,int,float,const ImFontConfig*,const ImWchar*)			(void* font_data,int font_size,float size_pixels,const ImFontConfig* font_cfg=((void *)0),const ImWchar* glyph_ranges=((void *)0))			(void* font_data,int font_size,float size_pixels,const ImFontConfig* font_cfg,const ImWchar* glyph_ranges)			(font_data,font_size,size_pixels,font_cfg,glyph_ranges)			ImFont* 
+ImFontAtlas_AddFontFromMemoryCompressedTTF	   	AddFontFromMemoryCompressedTTF			(const void*,int,float,const ImFontConfig*,const ImWchar*)			(const void* compressed_font_data,int compressed_font_size,float size_pixels,const ImFontConfig* font_cfg=((void *)0),const ImWchar* glyph_ranges=((void *)0))			(const void* compressed_font_data,int compressed_font_size,float size_pixels,const ImFontConfig* font_cfg,const ImWchar* glyph_ranges)			(compressed_font_data,compressed_font_size,size_pixels,font_cfg,glyph_ranges)			ImFont* 
+ImFontAtlas_AddFontFromMemoryCompressedBase85TTF	   	AddFontFromMemoryCompressedBase85TTF			(const char*,float,const ImFontConfig*,const ImWchar*)			(const char* compressed_font_data_base85,float size_pixels,const ImFontConfig* font_cfg=((void *)0),const ImWchar* glyph_ranges=((void *)0))			(const char* compressed_font_data_base85,float size_pixels,const ImFontConfig* font_cfg,const ImWchar* glyph_ranges)			(compressed_font_data_base85,size_pixels,font_cfg,glyph_ranges)			ImFont* 
+ImFontAtlas_ClearInputData	   	ClearInputData			()			()			()			()			void 
+ImFontAtlas_ClearTexData	   	ClearTexData			()			()			()			()			void 
+ImFontAtlas_ClearFonts	   	ClearFonts			()			()			()			()			void 
+ImFontAtlas_Clear	   	Clear			()			()			()			()			void 
+ImFontAtlas_Build	   	Build			()			()			()			()			bool 
+ImFontAtlas_GetTexDataAsAlpha8	   	GetTexDataAsAlpha8			(unsigned char**,int*,int*,int*)			(unsigned char** out_pixels,int* out_width,int* out_height,int* out_bytes_per_pixel=((void *)0))			(unsigned char** out_pixels,int* out_width,int* out_height,int* out_bytes_per_pixel)			(out_pixels,out_width,out_height,out_bytes_per_pixel)			void 
+ImFontAtlas_GetTexDataAsRGBA32	   	GetTexDataAsRGBA32			(unsigned char**,int*,int*,int*)			(unsigned char** out_pixels,int* out_width,int* out_height,int* out_bytes_per_pixel=((void *)0))			(unsigned char** out_pixels,int* out_width,int* out_height,int* out_bytes_per_pixel)			(out_pixels,out_width,out_height,out_bytes_per_pixel)			void 
+ImFontAtlas_SetTexID	   	SetTexID			(ImTextureID)			(ImTextureID id)			(ImTextureID id)			(id)			void 
+ImFontAtlas_GetGlyphRangesDefault	   	GetGlyphRangesDefault			()			()			()			()			const ImWchar* 
+ImFontAtlas_GetGlyphRangesKorean	   	GetGlyphRangesKorean			()			()			()			()			const ImWchar* 
+ImFontAtlas_GetGlyphRangesJapanese	   	GetGlyphRangesJapanese			()			()			()			()			const ImWchar* 
+ImFontAtlas_GetGlyphRangesChinese	   	GetGlyphRangesChinese			()			()			()			()			const ImWchar* 
+ImFontAtlas_GetGlyphRangesCyrillic	   	GetGlyphRangesCyrillic			()			()			()			()			const ImWchar* 
+ImFontAtlas_GetGlyphRangesThai	   	GetGlyphRangesThai			()			()			()			()			const ImWchar* 
+GlyphRangesBuilder_GlyphRangesBuilder	   	GlyphRangesBuilder			()			()			()			()			nil
+GlyphRangesBuilder_GetBit	   	GetBit			(int)			(int n)			(int n)			(n)			bool 
+GlyphRangesBuilder_SetBit	   	SetBit			(int)			(int n)			(int n)			(n)			void 
+GlyphRangesBuilder_AddChar	   	AddChar			(ImWchar)			(ImWchar c)			(ImWchar c)			(c)			void 
+GlyphRangesBuilder_AddText	   	AddText			(const char*,const char*)			(const char* text,const char* text_end=((void *)0))			(const char* text,const char* text_end)			(text,text_end)			void 
+GlyphRangesBuilder_AddRanges	   	AddRanges			(const ImWchar*)			(const ImWchar* ranges)			(const ImWchar* ranges)			(ranges)			void 
+GlyphRangesBuilder_BuildRanges	   	BuildRanges			(ImVector_ImWchar*)			(ImVector<ImWchar>* out_ranges)			(ImVector_ImWchar* out_ranges)			(out_ranges)			void 
+CustomRect_CustomRect	   	CustomRect			()			()			()			()			nil
+CustomRect_IsPacked	   	IsPacked			()			()			()			()			bool 
+ImFontAtlas_AddCustomRectRegular	   	AddCustomRectRegular			(unsigned int,int,int)			(unsigned int id,int width,int height)			(unsigned int id,int width,int height)			(id,width,height)			int 
+ImFontAtlas_AddCustomRectFontGlyph	   	AddCustomRectFontGlyph			(ImFont*,ImWchar,int,int,float,const ImVec2)			(ImFont* font,ImWchar id,int width,int height,float advance_x,const ImVec2& offset=ImVec2(0,0))			(ImFont* font,ImWchar id,int width,int height,float advance_x,const ImVec2 offset)			(font,id,width,height,advance_x,offset)			int 
+ImFontAtlas_GetCustomRectByIndex	   	GetCustomRectByIndex			(int)			(int index)			(int index)			(index)			const CustomRect* 
+ImFontAtlas_CalcCustomRectUV	   	CalcCustomRectUV			(const CustomRect*,ImVec2*,ImVec2*)			(const CustomRect* rect,ImVec2* out_uv_min,ImVec2* out_uv_max)			(const CustomRect* rect,ImVec2* out_uv_min,ImVec2* out_uv_max)			(rect,out_uv_min,out_uv_max)			void 
+ImFontAtlas_GetMouseCursorTexData	   	GetMouseCursorTexData			(ImGuiMouseCursor,ImVec2*,ImVec2*,ImVec2[2],ImVec2[2])			(ImGuiMouseCursor cursor,ImVec2* out_offset,ImVec2* out_size,ImVec2 out_uv_border[2],ImVec2 out_uv_fill[2])			(ImGuiMouseCursor cursor,ImVec2* out_offset,ImVec2* out_size,ImVec2 out_uv_border[2],ImVec2 out_uv_fill[2])			(cursor,out_offset,out_size,out_uv_border,out_uv_fill)			bool 
+ImFont_ImFont	   	ImFont			()			()			()			()			nil
+ImFont_~ImFont	   	~ImFont			()			()			()			()			nil
+ImFont_ClearOutputData	   	ClearOutputData			()			()			()			()			void 
+ImFont_BuildLookupTable	   	BuildLookupTable			()			()			()			()			void 
+ImFont_FindGlyph	   	FindGlyph			(ImWchar)			(ImWchar c)			(ImWchar c)			(c)			const ImFontGlyph*
+ImFont_FindGlyphNoFallback	   	FindGlyphNoFallback			(ImWchar)			(ImWchar c)			(ImWchar c)			(c)			const ImFontGlyph*
+ImFont_SetFallbackChar	   	SetFallbackChar			(ImWchar)			(ImWchar c)			(ImWchar c)			(c)			void 
+ImFont_GetCharAdvance	   	GetCharAdvance			(ImWchar)			(ImWchar c)			(ImWchar c)			(c)			float 
+ImFont_IsLoaded	   	IsLoaded			()			()			()			()			bool 
+ImFont_GetDebugName	   	GetDebugName			()			()			()			()			const char* 
+ImFont_CalcTextSizeA	   	CalcTextSizeA			(float,float,float,const char*,const char*,const char**)			(float size,float max_width,float wrap_width,const char* text_begin,const char* text_end=((void *)0),const char** remaining=((void *)0))			(float size,float max_width,float wrap_width,const char* text_begin,const char* text_end,const char** remaining)			(size,max_width,wrap_width,text_begin,text_end,remaining)			ImVec2 
+ImFont_CalcWordWrapPositionA	   	CalcWordWrapPositionA			(float,const char*,const char*,float)			(float scale,const char* text,const char* text_end,float wrap_width)			(float scale,const char* text,const char* text_end,float wrap_width)			(scale,text,text_end,wrap_width)			const char* 
+ImFont_RenderChar	   	RenderChar			(ImDrawList*,float,ImVec2,ImU32,unsigned short)			(ImDrawList* draw_list,float size,ImVec2 pos,ImU32 col,unsigned short c)			(ImDrawList* draw_list,float size,ImVec2 pos,ImU32 col,unsigned short c)			(draw_list,size,pos,col,c)			void 
+ImFont_RenderText	   	RenderText			(ImDrawList*,float,ImVec2,ImU32,const ImVec4,const char*,const char*,float,bool)			(ImDrawList* draw_list,float size,ImVec2 pos,ImU32 col,const ImVec4& clip_rect,const char* text_begin,const char* text_end,float wrap_width=0.0f,bool cpu_fine_clip=false)			(ImDrawList* draw_list,float size,ImVec2 pos,ImU32 col,const ImVec4 clip_rect,const char* text_begin,const char* text_end,float wrap_width,bool cpu_fine_clip)			(draw_list,size,pos,col,clip_rect,text_begin,text_end,wrap_width,cpu_fine_clip)			void 
+ImFont_GrowIndex	   	GrowIndex			(int)			(int new_size)			(int new_size)			(new_size)			void 
+ImFont_AddGlyph	   	AddGlyph			(ImWchar,float,float,float,float,float,float,float,float,float)			(ImWchar c,float x0,float y0,float x1,float y1,float u0,float v0,float u1,float v1,float advance_x)			(ImWchar c,float x0,float y0,float x1,float y1,float u0,float v0,float u1,float v1,float advance_x)			(c,x0,y0,x1,y1,u0,v0,u1,v1,advance_x)			void 
+ImFont_AddRemapChar	   	AddRemapChar			(ImWchar,ImWchar,bool)			(ImWchar dst,ImWchar src,bool overwrite_dst=true)			(ImWchar dst,ImWchar src,bool overwrite_dst)			(dst,src,overwrite_dst)			void 
+//embeded_structs---------------------------------------------------------------------------
+typedef ImFontAtlas::GlyphRangesBuilder GlyphRangesBuilder;
+typedef ImFontAtlas::CustomRect CustomRect;
+typedef ImGuiTextFilter::TextRange TextRange;
+typedef ImGuiStorage::Pair Pair;
+typedef ImVector<TextRange> ImVector_TextRange;
+typedef ImVector<ImWchar> ImVector_ImWchar;
+//constructors------------------------------------------------------------------
+ImVec2_ImVec2			()			()			()			()			nil
+ImVec2_ImVec2			(float,float)			(float _x,float _y)			(float _x,float _y)			(_x,_y)			nil
+ImVec4_ImVec4			()			()			()			()			nil
+ImVec4_ImVec4			(float,float,float,float)			(float _x,float _y,float _z,float _w)			(float _x,float _y,float _z,float _w)			(_x,_y,_z,_w)			nil
+ImGuiStyle_ImGuiStyle			()			()			()			()			nil
+ImGuiIO_ImGuiIO			()			()			()			()			nil
+ImGuiOnceUponAFrame_ImGuiOnceUponAFrame			()			()			()			()			nil
+TextRange_TextRange			()			()			()			()			nil
+TextRange_TextRange			(const char*,const char*)			(const char* _b,const char* _e)			(const char* _b,const char* _e)			(_b,_e)			nil
+ImGuiTextFilter_ImGuiTextFilter			(const char*)			(const char* default_filter="")			(const char* default_filter)			(default_filter)			nil
+ImGuiTextBuffer_ImGuiTextBuffer			()			()			()			()			nil
+Pair_Pair			(ImGuiID,int)			(ImGuiID _key,int _val_i)			(ImGuiID _key,int _val_i)			(_key,_val_i)			nil
+Pair_Pair			(ImGuiID,float)			(ImGuiID _key,float _val_f)			(ImGuiID _key,float _val_f)			(_key,_val_f)			nil
+Pair_Pair			(ImGuiID,void*)			(ImGuiID _key,void* _val_p)			(ImGuiID _key,void* _val_p)			(_key,_val_p)			nil
+ImGuiPayload_ImGuiPayload			()			()			()			()			nil
+ImColor_ImColor			()			()			()			()			nil
+ImColor_ImColor			(int,int,int,int)			(int r,int g,int b,int a=255)			(int r,int g,int b,int a)			(r,g,b,a)			nil
+ImColor_ImColor			(ImU32)			(ImU32 rgba)			(ImU32 rgba)			(rgba)			nil
+ImColor_ImColor			(float,float,float,float)			(float r,float g,float b,float a=1.0f)			(float r,float g,float b,float a)			(r,g,b,a)			nil
+ImColor_ImColor			(const ImVec4)			(const ImVec4& col)			(const ImVec4 col)			(col)			nil
+ImGuiListClipper_ImGuiListClipper			(int,float)			(int items_count=-1,float items_height=-1.0f)			(int items_count,float items_height)			(items_count,items_height)			nil
+ImGuiListClipper_~ImGuiListClipper			()			()			()			()			nil
+ImDrawCmd_ImDrawCmd			()			()			()			()			nil
+ImDrawList_ImDrawList			(const ImDrawListSharedData*)			(const ImDrawListSharedData* shared_data)			(const ImDrawListSharedData* shared_data)			(shared_data)			nil
+ImDrawList_~ImDrawList			()			()			()			()			nil
+ImDrawData_ImDrawData			()			()			()			()			nil
+ImDrawData_~ImDrawData			()			()			()			()			nil
+ImFontConfig_ImFontConfig			()			()			()			()			nil
+ImFontAtlas_ImFontAtlas			()			()			()			()			nil
+ImFontAtlas_~ImFontAtlas			()			()			()			()			nil
+GlyphRangesBuilder_GlyphRangesBuilder			()			()			()			()			nil
+CustomRect_CustomRect			()			()			()			()			nil
+ImFont_ImFont			()			()			()			()			nil
+ImFont_~ImFont			()			()			()			()			nil
+//-------------------------------------------------------------------------------------
