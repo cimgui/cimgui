@@ -3,10 +3,6 @@
 # Compatible with Ubuntu 14.04.1 and Mac OS X
 
 OBJS = cimgui.o
-OBJS += fontAtlas.o
-OBJS += drawList.o
-OBJS += listClipper.o
-#OBJS += test.o
 OBJS += ../imgui/imgui.o
 OBJS += ../imgui/imgui_draw.o
 OBJS += ../imgui/imgui_demo.o
