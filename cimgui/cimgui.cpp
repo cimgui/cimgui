@@ -308,7 +308,7 @@ CIMGUI_API ImVec2  igGetFontTexUvWhitePixel()
 {
     return ImGui::GetFontTexUvWhitePixel();
 }
-CIMGUI_API ImU32  igGetColorU32Col(ImGuiCol idx,float alpha_mul)
+CIMGUI_API ImU32  igGetColorU32(ImGuiCol idx,float alpha_mul)
 {
     return ImGui::GetColorU32(idx,alpha_mul);
 }
@@ -1589,7 +1589,7 @@ CIMGUI_API void  ImDrawList_AddCircleFilled(ImDrawList* self,const ImVec2 centre
 {
     return self->AddCircleFilled(centre,radius,col,num_segments);
 }
-CIMGUI_API void  ImDrawList_AddTextVec2(ImDrawList* self,const ImVec2 pos,ImU32 col,const char* text_begin,const char* text_end)
+CIMGUI_API void  ImDrawList_AddText(ImDrawList* self,const ImVec2 pos,ImU32 col,const char* text_begin,const char* text_end)
 {
     return self->AddText(pos,col,text_begin,text_end);
 }

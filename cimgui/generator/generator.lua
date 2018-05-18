@@ -21,6 +21,12 @@ local cimgui_overloads = {
 		--["(const void*)"] = 			"igPushIDPtr",
 		--["(int)"] = 					"igPushIDInt"
 	},
+	ImDrawList_AddText = {
+		["(const ImVec2,ImU32,const char*,const char*)"] = "ImDrawList_AddText",
+	},
+	igGetColorU32 = {
+		["(ImGuiCol,float)"] = "igGetColorU32",
+	},
 	igCollapsingHeader = {
 		["(const char*,ImGuiTreeNodeFlags)"] =		"igCollapsingHeader"
 	}

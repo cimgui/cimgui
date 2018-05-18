@@ -866,7 +866,7 @@ CIMGUI_API const ImVec4*  igGetStyleColorVec4(ImGuiCol idx);
 CIMGUI_API ImFont*  igGetFont();
 CIMGUI_API float  igGetFontSize();
 CIMGUI_API ImVec2  igGetFontTexUvWhitePixel();
-CIMGUI_API ImU32  igGetColorU32Col(ImGuiCol idx,float alpha_mul);
+CIMGUI_API ImU32  igGetColorU32(ImGuiCol idx,float alpha_mul);
 CIMGUI_API ImU32  igGetColorU32Vec4(const ImVec4 col);
 CIMGUI_API ImU32  igGetColorU32U32(ImU32 col);
 CIMGUI_API void  igPushItemWidth(float item_width);
@@ -1178,7 +1178,7 @@ CIMGUI_API void  ImDrawList_AddTriangle(ImDrawList* self,const ImVec2 a,const Im
 CIMGUI_API void  ImDrawList_AddTriangleFilled(ImDrawList* self,const ImVec2 a,const ImVec2 b,const ImVec2 c,ImU32 col);
 CIMGUI_API void  ImDrawList_AddCircle(ImDrawList* self,const ImVec2 centre,float radius,ImU32 col,int num_segments,float thickness);
 CIMGUI_API void  ImDrawList_AddCircleFilled(ImDrawList* self,const ImVec2 centre,float radius,ImU32 col,int num_segments);
-CIMGUI_API void  ImDrawList_AddTextVec2(ImDrawList* self,const ImVec2 pos,ImU32 col,const char* text_begin,const char* text_end);
+CIMGUI_API void  ImDrawList_AddText(ImDrawList* self,const ImVec2 pos,ImU32 col,const char* text_begin,const char* text_end);
 CIMGUI_API void  ImDrawList_AddTextFontPtr(ImDrawList* self,const ImFont* font,float font_size,const ImVec2 pos,ImU32 col,const char* text_begin,const char* text_end,float wrap_width,const ImVec4* cpu_fine_clip_rect);
 CIMGUI_API void  ImDrawList_AddImage(ImDrawList* self,ImTextureID user_texture_id,const ImVec2 a,const ImVec2 b,const ImVec2 uv_a,const ImVec2 uv_b,ImU32 col);
 CIMGUI_API void  ImDrawList_AddImageQuad(ImDrawList* self,ImTextureID user_texture_id,const ImVec2 a,const ImVec2 b,const ImVec2 c,const ImVec2 d,const ImVec2 uv_a,const ImVec2 uv_b,const ImVec2 uv_c,const ImVec2 uv_d,ImU32 col);
