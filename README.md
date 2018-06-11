@@ -14,7 +14,7 @@ Notes:
 # compilation
 
 * clone
-* make using makefile on linux/osx/mingw (Or use CMake to generate project)
+* make using makefile on linux/macOS/mingw (Or use CMake to generate project)
 
 # auto binding generation
 
