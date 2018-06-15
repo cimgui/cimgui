@@ -35,7 +35,7 @@ local cimgui_overloads = {
 --helper functions
 --------------------------------------------------------------------------
 --iterates lines from a gcc -E in a specific location
-local function location(file,locpath)
+local function locationBAK(file,locpath)
 	local location_re = '^# %d+ "([^"]*)"'
 	local path_re = '^(.*[\\/])('..locpath..')%.h$' 
 	local in_location = false
@@ -45,6 +45,29 @@ local function location(file,locpath)
 			if not line then return nil end
 			if #line == 0 then --nothing
 			elseif line:sub(1,1) == "#" then
+				-- Is this a location pragma?
+				local location_match = line:match(location_re)
+				if location_match then
+					-- If we are transitioning to a header we need to parse, set the flag
+					local path_match,aaa = location_match:match(path_re)
+					in_location = (path_match ~= nil)
+				end
+			elseif in_location then
+				return line
+			end
+		until false
+	end
+	return location_it
+end
+local function location(file,locpath)
+	local location_re = '^# %d+ "([^"]*)"'
+	local path_re = '^(.*[\\/])('..locpath..')%.h$' 
+	local in_location = false
+	local function location_it()
+		repeat
+			local line = file:read"*l"
+			if not line then return nil end
+			if line:sub(1,1) == "#" then
 				-- Is this a location pragma?
 				local location_match = line:match(location_re)
 				if location_match then
@@ -146,6 +169,7 @@ local function struct_parser()
 	
 		--drop initial comments
 		if line:match(initial_comment_re) then
+			table.insert(structcdefs,line)
             return 
 		end
 		
@@ -455,7 +479,7 @@ local function gen_structs_and_enums(cdefs)
 		-- separate comments from code and try to add them with same tab
         local line, comment = split_comment(line)
 		local linelen = #line
-		local desired_linelen = math.max(math.ceil(linelen/10)*10,40)
+		local desired_linelen = (linelen==0) and 0 or math.max(math.ceil(linelen/10)*10,40)
 		local spaces_to_add = desired_linelen - linelen
 		local linecom = line..string.rep(" ",spaces_to_add)..comment
 		
