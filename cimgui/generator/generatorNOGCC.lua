@@ -37,6 +37,12 @@ local cimgui_overloads = {
 	igPlotLines = {
 		["(const char*,const float*,int,int,const char*,float,float,ImVec2,int)"] = "igPlotLines",
 	},
+	igBeginChild = {
+		["(const char*,const ImVec2,bool,ImGuiWindowFlags)"] = "igBeginChild",
+	},
+	igSelectable = {
+		["(const char*,bool,ImGuiSelectableFlags,const ImVec2)"] = "igSelectable"
+	}
 }
 --------------------------------------------------------------------------
 --helper functions

@@ -92,7 +92,7 @@ CIMGUI_API void           igEnd()
 {
     return ImGui::End();
 }
-CIMGUI_API bool           igBeginChildStr(const char* str_id,const ImVec2 size,bool border,ImGuiWindowFlags flags)
+CIMGUI_API bool           igBeginChild(const char* str_id,const ImVec2 size,bool border,ImGuiWindowFlags flags)
 {
     return ImGui::BeginChild(str_id,size,border,flags);
 }
@@ -870,7 +870,7 @@ CIMGUI_API bool           igCollapsingHeaderBoolPtr(const char* label,bool* p_op
 {
     return ImGui::CollapsingHeader(label,p_open,flags);
 }
-CIMGUI_API bool           igSelectableBool(const char* label,bool selected,ImGuiSelectableFlags flags,const ImVec2 size)
+CIMGUI_API bool           igSelectable(const char* label,bool selected,ImGuiSelectableFlags flags,const ImVec2 size)
 {
     return ImGui::Selectable(label,selected,flags,size);
 }

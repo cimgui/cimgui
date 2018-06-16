@@ -1159,7 +1159,7 @@ CIMGUI_API void           igStyleColorsClassic(ImGuiStyle* dst); // classic imgu
 CIMGUI_API void           igStyleColorsLight(ImGuiStyle* dst);   // best used with borders and a custom, thicker font
 CIMGUI_API bool           igBegin(const char* name,bool* p_open,ImGuiWindowFlags flags);
 CIMGUI_API void           igEnd();
-CIMGUI_API bool           igBeginChildStr(const char* str_id,const ImVec2 size,bool border,ImGuiWindowFlags flags); // Begin a scrolling region. size==0.0f: use remaining window size, size<0.0f: use remaining window size minus abs(size). size>0.0f: fixed size. each axis can use a different mode, e.g. ImVec2(0,400).
+CIMGUI_API bool           igBeginChild(const char* str_id,const ImVec2 size,bool border,ImGuiWindowFlags flags); // Begin a scrolling region. size==0.0f: use remaining window size, size<0.0f: use remaining window size minus abs(size). size>0.0f: fixed size. each axis can use a different mode, e.g. ImVec2(0,400).
 CIMGUI_API bool           igBeginChildID(ImGuiID id,const ImVec2 size,bool border,ImGuiWindowFlags flags);
 CIMGUI_API void           igEndChild();
 CIMGUI_API bool           igIsWindowAppearing();
@@ -1346,7 +1346,7 @@ CIMGUI_API float          igGetTreeNodeToLabelSpacing();                        
 CIMGUI_API void           igSetNextTreeNodeOpen(bool is_open,ImGuiCond cond);              // set next TreeNode/CollapsingHeader open state.
 CIMGUI_API bool           igCollapsingHeader(const char* label,ImGuiTreeNodeFlags flags);  // if returning 'true' the header is open. doesn't indent nor push on ID stack. user doesn't have to call TreePop().
 CIMGUI_API bool           igCollapsingHeaderBoolPtr(const char* label,bool* p_open,ImGuiTreeNodeFlags flags); // when 'p_open' isn't NULL, display an additional small close button on upper right of the header
-CIMGUI_API bool           igSelectableBool(const char* label,bool selected,ImGuiSelectableFlags flags,const ImVec2 size);  // "bool selected" carry the selection state (read-only). Selectable() is clicked is returns true so you can modify your selection state. size.x==0.0: use remaining width, size.x>0.0: specify width. size.y==0.0: use label height, size.y>0.0: specify height
+CIMGUI_API bool           igSelectable(const char* label,bool selected,ImGuiSelectableFlags flags,const ImVec2 size);  // "bool selected" carry the selection state (read-only). Selectable() is clicked is returns true so you can modify your selection state. size.x==0.0: use remaining width, size.x>0.0: specify width. size.y==0.0: use label height, size.y>0.0: specify height
 CIMGUI_API bool           igSelectableBoolPtr(const char* label,bool* p_selected,ImGuiSelectableFlags flags,const ImVec2 size);       // "bool* p_selected" point to the selection state (read-write), as a convenient helper.
 CIMGUI_API bool           igListBoxStr_arr(const char* label,int* current_item,const char* const items[],int items_count,int height_in_items);
 CIMGUI_API bool           igListBoxFnPtr(const char* label,int* current_item,bool(*items_getter)(void* data,int idx,const char** out_text),void* data,int items_count,int height_in_items);
