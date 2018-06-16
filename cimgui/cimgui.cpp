@@ -590,7 +590,7 @@ CIMGUI_API bool           igRadioButtonIntPtr(const char* label,int* v,int v_but
 {
     return ImGui::RadioButton(label,v,v_button);
 }
-CIMGUI_API void           igPlotLinesFloatPtr(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride)
+CIMGUI_API void           igPlotLines(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride)
 {
     return ImGui::PlotLines(label,values,values_count,values_offset,overlay_text,scale_min,scale_max,graph_size,stride);
 }
@@ -622,7 +622,7 @@ CIMGUI_API void           igEndCombo()
 {
     return ImGui::EndCombo();
 }
-CIMGUI_API bool           igComboStr_arr(const char* label,int* current_item,const char* const items[],int items_count,int popup_max_height_in_items)
+CIMGUI_API bool           igCombo(const char* label,int* current_item,const char* const items[],int items_count,int popup_max_height_in_items)
 {
     return ImGui::Combo(label,current_item,items,items_count,popup_max_height_in_items);
 }
@@ -1948,4 +1948,8 @@ CIMGUI_API void ImGuiTextBuffer_appendf(struct ImGuiTextBuffer *buffer, const ch
 CIMGUI_API void ImFontConfig_DefaultConstructor(ImFontConfig *config)
 {
     *config = ImFontConfig();
+}
+CIMGUI_API float igGET_FLT_MAX()
+{
+	return FLT_MAX;
 }

@@ -1,5 +1,6 @@
 --------------------------------------------------------------------------
 --script for auto_funcs.h and auto_funcs.cpp generation
+--expects Lua 5.1 or luajit
 --------------------------------------------------------------------------
 
 --------------------------------------------------------------------------
@@ -28,8 +29,14 @@ local cimgui_overloads = {
 		["(ImGuiCol,float)"] = "igGetColorU32",
 	},
 	igCollapsingHeader = {
-		["(const char*,ImGuiTreeNodeFlags)"] =		"igCollapsingHeader"
-	}
+		["(const char*,ImGuiTreeNodeFlags)"] =	"igCollapsingHeader",
+	},
+	igCombo = {
+		["(const char*,int*,const char* const[],int,int)"] = "igCombo",
+	},
+	igPlotLines = {
+		["(const char*,const float*,int,int,const char*,float,float,ImVec2,int)"] = "igPlotLines",
+	},
 }
 --------------------------------------------------------------------------
 --helper functions
@@ -405,12 +412,13 @@ local function func_parser()
 				local defT = defsT[cimguiname][#defsT[cimguiname]] 
 				defT.defaults = {}
 				--for k,def in args:gmatch("([%w%s%*_]+)=([%w_%(%)%s,%*]+)[,%)]") do
-				for k,def in args:gmatch("([%w_]+)=([%w_%(%)%s,%*]+)[,%)]") do
+				for k,def in args:gmatch("([%w_]+)=([%w_%(%)%s,%*%.%-]+)[,%)]") do
 					defT.defaults[k]=def
 				end
 				defT.cimguiname = cimguiname
 				defT.stname = stname
 				defT.funcname = funcname
+				defT.argsoriginal = args
 				defT.args=argscsinpars
 				defT.signature = signature
 				defT.call_args = call_args
@@ -692,6 +700,7 @@ FP:compute_overloads()
 local cstructs = gen_structs_and_enums(STP.lines)
 local cfuncs = func_header_generate(FP)
 
+
 --merge it in cimgui_template.h to cimgui.h
 local hfile = io.open("./cimgui_template.h","r")
 local hstrfile = hfile:read"*a"
@@ -713,11 +722,12 @@ local outfile = io.open("./cimgui.cpp","w")
 outfile:write(hstrfile)
 outfile:close()
 
-----------save defs
+----------save fundefs in definitions.lua for using in bindings
 local hfile = io.open("./definitions.lua","w")
 local ser = serializeTable("defs",FP.defsT)
 hfile:write(ser.."\nreturn defs")
 hfile:close()
+
 
 
 ---dump infos-----------------------------------------------------------------------

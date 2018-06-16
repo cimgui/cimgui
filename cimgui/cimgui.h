@@ -1279,7 +1279,7 @@ CIMGUI_API bool           igCheckbox(const char* label,bool* v);
 CIMGUI_API bool           igCheckboxFlags(const char* label,unsigned int* flags,unsigned int flags_value);
 CIMGUI_API bool           igRadioButtonBool(const char* label,bool active);
 CIMGUI_API bool           igRadioButtonIntPtr(const char* label,int* v,int v_button);
-CIMGUI_API void           igPlotLinesFloatPtr(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride);
+CIMGUI_API void           igPlotLines(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride);
 CIMGUI_API void           igPlotLinesFnPtr(const char* label,float(*values_getter)(void* data,int idx),void* data,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size);
 CIMGUI_API void           igPlotHistogramFloatPtr(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride);
 CIMGUI_API void           igPlotHistogramFnPtr(const char* label,float(*values_getter)(void* data,int idx),void* data,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size);
@@ -1287,7 +1287,7 @@ CIMGUI_API void           igProgressBar(float fraction,const ImVec2 size_arg,con
 CIMGUI_API void           igBullet();                                                       // draw a small circle and keep the cursor on the same line. advance cursor x position by GetTreeNodeToLabelSpacing(), same distance that TreeNode() uses
 CIMGUI_API bool           igBeginCombo(const char* label,const char* preview_value,ImGuiComboFlags flags);
 CIMGUI_API void           igEndCombo(); // only call EndCombo() if BeginCombo() returns true!
-CIMGUI_API bool           igComboStr_arr(const char* label,int* current_item,const char* const items[],int items_count,int popup_max_height_in_items);
+CIMGUI_API bool           igCombo(const char* label,int* current_item,const char* const items[],int items_count,int popup_max_height_in_items);
 CIMGUI_API bool           igComboStr(const char* label,int* current_item,const char* items_separated_by_zeros,int popup_max_height_in_items);      // Separate items with \0 within a string, end item-list with \0\0. e.g. "One\0Two\0Three\0"
 CIMGUI_API bool           igComboFnPtr(const char* label,int* current_item,bool(*items_getter)(void* data,int idx,const char** out_text),void* data,int items_count,int popup_max_height_in_items);
 CIMGUI_API bool           igDragFloat(const char* label,float* v,float v_speed,float v_min,float v_max,const char* display_format,float power);     // If v_min >= v_max we have no bound
@@ -1617,4 +1617,6 @@ CIMGUI_API void igLogText(CONST char *fmt, ...);
 //no appendfV
 CIMGUI_API void ImGuiTextBuffer_appendf(struct ImGuiTextBuffer *buffer, const char *fmt, ...);
 CIMGUI_API void ImFontConfig_DefaultConstructor(ImFontConfig *config);
+CIMGUI_API float igGET_FLT_MAX();
+
 

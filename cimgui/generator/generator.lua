@@ -480,7 +480,7 @@ local function gen_structs_and_enums(cdefs)
         local line, comment = split_comment(line)
 		local linelen = #line
 		local desired_linelen = (linelen==0) and 0 or math.max(math.ceil(linelen/10)*10,40)
-		local spaces_to_add = desired_linelen - linelen
+		local spaces_to_add = 0 --desired_linelen - linelen
 		local linecom = line..string.rep(" ",spaces_to_add)..comment
 		
         if line:match(namespace_re) then
