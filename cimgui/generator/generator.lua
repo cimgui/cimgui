@@ -2,8 +2,11 @@
 --script for auto_funcs.h and auto_funcs.cpp generation
 --expects Lua 5.1 or luajit
 --------------------------------------------------------------------------
+local script_args = {...}
+local locations = {}
+for i=2,#script_args do table.insert(locations,script_args[i]) end
 -- first script argument to use gcc or not
-local USEGCC = ({...})[1] == "true"
+local USEGCC = script_args[1] == "true"
 print("USEGCC",USEGCC)
 --------------------------------------------------------------------------
 --this table has the functions to be skipped in generation
@@ -64,6 +67,8 @@ local function imguilines(file)
 				end
 				-- skip
 			elseif #iflevels == 0 then
+				-- drop IMGUI_APIX
+				line = line:gsub("IMGUI_APIX","")
 				-- drop IMGUI_API
 				line = line:gsub("IMGUI_API","")
 				return line
@@ -73,9 +78,12 @@ local function imguilines(file)
 	return location_it
 end
 --iterates lines from a gcc -E in a specific location
-local function location(file,locpath)
+local function location(file,locpathT)
 	local location_re = '^# %d+ "([^"]*)"'
-	local path_re = '^(.*[\\/])('..locpath..')%.h$' 
+	local path_reT = {}
+	for i,locpath in ipairs(locpathT) do
+		table.insert(path_reT,'^(.*[\\/])('..locpath..')%.h$')
+	end
 	local in_location = false
 	local function location_it()
 		repeat
@@ -85,9 +93,10 @@ local function location(file,locpath)
 				-- Is this a location pragma?
 				local location_match = line:match(location_re)
 				if location_match then
-					-- If we are transitioning to a header we need to parse, set the flag
-					local path_match,aaa = location_match:match(path_re)
-					in_location = (path_match ~= nil)
+					in_location = false
+					for i,path_re in ipairs(path_reT) do
+						if location_match:match(path_re) then in_location = true; break end
+					end
 				end
 			elseif in_location then
 				return line
@@ -156,6 +165,7 @@ local function get_manuals(def)
 end
 
 local function getcimguiname(stname,funcname)
+	if #stname == 0 then return funcname end --top level
 	local pre = (stname == "ImGui") and "ig" or stname.."_"
 	return pre..funcname
 end
@@ -414,7 +424,8 @@ local function func_parser()
 				local defT = defsT[cimguiname][#defsT[cimguiname]] 
 				defT.defaults = {}
 				--for k,def in args:gmatch("([%w%s%*_]+)=([%w_%(%)%s,%*]+)[,%)]") do
-				for k,def in args:gmatch("([%w_]+)=([%w_%(%)%s,%*%.%-]+)[,%)]") do
+				--for k,def in args:gmatch("([%w_]+)=([%w_%(%)%s,%*%.%-]+)[,%)]") do
+				for k,def in args:gmatch('([%w_]+)=([%w_%(%)%s,%*%.%-%%"]+)[,%)]') do
 					defT.defaults[k]=def
 				end
 				defT.cimguiname = cimguiname
@@ -605,7 +616,7 @@ local function func_header_generate(FP)
 		local manual = get_manuals(def)
 		if not manual and def.ret then --not constructor
 			local addcoment = def.comment or ""
-			if def.stname == "ImGui" then
+			if def.stname == "ImGui" or def.stname == "" then --ImGui namespace or top level
 				table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args..";"..addcoment.."\n")
 			else
 				local empty = def.args:match("^%(%)") --no args
@@ -626,7 +637,7 @@ local function func_implementation(FP)
 		local cimf = FP.defsT[t.cimguiname]
 		local def = cimf[t.signature]
 		local manual = get_manuals(def)
-		if not manual and def.ret then --not constructor
+		if not manual and def.ret and def.stname~="" then --not constructor or manual or top level
 			local ptret = def.retref and "&" or ""
 			-- local castret = def.ret:gsub("[^%s]+",function(x)
 					-- local y = x:gsub("%*","")
@@ -688,7 +699,7 @@ local iterator = (USEGCC and location) or imguilines
 print("iterator",iterator)
 print(location, imguilines)
 
-for line in iterator(io.input(),"imgui") do
+for line in iterator(io.input(),locations) do
 	local line, comment = split_comment(line)
 	STP.insert(line,comment)
 	FP.insert(line,comment)

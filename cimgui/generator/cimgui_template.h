@@ -32,6 +32,8 @@ typedef unsigned __int64 ImU64;
 typedef unsigned long long ImU64;
 #endif
 
+struct GLFWwindow;
+
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 #include "imgui_structs.h"
 #endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
