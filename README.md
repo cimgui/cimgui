@@ -2,12 +2,12 @@
 
 ![sample](screenshot.png)
 
-This is a thin c-api wrapper for the excellent C++ intermediate gui [imgui](https://github.com/ocornut/imgui).
-Most of the functions have wrapper counterparts now, missing stuff is added on a as-needed basis (PR welcome).
+This is a thin c-api wrapper programmatically generated for the excellent C++ intermediate gui [imgui](https://github.com/ocornut/imgui).
+All functions are programmatically wrapped except contructors, destructors and ImVector.(Unless someone find a use case for them)
 This library is intended as a intermediate layer to be able to use imgui from other languages that can interface with C (like D - see [D-binding](https://github.com/Extrawurst/DerelictImgui))
 
 Notes:
-* currently this wrapper is based on version [1.53 of imgui](https://github.com/ocornut/imgui/releases/tag/v1.53)
+* currently this wrapper is based on version [1.62WIP of imgui](https://github.com/ocornut/imgui/)
 * does not compile with pure C compiler yet (for writing bindings in languages that are able to use C-ABI it is enough though, see D-bindings)
 
 # usage
@@ -25,3 +25,4 @@ Notes:
 * [imgui-rs](https://github.com/Gekkio/imgui-rs)
 * [imgui-pas](https://github.com/dpethes/imgui-pas)
 * [odin-dear_imgui](https://github.com/ThisDrunkDane/odin-dear_imgui)
+* [LuaJIT-imgui](https://github.com/sonoro1234/LuaJIT-ImGui)
