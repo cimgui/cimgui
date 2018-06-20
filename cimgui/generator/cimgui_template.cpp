@@ -30,5 +30,5 @@ CIMGUI_API void ImFontConfig_DefaultConstructor(ImFontConfig *config)
 }
 CIMGUI_API float igGET_FLT_MAX()
 {
-	return FLT_MAX;
+    return FLT_MAX;
 }

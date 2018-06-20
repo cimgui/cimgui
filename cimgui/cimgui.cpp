@@ -276,7 +276,7 @@ CIMGUI_API void  igPushStyleColorU32(ImGuiCol idx,ImU32 col)
 {
     return ImGui::PushStyleColor(idx,col);
 }
-CIMGUI_API void  igPushStyleColorVec4(ImGuiCol idx,const ImVec4 col)
+CIMGUI_API void  igPushStyleColor(ImGuiCol idx,const ImVec4 col)
 {
     return ImGui::PushStyleColor(idx,col);
 }
@@ -2015,5 +2015,5 @@ CIMGUI_API void ImFontConfig_DefaultConstructor(ImFontConfig *config)
 }
 CIMGUI_API float igGET_FLT_MAX()
 {
-	return FLT_MAX;
+    return FLT_MAX;
 }
