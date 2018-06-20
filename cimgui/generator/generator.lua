@@ -108,7 +108,7 @@ local function location(file,locpathT)
     end
     return location_it
 end
-
+------serializeTable("anyname",table) gives a string that recreates the table with dofile(generated_string)
 local function serializeTable(name, value, saved)
     
     local function basicSerialize (o)
@@ -485,6 +485,101 @@ local function func_parser()
     return FP
 end
 
+local function gen_structs_and_enums_table(cdefs)
+    local function_closing_re = "}"
+    local namespace_re = "namespace"
+    local in_namespace = false
+    local struct_re = "^%s*struct%s+([^%s;]+)$"
+    local in_struct = false
+    local struct_closed_re = "^%s*struct%s+([^%s]+);$"
+    local struct_closing_re = "};"
+    local struct_op_close_re = "%b{}"
+    local structnames = {}
+    local enumnames = {}
+    local enums_re = "^%s*enum%s+([^%s;]+)"
+    local outtab = {structs={},enums={}}
+   
+    for i,line in ipairs(cdefs) do
+    repeat -- simulating continue with break
+        -- separate comments from code
+        local linecom = line
+        local line, comment = split_comment(line)
+        line = clean_spaces(line)
+        
+        if line:match(namespace_re) then
+            in_namespace = true
+        end
+        
+        local structbegin = line:match(struct_re)
+        if structbegin then
+            structnames[#structnames + 1] = structbegin
+            outtab.structs[structbegin] = outtab.structs[structbegin] or {}
+            break
+        end
+        
+        local enumname = line:match(enums_re)
+        if enumname then
+            enumnames[#enumnames + 1] = enumname
+            outtab.enums[enumname] = outtab.enums[enumname] or {}
+            break
+        end
+        
+        if in_namespace then
+            if line:match(function_closing_re) then
+                in_namespace = false
+            end
+            break -- dont write anything inside
+        end
+        
+        if (#enumnames > 0) then
+            assert(#structnames==0,"enum in struct")
+            if line:match(struct_closing_re) and not line:match(struct_op_close_re) then
+                enumnames[#enumnames] = nil
+                break
+            end
+            if line=="" or line:match("^{") then
+                break
+            else
+                local name,value = line:match("%s*([%w_]+)%s*=%s*([^,]+)")
+                if value then
+                    table.insert(outtab.enums[enumnames[#enumnames]],{name=name,value=value})
+                else
+                    local name = line:match("%s*([^,]+)")
+                    local value = #outtab.enums[enumnames[#enumnames]]
+                    table.insert(outtab.enums[enumnames[#enumnames]],{name=name,value=value})
+                end
+            end
+        end
+        
+        if (#structnames > 0) then
+            if line:match(struct_closing_re) and not line:match(struct_op_close_re) then
+                structnames[#structnames] = nil
+                break
+            end
+            if line=="" or line:match("^{") then
+                break
+            elseif structnames[#structnames] ~="ImVector" then --avoid ImVector
+                --local functype_re = "^%s*[%w%s%*]+(%(%*)[%w_]+(%)%([^%(%)]*%))"
+                local functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
+                local functype_reex = "^(%s*[%w%s%*]+%(%*)([%w_]+)(%)%([^%(%)]*%))"
+                if line:match(functype_re) then
+                    local t1,name,t2 = line:match(functype_reex)
+                    table.insert(outtab.structs[structnames[#structnames]],{type=t1..t2,name=name})
+                    break
+                end
+                --split type name1,name2; in several lines
+                local typen,rest = line:match("([^,]+)%s(%S+[,;])")
+                for name in rest:gmatch("([^%s,;]+)%s?[,;]") do
+                    table.insert(outtab.structs[structnames[#structnames]],{type=typen,name=name})
+                end
+            end
+        end
+    until true
+    end
+    return outtab
+end
+
+
 local function gen_structs_and_enums(cdefs)
     local function_closing_re = "}"
     local namespace_re = "namespace"
@@ -718,16 +813,16 @@ end
 
 
 --output after insert
---local hfile = io.open("./outstructs.h","w")
---hfile:write(table.concat(STP.lines,"\n"))
---hfile:close()
+-- local hfile = io.open("./outstructs.h","w")
+-- hfile:write(table.concat(STP.lines,"\n"))
+-- hfile:close()
 --do return end
 
 FP:compute_overloads()
 
 local cstructs = gen_structs_and_enums(STP.lines)
 local cfuncs = func_header_generate(FP)
-
+local cstructs_table = gen_structs_and_enums_table(STP.lines)
 
 --merge it in cimgui_template.h to cimgui.h
 local hfile = io.open("./cimgui_template.h","r")
@@ -760,9 +855,15 @@ local ser = serializeTable("defs",FP.defsT)
 hfile:write(ser.."\nreturn defs")
 hfile:close()
 
+----------save struct and enums lua table in structs_and_enums.lua for using in bindings
+local hfile = io.open("./structs_and_enums.lua","w")
+local ser = serializeTable("defs",cstructs_table)
+hfile:write(ser.."\nreturn defs")
+hfile:close()
 
 
----dump infos-----------------------------------------------------------------------
+
+---dump some infos-----------------------------------------------------------------------
 ------------------------------------------------------------------------------------
 print"//-------alltypes--------------------------------------------------------------------"
 FP:dump_alltypes()
