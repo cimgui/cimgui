@@ -11,6 +11,11 @@ Notes:
 * currently this wrapper is based on version [1.62WIP of imgui](https://github.com/ocornut/imgui/)
 * does not compile with pure C compiler yet (for writing bindings in languages that are able to use C-ABI it is enough though, see D-bindings)
 
+# auto binding generation
+
+* update imgui folder to the version you desire.
+* run vimgui/generator/generator.bat (or make a .sh version and please PR) with gcc and Lua on your PATH.
+
 # usage
 
 * clone
