@@ -1039,6 +1039,18 @@ struct GLFWwindow;
 // The 'glsl_version' initialization parameter defaults to "#version 150" if NULL.
 // Only override if your GL version doesn't handle this GLSL version. Keep NULL if unsure!
 // Called by Init/NewFrame/Shutdown
+// ImGui Renderer for: OpenGL2 (legacy OpenGL, fixed pipeline)
+// This needs to be used along with a Platform Binding (e.g. GLFW, SDL, Win32, custom..)
+// Implemented features:
+//  [X] Renderer: User texture binding. Use 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+// **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in imgui_impl_opengl3.cpp**
+// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
+// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
+// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
+// confuse your GPU driver. 
+// The GL2 code is unable to reset attributes or even call e.g. "glUseProgram(0)" because they don't exist in that API.
+// Called by Init/NewFrame/Shutdown
     struct GlyphRangesBuilder
     {
         ImVector/*<unsigned char>*/ UsedChars;
@@ -1726,6 +1738,14 @@ CIMGUI_API bool  ImGui_ImplOpenGL3_CreateFontsTexture();
 CIMGUI_API void  ImGui_ImplOpenGL3_DestroyFontsTexture();
 CIMGUI_API bool  ImGui_ImplOpenGL3_CreateDeviceObjects();
 CIMGUI_API void  ImGui_ImplOpenGL3_DestroyDeviceObjects();
+CIMGUI_API bool  ImGui_ImplOpenGL2_Init();
+CIMGUI_API void  ImGui_ImplOpenGL2_Shutdown();
+CIMGUI_API void  ImGui_ImplOpenGL2_NewFrame();
+CIMGUI_API void  ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
+CIMGUI_API bool  ImGui_ImplOpenGL2_CreateFontsTexture();
+CIMGUI_API void  ImGui_ImplOpenGL2_DestroyFontsTexture();
+CIMGUI_API bool  ImGui_ImplOpenGL2_CreateDeviceObjects();
+CIMGUI_API void  ImGui_ImplOpenGL2_DestroyDeviceObjects();
 
 
 /////////////////////////hand written functions
