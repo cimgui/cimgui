@@ -36,6 +36,10 @@ CIMGUI_API void  igNewFrame()
 {
     return ImGui::NewFrame();
 }
+CIMGUI_API void  igEndFrame()
+{
+    return ImGui::EndFrame();
+}
 CIMGUI_API void  igRender()
 {
     return ImGui::Render();
@@ -43,10 +47,6 @@ CIMGUI_API void  igRender()
 CIMGUI_API ImDrawData*  igGetDrawData()
 {
     return ImGui::GetDrawData();
-}
-CIMGUI_API void  igEndFrame()
-{
-    return ImGui::EndFrame();
 }
 CIMGUI_API void  igShowDemoWindow(bool* p_open)
 {

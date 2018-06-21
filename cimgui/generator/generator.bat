@@ -12,7 +12,7 @@ set PATH=%PATH%;C:\mingw32\bin;C:\luaGL;
 :: gcc -E -P no #pragma location information
 
 ::generate preprocessed file
-gcc -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" ../../imgui/imgui.h ../../imgui/examples/imgui_impl_glfw.h ../../imgui/examples/imgui_impl_opengl3.h > 1.txt
+gcc -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../../imgui/imgui.h ../../imgui/examples/imgui_impl_glfw.h ../../imgui/examples/imgui_impl_opengl3.h > 1.txt
 
 ::process preprocessed file
 type 1.txt | luajit.exe ./generator.lua true imgui imgui_impl_glfw imgui_impl_opengl3 > out.txt

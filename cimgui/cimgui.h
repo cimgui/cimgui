@@ -94,6 +94,7 @@ typedef struct ImDrawChannel ImDrawChannel;
 // Configuration file (edit imconfig.h or define IMGUI_USER_CONFIG to set your own filename)
 // Version
 // Define attributes of all API symbols declarations (e.g. for DLL under Windows)
+// IMGUI_API is used for core imgui functions, IMGUI_IMPL_API is used for the default bindings files (imgui_impl_xxx.h)
 // Helpers
 // Forward declarations
 struct ImDrawChannel; // Temporary storage for outputting drawing commands out of order, used by ImDrawList::ChannelsSplit()
@@ -119,6 +120,7 @@ struct ImGuiPayload; // User data payload for drag and drop operations
 struct ImGuiContext; // ImGui context (opaque)
 typedef void* ImTextureID; // User data to identify a texture (this is whatever to you want it to be! read the FAQ about ImTextureID in imgui.cpp)
 // Typedefs and Enumerations (declared as int for compatibility with old C++ and to not pollute the top of this file)
+// Use your programming IDE "Go to definition" facility on the names of the right-most columns to find the actual flags/enum lists.
 typedef unsigned int ImGuiID; // Unique ID used by widgets (typically hashed from a stack of string)
 typedef unsigned short ImWchar; // Character for keyboard input/display
 typedef int ImGuiCol; // enum: a color identifier for styling     // enum ImGuiCol_
@@ -151,12 +153,12 @@ typedef signed int ImS32; // 32-bit signed integer == int
 typedef unsigned int ImU32; // 32-bit unsigned integer (often used to store packed colors)
 typedef signed long long ImS64; // 64-bit signed integer
 typedef unsigned long long ImU64; // 64-bit unsigned integer
-// 2d vector
+// 2D vector (often used to store positions, sizes, etc.)
 struct ImVec2
 {
     float x, y;
 };
-// 4d vector (often used to store floating-point colors)
+// 4D vector (often used to store floating-point colors)
 struct ImVec4
 {
     float x, y, z, w;
@@ -1087,9 +1089,9 @@ CIMGUI_API bool  igDebugCheckVersionAndDataLayout(const char* version_str,size_t
 CIMGUI_API ImGuiIO*  igGetIO(); // access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags)
 CIMGUI_API ImGuiStyle*  igGetStyle(); // access the Style structure (colors, sizes). Always use PushStyleCol(), PushStyleVar() to modify style mid-frame.
 CIMGUI_API void  igNewFrame(); // start a new ImGui frame, you can submit any command from this point until Render()/EndFrame().
+CIMGUI_API void  igEndFrame(); // ends the ImGui frame. automatically called by Render(), you likely don't need to call that yourself directly. If you don't need to render data (skipping rendering) you may call EndFrame() but you'll have wasted CPU already! If you don't need to render, better to not create any imgui windows and not call NewFrame() at all!
 CIMGUI_API void  igRender(); // ends the ImGui frame, finalize the draw data. (Obsolete: optionally call io.RenderDrawListsFn if set. Nowadays, prefer calling your render function yourself.)
 CIMGUI_API ImDrawData*  igGetDrawData(); // valid after Render() and until the next call to NewFrame(). this is what you have to render. (Obsolete: this used to be passed to your io.RenderDrawListsFn() function.)
-CIMGUI_API void  igEndFrame(); // ends the ImGui frame. automatically called by Render(), so most likely don't need to ever call that yourself directly. If you don't need to render you may call EndFrame() but you'll have wasted CPU already. If you don't need to render, better to not create any imgui windows instead!
     // Demo, Debug, Information
 CIMGUI_API void  igShowDemoWindow(bool* p_open); // create demo/test window (previously called ShowTestWindow). demonstrate most ImGui features. call this to learn about the library! try to make it always available in your application!
 CIMGUI_API void  igShowMetricsWindow(bool* p_open); // create metrics window. display ImGui internals: draw commands (with individual draw calls and vertices), window list, basic internal state, etc.
