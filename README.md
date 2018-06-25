@@ -14,7 +14,9 @@ Notes:
 # auto binding generation
 
 * update imgui folder to the version you desire.
-* run vimgui/generator/generator.bat (or make a .sh version and please PR) with gcc and Lua on your PATH.
+* run imgui/generator/generator.bat (or make a .sh version and please PR) with gcc and Lua on your PATH.
+* build as shown in https://github.com/sonoro1234/LuaJIT-ImGui/tree/master_auto_implementations/build
+* generate binding as done in https://github.com/sonoro1234/LuaJIT-ImGui/blob/master_auto_implementations/lua/build.bat
 
 # usage
 
