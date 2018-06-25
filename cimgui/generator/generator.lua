@@ -3,11 +3,10 @@
 --expects Lua 5.1 or luajit
 --------------------------------------------------------------------------
 local script_args = {...}
-local locations = {}
-for i=2,#script_args do table.insert(locations,script_args[i]) end
+local implementations = {}
+for i=2,#script_args do table.insert(implementations,script_args[i]) end
 -- first script argument to use gcc or not
 local USEGCC = script_args[1] == "true"
-print("USEGCC",USEGCC)
 --------------------------------------------------------------------------
 --this table has the functions to be skipped in generation
 --------------------------------------------------------------------------
@@ -56,7 +55,7 @@ local cimgui_overloads = {
 --helper functions
 --------------------------------------------------------------------------
 --iterates lines from a .h file and discards between #if.. and #endif
-local function imguilines(file)
+local function filelines(file)
     local iflevels = {}
     local function location_it()
         repeat
@@ -88,6 +87,7 @@ local function location(file,locpathT)
         table.insert(path_reT,'^(.*[\\/])('..locpath..')%.h$')
     end
     local in_location = false
+	local which_location = ""
     local function location_it()
         repeat
             local line = file:read"*l"
@@ -98,11 +98,15 @@ local function location(file,locpathT)
                 if location_match then
                     in_location = false
                     for i,path_re in ipairs(path_reT) do
-                        if location_match:match(path_re) then in_location = true; break end
+                        if location_match:match(path_re) then 
+							in_location = true;
+							which_location = locpathT[i]
+							break 
+						end
                     end
                 end
             elseif in_location then
-                return line
+                return line, which_location
             end
         until false
     end
@@ -334,7 +338,8 @@ local function func_parser()
     FP.embeded_structs = embeded_structs
     FP.defsT = defsT
     FP.ImVector_templates = ImVector_templates
-    function FP.insert(line,comment)
+	
+    function FP.insert(line,comment,locat)
         line = clean_spaces(line)
         if line:match"template" then return end
         line = line:gsub("%S+",{class="struct",mutable=""}) --class -> struct
@@ -439,6 +444,7 @@ local function func_parser()
                 defT.signature = signature
                 defT.call_args = call_args
                 defT.isvararg = signature:match("%.%.%.%)$")
+				defT.location = locat
                 defT.comment = comment
                 if ret then
                     defT.ret = ret:gsub("&","*")
@@ -693,6 +699,29 @@ typedef struct ImVector ImVector;]])
     return outtab
 end
 
+local function func_header_impl_generate(FP)
+    --local hfile = io.open("./auto_funcs2.h","w")
+    local outtab = {}
+    
+    for _,t in ipairs(FP.cdefs) do
+        if t.cimguiname then
+			local cimf = FP.defsT[t.cimguiname]
+			local def = cimf[t.signature]
+			if def.ret then --not constructor
+				local addcoment = def.comment or ""
+				if def.stname == "" then --ImGui namespace or top level
+					table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args..";"..addcoment.."\n")
+				else
+					error("class function in implementations")
+				end
+			end
+        else --not cimguiname
+            table.insert(outtab,t.comment:gsub("%%","%%%%").."\n")-- %% substitution for gsub
+        end
+    end
+    --hfile:close()
+    return outtab
+end
 local function func_header_generate(FP)
     --local hfile = io.open("./auto_funcs2.h","w")
     local outtab = {}
@@ -798,19 +827,33 @@ end
 --------------------------------------------------------
 -----------------------------do it----------------------
 --------------------------------------------------------
+print("USEGCC",USEGCC)
+
+local pipe,err
+if USEGCC then
+	pipe,err = io.popen([[gcc -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../../imgui/imgui.h]],"r")
+
+	if not pipe then
+		error("could not execute gcc "..err)
+	end
+else
+	pipe,err = io.open("../../imgui/imgui.h","r")
+	if not pipe then
+		error("could not execute gcc "..err)
+	end
+end
+print"goint to iterate"
 local STP = struct_parser()
 local FP = func_parser()
-print("USEGCC",USEGCC)
-local iterator = (USEGCC and location) or imguilines 
-print("iterator",iterator)
-print(location, imguilines)
 
-for line in iterator(io.input(),locations) do
+local iterator = (USEGCC and location) or filelines 
+
+for line in iterator(pipe,{"imgui"}) do
     local line, comment = split_comment(line)
     STP.insert(line,comment)
     FP.insert(line,comment)
 end
-
+pipe:close()
 
 --output after insert
 -- local hfile = io.open("./outstructs.h","w")
@@ -822,7 +865,6 @@ FP:compute_overloads()
 
 local cstructs = gen_structs_and_enums(STP.lines)
 local cfuncs = func_header_generate(FP)
-local cstructs_table = gen_structs_and_enums_table(STP.lines)
 
 --merge it in cimgui_template.h to cimgui.h
 local hfile = io.open("./cimgui_template.h","r")
@@ -857,12 +899,64 @@ hfile:close()
 
 ----------save struct and enums lua table in structs_and_enums.lua for using in bindings
 local hfile = io.open("./structs_and_enums.lua","w")
-local ser = serializeTable("defs",cstructs_table)
+local ser = serializeTable("defs",gen_structs_and_enums_table(STP.lines))
 hfile:write(ser.."\nreturn defs")
 hfile:close()
 
+--=================================Now implementations
+local sources = {}
+local impl_locs = {}
+for i,impl in ipairs(implementations) do
+	table.insert(sources,[[../../imgui/examples/imgui_impl_]].. impl .. ".h ")
+	table.insert(impl_locs,[[imgui_impl_]].. impl )
+end
 
+if #sources > 0 then
 
+local pipe = nil
+if USEGCC then
+	pipe,err = io.popen([[gcc -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] ..table.concat(sources),"r")
+
+	if not pipe then
+		error("could not execute gcc "..err)
+	end
+end
+
+local iFP = func_parser()
+local iSTP = struct_parser()
+
+for line,locat in iterator(pipe,impl_locs) do
+    local line, comment = split_comment(line)
+	iSTP.insert(line,comment)
+    iFP.insert(line,comment,locat)
+end
+pipe:close()
+
+---[[
+local impl_cfuncs = func_header_impl_generate(iFP)
+local impl_cstructs = gen_structs_and_enums(iSTP.lines)
+---require"anima.utils"
+---prtable("impl_funcs",impl_cfuncs)
+--save to cimgui_impl.h
+local cstructstr = table.concat(impl_cstructs)
+cstructstr = cstructstr:gsub("\n+","\n") --several empty lines to one empty line
+local cfuncsstr = table.concat(impl_cfuncs)
+cfuncsstr = cfuncsstr:gsub("\n+","\n") --several empty lines to one empty line
+local outfile = io.open("./cimgui_impl.h","w")
+outfile:write(cstructstr)
+outfile:write(cfuncsstr)
+outfile:close()
+--]]
+
+----------save fundefs in impl_definitions.lua for using in bindings
+local hfile = io.open("./impl_definitions.lua","w")
+local ser = serializeTable("defs",iFP.defsT)
+hfile:write(ser.."\nreturn defs")
+hfile:close()
+
+end -- #sources > 0 then
+
+--[[
 ---dump some infos-----------------------------------------------------------------------
 ------------------------------------------------------------------------------------
 print"//-------alltypes--------------------------------------------------------------------"
@@ -880,7 +974,7 @@ end
 
 print"//constructors------------------------------------------------------------------"
 for i,t in ipairs(FP.cdefs) do
-    if not t.ret then
+    if t.cimguiname and not t.ret then
     print(t.cimguiname,"\t",t.signature,"\t",t.args,"\t",t.argsc,"\t",t.call_args,"\t",t.ret)
     end
 end
@@ -889,6 +983,4 @@ for i,t in ipairs(FP.cdefs) do
     --print(t.cimguiname,"   ",t.funcname,"\t",t.signature,"\t",t.args,"\t",t.argsc,"\t",t.call_args,"\t",t.ret) 
 end
 ---------------------------------------------------------------------------------------------
-
-
-
+--]]

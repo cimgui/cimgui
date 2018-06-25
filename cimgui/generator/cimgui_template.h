@@ -2,24 +2,24 @@
 #include <stdio.h>
 
 #if defined _WIN32 || defined __CYGWIN__
-#ifdef CIMGUI_NO_EXPORT
-#define API
+    #ifdef CIMGUI_NO_EXPORT
+        #define API
+    #else
+        #define API __declspec(dllexport)
+    #endif
+    #ifndef __GNUC__
+    #define snprintf sprintf_s
+    #endif
 #else
-#define API __declspec(dllexport)
-#endif
-#ifndef __GNUC__
-#define snprintf sprintf_s
-#endif
-#else
-#define API
+    #define API
 #endif
 
 #if defined __cplusplus
-#define EXTERN extern "C"
+    #define EXTERN extern "C"
 #else
-#include <stdarg.h>
-#include <stdbool.h>
-#define EXTERN extern
+    #include <stdarg.h>
+    #include <stdbool.h>
+    #define EXTERN extern
 #endif
 
 #define CIMGUI_API EXTERN API
@@ -32,10 +32,15 @@ typedef unsigned __int64 ImU64;
 typedef unsigned long long ImU64;
 #endif
 
-struct GLFWwindow;
+//struct GLFWwindow;
+//struct SDL_Window;
 
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 #include "imgui_structs.h"
+#else
+struct GLFWwindow;
+struct SDL_Window;
+typedef union SDL_Event SDL_Event;
 #endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
 #include "auto_funcs.h"
