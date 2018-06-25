@@ -87,7 +87,7 @@ local function location(file,locpathT)
         table.insert(path_reT,'^(.*[\\/])('..locpath..')%.h$')
     end
     local in_location = false
-	local which_location = ""
+    local which_location = ""
     local function location_it()
         repeat
             local line = file:read"*l"
@@ -99,10 +99,10 @@ local function location(file,locpathT)
                     in_location = false
                     for i,path_re in ipairs(path_reT) do
                         if location_match:match(path_re) then 
-							in_location = true;
-							which_location = locpathT[i]
-							break 
-						end
+                            in_location = true;
+                            which_location = locpathT[i]
+                            break 
+                        end
                     end
                 end
             elseif in_location then
@@ -338,7 +338,7 @@ local function func_parser()
     FP.embeded_structs = embeded_structs
     FP.defsT = defsT
     FP.ImVector_templates = ImVector_templates
-	
+    
     function FP.insert(line,comment,locat)
         line = clean_spaces(line)
         if line:match"template" then return end
@@ -444,7 +444,7 @@ local function func_parser()
                 defT.signature = signature
                 defT.call_args = call_args
                 defT.isvararg = signature:match("%.%.%.%)$")
-				defT.location = locat
+                defT.location = locat
                 defT.comment = comment
                 if ret then
                     defT.ret = ret:gsub("&","*")
@@ -705,16 +705,16 @@ local function func_header_impl_generate(FP)
     
     for _,t in ipairs(FP.cdefs) do
         if t.cimguiname then
-			local cimf = FP.defsT[t.cimguiname]
-			local def = cimf[t.signature]
-			if def.ret then --not constructor
-				local addcoment = def.comment or ""
-				if def.stname == "" then --ImGui namespace or top level
-					table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args..";"..addcoment.."\n")
-				else
-					error("class function in implementations")
-				end
-			end
+            local cimf = FP.defsT[t.cimguiname]
+            local def = cimf[t.signature]
+            if def.ret then --not constructor
+                local addcoment = def.comment or ""
+                if def.stname == "" then --ImGui namespace or top level
+                    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args..";"..addcoment.."\n")
+                else
+                    error("class function in implementations")
+                end
+            end
         else --not cimguiname
             table.insert(outtab,t.comment:gsub("%%","%%%%").."\n")-- %% substitution for gsub
         end
@@ -831,16 +831,16 @@ print("USEGCC",USEGCC)
 
 local pipe,err
 if USEGCC then
-	pipe,err = io.popen([[gcc -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../../imgui/imgui.h]],"r")
+    pipe,err = io.popen([[gcc -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../../imgui/imgui.h]],"r")
 
-	if not pipe then
-		error("could not execute gcc "..err)
-	end
+    if not pipe then
+        error("could not execute gcc "..err)
+    end
 else
-	pipe,err = io.open("../../imgui/imgui.h","r")
-	if not pipe then
-		error("could not execute gcc "..err)
-	end
+    pipe,err = io.open("../../imgui/imgui.h","r")
+    if not pipe then
+        error("could not execute gcc "..err)
+    end
 end
 print"goint to iterate"
 local STP = struct_parser()
@@ -893,41 +893,43 @@ outfile:close()
 
 ----------save fundefs in definitions.lua for using in bindings
 local hfile = io.open("./definitions.lua","w")
-local ser = serializeTable("defs",FP.defsT)
-hfile:write(ser.."\nreturn defs")
+local ser_funs = serializeTable("defs",FP.defsT)
+hfile:write(ser_funs.."\nreturn defs")
 hfile:close()
 
 ----------save struct and enums lua table in structs_and_enums.lua for using in bindings
 local hfile = io.open("./structs_and_enums.lua","w")
-local ser = serializeTable("defs",gen_structs_and_enums_table(STP.lines))
-hfile:write(ser.."\nreturn defs")
+local structs_and_enums_table = gen_structs_and_enums_table(STP.lines)
+local ser_struct = serializeTable("defs",structs_and_enums_table)
+hfile:write(ser_struct.."\nreturn defs")
 hfile:close()
 
 --=================================Now implementations
 local sources = {}
 local impl_locs = {}
+local iFP
 for i,impl in ipairs(implementations) do
-	table.insert(sources,[[../../imgui/examples/imgui_impl_]].. impl .. ".h ")
-	table.insert(impl_locs,[[imgui_impl_]].. impl )
+    table.insert(sources,[[../../imgui/examples/imgui_impl_]].. impl .. ".h ")
+    table.insert(impl_locs,[[imgui_impl_]].. impl )
 end
 
 if #sources > 0 then
 
 local pipe = nil
 if USEGCC then
-	pipe,err = io.popen([[gcc -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] ..table.concat(sources),"r")
+    pipe,err = io.popen([[gcc -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] ..table.concat(sources),"r")
 
-	if not pipe then
-		error("could not execute gcc "..err)
-	end
+    if not pipe then
+        error("could not execute gcc "..err)
+    end
 end
 
-local iFP = func_parser()
+iFP = func_parser()
 local iSTP = struct_parser()
 
 for line,locat in iterator(pipe,impl_locs) do
     local line, comment = split_comment(line)
-	iSTP.insert(line,comment)
+    iSTP.insert(line,comment)
     iFP.insert(line,comment,locat)
 end
 pipe:close()
@@ -950,12 +952,38 @@ outfile:close()
 
 ----------save fundefs in impl_definitions.lua for using in bindings
 local hfile = io.open("./impl_definitions.lua","w")
-local ser = serializeTable("defs",iFP.defsT)
-hfile:write(ser.."\nreturn defs")
+local ser_impl = serializeTable("defs",iFP.defsT)
+hfile:write(ser_impl.."\nreturn defs")
 hfile:close()
 
 end -- #sources > 0 then
 
+-------------------------------json saving
+--avoid mixed tables (with string and integer keys)
+local function json_prepare(defs)
+    --delete signatures in function
+    for k,def in pairs(defs) do
+        for k2,v in pairs(def) do
+            if type(k2)=="string" then
+                def[k2] = nil
+            end
+        end
+    end
+    return defs
+end
+local function save_data(filename,data)
+    local file = io.open(filename,"w")
+    file:write(data)
+    file:close()
+end
+local json = require"json"
+save_data("./definitions.json",json.encode(json_prepare(FP.defsT)))
+save_data("./structs_and_enums.json",json.encode(structs_and_enums_table))
+if iFP then
+    save_data("./impl_definitions.json",json.encode(json_prepare(iFP.defsT)))
+end
+
+print"all done!!"
 --[[
 ---dump some infos-----------------------------------------------------------------------
 ------------------------------------------------------------------------------------
