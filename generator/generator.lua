@@ -154,6 +154,12 @@ local function serializeTable(name, value, saved)
     return table.concat(string_table)
 end
 
+local function save_data(filename,data)
+    local file = io.open(filename,"w")
+    file:write(data)
+    file:close()
+end
+
 local function strip(cad)
     return cad:gsub("^%s*(.-)%s*$","%1") --remove initial and final spaces
 end
@@ -700,7 +706,7 @@ typedef struct ImVector ImVector;]])
 end
 
 local function func_header_impl_generate(FP)
-    --local hfile = io.open("./auto_funcs2.h","w")
+
     local outtab = {}
     
     for _,t in ipairs(FP.cdefs) do
@@ -723,7 +729,7 @@ local function func_header_impl_generate(FP)
     return outtab
 end
 local function func_header_generate(FP)
-    --local hfile = io.open("./auto_funcs2.h","w")
+
     local outtab = {}
     table.insert(outtab,"#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
     for k,v in pairs(FP.embeded_structs) do
@@ -763,7 +769,7 @@ local function func_header_generate(FP)
     return outtab
 end
 local function func_implementation(FP)
-    --local cppfile = io.open("./auto_funcs2.cpp","w")
+
     local outtab = {}
     for _,t in ipairs(FP.cdefs) do
         repeat -- continue simulation
@@ -876,9 +882,7 @@ hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
 local cfuncsstr = table.concat(cfuncs)
 cfuncsstr = cfuncsstr:gsub("\n+","\n") --several empty lines to one empty line
 hstrfile = hstrfile:gsub([[#include "auto_funcs%.h"]],cfuncsstr)
-local outfile = io.open("./cimgui.h","w")
-outfile:write(hstrfile)
-outfile:close()
+save_data("./cimgui.h",hstrfile)
 
 
 --merge it in cimgui_template.cpp to cimgui.cpp
@@ -887,76 +891,59 @@ local hfile = io.open("./cimgui_template.cpp","r")
 local hstrfile = hfile:read"*a"
 hfile:close()
 hstrfile = hstrfile:gsub([[#include "auto_funcs%.cpp"]],table.concat(cimplem))
-local outfile = io.open("./cimgui.cpp","w")
-outfile:write(hstrfile)
-outfile:close()
+save_data("./cimgui.cpp",hstrfile)
 
 ----------save fundefs in definitions.lua for using in bindings
-local hfile = io.open("./definitions.lua","w")
-local ser_funs = serializeTable("defs",FP.defsT)
-hfile:write(ser_funs.."\nreturn defs")
-hfile:close()
+save_data("./definitions.lua",serializeTable("defs",FP.defsT).."\nreturn defs")
 
 ----------save struct and enums lua table in structs_and_enums.lua for using in bindings
-local hfile = io.open("./structs_and_enums.lua","w")
-local structs_and_enums_table = gen_structs_and_enums_table(STP.lines)
-local ser_struct = serializeTable("defs",structs_and_enums_table)
-hfile:write(ser_struct.."\nreturn defs")
-hfile:close()
+save_data("./structs_and_enums.lua",serializeTable("defs",gen_structs_and_enums_table(STP.lines)).."\nreturn defs")
 
 --=================================Now implementations
-local sources = {}
-local impl_locs = {}
-local iFP
-for i,impl in ipairs(implementations) do
-    table.insert(sources,[[../../imgui/examples/imgui_impl_]].. impl .. ".h ")
-    table.insert(impl_locs,[[imgui_impl_]].. impl )
-end
 
-if #sources > 0 then
 
-local pipe = nil
-if USEGCC then
-    pipe,err = io.popen([[gcc -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] ..table.concat(sources),"r")
+local iFP,iSTP
 
-    if not pipe then
-        error("could not execute gcc "..err)
-    end
-end
 
-iFP = func_parser()
-local iSTP = struct_parser()
+if #implementations > 0 then
 
-for line,locat in iterator(pipe,impl_locs) do
-    local line, comment = split_comment(line)
-    iSTP.insert(line,comment)
-    iFP.insert(line,comment,locat)
-end
-pipe:close()
+	iFP = func_parser()
+	iSTP = struct_parser()
+	
+	for i,impl in ipairs(implementations) do
+		local source = [[../../imgui/examples/imgui_impl_]].. impl .. ".h "
+		local locati = [[imgui_impl_]].. impl
+		local pipe,err
+		if USEGCC then
+			pipe,err = io.popen([[gcc -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] ..source,"r")
+		else
+			pipe,err = io.open(source,"r")
+		end
+		if not pipe then
+			error("could not get file: "..err)
+		end
+	
+		for line,locat in iterator(pipe,{locati}) do
+			local line, comment = split_comment(line)
+			iSTP.insert(line,comment)
+			iFP.insert(line,comment,locat)
+		end
+		pipe:close()
+	end
 
----[[
-local impl_cfuncs = func_header_impl_generate(iFP)
-local impl_cstructs = gen_structs_and_enums(iSTP.lines)
----require"anima.utils"
----prtable("impl_funcs",impl_cfuncs)
---save to cimgui_impl.h
-local cstructstr = table.concat(impl_cstructs)
-cstructstr = cstructstr:gsub("\n+","\n") --several empty lines to one empty line
-local cfuncsstr = table.concat(impl_cfuncs)
-cfuncsstr = cfuncsstr:gsub("\n+","\n") --several empty lines to one empty line
-local outfile = io.open("./cimgui_impl.h","w")
-outfile:write(cstructstr)
-outfile:write(cfuncsstr)
-outfile:close()
---]]
+	-- save ./cimgui_impl.h
+	local impl_cfuncs = func_header_impl_generate(iFP)
+	local impl_cstructs = gen_structs_and_enums(iSTP.lines)
+	local cstructstr = table.concat(impl_cstructs)
+	cstructstr = cstructstr:gsub("\n+","\n") --several empty lines to one empty line
+	local cfuncsstr = table.concat(impl_cfuncs)
+	cfuncsstr = cfuncsstr:gsub("\n+","\n") --several empty lines to one empty line
+	save_data("./cimgui_impl.h",cstructstr..cfuncsstr)
 
-----------save fundefs in impl_definitions.lua for using in bindings
-local hfile = io.open("./impl_definitions.lua","w")
-local ser_impl = serializeTable("defs",iFP.defsT)
-hfile:write(ser_impl.."\nreturn defs")
-hfile:close()
+	----------save fundefs in impl_definitions.lua for using in bindings
+	save_data("./impl_definitions.lua",serializeTable("defs",iFP.defsT).."\nreturn defs")
 
-end -- #sources > 0 then
+end -- #implementations > 0 then
 
 -------------------------------json saving
 --avoid mixed tables (with string and integer keys)
@@ -971,11 +958,7 @@ local function json_prepare(defs)
     end
     return defs
 end
-local function save_data(filename,data)
-    local file = io.open(filename,"w")
-    file:write(data)
-    file:close()
-end
+
 local json = require"json"
 save_data("./definitions.json",json.encode(json_prepare(FP.defsT)))
 save_data("./structs_and_enums.json",json.encode(structs_and_enums_table))
