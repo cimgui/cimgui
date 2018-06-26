@@ -70,7 +70,7 @@ local function filelines(file)
                 -- skip
             elseif #iflevels == 0 then
                 -- drop IMGUI_APIX
-                line = line:gsub("IMGUI_APIX","")
+                line = line:gsub("IMGUI_IMPL_API","")
                 -- drop IMGUI_API
                 line = line:gsub("IMGUI_API","")
                 return line
@@ -837,13 +837,13 @@ print("USEGCC",USEGCC)
 
 local pipe,err
 if USEGCC then
-    pipe,err = io.popen([[gcc -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../../imgui/imgui.h]],"r")
+    pipe,err = io.popen([[gcc -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]],"r")
 
     if not pipe then
         error("could not execute gcc "..err)
     end
 else
-    pipe,err = io.open("../../imgui/imgui.h","r")
+    pipe,err = io.open("../imgui/imgui.h","r")
     if not pipe then
         error("could not execute gcc "..err)
     end
@@ -897,7 +897,8 @@ save_data("./cimgui.cpp",hstrfile)
 save_data("./definitions.lua",serializeTable("defs",FP.defsT).."\nreturn defs")
 
 ----------save struct and enums lua table in structs_and_enums.lua for using in bindings
-save_data("./structs_and_enums.lua",serializeTable("defs",gen_structs_and_enums_table(STP.lines)).."\nreturn defs")
+local structs_and_enums_table = gen_structs_and_enums_table(STP.lines)
+save_data("./structs_and_enums.lua",serializeTable("defs",structs_and_enums_table).."\nreturn defs")
 
 --=================================Now implementations
 
@@ -911,7 +912,7 @@ if #implementations > 0 then
 	iSTP = struct_parser()
 	
 	for i,impl in ipairs(implementations) do
-		local source = [[../../imgui/examples/imgui_impl_]].. impl .. ".h "
+		local source = [[../imgui/examples/imgui_impl_]].. impl .. ".h "
 		local locati = [[imgui_impl_]].. impl
 		local pipe,err
 		if USEGCC then
