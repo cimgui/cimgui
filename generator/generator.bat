@@ -17,8 +17,8 @@
 luajit.exe ./generator.lua glfw opengl3 opengl2 sdl
 
 ::copy cimgui.h and cimgui.cpp
-copy .\generated\cimgui.h ..\cimgui.h
-copy .\generated\cimgui.cpp ..\cimgui.cpp
+copy .\generated\cimgui_auto.h ..\cimgui_auto.h
+copy .\generated\cimgui_auto.cpp ..\cimgui_auto.cpp
 
 ::leave console open
 cmd /k
