@@ -9,7 +9,7 @@ This library is intended as a intermediate layer to be able to use imgui from ot
 
 Notes:
 * currently this wrapper is based on version [1.62 of imgui](https://github.com/ocornut/imgui/tree/v1.62)
-* overloaded function names try to be the most compatible with traditional cimgui names. So all naming is algorithmic except for those names that were in conflict with widely used cimgui names and were thus coded in a table (https://github.com/sonoro1234/cimgui/blob/cimgui_auto_implementations/generator/generator.lua#L40). Until the comunity finish with defining this table tag will be 1.62beta. Current overloaded function names can be found in (https://github.com/sonoro1234/cimgui/tree/cimgui_auto_implementations/generator/generated/overloads.txt)
+* overloaded function names try to be the most compatible with traditional cimgui names. So all naming is algorithmic except for those names that were in conflict with widely used cimgui names and were thus coded in a table (https://github.com/sonoro1234/cimgui/blob/Branch_v1.62.0/generator/generator.lua#L40). Until the comunity finish with defining this table tag will be 1.62beta. Current overloaded function names can be found in (https://github.com/sonoro1234/cimgui/tree/Branch_v1.62.0/generator/generated/overloads.txt)
 
 # auto binding generation
 
