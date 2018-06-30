@@ -8,17 +8,17 @@ local script_args = {...}
 local HAVE_GCC
 local pipe,err = io.popen("gcc --version","r")
 if pipe then
-	local str = pipe:read"*a"
-	print(str)
-	pipe:close()
-	if str=="" then
-		HAVE_GCC = false
-	else
-		HAVE_GCC = true
-	end
+    local str = pipe:read"*a"
+    print(str)
+    pipe:close()
+    if str=="" then
+        HAVE_GCC = false
+    else
+        HAVE_GCC = true
+    end
 else
-	HAVE_GCC = false
-	print(err)
+    HAVE_GCC = false
+    print(err)
 end
 print("HAVE_GCC",HAVE_GCC)
 --get implementations
@@ -174,10 +174,10 @@ end
 
 local function save_data(filename,...)
     local file = io.open(filename,"w")
-	for i=1, select('#', ...) do
-		local data = select(i, ...)
-		file:write(data)
-	end
+    for i=1, select('#', ...) do
+        local data = select(i, ...)
+        file:write(data)
+    end
     file:close()
 end
 
@@ -497,23 +497,30 @@ local function func_parser()
         for k,v in pairs(self.alltypes) do print(k, typetoStr(k) ) end
     end
     function FP:compute_overloads()
+        local strt = {}
         local numoverloaded = 0
         FP.alltypes = {}
-        print"----------------overloadings---------------------------"
+        table.insert(strt,"----------------overloadings---------------------------")
+        --require"anima.utils"
         for k,v in pairs(FP.defsT) do
             get_types(v)
             if #v > 1 then
                 numoverloaded = numoverloaded + #v
-                print(k,#v)
+                --print(k,#v)
+                table.insert(strt,string.format("%s\t%d",k,#v))
                 local typesc,post = name_overloadsAlgo(v)
                 for i,t in ipairs(v) do
+                    --take overloaded name from manual table or algorythm
                     t.ov_cimguiname = getcimguiname_overload(t.stname,t.funcname,t.signature) or k..typetoStr(post[i])
-                    print(i,t.signature,t.ret,t.ov_cimguiname,post[i])--,typetoStr(post[i]))
+                    --print(i,t.signature,t.ret,t.ov_cimguiname)--,post[i])--,typetoStr(post[i]))
+                    table.insert(strt,string.format("%d\t%s\t%s %s",i,t.ret,t.ov_cimguiname,t.signature))
                     --prtable(typesc[i])
                 end
             end
         end
-        print(numoverloaded, "overloaded")
+        --print(numoverloaded, "overloaded")
+        table.insert(strt,string.format("%d overloaded",numoverloaded))
+        return table.concat(strt,"\n")
     end
     return FP
 end
@@ -723,8 +730,8 @@ typedef struct ImVector ImVector;]])
     for i,l in ipairs(typedefs_table) do
         table.insert(outtab,2,l)
     end
-	local cstructsstr = table.concat(outtab)
-	cstructsstr = cstructsstr:gsub("\n+","\n") --several empty lines to one empty line
+    local cstructsstr = table.concat(outtab)
+    cstructsstr = cstructsstr:gsub("\n+","\n") --several empty lines to one empty line
     return cstructsstr
 end
 
@@ -748,7 +755,7 @@ local function func_header_impl_generate(FP)
             table.insert(outtab,t.comment:gsub("%%","%%%%").."\n")-- %% substitution for gsub
         end
     end
-	local cfuncsstr = table.concat(outtab)
+    local cfuncsstr = table.concat(outtab)
     cfuncsstr = cfuncsstr:gsub("\n+","\n") --several empty lines to one empty line
     return cfuncsstr
 end
@@ -790,9 +797,9 @@ local function func_header_generate(FP)
         end
     end
 
-	local cfuncsstr = table.concat(outtab)
-	cfuncsstr = cfuncsstr:gsub("\n+","\n") --several empty lines to one empty line
-	return cfuncsstr
+    local cfuncsstr = table.concat(outtab)
+    cfuncsstr = cfuncsstr:gsub("\n+","\n") --several empty lines to one empty line
+    return cfuncsstr
 end
 local function func_implementation(FP)
 
@@ -858,25 +865,25 @@ local function func_implementation(FP)
 end
 --generate cimgui.cpp cimgui.h and auto versions depending on postfix
 local function cimgui_generation(postfix,STP,FP)
-	--merge it in cimgui_template.h to cimgui.h
-	local hfile = io.open("./cimgui_template.h","r")
-	local hstrfile = hfile:read"*a"
-	hfile:close()
-	local cstructsstr = gen_structs_and_enums(STP.lines,postfix=="")
-	hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
-	local cfuncsstr = func_header_generate(FP)
-	hstrfile = hstrfile:gsub([[#include "auto_funcs%.h"]],cfuncsstr)
-	save_data("./generated/cimgui"..postfix..".h",hstrfile)
-	
-	
-	--merge it in cimgui_template.cpp to cimgui.cpp
-	local cimplem = func_implementation(FP)
-	local hfile = io.open("./cimgui_template.cpp","r")
-	local hstrfile = hfile:read"*a"
-	hfile:close()
-	hstrfile = hstrfile:gsub([[#include "auto_funcs%.cpp"]],cimplem)
-	hstrfile = hstrfile:gsub([[#include "cimgui%.h"]],[[#include "cimgui]]..postfix..[[.h"]])
-	save_data("./generated/cimgui"..postfix..".cpp",hstrfile)
+    --merge it in cimgui_template.h to cimgui.h
+    local hfile = io.open("./cimgui_template.h","r")
+    local hstrfile = hfile:read"*a"
+    hfile:close()
+    local cstructsstr = gen_structs_and_enums(STP.lines,postfix=="")
+    hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
+    local cfuncsstr = func_header_generate(FP)
+    hstrfile = hstrfile:gsub([[#include "auto_funcs%.h"]],cfuncsstr)
+    save_data("./generated/cimgui"..postfix..".h",hstrfile)
+    
+    
+    --merge it in cimgui_template.cpp to cimgui.cpp
+    local cimplem = func_implementation(FP)
+    local hfile = io.open("./cimgui_template.cpp","r")
+    local hstrfile = hfile:read"*a"
+    hfile:close()
+    hstrfile = hstrfile:gsub([[#include "auto_funcs%.cpp"]],cimplem)
+    hstrfile = hstrfile:gsub([[#include "cimgui%.h"]],[[#include "cimgui]]..postfix..[[.h"]])
+    save_data("./generated/cimgui"..postfix..".cpp",hstrfile)
 end
 --------------------------------------------------------
 -----------------------------do it----------------------
@@ -901,7 +908,7 @@ cimgui_generation("",STP,FP)
 
 --then gcc
 if HAVE_GCC then
-local pipe,err = io.popen([[gcc -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]],"r")
+local pipe,err = io.popen([[gcc -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]],"r")
 
 if not pipe then
     error("could not execute gcc "..err)
@@ -916,7 +923,8 @@ for line in location(pipe,{"imgui"}) do
     FP.insert(line,comment)
 end
 pipe:close()
-FP:compute_overloads()
+local ovstr = FP:compute_overloads()
+save_data("./generated/overloads.txt",ovstr)
 cimgui_generation("_auto",STP,FP)
 
 end
@@ -934,39 +942,39 @@ local iFP,iSTP
 
 if #implementations > 0 then
 
-	iFP = func_parser()
-	iSTP = struct_parser()
-	
-	for i,impl in ipairs(implementations) do
-		local source = [[../imgui/examples/imgui_impl_]].. impl .. ".h "
-		local locati = [[imgui_impl_]].. impl
-		local pipe,err
-		if HAVE_GCC then
-			pipe,err = io.popen([[gcc -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] ..source,"r")
-		else
-			pipe,err = io.open(source,"r")
-		end
-		if not pipe then
-			error("could not get file: "..err)
-		end
-		
-		local iterator = (HAVE_GCC and location) or filelines
-		
-		for line,locat in iterator(pipe,{locati}) do
-			local line, comment = split_comment(line)
-			iSTP.insert(line,comment)
-			iFP.insert(line,comment,locat)
-		end
-		pipe:close()
-	end
+    iFP = func_parser()
+    iSTP = struct_parser()
+    
+    for i,impl in ipairs(implementations) do
+        local source = [[../imgui/examples/imgui_impl_]].. impl .. ".h "
+        local locati = [[imgui_impl_]].. impl
+        local pipe,err
+        if HAVE_GCC then
+            pipe,err = io.popen([[gcc -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] ..source,"r")
+        else
+            pipe,err = io.open(source,"r")
+        end
+        if not pipe then
+            error("could not get file: "..err)
+        end
+        
+        local iterator = (HAVE_GCC and location) or filelines
+        
+        for line,locat in iterator(pipe,{locati}) do
+            local line, comment = split_comment(line)
+            iSTP.insert(line,comment)
+            iFP.insert(line,comment,locat)
+        end
+        pipe:close()
+    end
 
-	-- save ./cimgui_impl.h
-	local cfuncsstr = func_header_impl_generate(iFP)
-	local cstructstr = gen_structs_and_enums(iSTP.lines)
-	save_data("./generated/cimgui_impl.h",cstructstr,cfuncsstr)
+    -- save ./cimgui_impl.h
+    local cfuncsstr = func_header_impl_generate(iFP)
+    local cstructstr = gen_structs_and_enums(iSTP.lines)
+    save_data("./generated/cimgui_impl.h",cstructstr,cfuncsstr)
 
-	----------save fundefs in impl_definitions.lua for using in bindings
-	save_data("./generated/impl_definitions.lua",serializeTable("defs",iFP.defsT),"\nreturn defs")
+    ----------save fundefs in impl_definitions.lua for using in bindings
+    save_data("./generated/impl_definitions.lua",serializeTable("defs",iFP.defsT),"\nreturn defs")
 
 end -- #implementations > 0 then
 

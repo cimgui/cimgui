@@ -82,7 +82,7 @@ typedef struct ImDrawList ImDrawList;
 typedef struct ImDrawData ImDrawData;
 typedef struct ImDrawCmd ImDrawCmd;
 typedef struct ImDrawChannel ImDrawChannel;
-typedef void* ImTextureID;// dear imgui, v1.63 WIP
+typedef void* ImTextureID;// dear imgui, v1.62
 // (headers)
 // See imgui.cpp file for documentation.
 // Call and read ImGui::ShowDemoWindow() in imgui_demo.cpp for demo code.
