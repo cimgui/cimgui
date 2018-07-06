@@ -36,29 +36,14 @@ typedef unsigned long long ImU64;
 //struct SDL_Window;
 
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
-typedef unsigned short ImDrawIdx;typedef struct ImFont ImFont;
-typedef struct ImFontAtlas ImFontAtlas;
+typedef unsigned short ImDrawIdx;
+typedef void* ImTextureID;
+// dear imgui, v1.62
 typedef struct CustomRect CustomRect;
 typedef struct GlyphRangesBuilder GlyphRangesBuilder;
 typedef struct ImFontGlyph ImFontGlyph;
-typedef struct ImFontConfig ImFontConfig;
-typedef struct ImDrawData ImDrawData;
-typedef struct ImDrawList ImDrawList;
-typedef struct ImDrawChannel ImDrawChannel;
-typedef struct ImDrawCmd ImDrawCmd;
-typedef struct ImGuiListClipper ImGuiListClipper;
-typedef struct ImColor ImColor;
-typedef struct ImGuiPayload ImGuiPayload;
-typedef struct ImGuiSizeCallbackData ImGuiSizeCallbackData;
-typedef struct ImGuiTextEditCallbackData ImGuiTextEditCallbackData;
-typedef struct ImGuiStorage ImGuiStorage;
 typedef struct Pair Pair;
-typedef struct ImGuiTextBuffer ImGuiTextBuffer;
-typedef struct ImGuiTextFilter ImGuiTextFilter;
 typedef struct TextRange TextRange;
-typedef struct ImGuiOnceUponAFrame ImGuiOnceUponAFrame;
-typedef struct ImGuiIO ImGuiIO;
-typedef struct ImGuiStyle ImGuiStyle;
 typedef struct ImVec4 ImVec4;
 typedef struct ImVec2 ImVec2;
 typedef struct ImGuiContext ImGuiContext;
@@ -82,7 +67,6 @@ typedef struct ImDrawList ImDrawList;
 typedef struct ImDrawData ImDrawData;
 typedef struct ImDrawCmd ImDrawCmd;
 typedef struct ImDrawChannel ImDrawChannel;
-typedef void* ImTextureID;// dear imgui, v1.62
 // (headers)
 // See imgui.cpp file for documentation.
 // Call and read ImGui::ShowDemoWindow() in imgui_demo.cpp for demo code.

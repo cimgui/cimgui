@@ -37,30 +37,11 @@ typedef unsigned long long ImU64;
 
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
        
-typedef struct ImFont ImFont;
-typedef struct ImFontAtlas ImFontAtlas;
 typedef struct CustomRect CustomRect;
 typedef struct GlyphRangesBuilder GlyphRangesBuilder;
 typedef struct ImFontGlyph ImFontGlyph;
-typedef struct ImFontConfig ImFontConfig;
-typedef struct ImDrawData ImDrawData;
-typedef struct ImDrawList ImDrawList;
-typedef struct ImDrawChannel ImDrawChannel;
-typedef struct ImDrawVert ImDrawVert;
-typedef struct ImDrawCmd ImDrawCmd;
-typedef struct ImGuiListClipper ImGuiListClipper;
-typedef struct ImColor ImColor;
-typedef struct ImGuiPayload ImGuiPayload;
-typedef struct ImGuiSizeCallbackData ImGuiSizeCallbackData;
-typedef struct ImGuiTextEditCallbackData ImGuiTextEditCallbackData;
-typedef struct ImGuiStorage ImGuiStorage;
 typedef struct Pair Pair;
-typedef struct ImGuiTextBuffer ImGuiTextBuffer;
-typedef struct ImGuiTextFilter ImGuiTextFilter;
 typedef struct TextRange TextRange;
-typedef struct ImGuiOnceUponAFrame ImGuiOnceUponAFrame;
-typedef struct ImGuiIO ImGuiIO;
-typedef struct ImGuiStyle ImGuiStyle;
 typedef struct ImVec4 ImVec4;
 typedef struct ImVec2 ImVec2;
 typedef struct ImGuiContext ImGuiContext;
