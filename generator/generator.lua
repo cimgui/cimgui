@@ -2,6 +2,7 @@
 --script for auto_funcs.h and auto_funcs.cpp generation
 --expects Lua 5.1 or luajit
 --------------------------------------------------------------------------
+assert(_VERSION=='Lua 5.1',"Must use LuaJIT or Lua5.1")
 local script_args = {...}
 
 --test gcc present
