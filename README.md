@@ -1,5 +1,7 @@
 # cimgui [![Build Status](https://travis-ci.org/Extrawurst/cimgui.svg)](https://travis-ci.org/Extrawurst/cimgui)
 
+Please post issues in https://github.com/Extrawurst/cimgui
+
 ![sample](screenshot.png)
 
 This is a thin c-api wrapper programmatically generated for the excellent C++ intermediate gui [imgui](https://github.com/ocornut/imgui).

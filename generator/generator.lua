@@ -257,9 +257,9 @@ local function struct_parser()
             --nothing
         else
             local linea = line:gsub("%S+",{class="struct",mutable=""})
-            linea = linea:gsub("(%b<>)","/*%1*/")--,"/%*%1%*/") --comment template parameters
+            linea = linea:gsub("(%b<>)","/*%1*/") --comment template parameters
             table.insert(structcdefs,linea..comment)
-            --]]
+            
         end
         return 
     end
