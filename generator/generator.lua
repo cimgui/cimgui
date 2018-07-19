@@ -172,7 +172,13 @@ local function serializeTable(name, value, saved)
     
     return table.concat(string_table)
 end
-
+--merge tables
+function mergeT(t1,t2)
+	for k,v in pairs(t2) do
+		t1[k] = v
+	end
+	return t1
+end
 local function save_data(filename,...)
     local file = io.open(filename,"w")
     for i=1, select('#', ...) do
@@ -649,6 +655,7 @@ local function gen_structs_and_enums(cdefs)
     local structnames = {}
     local innerstructs = {}
     local typedefs_table = {}
+	local typedefs_dict = {}
 
     local outtab = {}
     -- Output the file
@@ -709,6 +716,7 @@ typedef struct ImVector ImVector;]])
             local struct_closed_name = line:match(struct_closed_re)
             if struct_closed_name then
                 table.insert(typedefs_table,"typedef struct "..struct_closed_name.." "..struct_closed_name..";\n")
+				typedefs_dict[struct_closed_name] = "struct "..struct_closed_name
             end
         end
 
@@ -724,12 +732,14 @@ typedef struct ImVector ImVector;]])
                     local structname = structnames[#structnames]
                     --st[#st + 1] = string.format("typedef struct %s %s;\n",structname,structname)
                     table.insert(typedefs_table,string.format("typedef struct %s %s;\n",structname,structname))
+					typedefs_dict[structname] = "struct "..structname
                     structnames[#structnames] = nil
                 end
             elseif line:match(struct_closing_re) and not line:match(struct_op_close_re) then
                 local structname = structnames[#structnames]
                 --table.insert(outtab,"typedef struct "..structname.." "..structname..";\n")
                 table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
+				typedefs_dict[structname] = "struct "..structname
                 structnames[#structnames] = nil
             end
         end
@@ -753,7 +763,7 @@ typedef struct ImVector ImVector;]])
     end
     local cstructsstr = table.concat(outtab)
     cstructsstr = cstructsstr:gsub("\n+","\n") --several empty lines to one empty line
-    return cstructsstr
+    return cstructsstr, typedefs_dict
 end
 
 local function func_header_impl_generate(FP)
@@ -891,7 +901,7 @@ local function cimgui_generation(postfix,STP,FP)
     local hfile = io.open("./cimgui_template.h","r")
     local hstrfile = hfile:read"*a"
     hfile:close()
-    local cstructsstr = gen_structs_and_enums(STP.lines)
+    local cstructsstr,typedefs_dict = gen_structs_and_enums(STP.lines)
     --for not gcc parsing
     if postfix == "" then
         cstructsstr = "typedef unsigned short ImDrawIdx;\ntypedef void* ImTextureID;\n"..cstructsstr
@@ -910,6 +920,7 @@ local function cimgui_generation(postfix,STP,FP)
     hstrfile = hstrfile:gsub([[#include "auto_funcs%.cpp"]],cimplem)
     hstrfile = hstrfile:gsub([[#include "cimgui%.h"]],[[#include "cimgui]]..postfix..[[.h"]])
     save_data("./generated/cimgui"..postfix..".cpp",hstrfile)
+	return typedefs_dict
 end
 --------------------------------------------------------
 -----------------------------do it----------------------
@@ -933,7 +944,7 @@ FP:compute_overloads()
 cimgui_generation("",STP,FP)
 
 --then gcc
-local pFP,pSTP
+local pFP,pSTP,typedefs_dict2
 
 if HAVE_GCC then
 local pipe,err = io.popen([[gcc -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]],"r")
@@ -953,7 +964,7 @@ end
 pipe:close()
 local ovstr = pFP:compute_overloads()
 save_data("./generated/overloads.txt",ovstr)
-cimgui_generation("_auto",pSTP,pFP)
+typedefs_dict2 = cimgui_generation("_auto",pSTP,pFP)
 
 end
 
@@ -963,6 +974,7 @@ save_data("./generated/definitions.lua",serializeTable("defs",pFP.defsT),"\nretu
 ----------save struct and enums lua table in structs_and_enums.lua for using in bindings
 local structs_and_enums_table,typedefs_dict = gen_structs_and_enums_table(pSTP.lines)
 save_data("./generated/structs_and_enums.lua",serializeTable("defs",structs_and_enums_table),"\nreturn defs")
+typedefs_dict = mergeT(typedefs_dict,typedefs_dict2)
 save_data("./generated/typedefs_dict.lua",serializeTable("defs",typedefs_dict),"\nreturn defs")
 --=================================Now implementations
 
