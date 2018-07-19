@@ -461,7 +461,7 @@ local function func_parser()
                 defT.defaults = {}
                 --for k,def in args:gmatch("([%w%s%*_]+)=([%w_%(%)%s,%*]+)[,%)]") do
                 --for k,def in args:gmatch("([%w_]+)=([%w_%(%)%s,%*%.%-]+)[,%)]") do
-                for k,def in args:gmatch('([%w_]+)=([%w_%(%)%s,%*%.%-%%"]+)[,%)]') do
+                for k,def in args:gmatch('([%w_]+)=([%w_%(%)%s,%*%.%-%+%%"]+)[,%)]') do
                     defT.defaults[k]=def
                 end
                 defT.cimguiname = cimguiname
