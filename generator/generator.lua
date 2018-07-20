@@ -496,7 +496,7 @@ local function func_parser()
 							type,name = arg:match("(.+)%s([^%s]+)")
 						end
 						--if not type or not name then print(funcname,type,name,argscsinpars,arg) end
-						--float[2]
+						--float name[2] to float[2] name
 						local siz = name:match("(%[%d*%])")
 						if siz then
 							type = type..siz
@@ -711,6 +711,50 @@ local function gen_structs_and_enums_table(cdefs)
         end
     until true
     end
+	--calcule size of name[16+1] [xxx_COUNT]
+	local allenums = {}
+	--first calc_value in enums
+	for enumname,enum in pairs(outtab.enums) do
+		for i,t in ipairs(enum) do
+			local val = tonumber(t.value)
+			if val then
+				t.calc_value = val
+			elseif t.value:match"<<" then
+				local v1,v2 = t.value:match("(%d+)%s*<<%s*(%d+)")
+				t.calc_value = bit.lshift(v1,v2)
+			elseif t.value:match"|" then --or several enums
+				local ens = t.value
+				ens = strsplit(ens,"|")
+				for i,v in ipairs(ens) do ens[i] = allenums[clean_spaces(v)] end
+				t.calc_value = bit.bor(unpack(ens))
+			elseif allenums[t.value] then
+				t.calc_value = allenums[t.value]
+			else
+				print("Error unknown value in enums",t.value)
+			end
+			assert(t.calc_value)
+			allenums[t.name] = t.calc_value
+		end
+	end
+	--then calcsize in struct members
+	for stname,struct in pairs(outtab.structs) do
+		for i,t in ipairs(struct) do
+			local val = t.name:match"%[([^%[%]]+)%]"
+			if val then
+				if tonumber(val) then
+					t.size = tonumber(val)
+				elseif allenums[val] then
+					t.size = allenums[val]
+				elseif val:match"%+" then
+					local s1,s2 = val:match("(%d+)%s*%+%s*(%d+)")
+					t.size = s1+s2
+				else
+					print("Error size is",val)
+				end
+				assert(t.size)
+			end
+		end
+	end
     return outtab, typedefs_dict
 end
 
