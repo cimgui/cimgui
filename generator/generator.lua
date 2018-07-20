@@ -179,6 +179,24 @@ function mergeT(t1,t2)
 	end
 	return t1
 end
+function strsplit(str, pat)
+	local t = {} 
+	local fpat = "(.-)" .. pat
+	local last_end = 1
+	local s, e, cap = str:find(fpat, 1)
+	while s do
+		table.insert(t,cap)
+		last_end = e+1
+		s, e, cap = str:find(fpat, last_end)
+	end
+	if last_end <= #str then
+		cap = str:sub(last_end)
+		table.insert(t, cap)
+	elseif str:sub(-1)==pat then
+		table.insert(t, "")
+	end
+	return t
+end
 local function save_data(filename,...)
     local file = io.open(filename,"w")
     for i=1, select('#', ...) do
@@ -431,7 +449,14 @@ local function func_parser()
                 
                 local argscsinpars = args:gsub("(=[^,%(%)]*)(%b())","%1")
                 argscsinpars = argscsinpars:gsub("(=[^,%(%)]*)([,%)])","%2")
-                argscsinpars = argscsinpars:gsub("&","")
+				-- if argscsinpars:match("&") then 
+					-- for arg in argscsinpars:gmatch("[%(,]*([^,%(%)]+)[%),]") do
+						-- if arg:match("&") and not arg:match("const") then
+							-- print(funcname,argscsinpars)
+						-- end
+					-- end
+				-- end
+                --argscsinpars = argscsinpars:gsub("&","")
                 
                 local template = argscsinpars:match("ImVector<([%w_]+)>")
                 if template then
@@ -439,6 +464,51 @@ local function func_parser()
                 end
                 
                 argscsinpars = argscsinpars:gsub("<([%w_]+)>","_%1") --ImVector
+				
+				local argsArr = {}
+				local functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
+				local functype_reex = "^(%s*[%w%s%*]+)%(%*([%w_]+)%)(%([^%(%)]*%))"
+				local functype_arg_rest = "^(%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)),*(.*)"
+				local rest = argscsinpars:sub(2,-2) --strip ()
+				
+				while true do
+				--local tt = strsplit(rest,",")
+				--for ii,arg in ipairs(tt) do
+				--for arg in argscsinpars:gmatch("[%(,]*([^,%(%)]+)[%),]") do
+					local type,name,retf,sigf
+					local arg,restt = rest:match(functype_arg_rest)
+					if arg then
+						local t1,namef,t2 = arg:match(functype_reex)
+						type=t1.."(*)"..t2;name=namef
+						retf = t1
+						sigf = t2
+						rest = restt
+					else
+						arg,restt = rest:match(",*([^,%(%)]+),*(.*)")
+						if not arg then break end
+						rest = restt
+						if arg:match("&") and arg:match("const") then
+							arg = arg:gsub("&","")
+						end
+						if arg:match("%.%.%.") then 
+							type="...";name="..."
+						else
+							type,name = arg:match("(.+)%s([^%s]+)")
+						end
+						--if not type or not name then print(funcname,type,name,argscsinpars,arg) end
+						--float[2]
+						local siz = name:match("(%[%d*%])")
+						if siz then
+							type = type..siz
+							name = name:gsub("(%[%d*%])","")
+						end
+					end
+					table.insert(argsArr,{type=type,name=name,ret=retf,signature=sigf})
+					if arg:match("&") and not arg:match("const") then
+						print(funcname,argscsinpars)
+					end
+				end
+				argscsinpars = argscsinpars:gsub("&","")
                 
                 local signature = argscsinpars:gsub("([%w%s%*_]+)%s[%w_]+%s*([,%)])","%1%2")
                 signature = signature:gsub("%s*([,%)])","%1") --space before , and )
@@ -480,6 +550,7 @@ local function func_parser()
                 defT.isvararg = signature:match("%.%.%.%)$")
                 defT.location = locat
                 defT.comment = comment
+				defT.argsT = argsArr
                 if ret then
                     defT.ret = clean_spaces(ret:gsub("&","*"))
                     defT.retref = ret:match("&")
