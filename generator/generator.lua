@@ -174,28 +174,28 @@ local function serializeTable(name, value, saved)
 end
 --merge tables
 function mergeT(t1,t2)
-	for k,v in pairs(t2) do
-		t1[k] = v
-	end
-	return t1
+    for k,v in pairs(t2) do
+        t1[k] = v
+    end
+    return t1
 end
 function strsplit(str, pat)
-	local t = {} 
-	local fpat = "(.-)" .. pat
-	local last_end = 1
-	local s, e, cap = str:find(fpat, 1)
-	while s do
-		table.insert(t,cap)
-		last_end = e+1
-		s, e, cap = str:find(fpat, last_end)
-	end
-	if last_end <= #str then
-		cap = str:sub(last_end)
-		table.insert(t, cap)
-	elseif str:sub(-1)==pat then
-		table.insert(t, "")
-	end
-	return t
+    local t = {} 
+    local fpat = "(.-)" .. pat
+    local last_end = 1
+    local s, e, cap = str:find(fpat, 1)
+    while s do
+        table.insert(t,cap)
+        last_end = e+1
+        s, e, cap = str:find(fpat, last_end)
+    end
+    if last_end <= #str then
+        cap = str:sub(last_end)
+        table.insert(t, cap)
+    elseif str:sub(-1)==pat then
+        table.insert(t, "")
+    end
+    return t
 end
 local function save_data(filename,...)
     local file = io.open(filename,"w")
@@ -449,13 +449,13 @@ local function func_parser()
                 
                 local argscsinpars = args:gsub("(=[^,%(%)]*)(%b())","%1")
                 argscsinpars = argscsinpars:gsub("(=[^,%(%)]*)([,%)])","%2")
-				-- if argscsinpars:match("&") then 
-					-- for arg in argscsinpars:gmatch("[%(,]*([^,%(%)]+)[%),]") do
-						-- if arg:match("&") and not arg:match("const") then
-							-- print(funcname,argscsinpars)
-						-- end
-					-- end
-				-- end
+                -- if argscsinpars:match("&") then 
+                    -- for arg in argscsinpars:gmatch("[%(,]*([^,%(%)]+)[%),]") do
+                        -- if arg:match("&") and not arg:match("const") then
+                            -- print(funcname,argscsinpars)
+                        -- end
+                    -- end
+                -- end
                 --argscsinpars = argscsinpars:gsub("&","")
                 
                 local template = argscsinpars:match("ImVector<([%w_]+)>")
@@ -464,51 +464,51 @@ local function func_parser()
                 end
                 
                 argscsinpars = argscsinpars:gsub("<([%w_]+)>","_%1") --ImVector
-				
-				local argsArr = {}
-				local functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
-				local functype_reex = "^(%s*[%w%s%*]+)%(%*([%w_]+)%)(%([^%(%)]*%))"
-				local functype_arg_rest = "^(%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)),*(.*)"
-				local rest = argscsinpars:sub(2,-2) --strip ()
-				
-				while true do
-				--local tt = strsplit(rest,",")
-				--for ii,arg in ipairs(tt) do
-				--for arg in argscsinpars:gmatch("[%(,]*([^,%(%)]+)[%),]") do
-					local type,name,retf,sigf
-					local arg,restt = rest:match(functype_arg_rest)
-					if arg then
-						local t1,namef,t2 = arg:match(functype_reex)
-						type=t1.."(*)"..t2;name=namef
-						retf = t1
-						sigf = t2
-						rest = restt
-					else
-						arg,restt = rest:match(",*([^,%(%)]+),*(.*)")
-						if not arg then break end
-						rest = restt
-						if arg:match("&") and arg:match("const") then
-							arg = arg:gsub("&","")
-						end
-						if arg:match("%.%.%.") then 
-							type="...";name="..."
-						else
-							type,name = arg:match("(.+)%s([^%s]+)")
-						end
-						--if not type or not name then print(funcname,type,name,argscsinpars,arg) end
-						--float name[2] to float[2] name
-						local siz = name:match("(%[%d*%])")
-						if siz then
-							type = type..siz
-							name = name:gsub("(%[%d*%])","")
-						end
-					end
-					table.insert(argsArr,{type=type,name=name,ret=retf,signature=sigf})
-					if arg:match("&") and not arg:match("const") then
-						print(funcname,argscsinpars)
-					end
-				end
-				argscsinpars = argscsinpars:gsub("&","")
+                
+                local argsArr = {}
+                local functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
+                local functype_reex = "^(%s*[%w%s%*]+)%(%*([%w_]+)%)(%([^%(%)]*%))"
+                local functype_arg_rest = "^(%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)),*(.*)"
+                local rest = argscsinpars:sub(2,-2) --strip ()
+                
+                while true do
+                --local tt = strsplit(rest,",")
+                --for ii,arg in ipairs(tt) do
+                --for arg in argscsinpars:gmatch("[%(,]*([^,%(%)]+)[%),]") do
+                    local type,name,retf,sigf
+                    local arg,restt = rest:match(functype_arg_rest)
+                    if arg then
+                        local t1,namef,t2 = arg:match(functype_reex)
+                        type=t1.."(*)"..t2;name=namef
+                        retf = t1
+                        sigf = t2
+                        rest = restt
+                    else
+                        arg,restt = rest:match(",*([^,%(%)]+),*(.*)")
+                        if not arg then break end
+                        rest = restt
+                        if arg:match("&") and arg:match("const") then
+                            arg = arg:gsub("&","")
+                        end
+                        if arg:match("%.%.%.") then 
+                            type="...";name="..."
+                        else
+                            type,name = arg:match("(.+)%s([^%s]+)")
+                        end
+                        --if not type or not name then print(funcname,type,name,argscsinpars,arg) end
+                        --float name[2] to float[2] name
+                        local siz = name:match("(%[%d*%])")
+                        if siz then
+                            type = type..siz
+                            name = name:gsub("(%[%d*%])","")
+                        end
+                    end
+                    table.insert(argsArr,{type=type,name=name,ret=retf,signature=sigf})
+                    if arg:match("&") and not arg:match("const") then
+                        print(funcname,argscsinpars)
+                    end
+                end
+                argscsinpars = argscsinpars:gsub("&","")
                 
                 local signature = argscsinpars:gsub("([%w%s%*_]+)%s[%w_]+%s*([,%)])","%1%2")
                 signature = signature:gsub("%s*([,%)])","%1") --space before , and )
@@ -550,7 +550,7 @@ local function func_parser()
                 defT.isvararg = signature:match("%.%.%.%)$")
                 defT.location = locat
                 defT.comment = comment
-				defT.argsT = argsArr
+                defT.argsT = argsArr
                 if ret then
                     defT.ret = clean_spaces(ret:gsub("&","*"))
                     defT.retref = ret:match("&")
@@ -711,50 +711,50 @@ local function gen_structs_and_enums_table(cdefs)
         end
     until true
     end
-	--calcule size of name[16+1] [xxx_COUNT]
-	local allenums = {}
-	--first calc_value in enums
-	for enumname,enum in pairs(outtab.enums) do
-		for i,t in ipairs(enum) do
-			local val = tonumber(t.value)
-			if val then
-				t.calc_value = val
-			elseif t.value:match"<<" then
-				local v1,v2 = t.value:match("(%d+)%s*<<%s*(%d+)")
-				t.calc_value = bit.lshift(v1,v2)
-			elseif t.value:match"|" then --or several enums
-				local ens = t.value
-				ens = strsplit(ens,"|")
-				for i,v in ipairs(ens) do ens[i] = allenums[clean_spaces(v)] end
-				t.calc_value = bit.bor(unpack(ens))
-			elseif allenums[t.value] then
-				t.calc_value = allenums[t.value]
-			else
-				print("Error unknown value in enums",t.value)
-			end
-			assert(t.calc_value)
-			allenums[t.name] = t.calc_value
-		end
-	end
-	--then calcsize in struct members
-	for stname,struct in pairs(outtab.structs) do
-		for i,t in ipairs(struct) do
-			local val = t.name:match"%[([^%[%]]+)%]"
-			if val then
-				if tonumber(val) then
-					t.size = tonumber(val)
-				elseif allenums[val] then
-					t.size = allenums[val]
-				elseif val:match"%+" then
-					local s1,s2 = val:match("(%d+)%s*%+%s*(%d+)")
-					t.size = s1+s2
-				else
-					print("Error size is",val)
-				end
-				assert(t.size)
-			end
-		end
-	end
+    --calcule size of name[16+1] [xxx_COUNT]
+    local allenums = {}
+    --first calc_value in enums
+    for enumname,enum in pairs(outtab.enums) do
+        for i,t in ipairs(enum) do
+            local val = tonumber(t.value)
+            if val then
+                t.calc_value = val
+            elseif t.value:match"<<" then
+                local v1,v2 = t.value:match("(%d+)%s*<<%s*(%d+)")
+                t.calc_value = bit.lshift(v1,v2)
+            elseif t.value:match"|" then --or several enums
+                local ens = t.value
+                ens = strsplit(ens,"|")
+                for i,v in ipairs(ens) do ens[i] = allenums[clean_spaces(v)] end
+                t.calc_value = bit.bor(unpack(ens))
+            elseif allenums[t.value] then
+                t.calc_value = allenums[t.value]
+            else
+                print("Error unknown value in enums",t.value)
+            end
+            assert(t.calc_value)
+            allenums[t.name] = t.calc_value
+        end
+    end
+    --then calcsize in struct members
+    for stname,struct in pairs(outtab.structs) do
+        for i,t in ipairs(struct) do
+            local val = t.name:match"%[([^%[%]]+)%]"
+            if val then
+                if tonumber(val) then
+                    t.size = tonumber(val)
+                elseif allenums[val] then
+                    t.size = allenums[val]
+                elseif val:match"%+" then
+                    local s1,s2 = val:match("(%d+)%s*%+%s*(%d+)")
+                    t.size = s1+s2
+                else
+                    print("Error size is",val)
+                end
+                assert(t.size)
+            end
+        end
+    end
     return outtab, typedefs_dict
 end
 
@@ -770,7 +770,7 @@ local function gen_structs_and_enums(cdefs)
     local structnames = {}
     local innerstructs = {}
     local typedefs_table = {}
-	local typedefs_dict = {}
+    local typedefs_dict = {}
 
     local outtab = {}
     -- Output the file
@@ -831,7 +831,7 @@ typedef struct ImVector ImVector;]])
             local struct_closed_name = line:match(struct_closed_re)
             if struct_closed_name then
                 table.insert(typedefs_table,"typedef struct "..struct_closed_name.." "..struct_closed_name..";\n")
-				typedefs_dict[struct_closed_name] = "struct "..struct_closed_name
+                typedefs_dict[struct_closed_name] = "struct "..struct_closed_name
             end
         end
 
@@ -847,14 +847,14 @@ typedef struct ImVector ImVector;]])
                     local structname = structnames[#structnames]
                     --st[#st + 1] = string.format("typedef struct %s %s;\n",structname,structname)
                     table.insert(typedefs_table,string.format("typedef struct %s %s;\n",structname,structname))
-					typedefs_dict[structname] = "struct "..structname
+                    typedefs_dict[structname] = "struct "..structname
                     structnames[#structnames] = nil
                 end
             elseif line:match(struct_closing_re) and not line:match(struct_op_close_re) then
                 local structname = structnames[#structnames]
                 --table.insert(outtab,"typedef struct "..structname.." "..structname..";\n")
                 table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
-				typedefs_dict[structname] = "struct "..structname
+                typedefs_dict[structname] = "struct "..structname
                 structnames[#structnames] = nil
             end
         end
@@ -971,8 +971,15 @@ local function func_implementation(FP)
                     table.insert(outtab,"{\n")
                     table.insert(outtab,"    va_list args;\n")
                     table.insert(outtab,"    va_start(args, fmt);\n")
-                    table.insert(outtab,"    ImGui::"..def.funcname.."V"..call_args..";\n")
+                    if def.ret~="void" then
+                        table.insert(outtab,"    "..def.ret.." ret = ImGui::"..def.funcname.."V"..call_args..";\n")
+                    else
+                        table.insert(outtab,"    ImGui::"..def.funcname.."V"..call_args..";\n")
+                    end
                     table.insert(outtab,"    va_end(args);\n")
+                    if def.ret~="void" then
+                        table.insert(outtab,"    return ret;\n")
+                    end
                     --cppfile:write("    return ImGui::",def.funcname,def.call_args,";\n")
                     table.insert(outtab,"}\n")
                 else
@@ -992,8 +999,15 @@ local function func_implementation(FP)
                     table.insert(outtab,"{\n")
                     table.insert(outtab,"    va_list args;\n")
                     table.insert(outtab,"    va_start(args, fmt);\n")
-                    table.insert(outtab,"    self->"..def.funcname.."V"..call_args..";\n")
+                    if def.ret~="void" then
+                        table.insert(outtab,"    "..def.ret.." ret = self->"..def.funcname.."V"..call_args..";\n")
+                    else
+                        table.insert(outtab,"    self->"..def.funcname.."V"..call_args..";\n")
+                    end
                     table.insert(outtab,"    va_end(args);\n")
+                    if def.ret~="void" then
+                        table.insert(outtab,"    return ret;\n")
+                    end
                     --cppfile:write("    return self->",def.funcname,def.call_args,";\n")
                     table.insert(outtab,"}\n")
                 else
@@ -1035,7 +1049,7 @@ local function cimgui_generation(postfix,STP,FP)
     hstrfile = hstrfile:gsub([[#include "auto_funcs%.cpp"]],cimplem)
     hstrfile = hstrfile:gsub([[#include "cimgui%.h"]],[[#include "cimgui]]..postfix..[[.h"]])
     save_data("./generated/cimgui"..postfix..".cpp",hstrfile)
-	return typedefs_dict
+    return typedefs_dict
 end
 --------------------------------------------------------
 -----------------------------do it----------------------
