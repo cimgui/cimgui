@@ -392,9 +392,10 @@ local function func_parser()
     FP.ImVector_templates = ImVector_templates
     
     function FP.insert(line,comment,locat)
-        line = clean_spaces(line)
+        
         if line:match"template" then return end
-        line = line:gsub("%S+",{class="struct",mutable=""}) --class -> struct
+        line = line:gsub("%S+",{class="struct",mutable="",inline=""}) --class -> struct
+		line = clean_spaces(line)
         
         if in_function then 
             if line:match(function_closing_re) then
@@ -601,6 +602,44 @@ local function func_parser()
         return table.concat(strt,"\n")
     end
     return FP
+end
+
+local function ADDnonUDT(FP)
+	--for cimguiname,defs in pairs(defsT) do
+	--for i,defT in ipairs(defs) do
+	local defsT = FP.defsT
+	local newcdefs = {}
+	for numcdef,t in ipairs(FP.cdefs) do
+        if t.cimguiname then
+        local cimf = defsT[t.cimguiname]
+        local defT = cimf[t.signature]
+		--if UDT return generate nonUDT version
+		if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
+			local defT2 = {}
+			--first strings
+			for k,v in pairs(defT) do
+				defT2[k] = v
+			end
+			--then argsT table
+			defT2.argsT = {{type=defT.ret.."*",name="pOut"}}
+			for k,v in ipairs(defT.argsT) do
+				table.insert(defT2.argsT,{type=v.type,name=v.name})
+			end
+			local comma = (#defT.argsT > 0) and "," or ""
+			defT2.args = "("..defT.ret.." *pOut"..comma..defT.args:sub(2)
+			defT2.ret = "void"
+			defT2.ov_cimguiname = (defT2.ov_cimguiname or defT2.cimguiname).."_nonUDT"
+			defT2.nonUDT = true
+			defT2.retref = nil
+			defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT2
+			defsT[t.cimguiname][t.signature.."nonUDT"] = defT2
+			table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT",cimguiname=t.cimguiname,call_args=call_args,ret =ret,comment=comment})
+		end
+		end
+	end
+	for i,v in ipairs(newcdefs) do
+		table.insert(FP.cdefs,v)
+	end
 end
 
 local function gen_structs_and_enums_table(cdefs)
@@ -982,6 +1021,11 @@ local function func_implementation(FP)
                     end
                     --cppfile:write("    return ImGui::",def.funcname,def.call_args,";\n")
                     table.insert(outtab,"}\n")
+                elseif def.nonUDT then
+                    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
+                    table.insert(outtab,"{\n")
+                    table.insert(outtab,"    *pOut = ImGui::"..def.funcname..def.call_args..";\n")
+                    table.insert(outtab,"}\n")
                 else
                     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
                     table.insert(outtab,"{\n")
@@ -1009,6 +1053,11 @@ local function func_implementation(FP)
                         table.insert(outtab,"    return ret;\n")
                     end
                     --cppfile:write("    return self->",def.funcname,def.call_args,";\n")
+                    table.insert(outtab,"}\n")
+                elseif def.nonUDT then
+                    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
+                    table.insert(outtab,"{\n")
+                    table.insert(outtab,"    *pOut = self->"..def.funcname..def.call_args..";\n")
                     table.insert(outtab,"}\n")
                 else
                     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
@@ -1092,6 +1141,7 @@ for line in location(pipe,{"imgui"}) do
 end
 pipe:close()
 local ovstr = pFP:compute_overloads()
+ADDnonUDT(pFP)
 save_data("./generated/overloads.txt",ovstr)
 typedefs_dict2 = cimgui_generation("_auto",pSTP,pFP)
 

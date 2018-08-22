@@ -1389,7 +1389,7 @@ CIMGUI_API void ImGuiIO_AddInputCharactersUTF8(ImGuiIO* self,const char* utf8_ch
 {
     return self->AddInputCharactersUTF8(utf8_chars);
 }
-CIMGUI_API inline void ImGuiIO_ClearInputCharacters(ImGuiIO* self)
+CIMGUI_API void ImGuiIO_ClearInputCharacters(ImGuiIO* self)
 {
     return self->ClearInputCharacters();
 }
@@ -1561,7 +1561,7 @@ CIMGUI_API bool ImGuiPayload_IsDelivery(ImGuiPayload* self)
 {
     return self->IsDelivery();
 }
-CIMGUI_API inline void ImColor_SetHSV(ImColor* self,float h,float s,float v,float a)
+CIMGUI_API void ImColor_SetHSV(ImColor* self,float h,float s,float v,float a)
 {
     return self->SetHSV(h,s,v,a);
 }
@@ -1601,11 +1601,11 @@ CIMGUI_API void ImDrawList_PopTextureID(ImDrawList* self)
 {
     return self->PopTextureID();
 }
-CIMGUI_API inline ImVec2 ImDrawList_GetClipRectMin(ImDrawList* self)
+CIMGUI_API ImVec2 ImDrawList_GetClipRectMin(ImDrawList* self)
 {
     return self->GetClipRectMin();
 }
-CIMGUI_API inline ImVec2 ImDrawList_GetClipRectMax(ImDrawList* self)
+CIMGUI_API ImVec2 ImDrawList_GetClipRectMax(ImDrawList* self)
 {
     return self->GetClipRectMax();
 }
@@ -1681,23 +1681,23 @@ CIMGUI_API void ImDrawList_AddBezierCurve(ImDrawList* self,const ImVec2 pos0,con
 {
     return self->AddBezierCurve(pos0,cp0,cp1,pos1,col,thickness,num_segments);
 }
-CIMGUI_API inline void ImDrawList_PathClear(ImDrawList* self)
+CIMGUI_API void ImDrawList_PathClear(ImDrawList* self)
 {
     return self->PathClear();
 }
-CIMGUI_API inline void ImDrawList_PathLineTo(ImDrawList* self,const ImVec2 pos)
+CIMGUI_API void ImDrawList_PathLineTo(ImDrawList* self,const ImVec2 pos)
 {
     return self->PathLineTo(pos);
 }
-CIMGUI_API inline void ImDrawList_PathLineToMergeDuplicate(ImDrawList* self,const ImVec2 pos)
+CIMGUI_API void ImDrawList_PathLineToMergeDuplicate(ImDrawList* self,const ImVec2 pos)
 {
     return self->PathLineToMergeDuplicate(pos);
 }
-CIMGUI_API inline void ImDrawList_PathFillConvex(ImDrawList* self,ImU32 col)
+CIMGUI_API void ImDrawList_PathFillConvex(ImDrawList* self,ImU32 col)
 {
     return self->PathFillConvex(col);
 }
-CIMGUI_API inline void ImDrawList_PathStroke(ImDrawList* self,ImU32 col,bool closed,float thickness)
+CIMGUI_API void ImDrawList_PathStroke(ImDrawList* self,ImU32 col,bool closed,float thickness)
 {
     return self->PathStroke(col,closed,thickness);
 }
@@ -1765,15 +1765,15 @@ CIMGUI_API void ImDrawList_PrimQuadUV(ImDrawList* self,const ImVec2 a,const ImVe
 {
     return self->PrimQuadUV(a,b,c,d,uv_a,uv_b,uv_c,uv_d,col);
 }
-CIMGUI_API inline void ImDrawList_PrimWriteVtx(ImDrawList* self,const ImVec2 pos,const ImVec2 uv,ImU32 col)
+CIMGUI_API void ImDrawList_PrimWriteVtx(ImDrawList* self,const ImVec2 pos,const ImVec2 uv,ImU32 col)
 {
     return self->PrimWriteVtx(pos,uv,col);
 }
-CIMGUI_API inline void ImDrawList_PrimWriteIdx(ImDrawList* self,ImDrawIdx idx)
+CIMGUI_API void ImDrawList_PrimWriteIdx(ImDrawList* self,ImDrawIdx idx)
 {
     return self->PrimWriteIdx(idx);
 }
-CIMGUI_API inline void ImDrawList_PrimVtx(ImDrawList* self,const ImVec2 pos,const ImVec2 uv,ImU32 col)
+CIMGUI_API void ImDrawList_PrimVtx(ImDrawList* self,const ImVec2 pos,const ImVec2 uv,ImU32 col)
 {
     return self->PrimVtx(pos,uv,col);
 }
@@ -1992,6 +1992,94 @@ CIMGUI_API void ImFont_AddGlyph(ImFont* self,ImWchar c,float x0,float y0,float x
 CIMGUI_API void ImFont_AddRemapChar(ImFont* self,ImWchar dst,ImWchar src,bool overwrite_dst)
 {
     return self->AddRemapChar(dst,src,overwrite_dst);
+}
+CIMGUI_API void igGetWindowPos_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetWindowPos();
+}
+CIMGUI_API void igGetWindowSize_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetWindowSize();
+}
+CIMGUI_API void igGetContentRegionMax_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetContentRegionMax();
+}
+CIMGUI_API void igGetContentRegionAvail_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetContentRegionAvail();
+}
+CIMGUI_API void igGetWindowContentRegionMin_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetWindowContentRegionMin();
+}
+CIMGUI_API void igGetWindowContentRegionMax_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetWindowContentRegionMax();
+}
+CIMGUI_API void igGetFontTexUvWhitePixel_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetFontTexUvWhitePixel();
+}
+CIMGUI_API void igGetCursorPos_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetCursorPos();
+}
+CIMGUI_API void igGetCursorStartPos_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetCursorStartPos();
+}
+CIMGUI_API void igGetCursorScreenPos_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetCursorScreenPos();
+}
+CIMGUI_API void igGetItemRectMin_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetItemRectMin();
+}
+CIMGUI_API void igGetItemRectMax_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetItemRectMax();
+}
+CIMGUI_API void igGetItemRectSize_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetItemRectSize();
+}
+CIMGUI_API void igCalcTextSize_nonUDT(ImVec2 *pOut,const char* text,const char* text_end,bool hide_text_after_double_hash,float wrap_width)
+{
+    *pOut = ImGui::CalcTextSize(text,text_end,hide_text_after_double_hash,wrap_width);
+}
+CIMGUI_API void igColorConvertU32ToFloat4_nonUDT(ImVec4 *pOut,ImU32 in)
+{
+    *pOut = ImGui::ColorConvertU32ToFloat4(in);
+}
+CIMGUI_API void igGetMousePos_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetMousePos();
+}
+CIMGUI_API void igGetMousePosOnOpeningCurrentPopup_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetMousePosOnOpeningCurrentPopup();
+}
+CIMGUI_API void igGetMouseDragDelta_nonUDT(ImVec2 *pOut,int button,float lock_threshold)
+{
+    *pOut = ImGui::GetMouseDragDelta(button,lock_threshold);
+}
+CIMGUI_API void ImColor_HSV_nonUDT(ImColor* self,ImColor *pOut,float h,float s,float v,float a)
+{
+    *pOut = self->HSV(h,s,v,a);
+}
+CIMGUI_API void ImDrawList_GetClipRectMin_nonUDT(ImDrawList* self,ImVec2 *pOut)
+{
+    *pOut = self->GetClipRectMin();
+}
+CIMGUI_API void ImDrawList_GetClipRectMax_nonUDT(ImDrawList* self,ImVec2 *pOut)
+{
+    *pOut = self->GetClipRectMax();
+}
+CIMGUI_API void ImFont_CalcTextSizeA_nonUDT(ImFont* self,ImVec2 *pOut,float size,float max_width,float wrap_width,const char* text_begin,const char* text_end,const char** remaining)
+{
+    *pOut = self->CalcTextSizeA(size,max_width,wrap_width,text_begin,text_end,remaining);
 }
 
 

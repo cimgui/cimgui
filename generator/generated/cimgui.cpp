@@ -1389,7 +1389,7 @@ CIMGUI_API void ImGuiIO_AddInputCharactersUTF8(ImGuiIO* self,const char* utf8_ch
 {
     return self->AddInputCharactersUTF8(utf8_chars);
 }
-CIMGUI_API inline void ImGuiIO_ClearInputCharacters(ImGuiIO* self)
+CIMGUI_API void ImGuiIO_ClearInputCharacters(ImGuiIO* self)
 {
     return self->ClearInputCharacters();
 }
@@ -1561,7 +1561,7 @@ CIMGUI_API bool ImGuiPayload_IsDelivery(ImGuiPayload* self)
 {
     return self->IsDelivery();
 }
-CIMGUI_API inline void ImColor_SetHSV(ImColor* self,float h,float s,float v,float a)
+CIMGUI_API void ImColor_SetHSV(ImColor* self,float h,float s,float v,float a)
 {
     return self->SetHSV(h,s,v,a);
 }
@@ -1601,11 +1601,11 @@ CIMGUI_API void ImDrawList_PopTextureID(ImDrawList* self)
 {
     return self->PopTextureID();
 }
-CIMGUI_API inline ImVec2 ImDrawList_GetClipRectMin(ImDrawList* self)
+CIMGUI_API ImVec2 ImDrawList_GetClipRectMin(ImDrawList* self)
 {
     return self->GetClipRectMin();
 }
-CIMGUI_API inline ImVec2 ImDrawList_GetClipRectMax(ImDrawList* self)
+CIMGUI_API ImVec2 ImDrawList_GetClipRectMax(ImDrawList* self)
 {
     return self->GetClipRectMax();
 }
@@ -1681,23 +1681,23 @@ CIMGUI_API void ImDrawList_AddBezierCurve(ImDrawList* self,const ImVec2 pos0,con
 {
     return self->AddBezierCurve(pos0,cp0,cp1,pos1,col,thickness,num_segments);
 }
-CIMGUI_API inline void ImDrawList_PathClear(ImDrawList* self)
+CIMGUI_API void ImDrawList_PathClear(ImDrawList* self)
 {
     return self->PathClear();
 }
-CIMGUI_API inline void ImDrawList_PathLineTo(ImDrawList* self,const ImVec2 pos)
+CIMGUI_API void ImDrawList_PathLineTo(ImDrawList* self,const ImVec2 pos)
 {
     return self->PathLineTo(pos);
 }
-CIMGUI_API inline void ImDrawList_PathLineToMergeDuplicate(ImDrawList* self,const ImVec2 pos)
+CIMGUI_API void ImDrawList_PathLineToMergeDuplicate(ImDrawList* self,const ImVec2 pos)
 {
     return self->PathLineToMergeDuplicate(pos);
 }
-CIMGUI_API inline void ImDrawList_PathFillConvex(ImDrawList* self,ImU32 col)
+CIMGUI_API void ImDrawList_PathFillConvex(ImDrawList* self,ImU32 col)
 {
     return self->PathFillConvex(col);
 }
-CIMGUI_API inline void ImDrawList_PathStroke(ImDrawList* self,ImU32 col,bool closed,float thickness)
+CIMGUI_API void ImDrawList_PathStroke(ImDrawList* self,ImU32 col,bool closed,float thickness)
 {
     return self->PathStroke(col,closed,thickness);
 }
@@ -1765,15 +1765,15 @@ CIMGUI_API void ImDrawList_PrimQuadUV(ImDrawList* self,const ImVec2 a,const ImVe
 {
     return self->PrimQuadUV(a,b,c,d,uv_a,uv_b,uv_c,uv_d,col);
 }
-CIMGUI_API inline void ImDrawList_PrimWriteVtx(ImDrawList* self,const ImVec2 pos,const ImVec2 uv,ImU32 col)
+CIMGUI_API void ImDrawList_PrimWriteVtx(ImDrawList* self,const ImVec2 pos,const ImVec2 uv,ImU32 col)
 {
     return self->PrimWriteVtx(pos,uv,col);
 }
-CIMGUI_API inline void ImDrawList_PrimWriteIdx(ImDrawList* self,ImDrawIdx idx)
+CIMGUI_API void ImDrawList_PrimWriteIdx(ImDrawList* self,ImDrawIdx idx)
 {
     return self->PrimWriteIdx(idx);
 }
-CIMGUI_API inline void ImDrawList_PrimVtx(ImDrawList* self,const ImVec2 pos,const ImVec2 uv,ImU32 col)
+CIMGUI_API void ImDrawList_PrimVtx(ImDrawList* self,const ImVec2 pos,const ImVec2 uv,ImU32 col)
 {
     return self->PrimVtx(pos,uv,col);
 }

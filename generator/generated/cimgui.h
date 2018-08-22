@@ -1436,7 +1436,7 @@ CIMGUI_API void ImGuiStyle_ScaleAllSizes(ImGuiStyle* self,float scale_factor);
     // Functions
 CIMGUI_API void ImGuiIO_AddInputCharacter(ImGuiIO* self,ImWchar c);                        // Add new character into InputCharacters[]
 CIMGUI_API void ImGuiIO_AddInputCharactersUTF8(ImGuiIO* self,const char* utf8_chars);      // Add new characters into InputCharacters[] from an UTF-8 string
-CIMGUI_API inline void ImGuiIO_ClearInputCharacters(ImGuiIO* self);   // Clear the text input buffer manually
+CIMGUI_API void ImGuiIO_ClearInputCharacters(ImGuiIO* self);   // Clear the text input buffer manually
     //------------------------------------------------------------------
     // Output - Retrieve after calling NewFrame()
     //------------------------------------------------------------------
@@ -1502,7 +1502,7 @@ CIMGUI_API bool ImGuiPayload_IsDataType(ImGuiPayload* self,const char* type);
 CIMGUI_API bool ImGuiPayload_IsPreview(ImGuiPayload* self);
 CIMGUI_API bool ImGuiPayload_IsDelivery(ImGuiPayload* self);
     // FIXME-OBSOLETE: May need to obsolete/cleanup those helpers.
-CIMGUI_API inline void ImColor_SetHSV(ImColor* self,float h,float s,float v,float a);
+CIMGUI_API void ImColor_SetHSV(ImColor* self,float h,float s,float v,float a);
 CIMGUI_API ImColor ImColor_HSV(ImColor* self,float h,float s,float v,float a);
     // items_count:  Use -1 to ignore (you can call Begin later). Use INT_MAX if you don't know how many items you have (in which case the cursor won't be advanced in the final step).
     // items_height: Use -1.0f to be calculated automatically on first step. Otherwise pass in the distance between your items, typically GetTextLineHeightWithSpacing() or GetFrameHeightWithSpacing().
@@ -1518,8 +1518,8 @@ CIMGUI_API void ImDrawList_PushClipRectFullScreen(ImDrawList* self);
 CIMGUI_API void ImDrawList_PopClipRect(ImDrawList* self);
 CIMGUI_API void ImDrawList_PushTextureID(ImDrawList* self,ImTextureID texture_id);
 CIMGUI_API void ImDrawList_PopTextureID(ImDrawList* self);
-CIMGUI_API inline ImVec2 ImDrawList_GetClipRectMin(ImDrawList* self);
-CIMGUI_API inline ImVec2 ImDrawList_GetClipRectMax(ImDrawList* self);
+CIMGUI_API ImVec2 ImDrawList_GetClipRectMin(ImDrawList* self);
+CIMGUI_API ImVec2 ImDrawList_GetClipRectMax(ImDrawList* self);
     // Primitives
 CIMGUI_API void ImDrawList_AddLine(ImDrawList* self,const ImVec2 a,const ImVec2 b,ImU32 col,float thickness);
 CIMGUI_API void ImDrawList_AddRect(ImDrawList* self,const ImVec2 a,const ImVec2 b,ImU32 col,float rounding,int rounding_corners_flags,float thickness);   // a: upper-left, b: lower-right, rounding_corners_flags: 4-bits corresponding to which corner to round
@@ -1540,11 +1540,11 @@ CIMGUI_API void ImDrawList_AddPolyline(ImDrawList* self,const ImVec2* points,con
 CIMGUI_API void ImDrawList_AddConvexPolyFilled(ImDrawList* self,const ImVec2* points,const int num_points,ImU32 col); // Note: Anti-aliased filling requires points to be in clockwise order.
 CIMGUI_API void ImDrawList_AddBezierCurve(ImDrawList* self,const ImVec2 pos0,const ImVec2 cp0,const ImVec2 cp1,const ImVec2 pos1,ImU32 col,float thickness,int num_segments);
     // Stateful path API, add points then finish with PathFillConvex() or PathStroke()
-CIMGUI_API inline void ImDrawList_PathClear(ImDrawList* self);
-CIMGUI_API inline void ImDrawList_PathLineTo(ImDrawList* self,const ImVec2 pos);
-CIMGUI_API inline void ImDrawList_PathLineToMergeDuplicate(ImDrawList* self,const ImVec2 pos);
-CIMGUI_API inline void ImDrawList_PathFillConvex(ImDrawList* self,ImU32 col);  // Note: Anti-aliased filling requires points to be in clockwise order.
-CIMGUI_API inline void ImDrawList_PathStroke(ImDrawList* self,ImU32 col,bool closed,float thickness);
+CIMGUI_API void ImDrawList_PathClear(ImDrawList* self);
+CIMGUI_API void ImDrawList_PathLineTo(ImDrawList* self,const ImVec2 pos);
+CIMGUI_API void ImDrawList_PathLineToMergeDuplicate(ImDrawList* self,const ImVec2 pos);
+CIMGUI_API void ImDrawList_PathFillConvex(ImDrawList* self,ImU32 col);  // Note: Anti-aliased filling requires points to be in clockwise order.
+CIMGUI_API void ImDrawList_PathStroke(ImDrawList* self,ImU32 col,bool closed,float thickness);
 CIMGUI_API void ImDrawList_PathArcTo(ImDrawList* self,const ImVec2 centre,float radius,float a_min,float a_max,int num_segments);
 CIMGUI_API void ImDrawList_PathArcToFast(ImDrawList* self,const ImVec2 centre,float radius,int a_min_of_12,int a_max_of_12);                                            // Use precomputed angles for a 12 steps circle
 CIMGUI_API void ImDrawList_PathBezierCurveTo(ImDrawList* self,const ImVec2 p1,const ImVec2 p2,const ImVec2 p3,int num_segments);
@@ -1567,9 +1567,9 @@ CIMGUI_API void ImDrawList_PrimReserve(ImDrawList* self,int idx_count,int vtx_co
 CIMGUI_API void ImDrawList_PrimRect(ImDrawList* self,const ImVec2 a,const ImVec2 b,ImU32 col);      // Axis aligned rectangle (composed of two triangles)
 CIMGUI_API void ImDrawList_PrimRectUV(ImDrawList* self,const ImVec2 a,const ImVec2 b,const ImVec2 uv_a,const ImVec2 uv_b,ImU32 col);
 CIMGUI_API void ImDrawList_PrimQuadUV(ImDrawList* self,const ImVec2 a,const ImVec2 b,const ImVec2 c,const ImVec2 d,const ImVec2 uv_a,const ImVec2 uv_b,const ImVec2 uv_c,const ImVec2 uv_d,ImU32 col);
-CIMGUI_API inline void ImDrawList_PrimWriteVtx(ImDrawList* self,const ImVec2 pos,const ImVec2 uv,ImU32 col);
-CIMGUI_API inline void ImDrawList_PrimWriteIdx(ImDrawList* self,ImDrawIdx idx);
-CIMGUI_API inline void ImDrawList_PrimVtx(ImDrawList* self,const ImVec2 pos,const ImVec2 uv,ImU32 col);
+CIMGUI_API void ImDrawList_PrimWriteVtx(ImDrawList* self,const ImVec2 pos,const ImVec2 uv,ImU32 col);
+CIMGUI_API void ImDrawList_PrimWriteIdx(ImDrawList* self,ImDrawIdx idx);
+CIMGUI_API void ImDrawList_PrimVtx(ImDrawList* self,const ImVec2 pos,const ImVec2 uv,ImU32 col);
 CIMGUI_API void ImDrawList_UpdateClipRect(ImDrawList* self);
 CIMGUI_API void ImDrawList_UpdateTextureID(ImDrawList* self);
     // Functions
