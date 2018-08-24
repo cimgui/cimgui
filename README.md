@@ -26,7 +26,7 @@ Notes:
 * build as shown in https://github.com/sonoro1234/LuaJIT-ImGui/tree/master_auto_implementations/build
 * generate binding as done in https://github.com/sonoro1234/LuaJIT-ImGui/blob/master_auto_implementations/lua/build.bat
 
-#usage
+# usage
 
 * use whatever method is in ImGui c++ namespace in the original [imgui.h](https://github.com/ocornut/imgui/blob/master/imgui.h) by prepending `ig`
 * methods have the same parameter list and return values (where possible)
