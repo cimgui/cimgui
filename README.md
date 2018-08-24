@@ -13,19 +13,25 @@ Notes:
 * currently this wrapper is based on version [1.62 of imgui](https://github.com/ocornut/imgui/tree/v1.62)
 * overloaded function names try to be the most compatible with traditional cimgui names. So all naming is algorithmic except for those names that were in conflict with widely used cimgui names and were thus coded in a table (https://github.com/sonoro1234/cimgui/blob/Branch_v1.62.0/generator/generator.lua#L40). Until the comunity finish with defining this table tag will be 1.62beta. Current overloaded function names can be found in (https://github.com/sonoro1234/cimgui/tree/Branch_v1.62.0/generator/generated/overloads.txt)
 
+# compilation
+
+* clone
+* make using makefile on linux/osx/mingw (Or use CMake to generate project)
+
 # auto binding generation
 
 * update imgui folder to the version you desire.
-* run imgui/generator/generator.bat (or make a .sh version and please PR) with gcc and Lua on your PATH.
+* run imgui/generator/generator.bat (or make a .sh version and please PR) with gcc and LuaJIT or Lua5.1 on your PATH.
+* as a result some files are generated: cimgui_auto.cpp and cimgui_auto.h for compiling and some lua/json files with information about the binding: definitions.json with function info, structs_and_enums.json with struct and enum info, impl_definitions.json with funtions from the implementations info.
 * build as shown in https://github.com/sonoro1234/LuaJIT-ImGui/tree/master_auto_implementations/build
 * generate binding as done in https://github.com/sonoro1234/LuaJIT-ImGui/blob/master_auto_implementations/lua/build.bat
 
-# usage
+#usage
 
-* clone
-* make using makefile on linux/osx
 * use whatever method is in ImGui c++ namespace in the original [imgui.h](https://github.com/ocornut/imgui/blob/master/imgui.h) by prepending `ig`
 * methods have the same parameter list and return values (where possible)
+* functions that belong to a struct have an extra first argument with a pointer to the struct.
+* where a function returns UDT by value some compilers complain so another function with the name function_name_nonUDT is generated accepting a pointer to the UDT type as the first argument. (or second argument if it is a struct function)
 
 # example bindings based on cimgui
 
