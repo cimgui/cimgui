@@ -38,7 +38,7 @@ typedef unsigned long long ImU64;
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 typedef unsigned short ImDrawIdx;
 typedef void* ImTextureID;
-// dear imgui, v1.63
+// dear imgui, v1.64
 typedef struct CustomRect CustomRect;
 typedef struct GlyphRangesBuilder GlyphRangesBuilder;
 typedef struct ImFontGlyph ImFontGlyph;

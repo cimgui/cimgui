@@ -6,6 +6,7 @@ OBJS = cimgui_auto.o
 OBJS += ./imgui/imgui.o
 OBJS += ./imgui/imgui_draw.o
 OBJS += ./imgui/imgui_demo.o
+OBJS += ./imgui/imgui_widgets.o
 
 UNAME_S := $(shell uname -s)
 
