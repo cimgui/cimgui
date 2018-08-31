@@ -44,17 +44,17 @@ typedef struct Pair Pair;
 typedef struct TextRange TextRange;
 typedef struct ImVec4 ImVec4;
 typedef struct ImVec2 ImVec2;
-typedef struct ImGuiContext ImGuiContext;
-typedef struct ImGuiPayload ImGuiPayload;
-typedef struct ImGuiListClipper ImGuiListClipper;
-typedef struct ImGuiSizeCallbackData ImGuiSizeCallbackData;
-typedef struct ImGuiTextEditCallbackData ImGuiTextEditCallbackData;
 typedef struct ImGuiTextBuffer ImGuiTextBuffer;
 typedef struct ImGuiTextFilter ImGuiTextFilter;
 typedef struct ImGuiStyle ImGuiStyle;
 typedef struct ImGuiStorage ImGuiStorage;
+typedef struct ImGuiSizeCallbackData ImGuiSizeCallbackData;
+typedef struct ImGuiPayload ImGuiPayload;
 typedef struct ImGuiOnceUponAFrame ImGuiOnceUponAFrame;
+typedef struct ImGuiListClipper ImGuiListClipper;
+typedef struct ImGuiInputTextCallbackData ImGuiInputTextCallbackData;
 typedef struct ImGuiIO ImGuiIO;
+typedef struct ImGuiContext ImGuiContext;
 typedef struct ImColor ImColor;
 typedef struct ImFontConfig ImFontConfig;
 typedef struct ImFontAtlas ImFontAtlas;
@@ -75,24 +75,24 @@ struct ImFont;
 struct ImFontAtlas;
 struct ImFontConfig;
 struct ImColor;
+typedef void* ImTextureID;
+struct ImGuiContext;
 struct ImGuiIO;
+struct ImGuiInputTextCallbackData;
+struct ImGuiListClipper;
 struct ImGuiOnceUponAFrame;
+struct ImGuiPayload;
+struct ImGuiSizeCallbackData;
 struct ImGuiStorage;
 struct ImGuiStyle;
 struct ImGuiTextFilter;
 struct ImGuiTextBuffer;
-struct ImGuiTextEditCallbackData;
-struct ImGuiSizeCallbackData;
-struct ImGuiListClipper;
-struct ImGuiPayload;
-struct ImGuiContext;
-typedef void* ImTextureID;
 typedef unsigned int ImGuiID;
 typedef unsigned short ImWchar;
 typedef int ImGuiCol;
+typedef int ImGuiCond;
 typedef int ImGuiDataType;
 typedef int ImGuiDir;
-typedef int ImGuiCond;
 typedef int ImGuiKey;
 typedef int ImGuiNavInput;
 typedef int ImGuiMouseCursor;
@@ -112,12 +112,12 @@ typedef int ImGuiInputTextFlags;
 typedef int ImGuiSelectableFlags;
 typedef int ImGuiTreeNodeFlags;
 typedef int ImGuiWindowFlags;
-typedef int (*ImGuiTextEditCallback)(ImGuiTextEditCallbackData *data);
+typedef int (*ImGuiInputTextCallback)(ImGuiInputTextCallbackData *data);
 typedef void (*ImGuiSizeCallback)(ImGuiSizeCallbackData* data);
 typedef signed int ImS32;
 typedef unsigned int ImU32;
-typedef signed long long ImS64;
-typedef unsigned long long ImU64;
+typedef int64_t ImS64;
+typedef uint64_t ImU64;
 struct ImVec2
 {
     float x, y;
@@ -145,7 +145,6 @@ enum ImGuiWindowFlags_
     ImGuiWindowFlags_AlwaysVerticalScrollbar= 1 << 14,
     ImGuiWindowFlags_AlwaysHorizontalScrollbar=1<< 15,
     ImGuiWindowFlags_AlwaysUseWindowPadding = 1 << 16,
-    ImGuiWindowFlags_ResizeFromAnySide = 1 << 17,
     ImGuiWindowFlags_NoNavInputs = 1 << 18,
     ImGuiWindowFlags_NoNavFocus = 1 << 19,
     ImGuiWindowFlags_NoNav = ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoNavFocus,
@@ -177,6 +176,7 @@ enum ImGuiInputTextFlags_
     ImGuiInputTextFlags_Password = 1 << 15,
     ImGuiInputTextFlags_NoUndoRedo = 1 << 16,
     ImGuiInputTextFlags_CharsScientific = 1 << 17,
+    ImGuiInputTextFlags_CallbackResize = 1 << 18,
     ImGuiInputTextFlags_Multiline = 1 << 20
 };
 enum ImGuiTreeNodeFlags_
@@ -201,7 +201,8 @@ enum ImGuiSelectableFlags_
     ImGuiSelectableFlags_None = 0,
     ImGuiSelectableFlags_DontClosePopups = 1 << 0,
     ImGuiSelectableFlags_SpanAllColumns = 1 << 1,
-    ImGuiSelectableFlags_AllowDoubleClick = 1 << 2
+    ImGuiSelectableFlags_AllowDoubleClick = 1 << 2,
+    ImGuiSelectableFlags_Disabled = 1 << 3
 };
 enum ImGuiComboFlags_
 {
@@ -232,6 +233,7 @@ enum ImGuiHoveredFlags_
     ImGuiHoveredFlags_AllowWhenBlockedByPopup = 1 << 3,
     ImGuiHoveredFlags_AllowWhenBlockedByActiveItem = 1 << 5,
     ImGuiHoveredFlags_AllowWhenOverlapped = 1 << 6,
+    ImGuiHoveredFlags_AllowWhenDisabled = 1 << 7,
     ImGuiHoveredFlags_RectOnly = ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem | ImGuiHoveredFlags_AllowWhenOverlapped,
     ImGuiHoveredFlags_RootAndChildWindows = ImGuiHoveredFlags_RootWindow | ImGuiHoveredFlags_ChildWindows
 };
@@ -243,6 +245,7 @@ enum ImGuiDragDropFlags_
     ImGuiDragDropFlags_SourceNoHoldToOpenOthers = 1 << 2,
     ImGuiDragDropFlags_SourceAllowNullID = 1 << 3,
     ImGuiDragDropFlags_SourceExtern = 1 << 4,
+    ImGuiDragDropFlags_SourceAutoExpirePayload = 1 << 5,
     ImGuiDragDropFlags_AcceptBeforeDelivery = 1 << 10,
     ImGuiDragDropFlags_AcceptNoDrawDefaultRect = 1 << 11,
     ImGuiDragDropFlags_AcceptNoPreviewTooltip = 1 << 12,
@@ -375,10 +378,11 @@ enum ImGuiCol_
     ImGuiCol_PlotHistogram,
     ImGuiCol_PlotHistogramHovered,
     ImGuiCol_TextSelectedBg,
-    ImGuiCol_ModalWindowDarkening,
     ImGuiCol_DragDropTarget,
     ImGuiCol_NavHighlight,
     ImGuiCol_NavWindowingHighlight,
+    ImGuiCol_NavWindowingDimBg,
+    ImGuiCol_ModalWindowDimBg,
     ImGuiCol_COUNT
 };
 enum ImGuiStyleVar_
@@ -444,6 +448,7 @@ enum ImGuiMouseCursor_
     ImGuiMouseCursor_ResizeEW,
     ImGuiMouseCursor_ResizeNESW,
     ImGuiMouseCursor_ResizeNWSE,
+    ImGuiMouseCursor_Hand,
     ImGuiMouseCursor_COUNT
 };
 enum ImGuiCond_
@@ -509,14 +514,15 @@ struct ImGuiIO
     ImVec2 DisplayFramebufferScale;
     ImVec2 DisplayVisibleMin;
     ImVec2 DisplayVisibleMax;
-    bool OptMacOSXBehaviors;
-    bool OptCursorBlink;
+    bool ConfigMacOSXBehaviors;
+    bool ConfigCursorBlink;
+    bool ConfigResizeWindowsFromEdges;
     const char* (*GetClipboardTextFn)(void* user_data);
     void (*SetClipboardTextFn)(void* user_data, const char* text);
     void* ClipboardUserData;
     void (*ImeSetInputScreenPosFn)(int x, int y);
     void* ImeWindowHandle;
-    void* RenderDrawListsFnDummy;
+    void* RenderDrawListsFnUnused;
     ImVec2 MousePos;
     bool MouseDown[5];
     float MouseWheel;
@@ -539,11 +545,13 @@ struct ImGuiIO
     float Framerate;
     int MetricsRenderVertices;
     int MetricsRenderIndices;
+    int MetricsRenderWindows;
     int MetricsActiveWindows;
+    int MetricsActiveAllocations;
     ImVec2 MouseDelta;
     ImVec2 MousePosPrev;
     ImVec2 MouseClickedPos[5];
-    float MouseClickedTime[5];
+    double MouseClickedTime[5];
     bool MouseClicked[5];
     bool MouseDoubleClicked[5];
     bool MouseReleased[5];
@@ -583,12 +591,11 @@ struct ImGuiStorage
 {
     ImVector/*<Pair>*/ Data;
 };
-struct ImGuiTextEditCallbackData
+struct ImGuiInputTextCallbackData
 {
     ImGuiInputTextFlags EventFlag;
     ImGuiInputTextFlags Flags;
     void* UserData;
-    bool ReadOnly;
     ImWchar EventChar;
     ImGuiKey EventKey;
     char* Buf;
@@ -723,11 +730,13 @@ struct ImFontGlyph
 };
 enum ImFontAtlasFlags_
 {
+    ImFontAtlasFlags_None = 0,
     ImFontAtlasFlags_NoPowerOfTwoHeight = 1 << 0,
     ImFontAtlasFlags_NoMouseCursors = 1 << 1
 };
 struct ImFontAtlas
 {
+    bool Locked;
     ImFontAtlasFlags Flags;
     ImTextureID TexID;
     int TexDesiredWidth;
@@ -778,6 +787,7 @@ struct ImFont
     {
         const char* b;
         const char* e;
+        const char* end () const { return e; }
     };
     struct Pair
     {
@@ -945,10 +955,6 @@ CIMGUI_API bool igCheckbox(const char* label,bool* v);
 CIMGUI_API bool igCheckboxFlags(const char* label,unsigned int* flags,unsigned int flags_value);
 CIMGUI_API bool igRadioButtonBool(const char* label,bool active);
 CIMGUI_API bool igRadioButtonIntPtr(const char* label,int* v,int v_button);
-CIMGUI_API void igPlotLines(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride);
-CIMGUI_API void igPlotLinesFnPtr(const char* label,float(*values_getter)(void* data,int idx),void* data,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size);
-CIMGUI_API void igPlotHistogramFloatPtr(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride);
-CIMGUI_API void igPlotHistogramFnPtr(const char* label,float(*values_getter)(void* data,int idx),void* data,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size);
 CIMGUI_API void igProgressBar(float fraction,const ImVec2 size_arg,const char* overlay);
 CIMGUI_API void igBullet();
 CIMGUI_API bool igBeginCombo(const char* label,const char* preview_value,ImGuiComboFlags flags);
@@ -968,19 +974,6 @@ CIMGUI_API bool igDragInt4(const char* label,int v[4],float v_speed,int v_min,in
 CIMGUI_API bool igDragIntRange2(const char* label,int* v_current_min,int* v_current_max,float v_speed,int v_min,int v_max,const char* format,const char* format_max);
 CIMGUI_API bool igDragScalar(const char* label,ImGuiDataType data_type,void* v,float v_speed,const void* v_min,const void* v_max,const char* format,float power);
 CIMGUI_API bool igDragScalarN(const char* label,ImGuiDataType data_type,void* v,int components,float v_speed,const void* v_min,const void* v_max,const char* format,float power);
-CIMGUI_API bool igInputText(const char* label,char* buf,size_t buf_size,ImGuiInputTextFlags flags,ImGuiTextEditCallback callback,void* user_data);
-CIMGUI_API bool igInputTextMultiline(const char* label,char* buf,size_t buf_size,const ImVec2 size,ImGuiInputTextFlags flags,ImGuiTextEditCallback callback,void* user_data);
-CIMGUI_API bool igInputFloat(const char* label,float* v,float step,float step_fast,const char* format,ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool igInputFloat2(const char* label,float v[2],const char* format,ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool igInputFloat3(const char* label,float v[3],const char* format,ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool igInputFloat4(const char* label,float v[4],const char* format,ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool igInputInt(const char* label,int* v,int step,int step_fast,ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool igInputInt2(const char* label,int v[2],ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool igInputInt3(const char* label,int v[3],ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool igInputInt4(const char* label,int v[4],ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool igInputDouble(const char* label,double* v,double step,double step_fast,const char* format,ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool igInputScalar(const char* label,ImGuiDataType data_type,void* v,const void* step,const void* step_fast,const char* format,ImGuiInputTextFlags extra_flags);
-CIMGUI_API bool igInputScalarN(const char* label,ImGuiDataType data_type,void* v,int components,const void* step,const void* step_fast,const char* format,ImGuiInputTextFlags extra_flags);
 CIMGUI_API bool igSliderFloat(const char* label,float* v,float v_min,float v_max,const char* format,float power);
 CIMGUI_API bool igSliderFloat2(const char* label,float v[2],float v_min,float v_max,const char* format,float power);
 CIMGUI_API bool igSliderFloat3(const char* label,float v[3],float v_min,float v_max,const char* format,float power);
@@ -995,6 +988,19 @@ CIMGUI_API bool igSliderScalarN(const char* label,ImGuiDataType data_type,void* 
 CIMGUI_API bool igVSliderFloat(const char* label,const ImVec2 size,float* v,float v_min,float v_max,const char* format,float power);
 CIMGUI_API bool igVSliderInt(const char* label,const ImVec2 size,int* v,int v_min,int v_max,const char* format);
 CIMGUI_API bool igVSliderScalar(const char* label,const ImVec2 size,ImGuiDataType data_type,void* v,const void* v_min,const void* v_max,const char* format,float power);
+CIMGUI_API bool igInputText(const char* label,char* buf,size_t buf_size,ImGuiInputTextFlags flags,ImGuiInputTextCallback callback,void* user_data);
+CIMGUI_API bool igInputTextMultiline(const char* label,char* buf,size_t buf_size,const ImVec2 size,ImGuiInputTextFlags flags,ImGuiInputTextCallback callback,void* user_data);
+CIMGUI_API bool igInputFloat(const char* label,float* v,float step,float step_fast,const char* format,ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool igInputFloat2(const char* label,float v[2],const char* format,ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool igInputFloat3(const char* label,float v[3],const char* format,ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool igInputFloat4(const char* label,float v[4],const char* format,ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool igInputInt(const char* label,int* v,int step,int step_fast,ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool igInputInt2(const char* label,int v[2],ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool igInputInt3(const char* label,int v[3],ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool igInputInt4(const char* label,int v[4],ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool igInputDouble(const char* label,double* v,double step,double step_fast,const char* format,ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool igInputScalar(const char* label,ImGuiDataType data_type,void* v,const void* step,const void* step_fast,const char* format,ImGuiInputTextFlags extra_flags);
+CIMGUI_API bool igInputScalarN(const char* label,ImGuiDataType data_type,void* v,int components,const void* step,const void* step_fast,const char* format,ImGuiInputTextFlags extra_flags);
 CIMGUI_API bool igColorEdit3(const char* label,float col[3],ImGuiColorEditFlags flags);
 CIMGUI_API bool igColorEdit4(const char* label,float col[4],ImGuiColorEditFlags flags);
 CIMGUI_API bool igColorPicker3(const char* label,float col[3],ImGuiColorEditFlags flags);
@@ -1026,14 +1032,14 @@ CIMGUI_API bool igListBoxFnPtr(const char* label,int* current_item,bool(*items_g
 CIMGUI_API bool igListBoxHeaderVec2(const char* label,const ImVec2 size);
 CIMGUI_API bool igListBoxHeaderInt(const char* label,int items_count,int height_in_items);
 CIMGUI_API void igListBoxFooter();
+CIMGUI_API void igPlotLines(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride);
+CIMGUI_API void igPlotLinesFnPtr(const char* label,float(*values_getter)(void* data,int idx),void* data,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size);
+CIMGUI_API void igPlotHistogramFloatPtr(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride);
+CIMGUI_API void igPlotHistogramFnPtr(const char* label,float(*values_getter)(void* data,int idx),void* data,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size);
 CIMGUI_API void igValueBool(const char* prefix,bool b);
 CIMGUI_API void igValueInt(const char* prefix,int v);
 CIMGUI_API void igValueUint(const char* prefix,unsigned int v);
 CIMGUI_API void igValueFloat(const char* prefix,float v,const char* float_format);
-CIMGUI_API void igBeginTooltip();
-CIMGUI_API void igEndTooltip();
-CIMGUI_API void igSetTooltip(const char* fmt,...);
-CIMGUI_API void igSetTooltipV(const char* fmt,va_list args);
 CIMGUI_API bool igBeginMainMenuBar();
 CIMGUI_API void igEndMainMenuBar();
 CIMGUI_API bool igBeginMenuBar();
@@ -1042,6 +1048,10 @@ CIMGUI_API bool igBeginMenu(const char* label,bool enabled);
 CIMGUI_API void igEndMenu();
 CIMGUI_API bool igMenuItemBool(const char* label,const char* shortcut,bool selected,bool enabled);
 CIMGUI_API bool igMenuItemBoolPtr(const char* label,const char* shortcut,bool* p_selected,bool enabled);
+CIMGUI_API void igBeginTooltip();
+CIMGUI_API void igEndTooltip();
+CIMGUI_API void igSetTooltip(const char* fmt,...);
+CIMGUI_API void igSetTooltipV(const char* fmt,va_list args);
 CIMGUI_API void igOpenPopup(const char* str_id);
 CIMGUI_API bool igBeginPopup(const char* str_id,ImGuiWindowFlags flags);
 CIMGUI_API bool igBeginPopupContextItem(const char* str_id,int mouse_button);
@@ -1080,8 +1090,9 @@ CIMGUI_API bool igIsItemActive();
 CIMGUI_API bool igIsItemFocused();
 CIMGUI_API bool igIsItemClicked(int mouse_button);
 CIMGUI_API bool igIsItemVisible();
+CIMGUI_API bool igIsItemEdited();
 CIMGUI_API bool igIsItemDeactivated();
-CIMGUI_API bool igIsItemDeactivatedAfterChange();
+CIMGUI_API bool igIsItemDeactivatedAfterEdit();
 CIMGUI_API bool igIsAnyItemHovered();
 CIMGUI_API bool igIsAnyItemActive();
 CIMGUI_API bool igIsAnyItemFocused();
@@ -1091,7 +1102,7 @@ CIMGUI_API ImVec2 igGetItemRectSize();
 CIMGUI_API void igSetItemAllowOverlap();
 CIMGUI_API bool igIsRectVisible(const ImVec2 size);
 CIMGUI_API bool igIsRectVisibleVec2(const ImVec2 rect_min,const ImVec2 rect_max);
-CIMGUI_API float igGetTime();
+CIMGUI_API double igGetTime();
 CIMGUI_API int igGetFrameCount();
 CIMGUI_API ImDrawList* igGetOverlayDrawList();
 CIMGUI_API ImDrawListSharedData* igGetDrawListSharedData();
@@ -1140,18 +1151,15 @@ CIMGUI_API void ImGuiStyle_ScaleAllSizes(ImGuiStyle* self,float scale_factor);
 CIMGUI_API void ImGuiIO_AddInputCharacter(ImGuiIO* self,ImWchar c);
 CIMGUI_API void ImGuiIO_AddInputCharactersUTF8(ImGuiIO* self,const char* utf8_chars);
 CIMGUI_API void ImGuiIO_ClearInputCharacters(ImGuiIO* self);
-CIMGUI_API const char* TextRange_begin(TextRange* self);
-CIMGUI_API const char* TextRange_end(TextRange* self);
-CIMGUI_API bool TextRange_empty(TextRange* self);
-CIMGUI_API char TextRange_front(TextRange* self);
-CIMGUI_API bool TextRange_is_blank(TextRange* self,char c);
-CIMGUI_API void TextRange_trim_blanks(TextRange* self);
-CIMGUI_API void TextRange_split(TextRange* self,char separator,ImVector_TextRange out);
 CIMGUI_API bool ImGuiTextFilter_Draw(ImGuiTextFilter* self,const char* label,float width);
 CIMGUI_API bool ImGuiTextFilter_PassFilter(ImGuiTextFilter* self,const char* text,const char* text_end);
 CIMGUI_API void ImGuiTextFilter_Build(ImGuiTextFilter* self);
 CIMGUI_API void ImGuiTextFilter_Clear(ImGuiTextFilter* self);
 CIMGUI_API bool ImGuiTextFilter_IsActive(ImGuiTextFilter* self);
+CIMGUI_API const char* TextRange_begin(TextRange* self);
+CIMGUI_API const char* TextRange_end(TextRange* self);
+CIMGUI_API bool TextRange_empty(TextRange* self);
+CIMGUI_API void TextRange_split(TextRange* self,char separator,ImVector_TextRange* out);
 CIMGUI_API const char* ImGuiTextBuffer_begin(ImGuiTextBuffer* self);
 CIMGUI_API const char* ImGuiTextBuffer_end(ImGuiTextBuffer* self);
 CIMGUI_API int ImGuiTextBuffer_size(ImGuiTextBuffer* self);
@@ -1175,9 +1183,9 @@ CIMGUI_API float* ImGuiStorage_GetFloatRef(ImGuiStorage* self,ImGuiID key,float 
 CIMGUI_API void** ImGuiStorage_GetVoidPtrRef(ImGuiStorage* self,ImGuiID key,void* default_val);
 CIMGUI_API void ImGuiStorage_SetAllInt(ImGuiStorage* self,int val);
 CIMGUI_API void ImGuiStorage_BuildSortByKey(ImGuiStorage* self);
-CIMGUI_API void ImGuiTextEditCallbackData_DeleteChars(ImGuiTextEditCallbackData* self,int pos,int bytes_count);
-CIMGUI_API void ImGuiTextEditCallbackData_InsertChars(ImGuiTextEditCallbackData* self,int pos,const char* text,const char* text_end);
-CIMGUI_API bool ImGuiTextEditCallbackData_HasSelection(ImGuiTextEditCallbackData* self);
+CIMGUI_API void ImGuiInputTextCallbackData_DeleteChars(ImGuiInputTextCallbackData* self,int pos,int bytes_count);
+CIMGUI_API void ImGuiInputTextCallbackData_InsertChars(ImGuiInputTextCallbackData* self,int pos,const char* text,const char* text_end);
+CIMGUI_API bool ImGuiInputTextCallbackData_HasSelection(ImGuiInputTextCallbackData* self);
 CIMGUI_API void ImGuiPayload_Clear(ImGuiPayload* self);
 CIMGUI_API bool ImGuiPayload_IsDataType(ImGuiPayload* self,const char* type);
 CIMGUI_API bool ImGuiPayload_IsPreview(ImGuiPayload* self);

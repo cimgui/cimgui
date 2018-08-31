@@ -38,16 +38,22 @@ igPlotHistogram	2
 igTreeNodeExV	2
 1	bool	igTreeNodeExVStr (const char*,ImGuiTreeNodeFlags,const char*,va_list)
 2	bool	igTreeNodeExVPtr (const void*,ImGuiTreeNodeFlags,const char*,va_list)
+igMenuItem	2
+1	bool	igMenuItemBool (const char*,const char*,bool,bool)
+2	bool	igMenuItemBoolPtr (const char*,const char*,bool*,bool)
 igGetID	3
 1	ImGuiID	igGetIDStr (const char*)
 2	ImGuiID	igGetIDStrStr (const char*,const char*)
 3	ImGuiID	igGetIDPtr (const void*)
+igListBoxHeader	2
+1	bool	igListBoxHeaderVec2 (const char*,const ImVec2)
+2	bool	igListBoxHeaderInt (const char*,int,int)
+igTreePush	2
+1	void	igTreePushStr (const char*)
+2	void	igTreePushPtr (const void*)
 igBeginChild	2
 1	bool	igBeginChild (const char*,const ImVec2,bool,ImGuiWindowFlags)
 2	bool	igBeginChildID (ImGuiID,const ImVec2,bool,ImGuiWindowFlags)
-igSetWindowFocus	2
-1	void	igSetWindowFocus ()
-2	void	igSetWindowFocusStr (const char*)
 ImDrawList_AddText	2
 1	void	ImDrawList_AddText (const ImVec2,ImU32,const char*,const char*)
 2	void	ImDrawList_AddTextFontPtr (const ImFont*,float,const ImVec2,ImU32,const char*,const char*,float,const ImVec4*)
@@ -66,16 +72,12 @@ Pair_Pair	3
 1	nil	Pair_PairInt (ImGuiID,int)
 2	nil	Pair_PairFloat (ImGuiID,float)
 3	nil	Pair_PairPtr (ImGuiID,void*)
-igTreePush	2
-1	void	igTreePushStr (const char*)
-2	void	igTreePushPtr (const void*)
 TextRange_TextRange	2
 1	nil	TextRange_TextRange ()
 2	nil	TextRange_TextRangeStr (const char*,const char*)
-igGetColorU32	3
-1	ImU32	igGetColorU32 (ImGuiCol,float)
-2	ImU32	igGetColorU32Vec4 (const ImVec4)
-3	ImU32	igGetColorU32U32 (ImU32)
+igSetWindowFocus	2
+1	void	igSetWindowFocus ()
+2	void	igSetWindowFocusStr (const char*)
 ImColor_ImColor	5
 1	nil	ImColor_ImColor ()
 2	nil	ImColor_ImColorInt (int,int,int,int)
@@ -88,12 +90,10 @@ igPushStyleColor	2
 igCollapsingHeader	2
 1	bool	igCollapsingHeader (const char*,ImGuiTreeNodeFlags)
 2	bool	igCollapsingHeaderBoolPtr (const char*,bool*,ImGuiTreeNodeFlags)
-igListBoxHeader	2
-1	bool	igListBoxHeaderVec2 (const char*,const ImVec2)
-2	bool	igListBoxHeaderInt (const char*,int,int)
-igMenuItem	2
-1	bool	igMenuItemBool (const char*,const char*,bool,bool)
-2	bool	igMenuItemBoolPtr (const char*,const char*,bool*,bool)
+igGetColorU32	3
+1	ImU32	igGetColorU32 (ImGuiCol,float)
+2	ImU32	igGetColorU32Vec4 (const ImVec4)
+3	ImU32	igGetColorU32U32 (ImU32)
 igSetWindowPos	2
 1	void	igSetWindowPosVec2 (const ImVec2,ImGuiCond)
 2	void	igSetWindowPosStr (const char*,const ImVec2,ImGuiCond)

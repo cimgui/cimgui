@@ -147,7 +147,7 @@ defs["ImGui_ImplOpenGL3_Init"][1]["args"] = "(const char* glsl_version)"
 defs["ImGui_ImplOpenGL3_Init"][1]["ret"] = "bool"
 defs["ImGui_ImplOpenGL3_Init"][1]["comment"] = ""
 defs["ImGui_ImplOpenGL3_Init"][1]["call_args"] = "(glsl_version)"
-defs["ImGui_ImplOpenGL3_Init"][1]["argsoriginal"] = "(const char* glsl_version=\"#version 150\")"
+defs["ImGui_ImplOpenGL3_Init"][1]["argsoriginal"] = "(const char* glsl_version=NULL)"
 defs["ImGui_ImplOpenGL3_Init"][1]["stname"] = ""
 defs["ImGui_ImplOpenGL3_Init"][1]["argsT"] = {}
 defs["ImGui_ImplOpenGL3_Init"][1]["argsT"][1] = {}
@@ -155,6 +155,7 @@ defs["ImGui_ImplOpenGL3_Init"][1]["argsT"][1]["type"] = "const char*"
 defs["ImGui_ImplOpenGL3_Init"][1]["argsT"][1]["name"] = "glsl_version"
 defs["ImGui_ImplOpenGL3_Init"][1]["location"] = "imgui_impl_opengl3"
 defs["ImGui_ImplOpenGL3_Init"][1]["defaults"] = {}
+defs["ImGui_ImplOpenGL3_Init"][1]["defaults"]["glsl_version"] = "NULL"
 defs["ImGui_ImplOpenGL3_Init"][1]["signature"] = "(const char*)"
 defs["ImGui_ImplOpenGL3_Init"][1]["cimguiname"] = "ImGui_ImplOpenGL3_Init"
 defs["ImGui_ImplOpenGL3_Init"]["(const char*)"] = defs["ImGui_ImplOpenGL3_Init"][1]
