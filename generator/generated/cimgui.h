@@ -1027,7 +1027,6 @@ struct ImFont
     {
         const char* b;
         const char* e;
-        const char*     end () const    { return e; }
     };
     struct Pair
     {

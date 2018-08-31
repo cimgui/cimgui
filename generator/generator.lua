@@ -237,7 +237,7 @@ end
 
 
 local function struct_parser()
-    local function_re = "(%a*%w+%b())" --"(%a*%w+%s+%w+%b())"
+    local function_re = "(%a*%w+%s*%b())" --"(%a*%w+%b())" --"(%a*%w+%s+%w+%b())"
     local function_closing_re = "}"
     local function_closed_re = "[;}]$"
     local operator_re = "operator.-%b()"
