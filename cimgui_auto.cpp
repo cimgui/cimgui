@@ -1,8 +1,8 @@
 
-#include "../imgui/imgui.h"
+#include "./imgui/imgui.h"
 #include "cimgui_auto.h"
 
-#include "../imgui/imgui_internal.h"
+#include "./imgui/imgui_internal.h"
 
 CIMGUI_API ImGuiContext* igCreateContext(ImFontAtlas* shared_font_atlas)
 {
