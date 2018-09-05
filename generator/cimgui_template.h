@@ -36,6 +36,14 @@ typedef unsigned long long ImU64;
 typedef struct ImVec2_Simple { float x; float y; } ImVec2_Simple;
 typedef struct ImVec4_Simple { float x; float y; float z; float w;} ImVec4_Simple;
 typedef struct ImColor_Simple { ImVec4_Simple Value;} ImColor_Simple;
+
+
+#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#include "imgui_structs.h"
+#else
+struct GLFWwindow;
+struct SDL_Window;
+typedef union SDL_Event SDL_Event;
 inline ImVec2_Simple ImVec2ToSimple(ImVec2 vec)
 {
 	ImVec2_Simple result;
@@ -58,13 +66,6 @@ inline ImColor_Simple ImColorToSimple(ImColor col)
     result.Value = ImVec4ToSimple(col.Value);
     return result;
 }
-
-#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
-#include "imgui_structs.h"
-#else
-struct GLFWwindow;
-struct SDL_Window;
-typedef union SDL_Event SDL_Event;
 #endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
 #include "auto_funcs.h"

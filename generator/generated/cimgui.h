@@ -36,28 +36,7 @@ typedef unsigned long long ImU64;
 typedef struct ImVec2_Simple { float x; float y; } ImVec2_Simple;
 typedef struct ImVec4_Simple { float x; float y; float z; float w;} ImVec4_Simple;
 typedef struct ImColor_Simple { ImVec4_Simple Value;} ImColor_Simple;
-inline ImVec2_Simple ImVec2ToSimple(ImVec2 vec)
-{
-	ImVec2_Simple result;
-    result.x = vec.x;
-    result.y = vec.y;
-    return result;
-}
-inline ImVec4_Simple ImVec4ToSimple(ImVec4 vec)
-{
-	ImVec4_Simple result;
-    result.x = vec.x;
-    result.y = vec.y;
-	result.z = vec.z;
-    result.w = vec.w;
-    return result;
-}
-inline ImColor_Simple ImColorToSimple(ImColor col)
-{
-	ImColor_Simple result;
-    result.Value = ImVec4ToSimple(col.Value);
-    return result;
-}
+
 
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 typedef unsigned short ImDrawIdx;
@@ -1062,6 +1041,28 @@ struct ImFont
 struct GLFWwindow;
 struct SDL_Window;
 typedef union SDL_Event SDL_Event;
+inline ImVec2_Simple ImVec2ToSimple(ImVec2 vec)
+{
+	ImVec2_Simple result;
+    result.x = vec.x;
+    result.y = vec.y;
+    return result;
+}
+inline ImVec4_Simple ImVec4ToSimple(ImVec4 vec)
+{
+	ImVec4_Simple result;
+    result.x = vec.x;
+    result.y = vec.y;
+	result.z = vec.z;
+    result.w = vec.w;
+    return result;
+}
+inline ImColor_Simple ImColorToSimple(ImColor col)
+{
+	ImColor_Simple result;
+    result.Value = ImVec4ToSimple(col.Value);
+    return result;
+}
 #endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
 #ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
