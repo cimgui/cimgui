@@ -32,6 +32,7 @@ Notes:
 * methods have the same parameter list and return values (where possible)
 * functions that belong to a struct have an extra first argument with a pointer to the struct.
 * where a function returns UDT by value some compilers complain so another function with the name function_name_nonUDT is generated accepting a pointer to the UDT type as the first argument. (or second argument if it is a struct function)
+* also is generated function_name_nonUDT2 which instead of returning the UDT type returns a simple version (without functions) called UDTType_Simple (ImVec2_Simple for ImVec2)
 
 # example bindings based on cimgui
 

@@ -32,8 +32,32 @@ typedef unsigned __int64 ImU64;
 typedef unsigned long long ImU64;
 #endif
 
-//struct GLFWwindow;
-//struct SDL_Window;
+//UDT stuff
+typedef struct ImVec2_Simple { float x; float y; } ImVec2_Simple;
+typedef struct ImVec4_Simple { float x; float y; float z; float w;} ImVec4_Simple;
+typedef struct ImColor_Simple { ImVec4_Simple Value;} ImColor_Simple;
+inline ImVec2_Simple ImVec2ToSimple(ImVec2 vec)
+{
+	ImVec2_Simple result;
+    result.x = vec.x;
+    result.y = vec.y;
+    return result;
+}
+inline ImVec4_Simple ImVec4ToSimple(ImVec4 vec)
+{
+	ImVec4_Simple result;
+    result.x = vec.x;
+    result.y = vec.y;
+	result.z = vec.z;
+    result.w = vec.w;
+    return result;
+}
+inline ImColor_Simple ImColorToSimple(ImColor col)
+{
+	ImColor_Simple result;
+    result.Value = ImVec4ToSimple(col.Value);
+    return result;
+}
 
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
        
@@ -1298,27 +1322,49 @@ CIMGUI_API void ImFont_GrowIndex(ImFont* self,int new_size);
 CIMGUI_API void ImFont_AddGlyph(ImFont* self,ImWchar c,float x0,float y0,float x1,float y1,float u0,float v0,float u1,float v1,float advance_x);
 CIMGUI_API void ImFont_AddRemapChar(ImFont* self,ImWchar dst,ImWchar src,bool overwrite_dst);
 CIMGUI_API void igGetWindowPos_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetWindowPos_nonUDT2();
 CIMGUI_API void igGetWindowSize_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetWindowSize_nonUDT2();
 CIMGUI_API void igGetContentRegionMax_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetContentRegionMax_nonUDT2();
 CIMGUI_API void igGetContentRegionAvail_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetContentRegionAvail_nonUDT2();
 CIMGUI_API void igGetWindowContentRegionMin_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetWindowContentRegionMin_nonUDT2();
 CIMGUI_API void igGetWindowContentRegionMax_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetWindowContentRegionMax_nonUDT2();
 CIMGUI_API void igGetFontTexUvWhitePixel_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetFontTexUvWhitePixel_nonUDT2();
 CIMGUI_API void igGetCursorPos_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetCursorPos_nonUDT2();
 CIMGUI_API void igGetCursorStartPos_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetCursorStartPos_nonUDT2();
 CIMGUI_API void igGetCursorScreenPos_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetCursorScreenPos_nonUDT2();
 CIMGUI_API void igGetItemRectMin_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetItemRectMin_nonUDT2();
 CIMGUI_API void igGetItemRectMax_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetItemRectMax_nonUDT2();
 CIMGUI_API void igGetItemRectSize_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetItemRectSize_nonUDT2();
 CIMGUI_API void igCalcTextSize_nonUDT(ImVec2 *pOut,const char* text,const char* text_end,bool hide_text_after_double_hash,float wrap_width);
+CIMGUI_API ImVec2_Simple igCalcTextSize_nonUDT2(const char* text,const char* text_end,bool hide_text_after_double_hash,float wrap_width);
 CIMGUI_API void igColorConvertU32ToFloat4_nonUDT(ImVec4 *pOut,ImU32 in);
+CIMGUI_API ImVec4_Simple igColorConvertU32ToFloat4_nonUDT2(ImU32 in);
 CIMGUI_API void igGetMousePos_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetMousePos_nonUDT2();
 CIMGUI_API void igGetMousePosOnOpeningCurrentPopup_nonUDT(ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple igGetMousePosOnOpeningCurrentPopup_nonUDT2();
 CIMGUI_API void igGetMouseDragDelta_nonUDT(ImVec2 *pOut,int button,float lock_threshold);
+CIMGUI_API ImVec2_Simple igGetMouseDragDelta_nonUDT2(int button,float lock_threshold);
 CIMGUI_API void ImColor_HSV_nonUDT(ImColor* self,ImColor *pOut,float h,float s,float v,float a);
+CIMGUI_API ImColor_Simple ImColor_HSV_nonUDT2(ImColor* self,float h,float s,float v,float a);
 CIMGUI_API void ImDrawList_GetClipRectMin_nonUDT(ImDrawList* self,ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple ImDrawList_GetClipRectMin_nonUDT2(ImDrawList* self);
 CIMGUI_API void ImDrawList_GetClipRectMax_nonUDT(ImDrawList* self,ImVec2 *pOut);
+CIMGUI_API ImVec2_Simple ImDrawList_GetClipRectMax_nonUDT2(ImDrawList* self);
 CIMGUI_API void ImFont_CalcTextSizeA_nonUDT(ImFont* self,ImVec2 *pOut,float size,float max_width,float wrap_width,const char* text_begin,const char* text_end,const char** remaining);
+CIMGUI_API ImVec2_Simple ImFont_CalcTextSizeA_nonUDT2(ImFont* self,float size,float max_width,float wrap_width,const char* text_begin,const char* text_end,const char** remaining);
 
 
 /////////////////////////hand written functions

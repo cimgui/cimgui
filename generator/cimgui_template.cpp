@@ -6,6 +6,7 @@
 
 #include "auto_funcs.cpp"
 
+
 /////////////////////////////manual written functions
 CIMGUI_API void igLogText(CONST char *fmt, ...)
 {

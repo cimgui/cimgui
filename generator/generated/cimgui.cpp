@@ -1987,6 +1987,7 @@ CIMGUI_API void ImFont_AddRemapChar(ImFont* self,ImWchar dst,ImWchar src,bool ov
 }
 
 
+
 /////////////////////////////manual written functions
 CIMGUI_API void igLogText(CONST char *fmt, ...)
 {

@@ -555,6 +555,9 @@ local function func_parser()
                 if ret then
                     defT.ret = clean_spaces(ret:gsub("&","*"))
                     defT.retref = ret:match("&")
+					-- if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
+						-- defT.ret = defT.ret.."_Simple"
+					-- end
                 end
                 defsT[cimguiname][signature] = defT
             end
@@ -615,6 +618,7 @@ local function ADDnonUDT(FP)
         local defT = cimf[t.signature]
 		--if UDT return generate nonUDT version
 		if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
+			--passing as a pointer arg
 			local defT2 = {}
 			--first strings
 			for k,v in pairs(defT) do
@@ -629,11 +633,32 @@ local function ADDnonUDT(FP)
 			defT2.args = "("..defT.ret.." *pOut"..comma..defT.args:sub(2)
 			defT2.ret = "void"
 			defT2.ov_cimguiname = (defT2.ov_cimguiname or defT2.cimguiname).."_nonUDT"
-			defT2.nonUDT = true
+			defT2.nonUDT = 1
 			defT2.retref = nil
 			defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT2
 			defsT[t.cimguiname][t.signature.."nonUDT"] = defT2
 			table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT",cimguiname=t.cimguiname,call_args=call_args,ret =ret,comment=comment})
+			--converting to Simple type----------------------------------------------------
+			local defT3 = {}
+			--first strings
+			for k,v in pairs(defT) do
+				defT3[k] = v
+			end
+			--then argsT table
+			defT3.argsT = {}
+			for k,v in ipairs(defT.argsT) do
+				table.insert(defT3.argsT,{type=v.type,name=v.name})
+			end
+			local comma = (#defT.argsT > 0) and "," or ""
+			--defT3.args = "("..defT.ret.." *pOut"..comma..defT.args:sub(2)
+			defT3.ret = defT.ret.."_Simple"
+			defT3.retorig = defT.ret
+			defT3.ov_cimguiname = (defT3.ov_cimguiname or defT3.cimguiname).."_nonUDT2"
+			defT3.nonUDT = 2
+			defT3.retref = nil
+			defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT3
+			defsT[t.cimguiname][t.signature.."nonUDT2"] = defT3
+			table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT2",cimguiname=t.cimguiname,call_args=call_args,ret =ret,comment=comment})
 		end
 		end
 	end
@@ -1022,10 +1047,19 @@ local function func_implementation(FP)
                     --cppfile:write("    return ImGui::",def.funcname,def.call_args,";\n")
                     table.insert(outtab,"}\n")
                 elseif def.nonUDT then
+					if def.nonUDT == 1 then
                     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
                     table.insert(outtab,"{\n")
                     table.insert(outtab,"    *pOut = ImGui::"..def.funcname..def.call_args..";\n")
                     table.insert(outtab,"}\n")
+					else --nonUDT==2
+					table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
+                    table.insert(outtab,"{\n")
+                    table.insert(outtab,"    "..def.retorig.." ret = ImGui::"..def.funcname..def.call_args..";\n")
+					table.insert(outtab,"    "..def.ret.." ret2 = "..def.retorig.."ToSimple(ret);\n")
+					table.insert(outtab,"    return ret2;\n")
+                    table.insert(outtab,"}\n")
+					end
                 else
                     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
                     table.insert(outtab,"{\n")
@@ -1055,10 +1089,19 @@ local function func_implementation(FP)
                     --cppfile:write("    return self->",def.funcname,def.call_args,";\n")
                     table.insert(outtab,"}\n")
                 elseif def.nonUDT then
+					if def.nonUDT == 1 then
                     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
                     table.insert(outtab,"{\n")
                     table.insert(outtab,"    *pOut = self->"..def.funcname..def.call_args..";\n")
                     table.insert(outtab,"}\n")
+					else --nonUDT==2
+					table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
+                    table.insert(outtab,"{\n")
+					table.insert(outtab,"    "..def.retorig.." ret = self->"..def.funcname..def.call_args..";\n")
+					table.insert(outtab,"    "..def.ret.." ret2 = "..def.retorig.."ToSimple(ret);\n")
+					table.insert(outtab,"    return ret2;\n")
+                    table.insert(outtab,"}\n")
+					end
                 else
                     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
                     table.insert(outtab,"{\n")
