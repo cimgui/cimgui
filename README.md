@@ -10,7 +10,7 @@ Generated files are: cimgui.cpp, cimgui.h for C compilation. Also for helping in
 This library is intended as a intermediate layer to be able to use imgui from other languages that can interface with C (like D - see [D-binding](https://github.com/Extrawurst/DerelictImgui))
 
 Notes:
-* currently this wrapper is based on version [1.64 of imgui]
+* currently this wrapper is based on version [1.65 of imgui]
 * overloaded function names try to be the most compatible with traditional cimgui names. So all naming is algorithmic except for those names that were in conflict with widely used cimgui names and were thus coded in a table (https://github.com/sonoro1234/cimgui/blob/Branch_v1.62.0/generator/generator.lua#L40). Until the comunity finish with defining this table tag will be 1.62beta. Current overloaded function names can be found in (https://github.com/sonoro1234/cimgui/tree/Branch_v1.62.0/generator/generated/overloads.txt)
 
 # compilation
