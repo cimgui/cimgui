@@ -29,7 +29,7 @@
 #ifdef _MSC_VER
 typedef unsigned __int64 ImU64;
 #else
-typedef unsigned long long ImU64;
+//typedef unsigned long long ImU64;
 #endif
 
 //UDT stuff
