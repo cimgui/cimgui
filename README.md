@@ -1,4 +1,4 @@
-# cimgui 
+# cimgui [![Build Status](https://travis-ci.org/sonoro1234/cimgui.svg?branch=latest_cimgui_auto)](https://travis-ci.org/sonoro1234/cimgui)
 
 ![sample](screenshot.png)
 
