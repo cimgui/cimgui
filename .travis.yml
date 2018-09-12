@@ -6,3 +6,6 @@ os:
 compiler:
   - gcc
   - clang
+
+script:
+  "./configure && make"
