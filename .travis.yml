@@ -9,4 +9,4 @@ compiler:
 
 script:
   - make -C cimgui_auto
-  - $CC cimgui_auto.h    # Make sure we can include in a plain C compiler
+  - $CC cimgui_auto   # Make sure we can include in a plain C compiler
