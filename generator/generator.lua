@@ -992,10 +992,11 @@ local function func_header_generate(FP)
         local manual = get_manuals(def)
         if not manual and def.ret then --not constructor
             local addcoment = def.comment or ""
+			local empty = def.args:match("^%(%)") --no args
             if def.stname == "ImGui" or def.stname == "" then --ImGui namespace or top level
-                table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args..";"..addcoment.."\n")
+                table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..(empty and "(void)" or def.args)..";"..addcoment.."\n")
             else
-                local empty = def.args:match("^%(%)") --no args
+                
                 --local imgui_stname = embeded_structs[def.stname] or def.stname
                 local imgui_stname = def.stname
                 local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
