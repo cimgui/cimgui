@@ -1081,24 +1081,24 @@ typedef ImVector ImVector_ImWchar;
     // All those functions are not reliant on the current context.
 CIMGUI_API ImGuiContext* igCreateContext(ImFontAtlas* shared_font_atlas);
 CIMGUI_API void igDestroyContext(ImGuiContext* ctx);   // NULL = destroy current context
-CIMGUI_API ImGuiContext* igGetCurrentContext();
+CIMGUI_API ImGuiContext* igGetCurrentContext(void);
 CIMGUI_API void igSetCurrentContext(ImGuiContext* ctx);
 CIMGUI_API bool igDebugCheckVersionAndDataLayout(const char* version_str,size_t sz_io,size_t sz_style,size_t sz_vec2,size_t sz_vec4,size_t sz_drawvert);
     // Main
-CIMGUI_API ImGuiIO* igGetIO();                                    // access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags)
-CIMGUI_API ImGuiStyle* igGetStyle();                                 // access the Style structure (colors, sizes). Always use PushStyleCol(), PushStyleVar() to modify style mid-frame.
-CIMGUI_API void igNewFrame();                                 // start a new ImGui frame, you can submit any command from this point until Render()/EndFrame().
-CIMGUI_API void igEndFrame();                                 // ends the ImGui frame. automatically called by Render(), you likely don't need to call that yourself directly. If you don't need to render data (skipping rendering) you may call EndFrame() but you'll have wasted CPU already! If you don't need to render, better to not create any imgui windows and not call NewFrame() at all!
-CIMGUI_API void igRender();                                   // ends the ImGui frame, finalize the draw data. (Obsolete: optionally call io.RenderDrawListsFn if set. Nowadays, prefer calling your render function yourself.)
-CIMGUI_API ImDrawData* igGetDrawData();                              // valid after Render() and until the next call to NewFrame(). this is what you have to render. (Obsolete: this used to be passed to your io.RenderDrawListsFn() function.)
+CIMGUI_API ImGuiIO* igGetIO(void);                                    // access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags)
+CIMGUI_API ImGuiStyle* igGetStyle(void);                                 // access the Style structure (colors, sizes). Always use PushStyleCol(), PushStyleVar() to modify style mid-frame.
+CIMGUI_API void igNewFrame(void);                                 // start a new ImGui frame, you can submit any command from this point until Render()/EndFrame().
+CIMGUI_API void igEndFrame(void);                                 // ends the ImGui frame. automatically called by Render(), you likely don't need to call that yourself directly. If you don't need to render data (skipping rendering) you may call EndFrame() but you'll have wasted CPU already! If you don't need to render, better to not create any imgui windows and not call NewFrame() at all!
+CIMGUI_API void igRender(void);                                   // ends the ImGui frame, finalize the draw data. (Obsolete: optionally call io.RenderDrawListsFn if set. Nowadays, prefer calling your render function yourself.)
+CIMGUI_API ImDrawData* igGetDrawData(void);                              // valid after Render() and until the next call to NewFrame(). this is what you have to render. (Obsolete: this used to be passed to your io.RenderDrawListsFn() function.)
     // Demo, Debug, Information
 CIMGUI_API void igShowDemoWindow(bool* p_open);        // create demo/test window (previously called ShowTestWindow). demonstrate most ImGui features. call this to learn about the library! try to make it always available in your application!
 CIMGUI_API void igShowMetricsWindow(bool* p_open);     // create metrics window. display ImGui internals: draw commands (with individual draw calls and vertices), window list, basic internal state, etc.
 CIMGUI_API void igShowStyleEditor(ImGuiStyle* ref);    // add style editor block (not a window). you can pass in a reference ImGuiStyle structure to compare to, revert to and save to (else it uses the default style)
 CIMGUI_API bool igShowStyleSelector(const char* label);       // add style selector block (not a window), essentially a combo listing the default styles.
 CIMGUI_API void igShowFontSelector(const char* label);        // add font selector block (not a window), essentially a combo listing the loaded fonts.
-CIMGUI_API void igShowUserGuide();                            // add basic help/info block (not a window): how to manipulate ImGui as a end-user (mouse/keyboard controls).
-CIMGUI_API const char* igGetVersion();                               // get the compiled version string e.g. "1.23"
+CIMGUI_API void igShowUserGuide(void);                            // add basic help/info block (not a window): how to manipulate ImGui as a end-user (mouse/keyboard controls).
+CIMGUI_API const char* igGetVersion(void);                               // get the compiled version string e.g. "1.23"
     // Styles
 CIMGUI_API void igStyleColorsDark(ImGuiStyle* dst);    // new, recommended style (default)
 CIMGUI_API void igStyleColorsClassic(ImGuiStyle* dst); // classic imgui style
@@ -1110,54 +1110,54 @@ CIMGUI_API void igStyleColorsLight(ImGuiStyle* dst);   // best used with borders
     // Passing 'bool* p_open != NULL' shows a close widget in the upper-right corner of the window, which when clicking will set the boolean to false.
     // Use child windows to introduce independent scrolling/clipping regions within a host window. Child windows can embed their own child.
 CIMGUI_API bool igBegin(const char* name,bool* p_open,ImGuiWindowFlags flags);
-CIMGUI_API void igEnd();
+CIMGUI_API void igEnd(void);
 CIMGUI_API bool igBeginChild(const char* str_id,const ImVec2 size,bool border,ImGuiWindowFlags flags); // Begin a scrolling region. size==0.0f: use remaining window size, size<0.0f: use remaining window size minus abs(size). size>0.0f: fixed size. each axis can use a different mode, e.g. ImVec2(0,400).
 CIMGUI_API bool igBeginChildID(ImGuiID id,const ImVec2 size,bool border,ImGuiWindowFlags flags);
-CIMGUI_API void igEndChild();
+CIMGUI_API void igEndChild(void);
     // Windows Utilities
-CIMGUI_API bool igIsWindowAppearing();
-CIMGUI_API bool igIsWindowCollapsed();
+CIMGUI_API bool igIsWindowAppearing(void);
+CIMGUI_API bool igIsWindowCollapsed(void);
 CIMGUI_API bool igIsWindowFocused(ImGuiFocusedFlags flags); // is current window focused? or its root/child, depending on flags. see flags for options.
 CIMGUI_API bool igIsWindowHovered(ImGuiHoveredFlags flags); // is current window hovered (and typically: not blocked by a popup/modal)? see flags for options. NB: If you are trying to check whether your mouse should be dispatched to imgui or to your app, you should use the 'io.WantCaptureMouse' boolean for that! Please read the FAQ!
-CIMGUI_API ImDrawList* igGetWindowDrawList();                        // get draw list associated to the window, to append your own drawing primitives
-CIMGUI_API ImVec2 igGetWindowPos();                             // get current window position in screen space (useful if you want to do your own drawing via the DrawList API)
-CIMGUI_API ImVec2 igGetWindowSize();                            // get current window size
-CIMGUI_API float igGetWindowWidth();                           // get current window width (shortcut for GetWindowSize().x)
-CIMGUI_API float igGetWindowHeight();                          // get current window height (shortcut for GetWindowSize().y)
-CIMGUI_API ImVec2 igGetContentRegionMax();                      // current content boundaries (typically window boundaries including scrolling, or current column boundaries), in windows coordinates
-CIMGUI_API ImVec2 igGetContentRegionAvail();                    // == GetContentRegionMax() - GetCursorPos()
-CIMGUI_API float igGetContentRegionAvailWidth();               //
-CIMGUI_API ImVec2 igGetWindowContentRegionMin();                // content boundaries min (roughly (0,0)-Scroll), in window coordinates
-CIMGUI_API ImVec2 igGetWindowContentRegionMax();                // content boundaries max (roughly (0,0)+Size-Scroll) where Size can be override with SetNextWindowContentSize(), in window coordinates
-CIMGUI_API float igGetWindowContentRegionWidth();              //
+CIMGUI_API ImDrawList* igGetWindowDrawList(void);                        // get draw list associated to the window, to append your own drawing primitives
+CIMGUI_API ImVec2 igGetWindowPos(void);                             // get current window position in screen space (useful if you want to do your own drawing via the DrawList API)
+CIMGUI_API ImVec2 igGetWindowSize(void);                            // get current window size
+CIMGUI_API float igGetWindowWidth(void);                           // get current window width (shortcut for GetWindowSize().x)
+CIMGUI_API float igGetWindowHeight(void);                          // get current window height (shortcut for GetWindowSize().y)
+CIMGUI_API ImVec2 igGetContentRegionMax(void);                      // current content boundaries (typically window boundaries including scrolling, or current column boundaries), in windows coordinates
+CIMGUI_API ImVec2 igGetContentRegionAvail(void);                    // == GetContentRegionMax() - GetCursorPos()
+CIMGUI_API float igGetContentRegionAvailWidth(void);               //
+CIMGUI_API ImVec2 igGetWindowContentRegionMin(void);                // content boundaries min (roughly (0,0)-Scroll), in window coordinates
+CIMGUI_API ImVec2 igGetWindowContentRegionMax(void);                // content boundaries max (roughly (0,0)+Size-Scroll) where Size can be override with SetNextWindowContentSize(), in window coordinates
+CIMGUI_API float igGetWindowContentRegionWidth(void);              //
 CIMGUI_API void igSetNextWindowPos(const ImVec2 pos,ImGuiCond cond,const ImVec2 pivot); // set next window position. call before Begin(). use pivot=(0.5f,0.5f) to center on given point, etc.
 CIMGUI_API void igSetNextWindowSize(const ImVec2 size,ImGuiCond cond);                  // set next window size. set axis to 0.0f to force an auto-fit on this axis. call before Begin()
 CIMGUI_API void igSetNextWindowSizeConstraints(const ImVec2 size_min,const ImVec2 size_max,ImGuiSizeCallback custom_callback,void* custom_callback_data); // set next window size limits. use -1,-1 on either X/Y axis to preserve the current size. Use callback to apply non-trivial programmatic constraints.
 CIMGUI_API void igSetNextWindowContentSize(const ImVec2 size);                               // set next window content size (~ enforce the range of scrollbars). not including window decorations (title bar, menu bar, etc.). set an axis to 0.0f to leave it automatic. call before Begin()
 CIMGUI_API void igSetNextWindowCollapsed(bool collapsed,ImGuiCond cond);                 // set next window collapsed state. call before Begin()
-CIMGUI_API void igSetNextWindowFocus();                                                       // set next window to be focused / front-most. call before Begin()
+CIMGUI_API void igSetNextWindowFocus(void);                                                       // set next window to be focused / front-most. call before Begin()
 CIMGUI_API void igSetNextWindowBgAlpha(float alpha);                                          // set next window background color alpha. helper to easily modify ImGuiCol_WindowBg/ChildBg/PopupBg.
 CIMGUI_API void igSetWindowPosVec2(const ImVec2 pos,ImGuiCond cond);                        // (not recommended) set current window position - call within Begin()/End(). prefer using SetNextWindowPos(), as this may incur tearing and side-effects.
 CIMGUI_API void igSetWindowSizeVec2(const ImVec2 size,ImGuiCond cond);                      // (not recommended) set current window size - call within Begin()/End(). set to ImVec2(0,0) to force an auto-fit. prefer using SetNextWindowSize(), as this may incur tearing and minor side-effects.
 CIMGUI_API void igSetWindowCollapsedBool(bool collapsed,ImGuiCond cond);                     // (not recommended) set current window collapsed state. prefer using SetNextWindowCollapsed().
-CIMGUI_API void igSetWindowFocus();                                                           // (not recommended) set current window to be focused / front-most. prefer using SetNextWindowFocus().
+CIMGUI_API void igSetWindowFocus(void);                                                           // (not recommended) set current window to be focused / front-most. prefer using SetNextWindowFocus().
 CIMGUI_API void igSetWindowFontScale(float scale);                                            // set font scale. Adjust IO.FontGlobalScale if you want to scale all windows
 CIMGUI_API void igSetWindowPosStr(const char* name,const ImVec2 pos,ImGuiCond cond);      // set named window position.
 CIMGUI_API void igSetWindowSizeStr(const char* name,const ImVec2 size,ImGuiCond cond);    // set named window size. set axis to 0.0f to force an auto-fit on this axis.
 CIMGUI_API void igSetWindowCollapsedStr(const char* name,bool collapsed,ImGuiCond cond);   // set named window collapsed state
 CIMGUI_API void igSetWindowFocusStr(const char* name);                                           // set named window to be focused / front-most. use NULL to remove focus.
     // Windows Scrolling
-CIMGUI_API float igGetScrollX();                                                   // get scrolling amount [0..GetScrollMaxX()]
-CIMGUI_API float igGetScrollY();                                                   // get scrolling amount [0..GetScrollMaxY()]
-CIMGUI_API float igGetScrollMaxX();                                                // get maximum scrolling amount ~~ ContentSize.X - WindowSize.X
-CIMGUI_API float igGetScrollMaxY();                                                // get maximum scrolling amount ~~ ContentSize.Y - WindowSize.Y
+CIMGUI_API float igGetScrollX(void);                                                   // get scrolling amount [0..GetScrollMaxX()]
+CIMGUI_API float igGetScrollY(void);                                                   // get scrolling amount [0..GetScrollMaxY()]
+CIMGUI_API float igGetScrollMaxX(void);                                                // get maximum scrolling amount ~~ ContentSize.X - WindowSize.X
+CIMGUI_API float igGetScrollMaxY(void);                                                // get maximum scrolling amount ~~ ContentSize.Y - WindowSize.Y
 CIMGUI_API void igSetScrollX(float scroll_x);                                     // set scrolling amount [0..GetScrollMaxX()]
 CIMGUI_API void igSetScrollY(float scroll_y);                                     // set scrolling amount [0..GetScrollMaxY()]
 CIMGUI_API void igSetScrollHere(float center_y_ratio);                     // adjust scrolling amount to make current cursor position visible. center_y_ratio=0.0: top, 0.5: center, 1.0: bottom. When using to make a "default/current item" visible, consider using SetItemDefaultFocus() instead.
 CIMGUI_API void igSetScrollFromPosY(float pos_y,float center_y_ratio);    // adjust scrolling amount to make given position valid. use GetCursorPos() or GetCursorStartPos()+offset to get valid positions.
     // Parameters stacks (shared)
 CIMGUI_API void igPushFont(ImFont* font);                                         // use NULL as a shortcut to push default font
-CIMGUI_API void igPopFont();
+CIMGUI_API void igPopFont(void);
 CIMGUI_API void igPushStyleColorU32(ImGuiCol idx,ImU32 col);
 CIMGUI_API void igPushStyleColor(ImGuiCol idx,const ImVec4 col);
 CIMGUI_API void igPopStyleColor(int count);
@@ -1165,46 +1165,46 @@ CIMGUI_API void igPushStyleVarFloat(ImGuiStyleVar idx,float val);
 CIMGUI_API void igPushStyleVarVec2(ImGuiStyleVar idx,const ImVec2 val);
 CIMGUI_API void igPopStyleVar(int count);
 CIMGUI_API const ImVec4* igGetStyleColorVec4(ImGuiCol idx);                                // retrieve style color as stored in ImGuiStyle structure. use to feed back into PushStyleColor(), otherwise use GetColorU32() to get style color with style alpha baked in.
-CIMGUI_API ImFont* igGetFont();                                                      // get current font
-CIMGUI_API float igGetFontSize();                                                  // get current font size (= height in pixels) of current font with current scale applied
-CIMGUI_API ImVec2 igGetFontTexUvWhitePixel();                                       // get UV coordinate for a while pixel, useful to draw custom shapes via the ImDrawList API
+CIMGUI_API ImFont* igGetFont(void);                                                      // get current font
+CIMGUI_API float igGetFontSize(void);                                                  // get current font size (= height in pixels) of current font with current scale applied
+CIMGUI_API ImVec2 igGetFontTexUvWhitePixel(void);                                       // get UV coordinate for a while pixel, useful to draw custom shapes via the ImDrawList API
 CIMGUI_API ImU32 igGetColorU32(ImGuiCol idx,float alpha_mul);              // retrieve given style color with style alpha applied and optional extra alpha multiplier
 CIMGUI_API ImU32 igGetColorU32Vec4(const ImVec4 col);                                 // retrieve given color with style alpha applied
 CIMGUI_API ImU32 igGetColorU32U32(ImU32 col);                                         // retrieve given color with style alpha applied
     // Parameters stacks (current window)
 CIMGUI_API void igPushItemWidth(float item_width);                                // width of items for the common item+label case, pixels. 0.0f = default to ~2/3 of windows width, >0.0f: width in pixels, <0.0f align xx pixels to the right of window (so -1.0f always align width to the right side)
-CIMGUI_API void igPopItemWidth();
-CIMGUI_API float igCalcItemWidth();                                                // width of item given pushed settings and current cursor position
+CIMGUI_API void igPopItemWidth(void);
+CIMGUI_API float igCalcItemWidth(void);                                                // width of item given pushed settings and current cursor position
 CIMGUI_API void igPushTextWrapPos(float wrap_pos_x);                       // word-wrapping for Text*() commands. < 0.0f: no wrapping; 0.0f: wrap to end of window (or column); > 0.0f: wrap at 'wrap_pos_x' position in window local space
-CIMGUI_API void igPopTextWrapPos();
+CIMGUI_API void igPopTextWrapPos(void);
 CIMGUI_API void igPushAllowKeyboardFocus(bool allow_keyboard_focus);              // allow focusing using TAB/Shift-TAB, enabled by default but you can disable it for certain widgets
-CIMGUI_API void igPopAllowKeyboardFocus();
+CIMGUI_API void igPopAllowKeyboardFocus(void);
 CIMGUI_API void igPushButtonRepeat(bool repeat);                                  // in 'repeat' mode, Button*() functions return repeated true in a typematic manner (using io.KeyRepeatDelay/io.KeyRepeatRate setting). Note that you can call IsItemActive() after any Button() to tell if the button is held in the current frame.
-CIMGUI_API void igPopButtonRepeat();
+CIMGUI_API void igPopButtonRepeat(void);
     // Cursor / Layout
-CIMGUI_API void igSeparator();                                                    // separator, generally horizontal. inside a menu bar or in horizontal layout mode, this becomes a vertical separator.
+CIMGUI_API void igSeparator(void);                                                    // separator, generally horizontal. inside a menu bar or in horizontal layout mode, this becomes a vertical separator.
 CIMGUI_API void igSameLine(float pos_x,float spacing_w);          // call between widgets or groups to layout them horizontally
-CIMGUI_API void igNewLine();                                                      // undo a SameLine()
-CIMGUI_API void igSpacing();                                                      // add vertical spacing
+CIMGUI_API void igNewLine(void);                                                      // undo a SameLine()
+CIMGUI_API void igSpacing(void);                                                      // add vertical spacing
 CIMGUI_API void igDummy(const ImVec2 size);                                      // add a dummy item of given size
 CIMGUI_API void igIndent(float indent_w);                                  // move content position toward the right, by style.IndentSpacing or indent_w if != 0
 CIMGUI_API void igUnindent(float indent_w);                                // move content position back to the left, by style.IndentSpacing or indent_w if != 0
-CIMGUI_API void igBeginGroup();                                                   // lock horizontal starting position + capture group bounding box into one "item" (so you can use IsItemHovered() or layout primitives such as SameLine() on whole group, etc.)
-CIMGUI_API void igEndGroup();
-CIMGUI_API ImVec2 igGetCursorPos();                                                 // cursor position is relative to window position
-CIMGUI_API float igGetCursorPosX();                                                // "
-CIMGUI_API float igGetCursorPosY();                                                // "
+CIMGUI_API void igBeginGroup(void);                                                   // lock horizontal starting position + capture group bounding box into one "item" (so you can use IsItemHovered() or layout primitives such as SameLine() on whole group, etc.)
+CIMGUI_API void igEndGroup(void);
+CIMGUI_API ImVec2 igGetCursorPos(void);                                                 // cursor position is relative to window position
+CIMGUI_API float igGetCursorPosX(void);                                                // "
+CIMGUI_API float igGetCursorPosY(void);                                                // "
 CIMGUI_API void igSetCursorPos(const ImVec2 local_pos);                          // "
 CIMGUI_API void igSetCursorPosX(float x);                                         // "
 CIMGUI_API void igSetCursorPosY(float y);                                         // "
-CIMGUI_API ImVec2 igGetCursorStartPos();                                            // initial cursor position
-CIMGUI_API ImVec2 igGetCursorScreenPos();                                           // cursor position in absolute screen coordinates [0..io.DisplaySize] (useful to work with ImDrawList API)
+CIMGUI_API ImVec2 igGetCursorStartPos(void);                                            // initial cursor position
+CIMGUI_API ImVec2 igGetCursorScreenPos(void);                                           // cursor position in absolute screen coordinates [0..io.DisplaySize] (useful to work with ImDrawList API)
 CIMGUI_API void igSetCursorScreenPos(const ImVec2 screen_pos);                   // cursor position in absolute screen coordinates [0..io.DisplaySize]
-CIMGUI_API void igAlignTextToFramePadding();                                      // vertically align upcoming text baseline to FramePadding.y so that it will align properly to regularly framed items (call if you have text on a line before a framed item)
-CIMGUI_API float igGetTextLineHeight();                                            // ~ FontSize
-CIMGUI_API float igGetTextLineHeightWithSpacing();                                 // ~ FontSize + style.ItemSpacing.y (distance in pixels between 2 consecutive lines of text)
-CIMGUI_API float igGetFrameHeight();                                               // ~ FontSize + style.FramePadding.y * 2
-CIMGUI_API float igGetFrameHeightWithSpacing();                                    // ~ FontSize + style.FramePadding.y * 2 + style.ItemSpacing.y (distance in pixels between 2 consecutive lines of framed widgets)
+CIMGUI_API void igAlignTextToFramePadding(void);                                      // vertically align upcoming text baseline to FramePadding.y so that it will align properly to regularly framed items (call if you have text on a line before a framed item)
+CIMGUI_API float igGetTextLineHeight(void);                                            // ~ FontSize
+CIMGUI_API float igGetTextLineHeightWithSpacing(void);                                 // ~ FontSize + style.ItemSpacing.y (distance in pixels between 2 consecutive lines of text)
+CIMGUI_API float igGetFrameHeight(void);                                               // ~ FontSize + style.FramePadding.y * 2
+CIMGUI_API float igGetFrameHeightWithSpacing(void);                                    // ~ FontSize + style.FramePadding.y * 2 + style.ItemSpacing.y (distance in pixels between 2 consecutive lines of framed widgets)
     // ID stack/scopes
     // Read the FAQ for more details about how ID are handled in dear imgui. If you are creating widgets in a loop you most
     // likely want to push a unique identifier (e.g. object pointer, loop index) to uniquely differentiate them.
@@ -1215,7 +1215,7 @@ CIMGUI_API void igPushIDStr(const char* str_id);                                
 CIMGUI_API void igPushIDRange(const char* str_id_begin,const char* str_id_end);
 CIMGUI_API void igPushIDPtr(const void* ptr_id);
 CIMGUI_API void igPushIDInt(int int_id);
-CIMGUI_API void igPopID();
+CIMGUI_API void igPopID(void);
 CIMGUI_API ImGuiID igGetIDStr(const char* str_id);                                      // calculate unique ID (hash of whole ID stack + given parameter). e.g. if you want to query into ImGuiStorage yourself
 CIMGUI_API ImGuiID igGetIDStrStr(const char* str_id_begin,const char* str_id_end);
 CIMGUI_API ImGuiID igGetIDPtr(const void* ptr_id);
@@ -1246,12 +1246,12 @@ CIMGUI_API bool igCheckboxFlags(const char* label,unsigned int* flags,unsigned i
 CIMGUI_API bool igRadioButtonBool(const char* label,bool active);                    // use with e.g. if (RadioButton("one", my_value==1)) { my_value = 1; }
 CIMGUI_API bool igRadioButtonIntPtr(const char* label,int* v,int v_button);           // shortcut to handle the above pattern when value is an integer
 CIMGUI_API void igProgressBar(float fraction,const ImVec2 size_arg,const char* overlay);
-CIMGUI_API void igBullet();                                                       // draw a small circle and keep the cursor on the same line. advance cursor x position by GetTreeNodeToLabelSpacing(), same distance that TreeNode() uses
+CIMGUI_API void igBullet(void);                                                       // draw a small circle and keep the cursor on the same line. advance cursor x position by GetTreeNodeToLabelSpacing(), same distance that TreeNode() uses
     // Widgets: Combo Box
     // The new BeginCombo()/EndCombo() api allows you to manage your contents and selection state however you want it, by creating e.g. Selectable() items.
     // The old Combo() api are helpers over BeginCombo()/EndCombo() which are kept available for convenience purpose.
 CIMGUI_API bool igBeginCombo(const char* label,const char* preview_value,ImGuiComboFlags flags);
-CIMGUI_API void igEndCombo(); // only call EndCombo() if BeginCombo() returns true!
+CIMGUI_API void igEndCombo(void); // only call EndCombo() if BeginCombo() returns true!
 CIMGUI_API bool igCombo(const char* label,int* current_item,const char* const items[],int items_count,int popup_max_height_in_items);
 CIMGUI_API bool igComboStr(const char* label,int* current_item,const char* items_separated_by_zeros,int popup_max_height_in_items);      // Separate items with \0 within a string, end item-list with \0\0. e.g. "One\0Two\0Three\0"
 CIMGUI_API bool igComboFnPtr(const char* label,int* current_item,bool(*items_getter)(void* data,int idx,const char** out_text),void* data,int items_count,int popup_max_height_in_items);
@@ -1324,9 +1324,9 @@ CIMGUI_API bool igTreeNodeExVStr(const char* str_id,ImGuiTreeNodeFlags flags,con
 CIMGUI_API bool igTreeNodeExVPtr(const void* ptr_id,ImGuiTreeNodeFlags flags,const char* fmt,va_list args);
 CIMGUI_API void igTreePushStr(const char* str_id);                                       // ~ Indent()+PushId(). Already called by TreeNode() when returning true, but you can call TreePush/TreePop yourself if desired.
 CIMGUI_API void igTreePushPtr(const void* ptr_id);                                // "
-CIMGUI_API void igTreePop();                                                          // ~ Unindent()+PopId()
-CIMGUI_API void igTreeAdvanceToLabelPos();                                            // advance cursor x position by GetTreeNodeToLabelSpacing()
-CIMGUI_API float igGetTreeNodeToLabelSpacing();                                        // horizontal distance preceding label when using TreeNode*() or Bullet() == (g.FontSize + style.FramePadding.x*2) for a regular unframed TreeNode
+CIMGUI_API void igTreePop(void);                                                          // ~ Unindent()+PopId()
+CIMGUI_API void igTreeAdvanceToLabelPos(void);                                            // advance cursor x position by GetTreeNodeToLabelSpacing()
+CIMGUI_API float igGetTreeNodeToLabelSpacing(void);                                        // horizontal distance preceding label when using TreeNode*() or Bullet() == (g.FontSize + style.FramePadding.x*2) for a regular unframed TreeNode
 CIMGUI_API void igSetNextTreeNodeOpen(bool is_open,ImGuiCond cond);              // set next TreeNode/CollapsingHeader open state.
 CIMGUI_API bool igCollapsingHeader(const char* label,ImGuiTreeNodeFlags flags);  // if returning 'true' the header is open. doesn't indent nor push on ID stack. user doesn't have to call TreePop().
 CIMGUI_API bool igCollapsingHeaderBoolPtr(const char* label,bool* p_open,ImGuiTreeNodeFlags flags); // when 'p_open' isn't NULL, display an additional small close button on upper right of the header
@@ -1338,7 +1338,7 @@ CIMGUI_API bool igListBoxStr_arr(const char* label,int* current_item,const char*
 CIMGUI_API bool igListBoxFnPtr(const char* label,int* current_item,bool(*items_getter)(void* data,int idx,const char** out_text),void* data,int items_count,int height_in_items);
 CIMGUI_API bool igListBoxHeaderVec2(const char* label,const ImVec2 size); // use if you want to reimplement ListBox() will custom data or interactions. if the function return true, you can output elements then call ListBoxFooter() afterwards.
 CIMGUI_API bool igListBoxHeaderInt(const char* label,int items_count,int height_in_items); // "
-CIMGUI_API void igListBoxFooter();                                                    // terminate the scrolling region. only call ListBoxFooter() if ListBoxHeader() returned true!
+CIMGUI_API void igListBoxFooter(void);                                                    // terminate the scrolling region. only call ListBoxFooter() if ListBoxHeader() returned true!
     // Widgets: Data Plotting
 CIMGUI_API void igPlotLines(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride);
 CIMGUI_API void igPlotLinesFnPtr(const char* label,float(*values_getter)(void* data,int idx),void* data,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size);
@@ -1350,17 +1350,17 @@ CIMGUI_API void igValueInt(const char* prefix,int v);
 CIMGUI_API void igValueUint(const char* prefix,unsigned int v);
 CIMGUI_API void igValueFloat(const char* prefix,float v,const char* float_format);
     // Widgets: Menus
-CIMGUI_API bool igBeginMainMenuBar();                                                 // create and append to a full screen menu-bar.
-CIMGUI_API void igEndMainMenuBar();                                                   // only call EndMainMenuBar() if BeginMainMenuBar() returns true!
-CIMGUI_API bool igBeginMenuBar();                                                     // append to menu-bar of current window (requires ImGuiWindowFlags_MenuBar flag set on parent window).
-CIMGUI_API void igEndMenuBar();                                                       // only call EndMenuBar() if BeginMenuBar() returns true!
+CIMGUI_API bool igBeginMainMenuBar(void);                                                 // create and append to a full screen menu-bar.
+CIMGUI_API void igEndMainMenuBar(void);                                                   // only call EndMainMenuBar() if BeginMainMenuBar() returns true!
+CIMGUI_API bool igBeginMenuBar(void);                                                     // append to menu-bar of current window (requires ImGuiWindowFlags_MenuBar flag set on parent window).
+CIMGUI_API void igEndMenuBar(void);                                                       // only call EndMenuBar() if BeginMenuBar() returns true!
 CIMGUI_API bool igBeginMenu(const char* label,bool enabled);                  // create a sub-menu entry. only call EndMenu() if this returns true!
-CIMGUI_API void igEndMenu();                                                          // only call EndMenu() if BeginMenu() returns true!
+CIMGUI_API void igEndMenu(void);                                                          // only call EndMenu() if BeginMenu() returns true!
 CIMGUI_API bool igMenuItemBool(const char* label,const char* shortcut,bool selected,bool enabled);  // return true when activated. shortcuts are displayed for convenience but not processed by ImGui at the moment
 CIMGUI_API bool igMenuItemBoolPtr(const char* label,const char* shortcut,bool* p_selected,bool enabled);              // return true when activated + toggle (*p_selected) if p_selected != NULL
     // Tooltips
-CIMGUI_API void igBeginTooltip();                                                     // begin/append a tooltip window. to create full-featured tooltip (with any kind of items).
-CIMGUI_API void igEndTooltip();
+CIMGUI_API void igBeginTooltip(void);                                                     // begin/append a tooltip window. to create full-featured tooltip (with any kind of items).
+CIMGUI_API void igEndTooltip(void);
 CIMGUI_API void igSetTooltip(const char* fmt,...);                     // set a text-only tooltip, typically use with ImGui::IsItemHovered(). overidde any previous call to SetTooltip().
 CIMGUI_API void igSetTooltipV(const char* fmt,va_list args);
     // Popups
@@ -1370,71 +1370,71 @@ CIMGUI_API bool igBeginPopupContextItem(const char* str_id,int mouse_button);   
 CIMGUI_API bool igBeginPopupContextWindow(const char* str_id,int mouse_button,bool also_over_items);  // helper to open and begin popup when clicked on current window.
 CIMGUI_API bool igBeginPopupContextVoid(const char* str_id,int mouse_button);                                 // helper to open and begin popup when clicked in void (where there are no imgui windows).
 CIMGUI_API bool igBeginPopupModal(const char* name,bool* p_open,ImGuiWindowFlags flags);                     // modal dialog (regular window with title bar, block interactions behind the modal window, can't close the modal window by clicking outside)
-CIMGUI_API void igEndPopup();                                                                                             // only call EndPopup() if BeginPopupXXX() returns true!
+CIMGUI_API void igEndPopup(void);                                                                                             // only call EndPopup() if BeginPopupXXX() returns true!
 CIMGUI_API bool igOpenPopupOnItemClick(const char* str_id,int mouse_button);                                  // helper to open popup when clicked on last item. return true when just opened.
 CIMGUI_API bool igIsPopupOpen(const char* str_id);                                    // return true if the popup is open
-CIMGUI_API void igCloseCurrentPopup();                                                // close the popup we have begin-ed into. clicking on a MenuItem or Selectable automatically close the current popup.
+CIMGUI_API void igCloseCurrentPopup(void);                                                // close the popup we have begin-ed into. clicking on a MenuItem or Selectable automatically close the current popup.
     // Columns
     // You can also use SameLine(pos_x) for simplified columns. The columns API is still work-in-progress and rather lacking.
 CIMGUI_API void igColumns(int count,const char* id,bool border);
-CIMGUI_API void igNextColumn();                                                       // next column, defaults to current row or next row if the current row is finished
-CIMGUI_API int igGetColumnIndex();                                                   // get current column index
+CIMGUI_API void igNextColumn(void);                                                       // next column, defaults to current row or next row if the current row is finished
+CIMGUI_API int igGetColumnIndex(void);                                                   // get current column index
 CIMGUI_API float igGetColumnWidth(int column_index);                              // get column width (in pixels). pass -1 to use current column
 CIMGUI_API void igSetColumnWidth(int column_index,float width);                      // set column width (in pixels). pass -1 to use current column
 CIMGUI_API float igGetColumnOffset(int column_index);                             // get position of column line (in pixels, from the left side of the contents region). pass -1 to use current column, otherwise 0..GetColumnsCount() inclusive. column 0 is typically 0.0f
 CIMGUI_API void igSetColumnOffset(int column_index,float offset_x);                  // set position of column line (in pixels, from the left side of the contents region). pass -1 to use current column
-CIMGUI_API int igGetColumnsCount();
+CIMGUI_API int igGetColumnsCount(void);
     // Logging/Capture: all text output from interface is captured to tty/file/clipboard. By default, tree nodes are automatically opened during logging.
 CIMGUI_API void igLogToTTY(int max_depth);                                       // start logging to tty
 CIMGUI_API void igLogToFile(int max_depth,const char* filename);         // start logging to file
 CIMGUI_API void igLogToClipboard(int max_depth);                                 // start logging to OS clipboard
-CIMGUI_API void igLogFinish();                                                        // stop logging (close file, etc.)
-CIMGUI_API void igLogButtons();                                                       // helper to display buttons for logging to tty/file/clipboard
+CIMGUI_API void igLogFinish(void);                                                        // stop logging (close file, etc.)
+CIMGUI_API void igLogButtons(void);                                                       // helper to display buttons for logging to tty/file/clipboard
     // Drag and Drop
     // [BETA API] Missing Demo code. API may evolve.
 CIMGUI_API bool igBeginDragDropSource(ImGuiDragDropFlags flags);                                      // call when the current item is active. If this return true, you can call SetDragDropPayload() + EndDragDropSource()
 CIMGUI_API bool igSetDragDropPayload(const char* type,const void* data,size_t size,ImGuiCond cond);// type is a user defined string of maximum 32 characters. Strings starting with '_' are reserved for dear imgui internal types. Data is copied and held by imgui.
-CIMGUI_API void igEndDragDropSource();                                                                    // only call EndDragDropSource() if BeginDragDropSource() returns true!
-CIMGUI_API bool igBeginDragDropTarget();                                                                  // call after submitting an item that may receive an item. If this returns true, you can call AcceptDragDropPayload() + EndDragDropTarget()
+CIMGUI_API void igEndDragDropSource(void);                                                                    // only call EndDragDropSource() if BeginDragDropSource() returns true!
+CIMGUI_API bool igBeginDragDropTarget(void);                                                                  // call after submitting an item that may receive an item. If this returns true, you can call AcceptDragDropPayload() + EndDragDropTarget()
 CIMGUI_API const ImGuiPayload* igAcceptDragDropPayload(const char* type,ImGuiDragDropFlags flags);            // accept contents of a given type. If ImGuiDragDropFlags_AcceptBeforeDelivery is set you can peek into the payload before the mouse button is released.
-CIMGUI_API void igEndDragDropTarget();                                                                    // only call EndDragDropTarget() if BeginDragDropTarget() returns true!
+CIMGUI_API void igEndDragDropTarget(void);                                                                    // only call EndDragDropTarget() if BeginDragDropTarget() returns true!
     // Clipping
 CIMGUI_API void igPushClipRect(const ImVec2 clip_rect_min,const ImVec2 clip_rect_max,bool intersect_with_current_clip_rect);
-CIMGUI_API void igPopClipRect();
+CIMGUI_API void igPopClipRect(void);
     // Focus, Activation
     // (Prefer using "SetItemDefaultFocus()" over "if (IsWindowAppearing()) SetScrollHere()" when applicable, to make your code more forward compatible when navigation branch is merged)
-CIMGUI_API void igSetItemDefaultFocus();                                              // make last item the default focused item of a window. Please use instead of "if (IsWindowAppearing()) SetScrollHere()" to signify "default item".
+CIMGUI_API void igSetItemDefaultFocus(void);                                              // make last item the default focused item of a window. Please use instead of "if (IsWindowAppearing()) SetScrollHere()" to signify "default item".
 CIMGUI_API void igSetKeyboardFocusHere(int offset);                               // focus keyboard on the next widget. Use positive 'offset' to access sub components of a multiple component widget. Use -1 to access previous widget.
     // Utilities
     // See Demo Window under "Widgets->Querying Status" for an interactive visualization of many of those functions.
 CIMGUI_API bool igIsItemHovered(ImGuiHoveredFlags flags);                         // is the last item hovered? (and usable, aka not blocked by a popup, etc.). See ImGuiHoveredFlags for more options.
-CIMGUI_API bool igIsItemActive();                                                     // is the last item active? (e.g. button being held, text field being edited. This will continuously return true while holding mouse button on an item. Items that don't interact will always return false)
-CIMGUI_API bool igIsItemFocused();                                                    // is the last item focused for keyboard/gamepad navigation?
+CIMGUI_API bool igIsItemActive(void);                                                     // is the last item active? (e.g. button being held, text field being edited. This will continuously return true while holding mouse button on an item. Items that don't interact will always return false)
+CIMGUI_API bool igIsItemFocused(void);                                                    // is the last item focused for keyboard/gamepad navigation?
 CIMGUI_API bool igIsItemClicked(int mouse_button);                                // is the last item clicked? (e.g. button/node just clicked on) == IsMouseClicked(mouse_button) && IsItemHovered()
-CIMGUI_API bool igIsItemVisible();                                                    // is the last item visible? (items may be out of sight because of clipping/scrolling)
-CIMGUI_API bool igIsItemEdited();                                                     // did the last item modify its underlying value this frame? or was pressed? This is generally the same as the "bool" return value of many widgets.
-CIMGUI_API bool igIsItemDeactivated();                                                // was the last item just made inactive (item was previously active). Useful for Undo/Redo patterns with widgets that requires continuous editing.
-CIMGUI_API bool igIsItemDeactivatedAfterEdit();                                       // was the last item just made inactive and made a value change when it was active? (e.g. Slider/Drag moved). Useful for Undo/Redo patterns with widgets that requires continuous editing. Note that you may get false positives (some widgets such as Combo()/ListBox()/Selectable() will return true even when clicking an already selected item).
-CIMGUI_API bool igIsAnyItemHovered();
-CIMGUI_API bool igIsAnyItemActive();
-CIMGUI_API bool igIsAnyItemFocused();
-CIMGUI_API ImVec2 igGetItemRectMin();                                                   // get bounding rectangle of last item, in screen space
-CIMGUI_API ImVec2 igGetItemRectMax();                                                   // "
-CIMGUI_API ImVec2 igGetItemRectSize();                                                  // get size of last item, in screen space
-CIMGUI_API void igSetItemAllowOverlap();                                              // allow last item to be overlapped by a subsequent item. sometimes useful with invisible buttons, selectables, etc. to catch unused area.
+CIMGUI_API bool igIsItemVisible(void);                                                    // is the last item visible? (items may be out of sight because of clipping/scrolling)
+CIMGUI_API bool igIsItemEdited(void);                                                     // did the last item modify its underlying value this frame? or was pressed? This is generally the same as the "bool" return value of many widgets.
+CIMGUI_API bool igIsItemDeactivated(void);                                                // was the last item just made inactive (item was previously active). Useful for Undo/Redo patterns with widgets that requires continuous editing.
+CIMGUI_API bool igIsItemDeactivatedAfterEdit(void);                                       // was the last item just made inactive and made a value change when it was active? (e.g. Slider/Drag moved). Useful for Undo/Redo patterns with widgets that requires continuous editing. Note that you may get false positives (some widgets such as Combo()/ListBox()/Selectable() will return true even when clicking an already selected item).
+CIMGUI_API bool igIsAnyItemHovered(void);
+CIMGUI_API bool igIsAnyItemActive(void);
+CIMGUI_API bool igIsAnyItemFocused(void);
+CIMGUI_API ImVec2 igGetItemRectMin(void);                                                   // get bounding rectangle of last item, in screen space
+CIMGUI_API ImVec2 igGetItemRectMax(void);                                                   // "
+CIMGUI_API ImVec2 igGetItemRectSize(void);                                                  // get size of last item, in screen space
+CIMGUI_API void igSetItemAllowOverlap(void);                                              // allow last item to be overlapped by a subsequent item. sometimes useful with invisible buttons, selectables, etc. to catch unused area.
 CIMGUI_API bool igIsRectVisible(const ImVec2 size);                                  // test if rectangle (of given size, starting from cursor position) is visible / not clipped.
 CIMGUI_API bool igIsRectVisibleVec2(const ImVec2 rect_min,const ImVec2 rect_max);      // test if rectangle (in screen space) is visible / not clipped. to perform coarse clipping on user's side.
-CIMGUI_API double igGetTime();
-CIMGUI_API int igGetFrameCount();
-CIMGUI_API ImDrawList* igGetOverlayDrawList();                                               // this draw list will be the last rendered one, useful to quickly draw overlays shapes/text
-CIMGUI_API ImDrawListSharedData* igGetDrawListSharedData();                                    // you may use this when creating your own ImDrawList instances
+CIMGUI_API double igGetTime(void);
+CIMGUI_API int igGetFrameCount(void);
+CIMGUI_API ImDrawList* igGetOverlayDrawList(void);                                               // this draw list will be the last rendered one, useful to quickly draw overlays shapes/text
+CIMGUI_API ImDrawListSharedData* igGetDrawListSharedData(void);                                    // you may use this when creating your own ImDrawList instances
 CIMGUI_API const char* igGetStyleColorName(ImGuiCol idx);
 CIMGUI_API void igSetStateStorage(ImGuiStorage* storage);                             // replace current window storage with our own (if you want to manipulate it yourself, typically clear subsection of it)
-CIMGUI_API ImGuiStorage* igGetStateStorage();
+CIMGUI_API ImGuiStorage* igGetStateStorage(void);
 CIMGUI_API ImVec2 igCalcTextSize(const char* text,const char* text_end,bool hide_text_after_double_hash,float wrap_width);
 CIMGUI_API void igCalcListClipping(int items_count,float items_height,int* out_items_display_start,int* out_items_display_end);    // calculate coarse clipping for large list of evenly sized items. Prefer using the ImGuiListClipper higher-level helper if you can.
 CIMGUI_API bool igBeginChildFrame(ImGuiID id,const ImVec2 size,ImGuiWindowFlags flags); // helper to create a child window / scrolling region that looks like a normal widget frame
-CIMGUI_API void igEndChildFrame();                                                    // always call EndChildFrame() regardless of BeginChildFrame() return values (which indicates a collapsed/clipped window)
+CIMGUI_API void igEndChildFrame(void);                                                    // always call EndChildFrame() regardless of BeginChildFrame() return values (which indicates a collapsed/clipped window)
 CIMGUI_API ImVec4 igColorConvertU32ToFloat4(ImU32 in);
 CIMGUI_API ImU32 igColorConvertFloat4ToU32(const ImVec4 in);
 CIMGUI_API void igColorConvertRGBtoHSV(float r,float g,float b,float out_h,float out_s,float out_v);
@@ -1446,23 +1446,23 @@ CIMGUI_API bool igIsKeyPressed(int user_key_index,bool repeat);               //
 CIMGUI_API bool igIsKeyReleased(int user_key_index);                                  // was key released (went from Down to !Down)..
 CIMGUI_API int igGetKeyPressedAmount(int key_index,float repeat_delay,float rate); // uses provided repeat rate/delay. return a count, most often 0 or 1 but might be >1 if RepeatRate is small enough that DeltaTime > RepeatRate
 CIMGUI_API bool igIsMouseDown(int button);                                            // is mouse button held (0=left, 1=right, 2=middle)
-CIMGUI_API bool igIsAnyMouseDown();                                                   // is any mouse button held
+CIMGUI_API bool igIsAnyMouseDown(void);                                                   // is any mouse button held
 CIMGUI_API bool igIsMouseClicked(int button,bool repeat);                    // did mouse button clicked (went from !Down to Down) (0=left, 1=right, 2=middle)
 CIMGUI_API bool igIsMouseDoubleClicked(int button);                                   // did mouse button double-clicked. a double-click returns false in IsMouseClicked(). uses io.MouseDoubleClickTime.
 CIMGUI_API bool igIsMouseReleased(int button);                                        // did mouse button released (went from Down to !Down)
 CIMGUI_API bool igIsMouseDragging(int button,float lock_threshold);      // is mouse dragging. if lock_threshold < -1.0f uses io.MouseDraggingThreshold
 CIMGUI_API bool igIsMouseHoveringRect(const ImVec2 r_min,const ImVec2 r_max,bool clip);  // is mouse hovering given bounding rect (in screen space). clipped by current clipping settings, but  disregarding of other consideration of focus/window ordering/popup-block.
 CIMGUI_API bool igIsMousePosValid(const ImVec2* mouse_pos);                    //
-CIMGUI_API ImVec2 igGetMousePos();                                                      // shortcut to ImGui::GetIO().MousePos provided by user, to be consistent with other calls
-CIMGUI_API ImVec2 igGetMousePosOnOpeningCurrentPopup();                                 // retrieve backup of mouse position at the time of opening popup we have BeginPopup() into
+CIMGUI_API ImVec2 igGetMousePos(void);                                                      // shortcut to ImGui::GetIO().MousePos provided by user, to be consistent with other calls
+CIMGUI_API ImVec2 igGetMousePosOnOpeningCurrentPopup(void);                                 // retrieve backup of mouse position at the time of opening popup we have BeginPopup() into
 CIMGUI_API ImVec2 igGetMouseDragDelta(int button,float lock_threshold);    // dragging amount since clicking. if lock_threshold < -1.0f uses io.MouseDraggingThreshold
 CIMGUI_API void igResetMouseDragDelta(int button);                                //
-CIMGUI_API ImGuiMouseCursor igGetMouseCursor();                                                // get desired cursor type, reset in ImGui::NewFrame(), this is updated during the frame. valid before Render(). If you use software rendering by setting io.MouseDrawCursor ImGui will render those for you
+CIMGUI_API ImGuiMouseCursor igGetMouseCursor(void);                                                // get desired cursor type, reset in ImGui::NewFrame(), this is updated during the frame. valid before Render(). If you use software rendering by setting io.MouseDrawCursor ImGui will render those for you
 CIMGUI_API void igSetMouseCursor(ImGuiMouseCursor type);                              // set desired cursor type
 CIMGUI_API void igCaptureKeyboardFromApp(bool capture);                        // manually override io.WantCaptureKeyboard flag next frame (said flag is entirely left for your application to handle). e.g. force capture keyboard when your widget is being hovered.
 CIMGUI_API void igCaptureMouseFromApp(bool capture);                           // manually override io.WantCaptureMouse flag next frame (said flag is entirely left for your application to handle).
     // Clipboard Utilities (also see the LogToClipboard() function to capture or output text data to the clipboard)
-CIMGUI_API const char* igGetClipboardText();
+CIMGUI_API const char* igGetClipboardText(void);
 CIMGUI_API void igSetClipboardText(const char* text);
     // Settings/.Ini Utilities
     // The disk functions are automatically called if io.IniFilename != NULL (default is "imgui.ini").
