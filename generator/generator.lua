@@ -742,9 +742,10 @@ local function gen_structs_and_enums_table(cdefs)
                 local name,value = line:match("%s*([%w_]+)%s*=%s*([^,]+)")
                 if value then
                     table.insert(outtab.enums[enumnames[#enumnames]],{name=name,value=value})
-                else
+                else --increment by one
                     local name = line:match("%s*([^,]+)")
-                    local value = #outtab.enums[enumnames[#enumnames]]
+					local enum_table = outtab.enums[enumnames[#enumnames]]
+                    local value = enum_table[#enum_table] and (enum_table[#enum_table].value + 1) or 0
                     table.insert(outtab.enums[enumnames[#enumnames]],{name=name,value=value})
                 end
             end
