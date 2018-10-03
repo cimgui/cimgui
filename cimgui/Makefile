@@ -11,15 +11,13 @@ OBJS += ../imgui/imgui.o
 OBJS += ../imgui/imgui_draw.o
 OBJS += ../imgui/imgui_demo.o
 
-CXXFLAGS=-O2
-
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S), Linux) #LINUX
 	ECHO_MESSAGE = "Linux"
 
 	OUTPUTNAME = cimgui.so
-	CXXFLAGS += -I../../
+	CXXFLAGS = -I../../
 	CXXFLAGS += -Wall
 	CXXFLAGS += -shared -fPIC
 	CFLAGS = $(CXXFLAGS)
@@ -29,7 +27,7 @@ ifeq ($(UNAME_S), Darwin) #APPLE
 	ECHO_MESSAGE = "Mac OS X"
 
 	OUTPUTNAME = cimgui.dylib
-	CXXFLAGS += -I/usr/local/include
+	CXXFLAGS = -I/usr/local/include
 	CXXFLAGS += -Wall
 	LINKFLAGS = -dynamiclib
 	CFLAGS = $(CXXFLAGS)
@@ -39,7 +37,7 @@ ifeq ($(OS), Windows_NT)
 	ECHO_MESSAGE = "Windows"
 
 	OUTPUTNAME = cimgui.dll
-	CXXFLAGS += -I../../
+	CXXFLAGS = -I../../
 	CXXFLAGS += -Wall
 	CXXFLAGS += -shared
 	LINKFLAGS = -limm32
