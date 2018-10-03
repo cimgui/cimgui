@@ -36,6 +36,10 @@ CIMGUI_API void igEndFrame()
     ImGui::EndFrame();
 }
 
+CIMGUI_API void igShutdown()
+{
+    ImGui::Shutdown();
+}
 
 CIMGUI_API void igShowUserGuide()
 {
@@ -179,7 +183,7 @@ CIMGUI_API void igSetNextWindowSize(CONST ImVec2 size, ImGuiCond cond)
     ImGui::SetNextWindowSize(size, cond);
 }
 
-CIMGUI_API void igSetNextWindowSizeConstraints(CONST struct ImVec2 size_min, CONST struct ImVec2 size_max, ImGuiSizeCallback custom_callback, void *custom_callback_data)
+CIMGUI_API void igSetNextWindowSizeConstraints(CONST struct ImVec2 size_min, CONST struct ImVec2 size_max, ImGuiSizeConstraintCallback custom_callback, void *custom_callback_data)
 {
     ImGui::SetNextWindowSizeConstraints(size_min, size_max, custom_callback, custom_callback_data);
 }
@@ -1306,9 +1310,9 @@ CIMGUI_API void igLogText(CONST char *fmt, ...)
     ImGui::LogText("%s", buffer);
 }
 
-CIMGUI_API bool igBeginDragDropSource(ImGuiDragDropFlags flags)
+CIMGUI_API bool igBeginDragDropSource(ImGuiDragDropFlags flags, int mouse_button)
 {
-    return ImGui::BeginDragDropSource(flags);
+    return ImGui::BeginDragDropSource(flags, mouse_button);
 }
 
 CIMGUI_API bool igSetDragDropPayload(CONST char *type, CONST void *data, size_t size, ImGuiCond cond)
@@ -1647,9 +1651,9 @@ CIMGUI_API CONST char *igGetVersion()
     return ImGui::GetVersion();
 }
 
-CIMGUI_API ImGuiContext *igCreateContext(struct ImFontAtlas* shared_font_atlas)
+CIMGUI_API ImGuiContext *igCreateContext(void *(*malloc_fn)(size_t), void (*free_fn)(void *))
 {
-    return ImGui::CreateContext(shared_font_atlas);
+    return ImGui::CreateContext(malloc_fn, free_fn);
 }
 
 CIMGUI_API void igDestroyContext(ImGuiContext *ctx)
