@@ -8,5 +8,4 @@ compiler:
   - clang
 
 script:
-  - make -C cimgui
-  - $CC cimgui/cimgui.h    # Make sure we can include in a plain C compiler
+  make
