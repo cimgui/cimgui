@@ -469,8 +469,8 @@ local function func_parser()
                 argscsinpars = argscsinpars:gsub("<([%w_]+)>","_%1") --ImVector
                 
                 local argsArr = {}
-                local functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
-                local functype_reex = "^(%s*[%w%s%*]+)%(%*([%w_]+)%)(%([^%(%)]*%))"
+                local functype_re =       "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
+                local functype_reex =     "^(%s*[%w%s%*]+)%(%*([%w_]+)%)(%([^%(%)]*%))"
                 local functype_arg_rest = "^(%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)),*(.*)"
                 local rest = argscsinpars:sub(2,-2) --strip ()
                 
@@ -498,17 +498,20 @@ local function func_parser()
                         else
                             type,name = arg:match("(.+)%s([^%s]+)")
                         end
-                        --if not type or not name then print(funcname,type,name,argscsinpars,arg) end
-                        --float name[2] to float[2] name
-                        local siz = name:match("(%[%d*%])")
-                        if siz then
-                            type = type..siz
-                            name = name:gsub("(%[%d*%])","")
-                        end
+                        if not type or not name then 
+							print("failure arg detection",funcname,type,name,argscsinpars,arg)
+						else
+							--float name[2] to float[2] name
+							local siz = name:match("(%[%d*%])")
+							if siz then
+								type = type..siz
+								name = name:gsub("(%[%d*%])","")
+							end
+						end
                     end
                     table.insert(argsArr,{type=type,name=name,ret=retf,signature=sigf})
                     if arg:match("&") and not arg:match("const") then
-                        print(funcname,argscsinpars)
+                        print("reference to no const arg in",funcname,argscsinpars)
                     end
                 end
                 argscsinpars = argscsinpars:gsub("&","")
@@ -1122,7 +1125,33 @@ local function func_implementation(FP)
     --cppfile:close()
     return table.concat(outtab)
 end
-
+--only basic ending
+local c_types = {
+	["char"]=true,
+	["int"]=true,
+	["float"]=true,
+	["double"]=true,
+	["short"]=true,
+	["long"]=true,
+	["signed"]=true,
+	["unsigned"]=true,
+	["size_t"]=true,
+	["ptrdiff_t"]=true,
+}
+local function check_arg_detection(fdefs,typedefs)
+	print"-----------------check arg detection---------------------------"
+	for k,defT in pairs(fdefs) do
+		for i,def in ipairs(defT) do
+			for j,arg in ipairs(def.argsT) do
+				--check name is not type, which happens in declaration without name
+				if not arg.type or not arg.name or c_types[arg.name] or typedefs[arg.name] then
+					print("bad argument name",arg.name, "in",def.funcname,def.args)
+				end
+			end
+		end
+	end
+	print"-----------------end check arg detection-----------------------"
+end
 --generate cimgui.cpp cimgui.h and auto versions depending on postfix
 local function cimgui_generation(postfix,STP,FP)
     --merge it in cimgui_template.h to cimgui.h
@@ -1194,7 +1223,8 @@ local ovstr = pFP:compute_overloads()
 ADDnonUDT(pFP)
 save_data("./generated/overloads.txt",ovstr)
 typedefs_dict2 = cimgui_generation("_auto",pSTP,pFP)
-
+--check arg detection failure if no name in function declaration
+check_arg_detection(pFP.defsT,typedefs_dict2)
 end
 
 ----------save fundefs in definitions.lua for using in bindings
