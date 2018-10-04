@@ -32,6 +32,8 @@ for i=1,#script_args do table.insert(implementations,script_args[i]) end
 local cimgui_manuals = {
     igLogText = true,
     ImGuiTextBuffer_appendf = true,
+	igColorConvertRGBtoHSV = true,
+	igColorConvertHSVtoRGB = true
 }
 --------------------------------------------------------------------------
 --this table is a dictionary to force a naming of function overloading (instead of algorythmic generated)
@@ -552,6 +554,9 @@ local function func_parser()
                 defT.location = locat
                 defT.comment = comment
                 defT.argsT = argsArr
+				if get_manuals(defT) then
+					defT.manual = true
+				end
                 if ret then
                     defT.ret = clean_spaces(ret:gsub("&","*"))
                     defT.retref = ret:match("&")
