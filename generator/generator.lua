@@ -469,8 +469,8 @@ local function func_parser()
                 argscsinpars = argscsinpars:gsub("<([%w_]+)>","_%1") --ImVector
                 
                 local argsArr = {}
-                local functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
-                local functype_reex = "^(%s*[%w%s%*]+)%(%*([%w_]+)%)(%([^%(%)]*%))"
+                local functype_re =       "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
+                local functype_reex =     "^(%s*[%w%s%*]+)%(%*([%w_]+)%)(%([^%(%)]*%))"
                 local functype_arg_rest = "^(%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)),*(.*)"
                 local rest = argscsinpars:sub(2,-2) --strip ()
                 
@@ -498,13 +498,16 @@ local function func_parser()
                         else
                             type,name = arg:match("(.+)%s([^%s]+)")
                         end
-                        --if not type or not name then print(funcname,type,name,argscsinpars,arg) end
-                        --float name[2] to float[2] name
-                        local siz = name:match("(%[%d*%])")
-                        if siz then
-                            type = type..siz
-                            name = name:gsub("(%[%d*%])","")
-                        end
+                        if not type or not name then 
+							print("failure arg detection",funcname,type,name,argscsinpars,arg)
+							--float name[2] to float[2] name
+							local siz = name:match("(%[%d*%])")
+						else
+							if siz then
+								type = type..siz
+								name = name:gsub("(%[%d*%])","")
+							end
+						end
                     end
                     table.insert(argsArr,{type=type,name=name,ret=retf,signature=sigf})
                     if arg:match("&") and not arg:match("const") then
