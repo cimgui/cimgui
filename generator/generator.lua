@@ -1125,7 +1125,31 @@ local function func_implementation(FP)
     --cppfile:close()
     return table.concat(outtab)
 end
-
+--only basic ending
+local c_types = {
+	["char"]=true,
+	["int"]=true,
+	["float"]=true,
+	["double"]=true,
+	["short"]=true,
+	["long"]=true,
+	["signed"]=true,
+	["unsigned"]=true,
+	["size_t"]=true,
+	["ptrdiff_t"]=true,
+}
+local function check_arg_detection(fdefs,typedefs)
+	for k,defT in pairs(fdefs) do
+		for i,def in ipairs(defT) do
+			for j,arg in ipairs(def.argsT) do
+				--check name is not type, which happens in declaration without name
+				if c_types[arg.name] or typedefs[arg.name] then
+					print("bad argument name",arg.name, "in",def.funcname,def.args)
+				end
+			end
+		end
+	end
+end
 --generate cimgui.cpp cimgui.h and auto versions depending on postfix
 local function cimgui_generation(postfix,STP,FP)
     --merge it in cimgui_template.h to cimgui.h
@@ -1197,7 +1221,8 @@ local ovstr = pFP:compute_overloads()
 ADDnonUDT(pFP)
 save_data("./generated/overloads.txt",ovstr)
 typedefs_dict2 = cimgui_generation("_auto",pSTP,pFP)
-
+--check arg detection failure if no name in function declaration
+check_arg_detection(pFP.defsT,typedefs_dict2)
 end
 
 ----------save fundefs in definitions.lua for using in bindings
