@@ -500,9 +500,9 @@ local function func_parser()
                         end
                         if not type or not name then 
 							print("failure arg detection",funcname,type,name,argscsinpars,arg)
+						else
 							--float name[2] to float[2] name
 							local siz = name:match("(%[%d*%])")
-						else
 							if siz then
 								type = type..siz
 								name = name:gsub("(%[%d*%])","")
