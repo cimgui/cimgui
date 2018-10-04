@@ -1,6 +1,6 @@
 #
 # Cross Platform Makefile
-# Compatible with Ubuntu 14.04.1 and Mac OS X
+# Compatible with Ubuntu 14.04.1 and macOS
 
 OBJS = cimgui_auto.o
 OBJS += ./imgui/imgui.o
@@ -21,7 +21,7 @@ ifeq ($(UNAME_S), Linux) #LINUX
 endif
 
 ifeq ($(UNAME_S), Darwin) #APPLE
-	ECHO_MESSAGE = "Mac OS X"
+	ECHO_MESSAGE = "macOS"
 
 	OUTPUTNAME = cimgui.dylib
 	CXXFLAGS = -I/usr/local/include
