@@ -511,7 +511,7 @@ local function func_parser()
                     end
                     table.insert(argsArr,{type=type,name=name,ret=retf,signature=sigf})
                     if arg:match("&") and not arg:match("const") then
-                        print(funcname,argscsinpars)
+                        print("reference to no const arg in",funcname,argscsinpars)
                     end
                 end
                 argscsinpars = argscsinpars:gsub("&","")
@@ -1139,16 +1139,18 @@ local c_types = {
 	["ptrdiff_t"]=true,
 }
 local function check_arg_detection(fdefs,typedefs)
+	print"-----------------check arg detection---------------------------"
 	for k,defT in pairs(fdefs) do
 		for i,def in ipairs(defT) do
 			for j,arg in ipairs(def.argsT) do
 				--check name is not type, which happens in declaration without name
-				if c_types[arg.name] or typedefs[arg.name] then
+				if not arg.type or not arg.name or c_types[arg.name] or typedefs[arg.name] then
 					print("bad argument name",arg.name, "in",def.funcname,def.args)
 				end
 			end
 		end
 	end
+	print"-----------------end check arg detection-----------------------"
 end
 --generate cimgui.cpp cimgui.h and auto versions depending on postfix
 local function cimgui_generation(postfix,STP,FP)
