@@ -1144,7 +1144,7 @@ local function check_arg_detection(fdefs,typedefs)
 		for i,def in ipairs(defT) do
 			for j,arg in ipairs(def.argsT) do
 				--check name is not type, which happens in declaration without name
-				if not arg.type or not arg.name or c_types[arg.name] or typedefs[arg.name] then
+				if arg.name=="*" or not arg.type or not arg.name or c_types[arg.name] or typedefs[arg.name] then
 					print("bad argument name",arg.name, "in",def.funcname,def.args)
 				end
 			end
