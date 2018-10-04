@@ -33,3 +33,11 @@ CIMGUI_API float igGET_FLT_MAX()
 {
     return FLT_MAX;
 }
+CIMGUI_API void igColorConvertRGBtoHSV(float r,float g,float b,float *out_h,float *out_s,float *out_v)
+{
+    ImGui::ColorConvertRGBtoHSV(r,g,b,*out_h,*out_s,*out_v);
+}
+CIMGUI_API void igColorConvertHSVtoRGB(float h,float s,float v,float *out_r,float *out_g,float *out_b)
+{
+    ImGui::ColorConvertHSVtoRGB(h,s,v,*out_r,*out_g,*out_b);
+}

@@ -1139,8 +1139,6 @@ CIMGUI_API bool igBeginChildFrame(ImGuiID id,const ImVec2 size,ImGuiWindowFlags 
 CIMGUI_API void igEndChildFrame(void);
 CIMGUI_API ImVec4 igColorConvertU32ToFloat4(ImU32 in);
 CIMGUI_API ImU32 igColorConvertFloat4ToU32(const ImVec4 in);
-CIMGUI_API void igColorConvertRGBtoHSV(float r,float g,float b,float out_h,float out_s,float out_v);
-CIMGUI_API void igColorConvertHSVtoRGB(float h,float s,float v,float out_r,float out_g,float out_b);
 CIMGUI_API int igGetKeyIndex(ImGuiKey imgui_key);
 CIMGUI_API bool igIsKeyDown(int user_key_index);
 CIMGUI_API bool igIsKeyPressed(int user_key_index,bool repeat);
@@ -1376,5 +1374,9 @@ CIMGUI_API void ImGuiTextBuffer_appendf(struct ImGuiTextBuffer *buffer, const ch
 CIMGUI_API void ImFontConfig_DefaultConstructor(ImFontConfig *config);
 //for getting FLT_MAX in bindings
 CIMGUI_API float igGET_FLT_MAX();
+//not const args from & to *
+CIMGUI_API void igColorConvertRGBtoHSV(float r,float g,float b,float *out_h,float *out_s,float *out_v);
+CIMGUI_API void igColorConvertHSVtoRGB(float h,float s,float v,float *out_r,float *out_g,float *out_b);
+
 
 
