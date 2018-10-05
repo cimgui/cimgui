@@ -102,32 +102,57 @@ local function filelines(file)
 end
 --iterates lines from a gcc -E in a specific location
 local function location(file,locpathT)
-    local location_re = '^# %d+ "([^"]*)"'
+    local location_re = '^# (%d+) "([^"]*)"'
     local path_reT = {}
     for i,locpath in ipairs(locpathT) do
         table.insert(path_reT,'^(.*[\\/])('..locpath..')%.h$')
     end
     local in_location = false
     local which_location = ""
+	local loc_num
+	local loc_num_incr
+	local lineold = "" 
+	local which_locationold,loc_num_realold
+	local lastdumped = false
     local function location_it()
         repeat
             local line = file:read"*l"
-            if not line then return nil end
+            if not line then
+				if not lastdumped then
+					lastdumped = true
+					return lineold, which_locationold,loc_num_realold
+				else
+					return nil
+				end
+			end
             if line:sub(1,1) == "#" then
                 -- Is this a location pragma?
-                local location_match = line:match(location_re)
+                local loc_num_t,location_match = line:match(location_re)
                 if location_match then
                     in_location = false
                     for i,path_re in ipairs(path_reT) do
                         if location_match:match(path_re) then 
                             in_location = true;
+							loc_num = loc_num_t
+							loc_num_incr = 0
                             which_location = locpathT[i]
                             break 
                         end
                     end
                 end
             elseif in_location then
-                return line, which_location
+				local loc_num_real = loc_num + loc_num_incr
+				loc_num_incr = loc_num_incr + 1
+				if loc_num_realold and loc_num_realold < loc_num_real then
+					--old line complete
+					local lineR,which_locationR,loc_num_realR = lineold, which_locationold,loc_num_realold
+					lineold, which_locationold,loc_num_realold = line,which_location,loc_num_real
+					return lineR,which_locationR,loc_num_realR
+				else
+					lineold=lineold..line
+					which_locationold,loc_num_realold = which_location,loc_num_real
+                --return line,loc_num_real, which_location
+				end
             end
         until false
     end
@@ -368,7 +393,8 @@ end
 
 local function func_parser()
     local function_closing_re = "}"
-    local function_re = "(%a*%w+%b())" --"(%a*%w+%s+%w+%b())"
+    --local function_re = "(%a*%w+%b())" --"(%a*%w+%s+%w+%b())"
+	local function_re = "(%a*[%w%[%]]+%s*%b())"
     local function_closed_re = "[;}]$"
     local namespace_re = "namespace ([^%s]+)"
     local namespace_closing_re = "^}"
@@ -378,6 +404,7 @@ local function func_parser()
     local functype_re = "^%s*[%w%s]+(%(%*)[%w_]+(%)%([^%(%)]*%))"
     
     local in_function = false
+	local line_in_function 
     local in_namespace = false
     local cdefs = {}
     local structnames = {}
@@ -394,7 +421,7 @@ local function func_parser()
     FP.ImVector_templates = ImVector_templates
     
     function FP.insert(line,comment,locat)
-        
+        local lineorig = line
         if line:match"template" then return end
         line = line:gsub("%S+",{class="struct",mutable="",inline=""}) --class -> struct
 		line = clean_spaces(line)
@@ -408,6 +435,7 @@ local function func_parser()
         if line:match(function_re) and not line:match("typedef.*%b().*%b().*") then
             if not line:match(function_closed_re) then
                 in_function = true
+				line_in_function = lineorig
             end
         end
         if line:match(namespace_re) then
@@ -500,6 +528,8 @@ local function func_parser()
                         end
                         if not type or not name then 
 							print("failure arg detection",funcname,type,name,argscsinpars,arg)
+							print(lineorig)
+							print(line_in_function)
 						else
 							--float name[2] to float[2] name
 							local siz = name:match("(%[%d*%])")
@@ -1183,6 +1213,7 @@ end
 -----------------------------do it----------------------
 --------------------------------------------------------
 --first without gcc
+print"------------------generation without precompiler------------------------"
 local pipe,err = io.open("../imgui/imgui.h","r")
 if not pipe then
     error("could not open file:"..err)
@@ -1201,6 +1232,7 @@ FP:compute_overloads()
 cimgui_generation("",STP,FP)
 
 --then gcc
+print"------------------generation with precompiler------------------------"
 local pFP,pSTP,typedefs_dict2
 
 if HAVE_GCC then
