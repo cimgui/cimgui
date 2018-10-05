@@ -1190,7 +1190,7 @@ local function cimgui_generation(postfix,STP,FP)
     hfile:close()
     local cstructsstr,typedefs_dict = gen_structs_and_enums(STP.lines)
     --for not gcc parsing
-    if postfix == "" then
+    if postfix == "_nopreprocess" then
         cstructsstr = "typedef unsigned short ImDrawIdx;\ntypedef void* ImTextureID;\n"..cstructsstr
     end
     hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
@@ -1229,7 +1229,7 @@ for line in filelines(pipe) do
 end
 pipe:close()
 FP:compute_overloads()
-cimgui_generation("",STP,FP)
+cimgui_generation("_nopreprocess",STP,FP)
 
 --then gcc
 print"------------------generation with precompiler------------------------"
@@ -1254,7 +1254,7 @@ pipe:close()
 local ovstr = pFP:compute_overloads()
 ADDnonUDT(pFP)
 save_data("./generated/overloads.txt",ovstr)
-typedefs_dict2 = cimgui_generation("_auto",pSTP,pFP)
+typedefs_dict2 = cimgui_generation("",pSTP,pFP)
 --check arg detection failure if no name in function declaration
 check_arg_detection(pFP.defsT,typedefs_dict2)
 end

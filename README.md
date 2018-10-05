@@ -4,7 +4,7 @@
 
 This is a thin c-api wrapper programmatically generated for the excellent C++ immediate mode gui [Dear ImGui](https://github.com/ocornut/imgui).
 All functions are programmatically wrapped except constructors, destructors and `ImVector`. (Unless someone find a use case for them)
-Generated files are: `cimgui_auto.cpp`, `cimgui_auto.h` for C compilation. Also for helping in bindings creation, `definitions.lua` with function definition information and `structs_and_enums.lua`.
+Generated files are: `cimgui.cpp`, `cimgui.h` for C compilation. Also for helping in bindings creation, `definitions.lua` with function definition information and `structs_and_enums.lua`.
 This library is intended as a intermediate layer to be able to use Dear ImGui from other languages that can interface with C (like D - see [D-binding](https://github.com/Extrawurst/DerelictImgui))
 
 Notes:
@@ -20,7 +20,7 @@ Notes:
 
 * update `imgui` folder to the version you desire.
 * run `generator/generator.bat` (or make a .sh version and please PR) with gcc and LuaJIT or Lua5.1 on your PATH.
-* as a result some files are generated: `cimgui_auto.cpp` and `cimgui_auto.h` for compiling and some lua/json files with information about the binding: `definitions.json` with function info, `structs_and_enums.json` with struct and enum info, `impl_definitions.json` with functions from the implementations info.
+* as a result some files are generated: `cimgui.cpp` and `cimgui.h` for compiling and some lua/json files with information about the binding: `definitions.json` with function info, `structs_and_enums.json` with struct and enum info, `impl_definitions.json` with functions from the implementations info.
 * build as shown in https://github.com/sonoro1234/LuaJIT-ImGui/tree/master_auto_implementations/build
 * generate binding as done in https://github.com/sonoro1234/LuaJIT-ImGui/blob/master_auto_implementations/lua/build.bat
 

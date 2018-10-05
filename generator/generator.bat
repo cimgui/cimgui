@@ -1,8 +1,8 @@
 :: this script must be executed in this directory
 :: all the output goes to generated folder
 :: .cpp and .h files:
-:: cimgui.h and cimgui.cpp generated without preprocess
-:: cimgui_auto.h and cimgui_auto.cpp with gcc preprocess
+:: cimgui_nopreprocess.h and cimgui_nopreprocess.cpp generated without preprocess
+:: cimgui.h and cimgui.cpp with gcc preprocess
 :: cimgui_impl.h with implementation function cdefs
 :: lua and json files:
 :: definitions.lua for function definitions
@@ -17,8 +17,8 @@
 luajit.exe ./generator.lua glfw opengl3 opengl2 sdl
 
 ::copy cimgui.h and cimgui.cpp
-copy .\generated\cimgui_auto.h ..\cimgui_auto.h
-copy .\generated\cimgui_auto.cpp ..\cimgui_auto.cpp
+copy .\generated\cimgui.h ..\cimgui.h
+copy .\generated\cimgui.cpp ..\cimgui.cpp
 
 ::leave console open
 cmd /k
