@@ -18,6 +18,8 @@ Notes:
 
 # auto binding generation
 
+* you will need LuaJIT or Lua5.1 (https://github.com/LuaJIT/LuaJIT.git better 2.1 branch)
+* need also gcc compiler for doing preprocessing (In windows MinGW-W64-builds for example)
 * update `imgui` folder to the version you desire.
 * run `generator/generator.bat` (or make a .sh version and please PR) with gcc and LuaJIT or Lua5.1 on your PATH.
 * as a result some files are generated: `cimgui.cpp` and `cimgui.h` for compiling and some lua/json files with information about the binding: `definitions.json` with function info, `structs_and_enums.json` with struct and enum info, `impl_definitions.json` with functions from the implementations info.
