@@ -2,7 +2,8 @@
 --script for auto_funcs.h and auto_funcs.cpp generation
 --expects Lua 5.1 or luajit
 --------------------------------------------------------------------------
-assert(_VERSION=='Lua 5.1',"Must use LuaJIT or Lua5.1")
+assert(_VERSION=='Lua 5.1',"Must use LuaJIT")
+assert(bit,"Must use LuaJIT")
 local script_args = {...}
 
 --test gcc present
@@ -162,6 +163,21 @@ local function location(file,locpathT)
         until false
     end
     return location_it
+end
+local function copyfile(src,dst,blocksize)
+	blocksize = blocksize or 1024*4
+	print( "copyfile", src, dst)
+	local srcf, err = io.open(src,"rb")
+	if not srcf then error(err) end
+	local dstf, err = io.open(dst,"wb")
+	if not dstf then error(err) end
+	while true do
+		local data = srcf:read(blocksize)
+		if not data then break end
+		dstf:write(data)
+	end
+	srcf:close()
+	dstf:close()
 end
 ------serializeTable("anyname",table) gives a string that recreates the table with dofile(generated_string)
 local function serializeTable(name, value, saved)
@@ -1198,6 +1214,7 @@ local function cimgui_generation(postfix,STP,FP)
     if postfix == "_nopreprocess" then
         cstructsstr = "typedef unsigned short ImDrawIdx;\ntypedef void* ImTextureID;\n"..cstructsstr
     end
+	
     hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
     local cfuncsstr = func_header_generate(FP)
     hstrfile = hstrfile:gsub([[#include "auto_funcs%.h"]],cfuncsstr)
@@ -1231,6 +1248,7 @@ end
 pipe:close()
 cimgui_header = cimgui_header:gsub("XXX",imgui_version)
 --first without gcc
+---[[
 print"------------------generation without precompiler------------------------"
 local pipe,err = io.open("../imgui/imgui.h","r")
 if not pipe then
@@ -1248,7 +1266,7 @@ end
 pipe:close()
 FP:compute_overloads()
 cimgui_generation("_nopreprocess",STP,FP)
-
+--]]
 --then gcc
 print"------------------generation with precompiler------------------------"
 local pFP,pSTP,typedefs_dict2
@@ -1349,6 +1367,8 @@ if iFP then
     save_data("./generated/impl_definitions.json",json.encode(json_prepare(iFP.defsT)))
 end
 
+copyfile("./generated/cimgui.h", "../cimgui.h")
+copyfile("./generated/cimgui.cpp", "../cimgui.cpp")
 print"all done!!"
 --[[
 ---dump some infos-----------------------------------------------------------------------
