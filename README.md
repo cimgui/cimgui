@@ -34,7 +34,7 @@ Notes:
 
 # generate binding
 * with your prefered languaje from lua or json files as in:
-  * https://github.com/sonoro1234/LuaJIT-ImGui/blob/master_auto_implementations/lua/build.bat
+  * https://github.com/sonoro1234/LuaJIT-ImGui/blob/master_auto_implementations/lua/build.bat (with lua code generation in https://github.com/sonoro1234/LuaJIT-ImGui/blob/master_auto_implementations/lua/class_gen.lua)
   * https://github.com/mellinoe/ImGui.NET/tree/autogen/src/CodeGenerator
 
 # usage
