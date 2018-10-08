@@ -7,18 +7,24 @@ All functions are programmatically wrapped except constructors, destructors and 
 Generated files are: `cimgui.cpp`, `cimgui.h` for C compilation. Also for helping in bindings creation, `definitions.lua` with function definition information and `structs_and_enums.lua`.
 This library is intended as a intermediate layer to be able to use Dear ImGui from other languages that can interface with C (like D - see [D-binding](https://github.com/Extrawurst/DerelictImgui))
 
+History:
+
+Initially cimgui was developed by Stephan Dilly as hand-written code but lately turned into an auto-generated version by sonoro1234 in order to keep up with imgui more easily (letting the user select the desired branch and commit)
+
 Notes:
 * currently this wrapper is based on version [1.65 of Dear ImGui]
 * overloaded function names try to be the most compatible with traditional cimgui names. So all naming is algorithmic except for those names that were in conflict with widely used cimgui names and were thus coded in a table (https://github.com/cimgui/cimgui/blob/master/generator/generator.lua#L41). Until the community finish with defining this table tag will be 1.62beta. Current overloaded function names can be found in (https://github.com/cimgui/cimgui/blob/master/generator/generated/overloads.txt)
 
 # compilation
 
-* clone
+* clone 
+  * git clone --recursive https://github.com/cimgui/cimgui.git
+  * git submodule update
 * make using makefile on linux/macOS/mingw (Or use CMake to generate project)
 
 # auto binding generation
 
-* you will need LuaJIT or Lua5.1 (https://github.com/LuaJIT/LuaJIT.git better 2.1 branch)
+* you will need LuaJIT (https://github.com/LuaJIT/LuaJIT.git better 2.1 branch) or precompiled for linux/macOS/windows in https://luapower.com/luajit/download
 * need also gcc compiler for doing preprocessing (In windows MinGW-W64-builds for example)
 * update `imgui` folder to the version you desire.
 * run `generator/generator.bat` (or make a .sh version and please PR) with gcc and LuaJIT or Lua5.1 on your PATH.
