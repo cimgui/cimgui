@@ -1218,7 +1218,7 @@ local function cimgui_generation(postfix,STP,FP)
     hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
     local cfuncsstr = func_header_generate(FP)
     hstrfile = hstrfile:gsub([[#include "auto_funcs%.h"]],cfuncsstr)
-    save_data("./generated/cimgui"..postfix..".h",cimgui_header,hstrfile)
+    save_data("./output/cimgui"..postfix..".h",cimgui_header,hstrfile)
     
     
     --merge it in cimgui_template.cpp to cimgui.cpp
@@ -1228,7 +1228,7 @@ local function cimgui_generation(postfix,STP,FP)
     hfile:close()
     hstrfile = hstrfile:gsub([[#include "auto_funcs%.cpp"]],cimplem)
     hstrfile = hstrfile:gsub([[#include "cimgui%.h"]],[[#include "cimgui]]..postfix..[[.h"]])
-    save_data("./generated/cimgui"..postfix..".cpp",cimgui_header,hstrfile)
+    save_data("./output/cimgui"..postfix..".cpp",cimgui_header,hstrfile)
     return typedefs_dict
 end
 --------------------------------------------------------
@@ -1289,20 +1289,20 @@ end
 pipe:close()
 local ovstr = pFP:compute_overloads()
 ADDnonUDT(pFP)
-save_data("./generated/overloads.txt",ovstr)
+save_data("./output/overloads.txt",ovstr)
 typedefs_dict2 = cimgui_generation("",pSTP,pFP)
 --check arg detection failure if no name in function declaration
 check_arg_detection(pFP.defsT,typedefs_dict2)
 end
 
 ----------save fundefs in definitions.lua for using in bindings
-save_data("./generated/definitions.lua",serializeTable("defs",pFP.defsT),"\nreturn defs")
+save_data("./output/definitions.lua",serializeTable("defs",pFP.defsT),"\nreturn defs")
 
 ----------save struct and enums lua table in structs_and_enums.lua for using in bindings
 local structs_and_enums_table,typedefs_dict = gen_structs_and_enums_table(pSTP.lines)
-save_data("./generated/structs_and_enums.lua",serializeTable("defs",structs_and_enums_table),"\nreturn defs")
+save_data("./output/structs_and_enums.lua",serializeTable("defs",structs_and_enums_table),"\nreturn defs")
 typedefs_dict = mergeT(typedefs_dict,typedefs_dict2)
-save_data("./generated/typedefs_dict.lua",serializeTable("defs",typedefs_dict),"\nreturn defs")
+save_data("./output/typedefs_dict.lua",serializeTable("defs",typedefs_dict),"\nreturn defs")
 --=================================Now implementations
 
 local iFP,iSTP
@@ -1338,10 +1338,10 @@ if #implementations > 0 then
     -- save ./cimgui_impl.h
     local cfuncsstr = func_header_impl_generate(iFP)
     local cstructstr = gen_structs_and_enums(iSTP.lines)
-    save_data("./generated/cimgui_impl.h",cstructstr,cfuncsstr)
+    save_data("./output/cimgui_impl.h",cstructstr,cfuncsstr)
 
     ----------save fundefs in impl_definitions.lua for using in bindings
-    save_data("./generated/impl_definitions.lua",serializeTable("defs",iFP.defsT),"\nreturn defs")
+    save_data("./output/impl_definitions.lua",serializeTable("defs",iFP.defsT),"\nreturn defs")
 
 end -- #implementations > 0 then
 
@@ -1360,15 +1360,15 @@ local function json_prepare(defs)
 end
 
 local json = require"json"
-save_data("./generated/definitions.json",json.encode(json_prepare(pFP.defsT)))
-save_data("./generated/structs_and_enums.json",json.encode(structs_and_enums_table))
-save_data("./generated/typedefs_dict.json",json.encode(typedefs_dict))
+save_data("./output/definitions.json",json.encode(json_prepare(pFP.defsT)))
+save_data("./output/structs_and_enums.json",json.encode(structs_and_enums_table))
+save_data("./output/typedefs_dict.json",json.encode(typedefs_dict))
 if iFP then
-    save_data("./generated/impl_definitions.json",json.encode(json_prepare(iFP.defsT)))
+    save_data("./output/impl_definitions.json",json.encode(json_prepare(iFP.defsT)))
 end
 
-copyfile("./generated/cimgui.h", "../cimgui.h")
-copyfile("./generated/cimgui.cpp", "../cimgui.cpp")
+copyfile("./output/cimgui.h", "../cimgui.h")
+copyfile("./output/cimgui.cpp", "../cimgui.cpp")
 print"all done!!"
 --[[
 ---dump some infos-----------------------------------------------------------------------

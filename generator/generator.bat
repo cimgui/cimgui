@@ -1,8 +1,8 @@
 :: this script must be executed in this directory
-:: all the output goes to generated folder
+:: all the output goes to generator/output folder
 :: .cpp and .h files:
-:: cimgui_nopreprocess.h and cimgui_nopreprocess.cpp generated without preprocess
 :: cimgui.h and cimgui.cpp with gcc preprocess
+:: cimgui_nopreprocess.h and cimgui_nopreprocess.cpp generated without preprocess
 :: cimgui_impl.h with implementation function cdefs
 :: lua and json files:
 :: definitions.lua for function definitions
