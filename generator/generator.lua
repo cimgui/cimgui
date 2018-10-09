@@ -563,7 +563,11 @@ local function func_parser()
                     end
                     table.insert(argsArr,{type=type,name=name,ret=retf,signature=sigf})
                     if arg:match("&") and not arg:match("const") then
-                        print("reference to no const arg in",funcname,argscsinpars)
+						--only post error if not manual
+						local cname = getcimguiname(stname,funcname)
+						if not cimgui_manuals[cname] then
+							print("reference to no const arg in",funcname,argscsinpars)
+						end
                     end
                 end
                 argscsinpars = argscsinpars:gsub("&","")
