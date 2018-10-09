@@ -5,27 +5,28 @@
 assert(_VERSION=='Lua 5.1',"Must use LuaJIT")
 assert(bit,"Must use LuaJIT")
 local script_args = {...}
-
---test gcc present
-local HAVE_GCC
-local pipe,err = io.popen("gcc --version","r")
+local COMPILER = script_args[1]
+--test compiler present
+local HAVE_COMPILER
+local pipe,err = io.popen(COMPILER.." --version","r")
 if pipe then
     local str = pipe:read"*a"
     print(str)
     pipe:close()
     if str=="" then
-        HAVE_GCC = false
+        HAVE_COMPILER = false
     else
-        HAVE_GCC = true
+        HAVE_COMPILER = true
     end
 else
-    HAVE_GCC = false
+    HAVE_COMPILER = false
     print(err)
 end
-print("HAVE_GCC",HAVE_GCC)
+assert(HAVE_COMPILER,"gcc or clang needed to run script")
+print("HAVE_COMPILER",HAVE_COMPILER)
 --get implementations
 local implementations = {}
-for i=1,#script_args do table.insert(implementations,script_args[i]) end
+for i=2,#script_args do table.insert(implementations,script_args[i]) end
 
 --------------------------------------------------------------------------
 --this table has the functions to be skipped in generation
@@ -107,7 +108,7 @@ local function filelines(file)
     end
     return location_it
 end
---iterates lines from a gcc -E in a specific location
+--iterates lines from a gcc/clang -E in a specific location
 local function location(file,locpathT)
     local location_re = '^# (%d+) "([^"]*)"'
     local path_reT = {}
@@ -1209,7 +1210,7 @@ local function check_arg_detection(fdefs,typedefs)
 	print"-----------------end check arg detection-----------------------"
 end
 local function get_defines(t)
-	local pipe,err = io.popen([[gcc -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]],"r")
+	local pipe,err = io.popen(COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]],"r")
 	local defines = {}
 	while true do
 		local line = pipe:read"*l"
@@ -1298,7 +1299,7 @@ pipe:close()
 cimgui_header = cimgui_header:gsub("XXX",imgui_version)
 print("IMGUI_VERSION",imgui_version)
 --get some defines----------------------------
-if HAVE_GCC then
+if HAVE_COMPILER then
 	gdefines = get_defines{"IMGUI_VERSION","FLT_MAX"}
 end									
 --first without gcc
@@ -1325,8 +1326,8 @@ cimgui_generation("_nopreprocess",STP,FP)
 print"------------------generation with precompiler------------------------"
 local pFP,pSTP,typedefs_dict2
 
-if HAVE_GCC then
-local pipe,err = io.popen([[gcc -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]],"r")
+if HAVE_COMPILER then
+local pipe,err = io.popen(COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]],"r")
 
 if not pipe then
     error("could not execute gcc "..err)
@@ -1371,8 +1372,8 @@ if #implementations > 0 then
         local source = [[../imgui/examples/imgui_impl_]].. impl .. ".h "
         local locati = [[imgui_impl_]].. impl
         local pipe,err
-        if HAVE_GCC then
-            pipe,err = io.popen([[gcc -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] ..source,"r")
+        if HAVE_COMPILER then
+            pipe,err = io.popen(COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] ..source,"r")
         else
             pipe,err = io.open(source,"r")
         end
@@ -1380,7 +1381,7 @@ if #implementations > 0 then
             error("could not get file: "..err)
         end
         
-        local iterator = (HAVE_GCC and location) or filelines
+        local iterator = (HAVE_COMPILER and location) or filelines
         
         for line,locat in iterator(pipe,{locati}) do
             local line, comment = split_comment(line)
