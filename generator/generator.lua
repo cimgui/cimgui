@@ -6,9 +6,19 @@ assert(_VERSION=='Lua 5.1',"Must use LuaJIT")
 assert(bit,"Must use LuaJIT")
 local script_args = {...}
 local COMPILER = script_args[1]
+local CPRE,CTEST
+if COMPILER == "gcc" or COMPILER == "clang" then
+	CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]
+	CTEST = COMPILER.." --version"
+elseif COMPILER == "cl" then
+	CPRE = COMPILER..[[ /E /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_API="" /DIMGUI_IMPL_API="" ]]
+	CTEST = COMPILER
+else
+	error("not prepared for "..COMPILER)
+end
 --test compiler present
 local HAVE_COMPILER
-local pipe,err = io.popen(COMPILER.." --version","r")
+local pipe,err = io.popen(CTEST,"r")
 if pipe then
     local str = pipe:read"*a"
     print(str)
@@ -110,7 +120,12 @@ local function filelines(file)
 end
 --iterates lines from a gcc/clang -E in a specific location
 local function location(file,locpathT)
-    local location_re = '^# (%d+) "([^"]*)"'
+    local location_re 
+	if COMPILER == "cl" then
+		location_re = '^#line (%d+) "([^"]*)"'
+	else --gcc, clang
+		location_re = '^# (%d+) "([^"]*)"'
+	end
     local path_reT = {}
     for i,locpath in ipairs(locpathT) do
         table.insert(path_reT,'^(.*[\\/])('..locpath..')%.h$')
@@ -133,7 +148,9 @@ local function location(file,locpathT)
 					return nil
 				end
 			end
-            if line:sub(1,1) == "#" then
+			if #line==0 then --nothing on emptyline
+			elseif not line:match("%S") then --nothing if only spaces
+            elseif line:sub(1,1) == "#" then
                 -- Is this a location pragma?
                 local loc_num_t,location_match = line:match(location_re)
                 if location_match then
@@ -162,7 +179,7 @@ local function location(file,locpathT)
                 --return line,loc_num_real, which_location
 				end
             end
-        until false
+        until false --forever
     end
     return location_it
 end
@@ -267,7 +284,9 @@ local function clean_spaces(cad)
 end
 local function split_comment(line)
     local comment = line:match("(%s*//.*)") or ""
-    return line:gsub("%s*//.*",""),comment
+	line = line:gsub("%s*//.*","")
+	line = line:gsub("%s*$","")
+    return line,comment
 end
 local function get_manuals(def)
     return cimgui_manuals[def.ov_cimguiname] or cimgui_manuals[def.cimguiname]
@@ -289,7 +308,7 @@ end
 local function struct_parser()
     local function_re = "(%a*%w+%s*%b())" --"(%a*%w+%b())" --"(%a*%w+%s+%w+%b())"
     local function_closing_re = "}"
-    local function_closed_re = "[;}]$"
+    local function_closed_re = "[;}]%s*$"
     local operator_re = "operator.-%b()"
     local functype_re = "(%(%*)[%w_]+(%)%([^%(%)]*%))"
     local initial_comment_re = [[^%s*//.*]]
@@ -308,6 +327,7 @@ local function struct_parser()
         
         --if in_function discard
         if in_functionst then 
+			--table.insert(structcdefs,"en function:"..line) --debug
             if line:match(function_closing_re) then
                 in_functionst = false
                 --print("in function:",line)
@@ -315,16 +335,13 @@ local function struct_parser()
             return
         end
 
-        
-        
         if (line:match(function_re) or line:match(operator_re)) and not line:match("typedef.*%b().*%b().*") 
         and not line:match(functype_re) then
+			--table.insert(structcdefs,"function test2:"..line) --debug
             if not line:match(function_closed_re) then
                 --print("match:",line)
                 in_functionst = true
             end
-        --else
-            --table.insert(structcdefs,linecommented)
         elseif line:match("template") then
             --nothing
         elseif line:match("public:") then
@@ -333,7 +350,6 @@ local function struct_parser()
             local linea = line:gsub("%S+",{class="struct",mutable=""})
             linea = linea:gsub("(%b<>)","/*%1*/") --comment template parameters
             table.insert(structcdefs,linea..comment)
-            
         end
         return 
     end
@@ -797,6 +813,11 @@ local function gen_structs_and_enums_table(cdefs)
         
         if (#enumnames > 0) then
             assert(#structnames==0,"enum in struct")
+			-- if #structnames~=0 then
+				-- print(line,#line)
+				-- print(linecom,#linecom)
+				-- error"enuminstruct"
+			-- end
             if line:match(struct_closing_re) and not line:match(struct_op_close_re) then
                 enumnames[#enumnames] = nil
                 break
@@ -930,13 +951,15 @@ local function gen_structs_and_enums(cdefs)
         -- ImVector special treatment
         if structnames[#structnames] == "ImVector" then
             if line:match(struct_closing_re) then
-                table.insert(outtab,[[struct ImVector
+                table.insert(outtab,[[
+struct ImVector
 {
     int Size;
     int Capacity;
     void* Data;
 };
-typedef struct ImVector ImVector;]])
+typedef struct ImVector ImVector;
+]])
                 structnames[#structnames] = nil
             end
             break -- dont write
@@ -1210,6 +1233,7 @@ local function check_arg_detection(fdefs,typedefs)
 	print"-----------------end check arg detection-----------------------"
 end
 local function get_defines(t)
+	if COMPILER == "cl" then print"can't get defines with cl compiler"; return {} end
 	local pipe,err = io.popen(COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]],"r")
 	local defines = {}
 	while true do
@@ -1329,7 +1353,7 @@ print"------------------generation with precompiler------------------------"
 local pFP,pSTP,typedefs_dict2
 
 if HAVE_COMPILER then
-local pipe,err = io.popen(COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]],"r")
+local pipe,err = io.popen(CPRE..[[../imgui/imgui.h]],"r")
 
 if not pipe then
     error("could not execute gcc "..err)
@@ -1338,13 +1362,17 @@ end
 pSTP = struct_parser() --overwrite
 pFP = func_parser() --overwrite
 
+--local linesl = {}
 for line in location(pipe,{"imgui"}) do
     local line, comment = split_comment(line)
 	--line = clean_spaces(line)
+	--table.insert(linesl,line)
     pSTP.insert(line,comment)
     pFP.insert(line,comment)
 end
 pipe:close()
+--save_data("./LINES.txt",table.concat(linesl,"\n"))
+--save_data("./STPLINES.txt",table.concat(pSTP.lines,"\n"))
 local ovstr = pFP:compute_overloads()
 ADDnonUDT(pFP)
 save_data("./output/overloads.txt",ovstr)
@@ -1376,7 +1404,7 @@ if #implementations > 0 then
         local locati = [[imgui_impl_]].. impl
         local pipe,err
         if HAVE_COMPILER then
-            pipe,err = io.popen(COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] ..source,"r")
+            pipe,err = io.popen(CPRE..source,"r")
         else
             pipe,err = io.open(source,"r")
         end

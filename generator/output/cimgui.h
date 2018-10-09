@@ -40,7 +40,7 @@ typedef struct ImColor_Simple { ImVec4_Simple Value;} ImColor_Simple;
 
 
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
-       
+struct ImDrawChannel;
 typedef struct CustomRect CustomRect;
 typedef struct GlyphRangesBuilder GlyphRangesBuilder;
 typedef struct ImFontGlyph ImFontGlyph;
@@ -69,7 +69,6 @@ typedef struct ImDrawList ImDrawList;
 typedef struct ImDrawData ImDrawData;
 typedef struct ImDrawCmd ImDrawCmd;
 typedef struct ImDrawChannel ImDrawChannel;
-struct ImDrawChannel;
 struct ImDrawCmd;
 struct ImDrawData;
 struct ImDrawList;
