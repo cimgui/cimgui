@@ -20,6 +20,7 @@ endif(WIN32)
 #add library and link
 add_library(cimgui SHARED ${IMGUI_SOURCES})
 target_link_libraries(cimgui ${IMGUI_LIBRARIES})
+set_target_properties(cimgui PROPERTIES PREFIX "")
 
 #install
 install(TARGETS cimgui
