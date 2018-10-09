@@ -1315,11 +1315,13 @@ local FP = func_parser()
 
 for line in filelines(pipe) do
     local line, comment = split_comment(line)
-    STP.insert(line,comment)
-    FP.insert(line,comment)
+	line = clean_spaces(line)
+    STP.insert(line,"")--comment)
+    FP.insert(line,"")--comment)
 end
 pipe:close()
 FP:compute_overloads()
+ADDnonUDT(FP)
 cimgui_generation("_nopreprocess",STP,FP)
 --]]
 --then gcc
@@ -1338,6 +1340,7 @@ pFP = func_parser() --overwrite
 
 for line in location(pipe,{"imgui"}) do
     local line, comment = split_comment(line)
+	--line = clean_spaces(line)
     pSTP.insert(line,comment)
     pFP.insert(line,comment)
 end

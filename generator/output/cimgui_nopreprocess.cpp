@@ -1978,6 +1978,226 @@ CIMGUI_API void ImFont_AddRemapChar(ImFont* self,ImWchar dst,ImWchar src,bool ov
 {
     return self->AddRemapChar(dst,src,overwrite_dst);
 }
+CIMGUI_API void igGetWindowPos_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetWindowPos();
+}
+CIMGUI_API ImVec2_Simple igGetWindowPos_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetWindowPos();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetWindowSize_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetWindowSize();
+}
+CIMGUI_API ImVec2_Simple igGetWindowSize_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetWindowSize();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetContentRegionMax_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetContentRegionMax();
+}
+CIMGUI_API ImVec2_Simple igGetContentRegionMax_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetContentRegionMax();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetContentRegionAvail_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetContentRegionAvail();
+}
+CIMGUI_API ImVec2_Simple igGetContentRegionAvail_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetContentRegionAvail();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetWindowContentRegionMin_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetWindowContentRegionMin();
+}
+CIMGUI_API ImVec2_Simple igGetWindowContentRegionMin_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetWindowContentRegionMin();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetWindowContentRegionMax_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetWindowContentRegionMax();
+}
+CIMGUI_API ImVec2_Simple igGetWindowContentRegionMax_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetWindowContentRegionMax();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetFontTexUvWhitePixel_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetFontTexUvWhitePixel();
+}
+CIMGUI_API ImVec2_Simple igGetFontTexUvWhitePixel_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetFontTexUvWhitePixel();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetCursorPos_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetCursorPos();
+}
+CIMGUI_API ImVec2_Simple igGetCursorPos_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetCursorPos();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetCursorStartPos_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetCursorStartPos();
+}
+CIMGUI_API ImVec2_Simple igGetCursorStartPos_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetCursorStartPos();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetCursorScreenPos_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetCursorScreenPos();
+}
+CIMGUI_API ImVec2_Simple igGetCursorScreenPos_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetCursorScreenPos();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetItemRectMin_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetItemRectMin();
+}
+CIMGUI_API ImVec2_Simple igGetItemRectMin_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetItemRectMin();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetItemRectMax_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetItemRectMax();
+}
+CIMGUI_API ImVec2_Simple igGetItemRectMax_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetItemRectMax();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetItemRectSize_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetItemRectSize();
+}
+CIMGUI_API ImVec2_Simple igGetItemRectSize_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetItemRectSize();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igCalcTextSize_nonUDT(ImVec2 *pOut,const char* text,const char* text_end,bool hide_text_after_double_hash,float wrap_width)
+{
+    *pOut = ImGui::CalcTextSize(text,text_end,hide_text_after_double_hash,wrap_width);
+}
+CIMGUI_API ImVec2_Simple igCalcTextSize_nonUDT2(const char* text,const char* text_end,bool hide_text_after_double_hash,float wrap_width)
+{
+    ImVec2 ret = ImGui::CalcTextSize(text,text_end,hide_text_after_double_hash,wrap_width);
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igColorConvertU32ToFloat4_nonUDT(ImVec4 *pOut,ImU32 in)
+{
+    *pOut = ImGui::ColorConvertU32ToFloat4(in);
+}
+CIMGUI_API ImVec4_Simple igColorConvertU32ToFloat4_nonUDT2(ImU32 in)
+{
+    ImVec4 ret = ImGui::ColorConvertU32ToFloat4(in);
+    ImVec4_Simple ret2 = ImVec4ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetMousePos_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetMousePos();
+}
+CIMGUI_API ImVec2_Simple igGetMousePos_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetMousePos();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetMousePosOnOpeningCurrentPopup_nonUDT(ImVec2 *pOut)
+{
+    *pOut = ImGui::GetMousePosOnOpeningCurrentPopup();
+}
+CIMGUI_API ImVec2_Simple igGetMousePosOnOpeningCurrentPopup_nonUDT2()
+{
+    ImVec2 ret = ImGui::GetMousePosOnOpeningCurrentPopup();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void igGetMouseDragDelta_nonUDT(ImVec2 *pOut,int button,float lock_threshold)
+{
+    *pOut = ImGui::GetMouseDragDelta(button,lock_threshold);
+}
+CIMGUI_API ImVec2_Simple igGetMouseDragDelta_nonUDT2(int button,float lock_threshold)
+{
+    ImVec2 ret = ImGui::GetMouseDragDelta(button,lock_threshold);
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void ImColor_HSV_nonUDT(ImColor* self,ImColor *pOut,float h,float s,float v,float a)
+{
+    *pOut = self->HSV(h,s,v,a);
+}
+CIMGUI_API ImColor_Simple ImColor_HSV_nonUDT2(ImColor* self,float h,float s,float v,float a)
+{
+    ImColor ret = self->HSV(h,s,v,a);
+    ImColor_Simple ret2 = ImColorToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void ImDrawList_GetClipRectMin_nonUDT(ImDrawList* self,ImVec2 *pOut)
+{
+    *pOut = self->GetClipRectMin();
+}
+CIMGUI_API ImVec2_Simple ImDrawList_GetClipRectMin_nonUDT2(ImDrawList* self)
+{
+    ImVec2 ret = self->GetClipRectMin();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void ImDrawList_GetClipRectMax_nonUDT(ImDrawList* self,ImVec2 *pOut)
+{
+    *pOut = self->GetClipRectMax();
+}
+CIMGUI_API ImVec2_Simple ImDrawList_GetClipRectMax_nonUDT2(ImDrawList* self)
+{
+    ImVec2 ret = self->GetClipRectMax();
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
+CIMGUI_API void ImFont_CalcTextSizeA_nonUDT(ImFont* self,ImVec2 *pOut,float size,float max_width,float wrap_width,const char* text_begin,const char* text_end,const char** remaining)
+{
+    *pOut = self->CalcTextSizeA(size,max_width,wrap_width,text_begin,text_end,remaining);
+}
+CIMGUI_API ImVec2_Simple ImFont_CalcTextSizeA_nonUDT2(ImFont* self,float size,float max_width,float wrap_width,const char* text_begin,const char* text_end,const char** remaining)
+{
+    ImVec2 ret = self->CalcTextSizeA(size,max_width,wrap_width,text_begin,text_end,remaining);
+    ImVec2_Simple ret2 = ImVec2ToSimple(ret);
+    return ret2;
+}
 
 
 
