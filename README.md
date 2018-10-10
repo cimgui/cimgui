@@ -36,7 +36,18 @@ Notes:
 * with your prefered languaje from lua or json files as in:
   * https://github.com/sonoro1234/LuaJIT-ImGui/blob/master_auto_implementations/lua/build.bat (with lua code generation in https://github.com/sonoro1234/LuaJIT-ImGui/blob/master_auto_implementations/lua/class_gen.lua)
   * https://github.com/mellinoe/ImGui.NET/tree/autogen/src/CodeGenerator
-
+### definitions description
+* It is a collection in which key is the cimgui name that would result without overloadings and the value is an array of overloadings (may be only one overloading)
+* Each overloading is a collection. Some relevant keys and values are:
+  * stname : the name of the struct the function belongs to (may be ImGui if it is top level in ImGui namespace)
+  * ov_cimguiname : the overloaded cimgui name (if absent it would be taken from cimguiname)
+  * cimguiname : the name without overloading (this should be used if there is not ov_cimguiname)
+  * call_args : a string with the argument names separated by commas
+  * args : the same as above but with types
+  * ret : the return type
+  * argsT : an array of collections (each one with type: argument type and name: the argument name)
+  * defaults : a collection in which key is argument name and value is the default value.
+  * manual : will be true if this function is hand-written (not generated)
 # usage
 
 * use whatever method is in ImGui c++ namespace in the original [imgui.h](https://github.com/ocornut/imgui/blob/master/imgui.h) by prepending `ig`
