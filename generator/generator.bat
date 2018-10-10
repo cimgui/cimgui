@@ -14,9 +14,9 @@
 :: set PATH=%PATH%;C:\luaGL;C:\i686-7.2.0-release-posix-dwarf-rt_v5-rev1\mingw32\bin;
 :: set PATH=%PATH%;C:\luaGL\sources\luajit-master\luajit-master\bin\mingw32;C:\mingw32\bin;
 ::process  files
-:: arg[1] compiler name gcc, clang or cl
+:: arg[1] compiler name gcc, clang, cl or nocompiler
 :: arg[2..n] name of implementations to generate
-luajit ./generator.lua "gcc" glfw opengl3 opengl2 sdl
+luajit ./generator.lua gcc glfw opengl3 opengl2 sdl
 
 ::leave console open
 cmd /k
