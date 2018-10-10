@@ -48,6 +48,16 @@ Notes:
   * argsT : an array of collections (each one with type: argument type and name: the argument name)
   * defaults : a collection in which key is argument name and value is the default value.
   * manual : will be true if this function is hand-written (not generated)
+  * nonUDT : if present can be 1 or 2 (explained meaning in usage) if return type was a user defined type
+### structs_and_enums description
+* Is is a collection with two items:
+  * under key enums we get the enums collection in which each key is the enum tagname and the value is an array of the ordered values represented as a collection with keys
+    * name : the name of this enum value
+    * value : the C string
+    * calc_value : the numeric value corresponding to value
+  * under key structs we get the structs collection in which the key is the struct name and the value is an array of the struct members. Each one given as a collection with keys
+    * type : the type of the struct member
+    * name : the name of the struct member
 # usage
 
 * use whatever method is in ImGui c++ namespace in the original [imgui.h](https://github.com/ocornut/imgui/blob/master/imgui.h) by prepending `ig`
