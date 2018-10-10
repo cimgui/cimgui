@@ -14,25 +14,28 @@ elseif COMPILER == "cl" then
 	CPRE = COMPILER..[[ /E /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_API="" /DIMGUI_IMPL_API="" ]]
 	CTEST = COMPILER
 else
-	error("not prepared for "..COMPILER)
+	print("Working without compiler ")
 end
 --test compiler present
-local HAVE_COMPILER
-local pipe,err = io.popen(CTEST,"r")
-if pipe then
-    local str = pipe:read"*a"
-    print(str)
-    pipe:close()
-    if str=="" then
-        HAVE_COMPILER = false
-    else
-        HAVE_COMPILER = true
-    end
-else
-    HAVE_COMPILER = false
-    print(err)
-end
-assert(HAVE_COMPILER,"gcc or clang needed to run script")
+local HAVE_COMPILER = false
+if CTEST then
+	local pipe,err = io.popen(CTEST,"r")
+	if pipe then
+		local str = pipe:read"*a"
+		print(str)
+		pipe:close()
+		if str=="" then
+			HAVE_COMPILER = false
+		else
+			HAVE_COMPILER = true
+		end
+	else
+		HAVE_COMPILER = false
+		print(err)
+	end
+	assert(HAVE_COMPILER,"gcc, clang or cl needed to run script")
+end --CTEST
+
 print("HAVE_COMPILER",HAVE_COMPILER)
 --get implementations
 local implementations = {}
@@ -93,26 +96,35 @@ local gdefines = {} --for FLT_MAX and others
 --------------------------------------------------------------------------
 --helper functions
 --------------------------------------------------------------------------
---iterates lines from a .h file and discards between #if.. and #endif
-local function filelines(file)
+--minimal preprocessor
+local function filelines(file,locats)
     local iflevels = {}
+	--only one case is true
+	local function prepro_boolif(line)
+		local ma = line:match("#ifndef%s+IMGUI_OVERRIDE_DRAWVERT_STRUCT_LAYOUT") or line:match("#ifndef%s+ImTextureID")
+		return not (ma==nil)
+	end
     local function location_it()
         repeat
             local line = file:read"*l"
             if not line then return nil end
             if line:sub(1,1) == "#" then
                 if line:match("#if") then 
-                    iflevels[#iflevels +1 ] = true
+                    iflevels[#iflevels +1 ] = prepro_boolif(line)
                 elseif line:match("#endif") then
                     iflevels[#iflevels] = nil
+				elseif line:match("#elseif") then
+					iflevels[#iflevels] = false -- all false now
+				elseif line:match("#else") then
+					iflevels[#iflevels] = not iflevels[#iflevels]
                 end
                 -- skip
-            elseif #iflevels == 0 then
+            elseif #iflevels == 0 or iflevels[#iflevels] then
                 -- drop IMGUI_APIX
                 line = line:gsub("IMGUI_IMPL_API","")
                 -- drop IMGUI_API
                 line = line:gsub("IMGUI_API","")
-                return line
+                return line,locats[1]
             end
         until false
     end
@@ -1326,34 +1338,17 @@ print("IMGUI_VERSION",imgui_version)
 if HAVE_COMPILER then
 	gdefines = get_defines{"IMGUI_VERSION","FLT_MAX"}
 end									
---first without gcc
----[[
-print"------------------generation without precompiler------------------------"
-local pipe,err = io.open("../imgui/imgui.h","r")
-if not pipe then
-    error("could not open file:"..err)
-end
 
-local STP = struct_parser()
-local FP = func_parser()
-
-for line in filelines(pipe) do
-    local line, comment = split_comment(line)
-	line = clean_spaces(line)
-    STP.insert(line,"")--comment)
-    FP.insert(line,"")--comment)
-end
-pipe:close()
-FP:compute_overloads()
-ADDnonUDT(FP)
-cimgui_generation("_nopreprocess",STP,FP)
---]]
---then gcc
-print"------------------generation with precompiler------------------------"
+--generation
+print("------------------generation with "..COMPILER.."------------------------")
 local pFP,pSTP,typedefs_dict2
 
+local pipe,err
 if HAVE_COMPILER then
-local pipe,err = io.popen(CPRE..[[../imgui/imgui.h]],"r")
+    pipe,err = io.popen(CPRE..[[../imgui/imgui.h]],"r")
+else
+    pipe,err = io.open([[../imgui/imgui.h]],"r")
+end
 
 if not pipe then
     error("could not execute gcc "..err)
@@ -1362,24 +1357,23 @@ end
 pSTP = struct_parser() --overwrite
 pFP = func_parser() --overwrite
 
---local linesl = {}
-for line in location(pipe,{"imgui"}) do
+local iterator = (HAVE_COMPILER and location) or filelines
+
+for line in iterator(pipe,{"imgui"}) do
     local line, comment = split_comment(line)
 	--line = clean_spaces(line)
-	--table.insert(linesl,line)
     pSTP.insert(line,comment)
     pFP.insert(line,comment)
 end
 pipe:close()
---save_data("./LINES.txt",table.concat(linesl,"\n"))
---save_data("./STPLINES.txt",table.concat(pSTP.lines,"\n"))
+
 local ovstr = pFP:compute_overloads()
 ADDnonUDT(pFP)
 save_data("./output/overloads.txt",ovstr)
 typedefs_dict2 = cimgui_generation("",pSTP,pFP)
 --check arg detection failure if no name in function declaration
 check_arg_detection(pFP.defsT,typedefs_dict2)
-end
+
 
 ----------save fundefs in definitions.lua for using in bindings
 set_defines(pFP.defsT) 
