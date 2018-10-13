@@ -96,27 +96,82 @@ local gdefines = {} --for FLT_MAX and others
 --------------------------------------------------------------------------
 --helper functions
 --------------------------------------------------------------------------
+
+local function split_comment(line)
+    local comment = line:match("(%s*//.*)") or ""
+	line = line:gsub("%s*//.*","")
+	line = line:gsub("%s*$","")
+    return line,comment
+end
 --minimal preprocessor
 local function filelines(file,locats)
     local iflevels = {}
+   --generated known prepros
+local prepro = {
+["#if"]={
+    [   "defined(__clang__) || defined(__GNUC__)"       ]=false,
+    [   "defined(__clang__)"    ]=false,
+    [   "defined(_MSC_VER) && !defined(__clang__)"      ]=false,
+    [   "!defined(IMGUI_DISABLE_INCLUDE_IMCONFIG_H) || defined(IMGUI_INCLUDE_IMCONFIG_H)"       ]=false,
+    [   "!defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)     \\"        ]=false,
+},
+["#elif"]={
+    [   "defined(__GNUC__) && __GNUC__ >= 8"    ]=false,
+    [   "(defined(__clang__) || defined(__GNUC__)) && (__cplusplus < 201100)"   ]=false,
+},
+["#ifdef"]={
+    [   "IM_VEC4_CLASS_EXTRA"   ]=false,
+    [   "IMGUI_USER_CONFIG"     ]=false,
+    [   "IMGUI_INCLUDE_IMGUI_USER_H"    ]=false,
+    [   "IMGUI_USE_BGRA_PACKED_COLOR"   ]=false,
+    [   "IM_VEC2_CLASS_EXTRA"   ]=false,
+},
+["#ifndef"]={
+    [   "IMGUI_API"     ]=false,
+    [   "IMGUI_IMPL_API"        ]=false,
+    [   "IMGUI_OVERRIDE_DRAWVERT_STRUCT_LAYOUT" ]=true,
+    [   "IM_ASSERT"     ]=false,
+    [   "ImTextureID"   ]=true,
+    [   "ImDrawIdx"     ]=true,
+    [   "IMGUI_DISABLE_OBSOLETE_FUNCTIONS"      ]=false,
+},
+}
 	--only one case is true
-	local function prepro_boolif(line)
+	local function prepro_boolifBAK(line)
 		local ma = line:match("#ifndef%s+IMGUI_OVERRIDE_DRAWVERT_STRUCT_LAYOUT") or line:match("#ifndef%s+ImTextureID")
 		return not (ma==nil)
+	end
+	local function prepro_boolif(pre,cond)
+		local conds = prepro[pre]
+		assert(conds,pre.." has no conds")
+		local res = conds[cond]
+		assert(type(res)~="nil",cond.." not found")
+		return res
 	end
     local function location_it()
         repeat
             local line = file:read"*l"
             if not line then return nil end
-            if line:sub(1,1) == "#" then
+            --if line:sub(1,1) == "#" then
+			if line:match("^%s*#") then
+				line,_ = split_comment(line)
+				local pre,cond = line:match("^%s*(#%S*)%s+(.*)%s*$")
                 if line:match("#if") then 
-                    iflevels[#iflevels +1 ] = prepro_boolif(line)
+                    iflevels[#iflevels +1 ] = prepro_boolif(pre,cond)
                 elseif line:match("#endif") then
                     iflevels[#iflevels] = nil
-				elseif line:match("#elseif") then
-					iflevels[#iflevels] = false -- all false now
+				elseif line:match("#elif") then
+					if not iflevels[#iflevels] then
+						iflevels[#iflevels] = prepro_boolif(pre,cond)
+					else --was true
+						iflevels[#iflevels] = false
+					end
 				elseif line:match("#else") then
 					iflevels[#iflevels] = not iflevels[#iflevels]
+				else
+					if not (pre:match("#define") or pre:match"#include" or pre:match"#pragma") then
+						error("not expected prepro "..pre)
+					end
                 end
                 -- skip
             elseif #iflevels == 0 or iflevels[#iflevels] then
@@ -293,12 +348,6 @@ local function clean_spaces(cad)
     cad = cad:gsub("%s+"," ") --not more than one space
     cad = cad:gsub("%s*([%(%),=])%s*","%1") --not spaces with ( , )
     return cad
-end
-local function split_comment(line)
-    local comment = line:match("(%s*//.*)") or ""
-	line = line:gsub("%s*//.*","")
-	line = line:gsub("%s*$","")
-    return line,comment
 end
 local function get_manuals(def)
     return cimgui_manuals[def.ov_cimguiname] or cimgui_manuals[def.cimguiname]
@@ -1362,6 +1411,7 @@ local iterator = (HAVE_COMPILER and location) or filelines
 for line in iterator(pipe,{"imgui"}) do
     local line, comment = split_comment(line)
 	--line = clean_spaces(line)
+	--comment = ""
     pSTP.insert(line,comment)
     pFP.insert(line,comment)
 end
