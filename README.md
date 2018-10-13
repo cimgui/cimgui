@@ -73,5 +73,5 @@ Notes:
 * [ImGuiCS](https://github.com/conatuscreative/ImGuiCS)
 * [imgui-rs](https://github.com/Gekkio/imgui-rs)
 * [imgui-pas](https://github.com/dpethes/imgui-pas)
-* [odin-dear_imgui](https://github.com/ThisDrunkDane/odin-dear_imgui)
+* [odin-imgui](https://github.com/ThisDrunkDane/odin-imgui)
 * [LuaJIT-imgui](https://github.com/sonoro1234/LuaJIT-ImGui)
