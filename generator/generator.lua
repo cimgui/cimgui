@@ -143,9 +143,13 @@ local prepro = {
 	end
 	local function prepro_boolif(pre,cond)
 		local conds = prepro[pre]
-		assert(conds,pre.." has no conds")
+		assert(conds,pre.." has no conds-----------------------------")
 		local res = conds[cond]
-		assert(type(res)~="nil",cond.." not found")
+		--assert(type(res)~="nil",cond.." not found")
+		if type(res)=="nil" then
+			print(pre,cond,"not found in precompiler database, returning false.")
+			res = false
+		end
 		return res
 	end
     local function location_it()
@@ -170,7 +174,7 @@ local prepro = {
 					iflevels[#iflevels] = not iflevels[#iflevels]
 				else
 					if not (pre:match("#define") or pre:match"#include" or pre:match"#pragma") then
-						error("not expected prepro "..pre)
+						print("not expected preprocessor directive ",pre)
 					end
                 end
                 -- skip
