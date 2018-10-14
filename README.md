@@ -57,6 +57,7 @@ Notes:
     * calc_value : the numeric value corresponding to value
   * under key structs we get the structs collection in which the key is the struct name and the value is an array of the struct members. Each one given as a collection with keys
     * type : the type of the struct member
+    * template_type : if type has a template argument (as ImVector) here will be
     * name : the name of the struct member
 # usage
 
