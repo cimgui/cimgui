@@ -923,8 +923,10 @@ local function gen_structs_and_enums_table(cdefs)
                 end
                 --split type name1,name2; in several lines
                 local typen,rest = line:match("([^,]+)%s(%S+[,;])")
+				local template_type = typen:match("/%*<(.+)>%*/")
+				if template_type then typen = typen:match("(.+)/%*") end
                 for name in rest:gmatch("([^%s,;]+)%s?[,;]") do
-                    table.insert(outtab.structs[structnames[#structnames]],{type=typen,name=name})
+                    table.insert(outtab.structs[structnames[#structnames]],{type=typen,template_type=template_type,name=name})
                 end
             end
         end
