@@ -954,7 +954,7 @@ CIMGUI_API void igPushIDPtr(const void* ptr_id);
 CIMGUI_API void igPushIDInt(int int_id);
 CIMGUI_API void igPopID(void);
 CIMGUI_API ImGuiID igGetIDStr(const char* str_id);
-CIMGUI_API ImGuiID igGetIDStrStr(const char* str_id_begin,const char* str_id_end);
+CIMGUI_API ImGuiID igGetIDRange(const char* str_id_begin,const char* str_id_end);
 CIMGUI_API ImGuiID igGetIDPtr(const void* ptr_id);
 CIMGUI_API void igTextUnformatted(const char* text,const char* text_end);
 CIMGUI_API void igText(const char* fmt,...);

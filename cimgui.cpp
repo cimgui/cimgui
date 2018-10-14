@@ -477,7 +477,7 @@ CIMGUI_API ImGuiID igGetIDStr(const char* str_id)
 {
     return ImGui::GetID(str_id);
 }
-CIMGUI_API ImGuiID igGetIDStrStr(const char* str_id_begin,const char* str_id_end)
+CIMGUI_API ImGuiID igGetIDRange(const char* str_id_begin,const char* str_id_end)
 {
     return ImGui::GetID(str_id_begin,str_id_end);
 }

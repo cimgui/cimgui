@@ -62,6 +62,9 @@ local cimgui_overloads = {
         --["(const void*)"] =           "igPushIDPtr",
         --["(int)"] =                   "igPushIDInt"
     },
+	igGetID = {
+		["(const char*,const char*)"] = "igGetIDRange",
+	},
     ImDrawList_AddText = {
         ["(const ImVec2,ImU32,const char*,const char*)"] = "ImDrawList_AddText",
     },

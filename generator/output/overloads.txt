@@ -43,7 +43,7 @@ igMenuItem	2
 2	bool	igMenuItemBoolPtr (const char*,const char*,bool*,bool)
 igGetID	3
 1	ImGuiID	igGetIDStr (const char*)
-2	ImGuiID	igGetIDStrStr (const char*,const char*)
+2	ImGuiID	igGetIDRange (const char*,const char*)
 3	ImGuiID	igGetIDPtr (const void*)
 igListBoxHeader	2
 1	bool	igListBoxHeaderVec2 (const char*,const ImVec2)
