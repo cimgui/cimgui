@@ -383,7 +383,9 @@ local function struct_parser()
     
     local in_functionst = false
     local structcdefs = {}
+	local ImVector_templates = {}
     local STP = {}
+	STP.ImVector_templates = ImVector_templates
     STP.lines = structcdefs
     function STP.insert(line,comment)
     
@@ -416,6 +418,10 @@ local function struct_parser()
             --nothing
         else
             local linea = line:gsub("%S+",{class="struct",mutable=""})
+			local template = linea:match("ImVector<([%w_]+)>")
+                if template then
+                    ImVector_templates[template] = true
+                end
             linea = linea:gsub("(%b<>)","/*%1*/") --comment template parameters
             table.insert(structcdefs,linea..comment)
         end
