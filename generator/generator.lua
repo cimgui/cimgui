@@ -792,7 +792,7 @@ local function ADDnonUDT(FP)
 			defT2.retref = nil
 			defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT2
 			defsT[t.cimguiname][t.signature.."nonUDT"] = defT2
-			table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT",cimguiname=t.cimguiname,call_args=call_args,ret =ret,comment=comment})
+			table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret,comment=comment})
 			--converting to Simple type----------------------------------------------------
 			local defT3 = {}
 			--first strings
@@ -813,7 +813,7 @@ local function ADDnonUDT(FP)
 			defT3.retref = nil
 			defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT3
 			defsT[t.cimguiname][t.signature.."nonUDT2"] = defT3
-			table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT2",cimguiname=t.cimguiname,call_args=call_args,ret =ret,comment=comment})
+			table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT2",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret,comment=comment})
 		end
 		end
 	end
@@ -1155,18 +1155,32 @@ local function func_header_generate(FP)
         local cimf = FP.defsT[t.cimguiname]
         local def = cimf[t.signature]
         local manual = get_manuals(def)
-        if not manual and def.ret then --not constructor
-            local addcoment = def.comment or ""
+        if not manual then
+			local addcoment = def.comment or ""
 			local empty = def.args:match("^%(%)") --no args
-            if def.stname == "ImGui" or def.stname == "" then --ImGui namespace or top level
-                table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..(empty and "(void)" or def.args)..";"..addcoment.."\n")
-            else
-                
-                --local imgui_stname = embeded_structs[def.stname] or def.stname
-                local imgui_stname = def.stname
-                local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
-                table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args..";"..addcoment.."\n")
-            end
+			if def.ret then --not constructor
+				if def.stname == "ImGui" or def.stname == "" then --ImGui namespace or top level
+					table.insert(outtab,"CIMGUI_API "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..(empty and "(void)" or def.args)..";"..addcoment.."\n")
+				else
+					--local imgui_stname = embeded_structs[def.stname] or def.stname
+					local imgui_stname = def.stname
+					local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
+					table.insert(outtab,"CIMGUI_API "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args..";"..addcoment.."\n")
+				end
+			else --constructor
+				assert(def.stname ~= "ImGui" and def.stname ~= "","constructor without struct")
+				if not def.funcname:match("~") then --constructor
+					table.insert(outtab,"CIMGUI_API "..def.stname.."* "..(def.ov_cimguiname or def.cimguiname)..(empty and "(void)" or def.args)..";"..addcoment.."\n")
+					if empty then
+						--make destructor also only once
+						local args = "("..def.stname.."* self)"
+						local fname = def.stname.."_destroy" 
+						table.insert(outtab,"CIMGUI_API void "..fname..args..";"..addcoment.."\n")
+					end
+				else --destructor
+				    --already done
+				end
+			end
         end
         else --not cimguiname
             table.insert(outtab,t.comment:gsub("%%","%%%%").."\n")-- %% substitution for gsub
@@ -1226,13 +1240,13 @@ local function func_implementation(FP)
 					table.insert(outtab,"    return ret2;\n")
                     table.insert(outtab,"}\n")
 					end
-                else
+                else --standard ImGui
                     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
                     table.insert(outtab,"{\n")
                     table.insert(outtab,"    return "..castret..ptret.."ImGui::"..def.funcname..def.call_args..";\n")
                     table.insert(outtab,"}\n")
                 end
-            else
+            else -- stname
                 local empty = def.args:match("^%(%)") --no args
                 --local imgui_stname = embeded_structs[def.stname] or def.stname
                 local imgui_stname = def.stname
@@ -1268,13 +1282,33 @@ local function func_implementation(FP)
 					table.insert(outtab,"    return ret2;\n")
                     table.insert(outtab,"}\n")
 					end
-                else
+                else --standard struct
                     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
                     table.insert(outtab,"{\n")
                     table.insert(outtab,"    return "..castret..ptret.."self->"..def.funcname..def.call_args..";\n")
                     table.insert(outtab,"}\n")
                 end
             end
+		elseif not manual and not def.ret then --constructor and destructors
+			assert(def.stname ~= "ImGui" and def.stname ~= "","constructor without struct")
+			local empty = def.args:match("^%(%)") --no args
+			if not def.funcname:match("~") then --constructor
+				table.insert(outtab,"CIMGUI_API "..def.stname.."* "..(def.ov_cimguiname or def.cimguiname)..(empty and "(void)" or def.args).."\n")
+				table.insert(outtab,"{\n")
+				table.insert(outtab,"    return IM_NEW("..def.stname..")"..def.call_args..";\n")
+				table.insert(outtab,"}\n")
+				if empty then
+					--do destructor only once
+					local args = "("..def.stname.."* self)"
+					local fname = def.stname.."_destroy" 
+					table.insert(outtab,"CIMGUI_API void "..fname..args.."\n")
+					table.insert(outtab,"{\n")
+					table.insert(outtab,"    IM_DELETE(self);\n")
+					table.insert(outtab,"}\n")
+				end
+			else --destructor
+			    --already done
+			end
         end
         until true
     end
@@ -1504,7 +1538,7 @@ local function json_prepare(defs)
     end
     return defs
 end
-
+---[[
 local json = require"json"
 save_data("./output/definitions.json",json.encode(json_prepare(pFP.defsT)))
 save_data("./output/structs_and_enums.json",json.encode(structs_and_enums_table))
@@ -1512,7 +1546,7 @@ save_data("./output/typedefs_dict.json",json.encode(typedefs_dict))
 if iFP then
     save_data("./output/impl_definitions.json",json.encode(json_prepare(iFP.defsT)))
 end
-
+--]]
 copyfile("./output/cimgui.h", "../cimgui.h")
 copyfile("./output/cimgui.cpp", "../cimgui.cpp")
 print"all done!!"
@@ -1520,26 +1554,37 @@ print"all done!!"
 ---dump some infos-----------------------------------------------------------------------
 ------------------------------------------------------------------------------------
 print"//-------alltypes--------------------------------------------------------------------"
-FP:dump_alltypes()
+pFP:dump_alltypes()
 print"//embeded_structs---------------------------------------------------------------------------"
-for k,v in pairs(FP.embeded_structs) do
+for k,v in pairs(pFP.embeded_structs) do
     --print(k,v)
     io.write("typedef ",v," ",k,";\n")
 end
 print"//templates---------------------------------------------------------------------------"
-for k,v in pairs(FP.ImVector_templates) do
+for k,v in pairs(pFP.ImVector_templates) do
     --print(k,v)
     io.write("typedef ImVector<",k,"> ImVector_",k,";\n")
 end
-
+for k,v in pairs(pSTP.ImVector_templates) do
+    --print(k,v)
+    io.write("typedef ImVector<",k,"> ImVector_",k,";\n")
+end
+require"anima.utils"
 print"//constructors------------------------------------------------------------------"
-for i,t in ipairs(FP.cdefs) do
+for i,t in ipairs(pFP.cdefs) do
     if t.cimguiname and not t.ret then
-    print(t.cimguiname,"\t",t.signature,"\t",t.args,"\t",t.argsc,"\t",t.call_args,"\t",t.ret)
+		local cimf = pFP.defsT[t.cimguiname]
+        local def = cimf[t.signature]
+		if not def.ret then
+			print(t.cimguiname,"\t",t.signature,t.ret)
+		else
+			print"constructor error"
+			prtable(def)
+		end
     end
 end
 print"//-------------------------------------------------------------------------------------"
-for i,t in ipairs(FP.cdefs) do
+for i,t in ipairs(pFP.cdefs) do
     --print(t.cimguiname,"   ",t.funcname,"\t",t.signature,"\t",t.args,"\t",t.argsc,"\t",t.call_args,"\t",t.ret) 
 end
 ---------------------------------------------------------------------------------------------
