@@ -2235,3 +2235,28 @@ CIMGUI_API void igColorConvertHSVtoRGB(float h,float s,float v,float *out_r,floa
 {
     ImGui::ColorConvertHSVtoRGB(h,s,v,*out_r,*out_g,*out_b);
 }
+
+CIMGUI_API ImVector_ImWchar* ImVector_ImWchar_create()
+{
+	return IM_NEW(ImVector<ImWchar>) ();
+}
+CIMGUI_API void ImVector_ImWchar_destroy(ImVector_ImWchar* p)
+{
+	IM_DELETE(p);
+}
+CIMGUI_API void ImVector_ImWchar_Init(ImVector_ImWchar* p)
+{
+	IM_PLACEMENT_NEW(p) ImVector<ImWchar>();
+}
+CIMGUI_API void ImVector_ImWchar_UnInit(ImVector_ImWchar* p)
+{
+	p->~ImVector<ImWchar>();
+}
+CIMGUI_API GlyphRangesBuilder* GlyphRangesBuilder_create()
+{
+	return IM_NEW(GlyphRangesBuilder)();
+}
+CIMGUI_API void GlyphRangesBuilder_destroy(GlyphRangesBuilder* p)
+{
+	IM_DELETE(p);
+}

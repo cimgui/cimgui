@@ -834,7 +834,12 @@ typedef ImVector<TextRange> ImVector_TextRange;
 typedef ImVector<ImWchar> ImVector_ImWchar;
 #else //CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 typedef ImVector ImVector_TextRange;
-typedef ImVector ImVector_ImWchar;
+//typedef ImVector ImVector_ImWchar;
+typedef struct {
+    int Size;
+    int Capacity;
+    ImWchar * Data;
+} ImVector_ImWchar;
 #endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 CIMGUI_API ImGuiContext* igCreateContext(ImFontAtlas* shared_font_atlas);
 CIMGUI_API void igDestroyContext(ImGuiContext* ctx);
@@ -1377,6 +1382,13 @@ CIMGUI_API float igGET_FLT_MAX();
 //not const args from & to *
 CIMGUI_API void igColorConvertRGBtoHSV(float r,float g,float b,float *out_h,float *out_s,float *out_v);
 CIMGUI_API void igColorConvertHSVtoRGB(float h,float s,float v,float *out_r,float *out_g,float *out_b);
+
+CIMGUI_API ImVector_ImWchar* ImVector_ImWchar_create();
+CIMGUI_API void ImVector_ImWchar_destroy(ImVector_ImWchar* p);
+CIMGUI_API void ImVector_ImWchar_Init(ImVector_ImWchar* p);
+CIMGUI_API void ImVector_ImWchar_UnInit(ImVector_ImWchar* p);
+CIMGUI_API GlyphRangesBuilder* GlyphRangesBuilder_create();
+CIMGUI_API void GlyphRangesBuilder_destroy(GlyphRangesBuilder* p);
 
 
 
