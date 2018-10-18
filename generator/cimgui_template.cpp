@@ -25,10 +25,7 @@ CIMGUI_API void ImGuiTextBuffer_appendf(struct ImGuiTextBuffer *buffer, const ch
     buffer->appendfv(fmt, args);
     va_end(args);
 }
-CIMGUI_API void ImFontConfig_DefaultConstructor(ImFontConfig *config)
-{
-    *config = ImFontConfig();
-}
+
 CIMGUI_API float igGET_FLT_MAX()
 {
     return FLT_MAX;

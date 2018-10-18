@@ -1418,7 +1418,6 @@ CIMGUI_API ImVec2_Simple ImFont_CalcTextSizeA_nonUDT2(ImFont* self,float size,fl
 CIMGUI_API void igLogText(CONST char *fmt, ...);
 //no appendfV
 CIMGUI_API void ImGuiTextBuffer_appendf(struct ImGuiTextBuffer *buffer, const char *fmt, ...);
-CIMGUI_API void ImFontConfig_DefaultConstructor(ImFontConfig *config);
 //for getting FLT_MAX in bindings
 CIMGUI_API float igGET_FLT_MAX();
 //not const args from & to *
