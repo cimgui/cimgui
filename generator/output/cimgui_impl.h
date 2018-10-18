@@ -1,6 +1,6 @@
-struct GLFWwindow;
 typedef struct SDL_Window SDL_Window;
 typedef struct GLFWwindow GLFWwindow;
+struct GLFWwindow;
 struct SDL_Window;
 typedef union SDL_Event SDL_Event;
 CIMGUI_API bool ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window,bool install_callbacks);
