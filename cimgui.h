@@ -40,12 +40,30 @@ typedef struct ImColor_Simple { ImVec4_Simple Value;} ImColor_Simple;
 
 
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
-struct ImDrawChannel;
 typedef struct CustomRect CustomRect;
 typedef struct GlyphRangesBuilder GlyphRangesBuilder;
 typedef struct ImFontGlyph ImFontGlyph;
+typedef unsigned short ImDrawIdx;;
 typedef struct Pair Pair;
 typedef struct TextRange TextRange;
+typedef struct ImVector_ImVec2 ImVector_ImVec2;
+typedef struct ImVector_ImDrawIdx ImVector_ImDrawIdx;
+typedef struct ImVector_ImVec4 ImVector_ImVec4;
+typedef struct ImVector_TextRange ImVector_TextRange;
+typedef struct ImVector_ImFontPtr ImVector_ImFontPtr;
+typedef struct ImVector_ImDrawCmd ImVector_ImDrawCmd;
+typedef struct ImVector_ImDrawVert ImVector_ImDrawVert;
+typedef struct ImVector_unsigned_short ImVector_unsigned_short;
+typedef struct ImVector_ImTextureID ImVector_ImTextureID;
+typedef struct ImVector_char ImVector_char;
+typedef struct ImVector_ImDrawChannel ImVector_ImDrawChannel;
+typedef struct ImVector_CustomRect ImVector_CustomRect;
+typedef struct ImVector_Pair ImVector_Pair;
+typedef struct ImVector_unsigned_char ImVector_unsigned_char;
+typedef struct ImVector_ImFontGlyph ImVector_ImFontGlyph;
+typedef struct ImVector_ImFontConfig ImVector_ImFontConfig;
+typedef struct ImVector_ImWchar ImVector_ImWchar;
+typedef struct ImVector_float ImVector_float;
 typedef struct ImVec4 ImVec4;
 typedef struct ImVec2 ImVec2;
 typedef struct ImGuiTextBuffer ImGuiTextBuffer;
@@ -69,6 +87,7 @@ typedef struct ImDrawList ImDrawList;
 typedef struct ImDrawData ImDrawData;
 typedef struct ImDrawCmd ImDrawCmd;
 typedef struct ImDrawChannel ImDrawChannel;
+struct ImDrawChannel;
 struct ImDrawCmd;
 struct ImDrawData;
 struct ImDrawList;
@@ -568,13 +587,25 @@ struct ImGuiIO
     float NavInputsDownDuration[ImGuiNavInput_COUNT];
     float NavInputsDownDurationPrev[ImGuiNavInput_COUNT];
 };
-struct ImVector
-{
-    int Size;
-    int Capacity;
-    void* Data;
-};
-typedef struct ImVector ImVector;
+typedef struct ImVector{int Size;int Capacity;void* Data;} ImVector;
+struct ImVector_float {int Size;int Capacity;float* Data;} ImVector_float;
+struct ImVector_ImWchar {int Size;int Capacity;ImWchar* Data;} ImVector_ImWchar;
+struct ImVector_ImFontConfig {int Size;int Capacity;ImFontConfig* Data;} ImVector_ImFontConfig;
+struct ImVector_ImFontGlyph {int Size;int Capacity;ImFontGlyph* Data;} ImVector_ImFontGlyph;
+struct ImVector_unsigned_char {int Size;int Capacity;unsigned char* Data;} ImVector_unsigned_char;
+struct ImVector_Pair {int Size;int Capacity;Pair* Data;} ImVector_Pair;
+struct ImVector_CustomRect {int Size;int Capacity;CustomRect* Data;} ImVector_CustomRect;
+struct ImVector_ImDrawChannel {int Size;int Capacity;ImDrawChannel* Data;} ImVector_ImDrawChannel;
+struct ImVector_char {int Size;int Capacity;char* Data;} ImVector_char;
+struct ImVector_ImTextureID {int Size;int Capacity;ImTextureID* Data;} ImVector_ImTextureID;
+struct ImVector_unsigned_short {int Size;int Capacity;unsigned short* Data;} ImVector_unsigned_short;
+struct ImVector_ImDrawVert {int Size;int Capacity;ImDrawVert* Data;} ImVector_ImDrawVert;
+struct ImVector_ImDrawCmd {int Size;int Capacity;ImDrawCmd* Data;} ImVector_ImDrawCmd;
+struct ImVector_ImFontPtr {int Size;int Capacity;ImFont** Data;} ImVector_ImFontPtr;
+struct ImVector_TextRange {int Size;int Capacity;TextRange* Data;} ImVector_TextRange;
+struct ImVector_ImVec4 {int Size;int Capacity;ImVec4* Data;} ImVector_ImVec4;
+struct ImVector_ImDrawIdx {int Size;int Capacity;ImDrawIdx* Data;} ImVector_ImDrawIdx;
+struct ImVector_ImVec2 {int Size;int Capacity;ImVec2* Data;} ImVector_ImVec2;
 struct ImNewDummy {};
 struct ImGuiOnceUponAFrame
 {
@@ -583,16 +614,16 @@ struct ImGuiOnceUponAFrame
 struct ImGuiTextFilter
 {
     char InputBuf[256];
-    ImVector/*<TextRange>*/ Filters;
+    ImVector_TextRange Filters;
     int CountGrep;
 };
 struct ImGuiTextBuffer
 {
-    ImVector/*<char>*/ Buf;
+    ImVector_char Buf;
 };
 struct ImGuiStorage
 {
-    ImVector/*<Pair>*/ Data;
+    ImVector_Pair Data;
 };
 struct ImGuiInputTextCallbackData
 {
@@ -646,7 +677,6 @@ struct ImDrawCmd
     ImDrawCallback UserCallback;
     void* UserCallbackData;
 };
-typedef unsigned short ImDrawIdx;
 struct ImDrawVert
 {
     ImVec2 pos;
@@ -655,8 +685,8 @@ struct ImDrawVert
 };
 struct ImDrawChannel
 {
-    ImVector/*<ImDrawCmd>*/ CmdBuffer;
-    ImVector/*<ImDrawIdx>*/ IdxBuffer;
+    ImVector_ImDrawCmd CmdBuffer;
+    ImVector_ImDrawIdx IdxBuffer;
 };
 enum ImDrawCornerFlags_
 {
@@ -677,21 +707,21 @@ enum ImDrawListFlags_
 };
 struct ImDrawList
 {
-    ImVector/*<ImDrawCmd>*/ CmdBuffer;
-    ImVector/*<ImDrawIdx>*/ IdxBuffer;
-    ImVector/*<ImDrawVert>*/ VtxBuffer;
+    ImVector_ImDrawCmd CmdBuffer;
+    ImVector_ImDrawIdx IdxBuffer;
+    ImVector_ImDrawVert VtxBuffer;
     ImDrawListFlags Flags;
     const ImDrawListSharedData* _Data;
     const char* _OwnerName;
     unsigned int _VtxCurrentIdx;
     ImDrawVert* _VtxWritePtr;
     ImDrawIdx* _IdxWritePtr;
-    ImVector/*<ImVec4>*/ _ClipRectStack;
-    ImVector/*<ImTextureID>*/ _TextureIdStack;
-    ImVector/*<ImVec2>*/ _Path;
+    ImVector_ImVec4 _ClipRectStack;
+    ImVector_ImTextureID _TextureIdStack;
+    ImVector_ImVec2 _Path;
     int _ChannelsCurrent;
     int _ChannelsCount;
-    ImVector/*<ImDrawChannel>*/ _Channels;
+    ImVector_ImDrawChannel _Channels;
 };
 struct ImDrawData
 {
@@ -750,9 +780,9 @@ struct ImFontAtlas
     int TexHeight;
     ImVec2 TexUvScale;
     ImVec2 TexUvWhitePixel;
-    ImVector/*<ImFont*>*/ Fonts;
-    ImVector/*<CustomRect>*/ CustomRects;
-    ImVector/*<ImFontConfig>*/ ConfigData;
+    ImVector_ImFontPtr Fonts;
+    ImVector_CustomRect CustomRects;
+    ImVector_ImFontConfig ConfigData;
     int CustomRectIds[1];
 };
 struct ImFont
@@ -760,9 +790,9 @@ struct ImFont
     float FontSize;
     float Scale;
     ImVec2 DisplayOffset;
-    ImVector/*<ImFontGlyph>*/ Glyphs;
-    ImVector/*<float>*/ IndexAdvanceX;
-    ImVector/*<unsigned short>*/ IndexLookup;
+    ImVector_ImFontGlyph Glyphs;
+    ImVector_float IndexAdvanceX;
+    ImVector_unsigned_short IndexLookup;
     const ImFontGlyph* FallbackGlyph;
     float FallbackAdvanceX;
     ImWchar FallbackChar;
@@ -775,7 +805,7 @@ struct ImFont
 };
     struct GlyphRangesBuilder
     {
-        ImVector/*<unsigned char>*/ UsedChars;
+        ImVector_unsigned_char UsedChars;
     };
     struct CustomRect
     {
@@ -832,9 +862,6 @@ typedef ImGuiTextFilter::TextRange TextRange;
 typedef ImGuiStorage::Pair Pair;
 typedef ImVector<TextRange> ImVector_TextRange;
 typedef ImVector<ImWchar> ImVector_ImWchar;
-#else //CIMGUI_DEFINE_ENUMS_AND_STRUCTS
-typedef ImVector ImVector_TextRange;
-typedef ImVector ImVector_ImWchar;
 #endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 CIMGUI_API ImVec2* ImVec2_ImVec2(void);
 CIMGUI_API void ImVec2_destroy(ImVec2* self);
