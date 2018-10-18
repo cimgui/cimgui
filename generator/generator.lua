@@ -1003,8 +1003,8 @@ local function generate_templates(code,templates,typedefs)
 		local te = k:gsub("%s","_")
 		te = te:gsub("%*","Ptr")
 		--table.insert(code,"typedef struct ImVector_"..te.." {int Size;int Capacity;"..k.."* Data;} ImVector_"..te..";\n")
-		table.insert(code,"struct ImVector_"..te.." {int Size;int Capacity;"..k.."* Data;} ImVector_"..te..";\n")
-		table.insert(typedefs,"typedef struct ImVector_"..te.." ImVector_"..te..";\n")
+		table.insert(code,"typedef struct ImVector_"..te.." {int Size;int Capacity;"..k.."* Data;} ImVector_"..te..";\n")
+		--table.insert(typedefs,"typedef struct ImVector_"..te.." ImVector_"..te..";\n")
 	end
 end
 
