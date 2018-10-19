@@ -778,10 +778,10 @@ local function ADDdestructors(FP)
             --local defT = cimf[t.signature]
         --for fname,defT in pairs(FP.defsT) do
         if not defT[1].ret and not defT[1].constructor then --if constructor not processed
-			if defT[1].funcname:match("~") then
-				defsT[t.cimguiname] = nil --clear destructor
-				newcdefs[#newcdefs] = nil
-			else
+            if defT[1].funcname:match("~") then
+                defsT[t.cimguiname] = nil --clear destructor
+                newcdefs[#newcdefs] = nil
+            else
             for j,cons in ipairs(defT) do
                 cons.constructor = true
             end
@@ -790,19 +790,19 @@ local function ADDdestructors(FP)
             def.stname = defT[1].stname
             def.ret = "void"
             def.ov_cimguiname = def.stname.."_destroy"
-			def.cimguiname = def.ov_cimguiname
+            def.cimguiname = def.ov_cimguiname
             def.destructor = true
             def.args = "("..def.stname.."* self)"
             def.call_args = "(self)"
             def.signature = "("..def.stname.."*)"
-			def.defaults = {}
+            def.defaults = {}
             def.argsT = {{type=def.stname.."*",name="self"}}
             defsT[def.ov_cimguiname] = {def}
             defsT[def.ov_cimguiname][def.signature] = def
             newcdefs[#newcdefs+1]={stname=def.stname,funcname=def.ov_cimguiname,args=def.args,signature=def.signature,cimguiname=def.cimguiname,call_args=def.call_args,ret =def.ret}
-			end
+            end
         end
-		end
+        end
     end
     FP.cdefs = newcdefs
 end
@@ -1215,7 +1215,7 @@ local function func_header_generate(FP)
         if t.cimguiname then
         local cimf = FP.defsT[t.cimguiname]
         local def = cimf[t.signature]
-		assert(def,t.signature..t.cimguiname)
+        assert(def,t.signature..t.cimguiname)
         local manual = get_manuals(def)
         if not manual then
             local addcoment = def.comment or ""
@@ -1286,8 +1286,8 @@ local function ImGui_f_implementation(outtab,def)
     end
 end
 local function struct_f_implementation(outtab,def)
-	local empty = def.args:match("^%(%)") --no args
-	local ptret = def.retref and "&" or ""
+    local empty = def.args:match("^%(%)") --no args
+    local ptret = def.retref and "&" or ""
     --local imgui_stname = embeded_structs[def.stname] or def.stname
     local imgui_stname = def.stname
     local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
@@ -1337,18 +1337,18 @@ local function func_implementation(FP)
         if not t.cimguiname then break end
         local cimf = FP.defsT[t.cimguiname]
         local def = cimf[t.signature]
-		assert(def)
+        assert(def)
         local manual = get_manuals(def)
         if not manual then 
             if def.constructor then
-				assert(def.stname ~= "ImGui" and def.stname ~= "","constructor without struct")
-				local empty = def.args:match("^%(%)") --no args
-				table.insert(outtab,"CIMGUI_API "..def.stname.."* "..(def.ov_cimguiname or def.cimguiname)..(empty and "(void)" or def.args).."\n")
+                assert(def.stname ~= "ImGui" and def.stname ~= "","constructor without struct")
+                local empty = def.args:match("^%(%)") --no args
+                table.insert(outtab,"CIMGUI_API "..def.stname.."* "..(def.ov_cimguiname or def.cimguiname)..(empty and "(void)" or def.args).."\n")
                 table.insert(outtab,"{\n")
                 table.insert(outtab,"    return IM_NEW("..def.stname..")"..def.call_args..";\n")
                 table.insert(outtab,"}\n")
             elseif def.destructor then
-				local args = "("..def.stname.."* self)"
+                local args = "("..def.stname.."* self)"
                 local fname = def.stname.."_destroy" 
                 table.insert(outtab,"CIMGUI_API void "..fname..args.."\n")
                 table.insert(outtab,"{\n")
@@ -1437,16 +1437,16 @@ local function set_defines(fdefs)
     end
 end 
 local function DefsByStruct(FP)
-	local structs = {}
-	for fun,defs in pairs(FP.defsT) do
-		local stname = defs[1].stname
-		structs[stname] = structs[stname] or {}
-		table.insert(structs[stname],fun)
-	end
-	for st,funs in pairs(struct) do
-		struct[st] = table.sort(funs)
-	end
-	FP.defsBystruct = struct
+    local structs = {}
+    for fun,defs in pairs(FP.defsT) do
+        local stname = defs[1].stname
+        structs[stname] = structs[stname] or {}
+        table.insert(structs[stname],fun)
+    end
+    for st,funs in pairs(struct) do
+        struct[st] = table.sort(funs)
+    end
+    FP.defsBystruct = struct
 end  
 --generate cimgui.cpp cimgui.h and auto versions depending on postfix
 local function cimgui_generation(postfix,STP,FP)
