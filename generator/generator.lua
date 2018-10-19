@@ -8,32 +8,32 @@ local script_args = {...}
 local COMPILER = script_args[1]
 local CPRE,CTEST
 if COMPILER == "gcc" or COMPILER == "clang" then
-	CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]
-	CTEST = COMPILER.." --version"
+    CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]
+    CTEST = COMPILER.." --version"
 elseif COMPILER == "cl" then
-	CPRE = COMPILER..[[ /E /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_API="" /DIMGUI_IMPL_API="" ]]
-	CTEST = COMPILER
+    CPRE = COMPILER..[[ /E /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_API="" /DIMGUI_IMPL_API="" ]]
+    CTEST = COMPILER
 else
-	print("Working without compiler ")
+    print("Working without compiler ")
 end
 --test compiler present
 local HAVE_COMPILER = false
 if CTEST then
-	local pipe,err = io.popen(CTEST,"r")
-	if pipe then
-		local str = pipe:read"*a"
-		print(str)
-		pipe:close()
-		if str=="" then
-			HAVE_COMPILER = false
-		else
-			HAVE_COMPILER = true
-		end
-	else
-		HAVE_COMPILER = false
-		print(err)
-	end
-	assert(HAVE_COMPILER,"gcc, clang or cl needed to run script")
+    local pipe,err = io.popen(CTEST,"r")
+    if pipe then
+        local str = pipe:read"*a"
+        print(str)
+        pipe:close()
+        if str=="" then
+            HAVE_COMPILER = false
+        else
+            HAVE_COMPILER = true
+        end
+    else
+        HAVE_COMPILER = false
+        print(err)
+    end
+    assert(HAVE_COMPILER,"gcc, clang or cl needed to run script")
 end --CTEST
 
 print("HAVE_COMPILER",HAVE_COMPILER)
@@ -47,8 +47,8 @@ for i=2,#script_args do table.insert(implementations,script_args[i]) end
 local cimgui_manuals = {
     igLogText = true,
     ImGuiTextBuffer_appendf = true,
-	igColorConvertRGBtoHSV = true,
-	igColorConvertHSVtoRGB = true
+    igColorConvertRGBtoHSV = true,
+    igColorConvertHSVtoRGB = true
 }
 --------------------------------------------------------------------------
 --this table is a dictionary to force a naming of function overloading (instead of algorythmic generated)
@@ -62,9 +62,9 @@ local cimgui_overloads = {
         --["(const void*)"] =           "igPushIDPtr",
         --["(int)"] =                   "igPushIDInt"
     },
-	igGetID = {
-		["(const char*,const char*)"] = "igGetIDRange",
-	},
+    igGetID = {
+        ["(const char*,const char*)"] = "igGetIDRange",
+    },
     ImDrawList_AddText = {
         ["(const ImVec2,ImU32,const char*,const char*)"] = "ImDrawList_AddText",
     },
@@ -102,8 +102,8 @@ local gdefines = {} --for FLT_MAX and others
 
 local function split_comment(line)
     local comment = line:match("(%s*//.*)") or ""
-	line = line:gsub("%s*//.*","")
-	line = line:gsub("%s*$","")
+    line = line:gsub("%s*//.*","")
+    line = line:gsub("%s*$","")
     return line,comment
 end
 --minimal preprocessor
@@ -139,46 +139,46 @@ local prepro = {
     [   "IMGUI_DISABLE_OBSOLETE_FUNCTIONS"      ]=false,
 },
 }
-	--only one case is true
-	local function prepro_boolifBAK(line)
-		local ma = line:match("#ifndef%s+IMGUI_OVERRIDE_DRAWVERT_STRUCT_LAYOUT") or line:match("#ifndef%s+ImTextureID")
-		return not (ma==nil)
-	end
-	local function prepro_boolif(pre,cond)
-		local conds = prepro[pre]
-		assert(conds,pre.." has no conds-----------------------------")
-		local res = conds[cond]
-		--assert(type(res)~="nil",cond.." not found")
-		if type(res)=="nil" then
-			print(pre,cond,"not found in precompiler database, returning false.")
-			res = false
-		end
-		return res
-	end
+    --only one case is true
+    local function prepro_boolifBAK(line)
+        local ma = line:match("#ifndef%s+IMGUI_OVERRIDE_DRAWVERT_STRUCT_LAYOUT") or line:match("#ifndef%s+ImTextureID")
+        return not (ma==nil)
+    end
+    local function prepro_boolif(pre,cond)
+        local conds = prepro[pre]
+        assert(conds,pre.." has no conds-----------------------------")
+        local res = conds[cond]
+        --assert(type(res)~="nil",cond.." not found")
+        if type(res)=="nil" then
+            print(pre,cond,"not found in precompiler database, returning false.")
+            res = false
+        end
+        return res
+    end
     local function location_it()
         repeat
             local line = file:read"*l"
             if not line then return nil end
             --if line:sub(1,1) == "#" then
-			if line:match("^%s*#") then
-				line,_ = split_comment(line)
-				local pre,cond = line:match("^%s*(#%S*)%s+(.*)%s*$")
+            if line:match("^%s*#") then
+                line,_ = split_comment(line)
+                local pre,cond = line:match("^%s*(#%S*)%s+(.*)%s*$")
                 if line:match("#if") then 
                     iflevels[#iflevels +1 ] = prepro_boolif(pre,cond)
                 elseif line:match("#endif") then
                     iflevels[#iflevels] = nil
-				elseif line:match("#elif") then
-					if not iflevels[#iflevels] then
-						iflevels[#iflevels] = prepro_boolif(pre,cond)
-					else --was true
-						iflevels[#iflevels] = false
-					end
-				elseif line:match("#else") then
-					iflevels[#iflevels] = not iflevels[#iflevels]
-				else
-					if not (pre:match("#define") or pre:match"#include" or pre:match"#pragma") then
-						print("not expected preprocessor directive ",pre)
-					end
+                elseif line:match("#elif") then
+                    if not iflevels[#iflevels] then
+                        iflevels[#iflevels] = prepro_boolif(pre,cond)
+                    else --was true
+                        iflevels[#iflevels] = false
+                    end
+                elseif line:match("#else") then
+                    iflevels[#iflevels] = not iflevels[#iflevels]
+                else
+                    if not (pre:match("#define") or pre:match"#include" or pre:match"#pragma") then
+                        print("not expected preprocessor directive ",pre)
+                    end
                 end
                 -- skip
             elseif #iflevels == 0 or iflevels[#iflevels] then
@@ -195,35 +195,35 @@ end
 --iterates lines from a gcc/clang -E in a specific location
 local function location(file,locpathT)
     local location_re 
-	if COMPILER == "cl" then
-		location_re = '^#line (%d+) "([^"]*)"'
-	else --gcc, clang
-		location_re = '^# (%d+) "([^"]*)"'
-	end
+    if COMPILER == "cl" then
+        location_re = '^#line (%d+) "([^"]*)"'
+    else --gcc, clang
+        location_re = '^# (%d+) "([^"]*)"'
+    end
     local path_reT = {}
     for i,locpath in ipairs(locpathT) do
         table.insert(path_reT,'^(.*[\\/])('..locpath..')%.h$')
     end
     local in_location = false
     local which_location = ""
-	local loc_num
-	local loc_num_incr
-	local lineold = "" 
-	local which_locationold,loc_num_realold
-	local lastdumped = false
+    local loc_num
+    local loc_num_incr
+    local lineold = "" 
+    local which_locationold,loc_num_realold
+    local lastdumped = false
     local function location_it()
         repeat
             local line = file:read"*l"
             if not line then
-				if not lastdumped then
-					lastdumped = true
-					return lineold, which_locationold,loc_num_realold
-				else
-					return nil
-				end
-			end
-			if #line==0 then --nothing on emptyline
-			elseif not line:match("%S") then --nothing if only spaces
+                if not lastdumped then
+                    lastdumped = true
+                    return lineold, which_locationold,loc_num_realold
+                else
+                    return nil
+                end
+            end
+            if #line==0 then --nothing on emptyline
+            elseif not line:match("%S") then --nothing if only spaces
             elseif line:sub(1,1) == "#" then
                 -- Is this a location pragma?
                 local loc_num_t,location_match = line:match(location_re)
@@ -232,45 +232,45 @@ local function location(file,locpathT)
                     for i,path_re in ipairs(path_reT) do
                         if location_match:match(path_re) then 
                             in_location = true;
-							loc_num = loc_num_t
-							loc_num_incr = 0
+                            loc_num = loc_num_t
+                            loc_num_incr = 0
                             which_location = locpathT[i]
                             break 
                         end
                     end
                 end
             elseif in_location then
-				local loc_num_real = loc_num + loc_num_incr
-				loc_num_incr = loc_num_incr + 1
-				if loc_num_realold and loc_num_realold < loc_num_real then
-					--old line complete
-					local lineR,which_locationR,loc_num_realR = lineold, which_locationold,loc_num_realold
-					lineold, which_locationold,loc_num_realold = line,which_location,loc_num_real
-					return lineR,which_locationR,loc_num_realR
-				else
-					lineold=lineold..line
-					which_locationold,loc_num_realold = which_location,loc_num_real
+                local loc_num_real = loc_num + loc_num_incr
+                loc_num_incr = loc_num_incr + 1
+                if loc_num_realold and loc_num_realold < loc_num_real then
+                    --old line complete
+                    local lineR,which_locationR,loc_num_realR = lineold, which_locationold,loc_num_realold
+                    lineold, which_locationold,loc_num_realold = line,which_location,loc_num_real
+                    return lineR,which_locationR,loc_num_realR
+                else
+                    lineold=lineold..line
+                    which_locationold,loc_num_realold = which_location,loc_num_real
                 --return line,loc_num_real, which_location
-				end
+                end
             end
         until false --forever
     end
     return location_it
 end
 local function copyfile(src,dst,blocksize)
-	blocksize = blocksize or 1024*4
-	print( "copyfile", src, dst)
-	local srcf, err = io.open(src,"rb")
-	if not srcf then error(err) end
-	local dstf, err = io.open(dst,"wb")
-	if not dstf then error(err) end
-	while true do
-		local data = srcf:read(blocksize)
-		if not data then break end
-		dstf:write(data)
-	end
-	srcf:close()
-	dstf:close()
+    blocksize = blocksize or 1024*4
+    print( "copyfile", src, dst)
+    local srcf, err = io.open(src,"rb")
+    if not srcf then error(err) end
+    local dstf, err = io.open(dst,"wb")
+    if not dstf then error(err) end
+    while true do
+        local data = srcf:read(blocksize)
+        if not data then break end
+        dstf:write(data)
+    end
+    srcf:close()
+    dstf:close()
 end
 ------serializeTable("anyname",table) gives a string that recreates the table with dofile(generated_string)
 local function serializeTable(name, value, saved)
@@ -383,9 +383,9 @@ local function struct_parser()
     
     local in_functionst = false
     local structcdefs = {}
-	local ImVector_templates = {}
+    local ImVector_templates = {}
     local STP = {}
-	STP.ImVector_templates = ImVector_templates
+    STP.ImVector_templates = ImVector_templates
     STP.lines = structcdefs
     function STP.insert(line,comment)
     
@@ -397,7 +397,7 @@ local function struct_parser()
         
         --if in_function discard
         if in_functionst then 
-			--table.insert(structcdefs,"en function:"..line) --debug
+            --table.insert(structcdefs,"en function:"..line) --debug
             if line:match(function_closing_re) then
                 in_functionst = false
                 --print("in function:",line)
@@ -407,7 +407,7 @@ local function struct_parser()
 
         if (line:match(function_re) or line:match(operator_re)) and not line:match("typedef.*%b().*%b().*") 
         and not line:match(functype_re) then
-			--table.insert(structcdefs,"function test2:"..line) --debug
+            --table.insert(structcdefs,"function test2:"..line) --debug
             if not line:match(function_closed_re) then
                 --print("match:",line)
                 in_functionst = true
@@ -418,15 +418,15 @@ local function struct_parser()
             --nothing
         else
             local linea = line:gsub("%S+",{class="struct",mutable=""})
-			local template = linea:match("ImVector<(.+)>")
+            local template = linea:match("ImVector<(.+)>")
             if template then
-				local te = template:gsub("%s","_")
-				te = te:gsub("%*","Ptr")
+                local te = template:gsub("%s","_")
+                te = te:gsub("%*","Ptr")
                 ImVector_templates[template] = true
-				linea = linea:gsub("(%b<>)","_"..te) --comment template parameters
+                linea = linea:gsub("(%b<>)","_"..te) --comment template parameters
             end
             --linea = linea:gsub("(%b<>)","/*%1*/") --comment template parameters
-			--linea = linea:gsub("<([%w_]+)>","_%1") --ImVector expand templates
+            --linea = linea:gsub("<([%w_]+)>","_%1") --ImVector expand templates
             table.insert(structcdefs,linea..comment)
         end
         return 
@@ -511,7 +511,7 @@ end
 local function func_parser()
     local function_closing_re = "}"
     --local function_re = "(%a*%w+%b())" --"(%a*%w+%s+%w+%b())"
-	local function_re = "(%a*[%w%[%]]+%s*%b())"
+    local function_re = "(%a*[%w%[%]]+%s*%b())"
     local function_closed_re = "[;}]$"
     local namespace_re = "namespace ([^%s]+)"
     local namespace_closing_re = "^}"
@@ -521,7 +521,7 @@ local function func_parser()
     local functype_re = "^%s*[%w%s]+(%(%*)[%w_]+(%)%([^%(%)]*%))"
     
     local in_function = false
-	local line_in_function 
+    local line_in_function 
     local in_namespace = false
     local cdefs = {}
     local structnames = {}
@@ -541,7 +541,7 @@ local function func_parser()
         local lineorig = line
         if line:match"template" then return end
         line = line:gsub("%S+",{class="struct",mutable="",inline=""}) --class -> struct
-		line = clean_spaces(line)
+        line = clean_spaces(line)
         
         if in_function then 
             if line:match(function_closing_re) then
@@ -552,7 +552,7 @@ local function func_parser()
         if line:match(function_re) and not line:match("typedef.*%b().*%b().*") then
             if not line:match(function_closed_re) then
                 in_function = true
-				line_in_function = lineorig
+                line_in_function = lineorig
             end
         end
         if line:match(namespace_re) then
@@ -608,8 +608,8 @@ local function func_parser()
                 
                 local template = argscsinpars:match("ImVector<(.+)>")
                 if template then
-					--template = template:gsub("%s","_")
-					--template = template:gsub("%*","Ptr")
+                    --template = template:gsub("%s","_")
+                    --template = template:gsub("%*","Ptr")
                     ImVector_templates[template] = true
                 end
                 
@@ -646,25 +646,25 @@ local function func_parser()
                             type,name = arg:match("(.+)%s([^%s]+)")
                         end
                         if not type or not name then 
-							print("failure arg detection",funcname,type,name,argscsinpars,arg)
-							print(lineorig)
-							print(line_in_function)
-						else
-							--float name[2] to float[2] name
-							local siz = name:match("(%[%d*%])")
-							if siz then
-								type = type..siz
-								name = name:gsub("(%[%d*%])","")
-							end
-						end
+                            print("failure arg detection",funcname,type,name,argscsinpars,arg)
+                            print(lineorig)
+                            print(line_in_function)
+                        else
+                            --float name[2] to float[2] name
+                            local siz = name:match("(%[%d*%])")
+                            if siz then
+                                type = type..siz
+                                name = name:gsub("(%[%d*%])","")
+                            end
+                        end
                     end
                     table.insert(argsArr,{type=type,name=name,ret=retf,signature=sigf})
                     if arg:match("&") and not arg:match("const") then
-						--only post error if not manual
-						local cname = getcimguiname(stname,funcname)
-						if not cimgui_manuals[cname] then
-							print("reference to no const arg in",funcname,argscsinpars)
-						end
+                        --only post error if not manual
+                        local cname = getcimguiname(stname,funcname)
+                        if not cimgui_manuals[cname] then
+                            print("reference to no const arg in",funcname,argscsinpars)
+                        end
                     end
                 end
                 argscsinpars = argscsinpars:gsub("&","")
@@ -710,15 +710,15 @@ local function func_parser()
                 defT.location = locat
                 defT.comment = comment
                 defT.argsT = argsArr
-				if get_manuals(defT) then
-					defT.manual = true
-				end
+                if get_manuals(defT) then
+                    defT.manual = true
+                end
                 if ret then
                     defT.ret = clean_spaces(ret:gsub("&","*"))
                     defT.retref = ret:match("&")
-					-- if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
-						-- defT.ret = defT.ret.."_Simple"
-					-- end
+                    -- if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
+                        -- defT.ret = defT.ret.."_Simple"
+                    -- end
                 end
                 defsT[cimguiname][signature] = defT
             end
@@ -767,65 +767,103 @@ local function func_parser()
     end
     return FP
 end
-
+local function ADDdestructors(FP)
+    local defsT = FP.defsT
+    local newcdefs = {}
+    --TODO add constructor = true
+    for numcdef,t in ipairs(FP.cdefs) do
+        newcdefs[#newcdefs+1] = t
+        if t.cimguiname then
+            local defT = defsT[t.cimguiname]
+            --local defT = cimf[t.signature]
+        --for fname,defT in pairs(FP.defsT) do
+        if not defT[1].ret and not defT[1].constructor then --if constructor not processed
+			if defT[1].funcname:match("~") then
+				defsT[t.cimguiname] = nil --clear destructor
+				newcdefs[#newcdefs] = nil
+			else
+            for j,cons in ipairs(defT) do
+                cons.constructor = true
+            end
+            assert(defT[1].stname==defT[1].funcname)
+            local def = {}
+            def.stname = defT[1].stname
+            def.ret = "void"
+            def.ov_cimguiname = def.stname.."_destroy"
+			def.cimguiname = def.ov_cimguiname
+            def.destructor = true
+            def.args = "("..def.stname.."* self)"
+            def.call_args = "(self)"
+            def.signature = "("..def.stname.."*)"
+			def.defaults = {}
+            def.argsT = {{type=def.stname.."*",name="self"}}
+            defsT[def.ov_cimguiname] = {def}
+            defsT[def.ov_cimguiname][def.signature] = def
+            newcdefs[#newcdefs+1]={stname=def.stname,funcname=def.ov_cimguiname,args=def.args,signature=def.signature,cimguiname=def.cimguiname,call_args=def.call_args,ret =def.ret}
+			end
+        end
+		end
+    end
+    FP.cdefs = newcdefs
+end
 local function ADDnonUDT(FP)
-	--for cimguiname,defs in pairs(defsT) do
-	--for i,defT in ipairs(defs) do
-	local defsT = FP.defsT
-	local newcdefs = {}
-	for numcdef,t in ipairs(FP.cdefs) do
+    --for cimguiname,defs in pairs(defsT) do
+    --for i,defT in ipairs(defs) do
+    local defsT = FP.defsT
+    local newcdefs = {}
+    for numcdef,t in ipairs(FP.cdefs) do
         if t.cimguiname then
         local cimf = defsT[t.cimguiname]
         local defT = cimf[t.signature]
-		--if UDT return generate nonUDT version
-		if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
-			--passing as a pointer arg
-			local defT2 = {}
-			--first strings
-			for k,v in pairs(defT) do
-				defT2[k] = v
-			end
-			--then argsT table
-			defT2.argsT = {{type=defT.ret.."*",name="pOut"}}
-			for k,v in ipairs(defT.argsT) do
-				table.insert(defT2.argsT,{type=v.type,name=v.name})
-			end
-			local comma = (#defT.argsT > 0) and "," or ""
-			defT2.args = "("..defT.ret.." *pOut"..comma..defT.args:sub(2)
-			defT2.ret = "void"
-			defT2.ov_cimguiname = (defT2.ov_cimguiname or defT2.cimguiname).."_nonUDT"
-			defT2.nonUDT = 1
-			defT2.retref = nil
-			defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT2
-			defsT[t.cimguiname][t.signature.."nonUDT"] = defT2
-			table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret,comment=comment})
-			--converting to Simple type----------------------------------------------------
-			local defT3 = {}
-			--first strings
-			for k,v in pairs(defT) do
-				defT3[k] = v
-			end
-			--then argsT table
-			defT3.argsT = {}
-			for k,v in ipairs(defT.argsT) do
-				table.insert(defT3.argsT,{type=v.type,name=v.name})
-			end
-			local comma = (#defT.argsT > 0) and "," or ""
-			--defT3.args = "("..defT.ret.." *pOut"..comma..defT.args:sub(2)
-			defT3.ret = defT.ret.."_Simple"
-			defT3.retorig = defT.ret
-			defT3.ov_cimguiname = (defT3.ov_cimguiname or defT3.cimguiname).."_nonUDT2"
-			defT3.nonUDT = 2
-			defT3.retref = nil
-			defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT3
-			defsT[t.cimguiname][t.signature.."nonUDT2"] = defT3
-			table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT2",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret,comment=comment})
-		end
-		end
-	end
-	for i,v in ipairs(newcdefs) do
-		table.insert(FP.cdefs,v)
-	end
+        --if UDT return generate nonUDT version
+        if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
+            --passing as a pointer arg
+            local defT2 = {}
+            --first strings
+            for k,v in pairs(defT) do
+                defT2[k] = v
+            end
+            --then argsT table
+            defT2.argsT = {{type=defT.ret.."*",name="pOut"}}
+            for k,v in ipairs(defT.argsT) do
+                table.insert(defT2.argsT,{type=v.type,name=v.name})
+            end
+            local comma = (#defT.argsT > 0) and "," or ""
+            defT2.args = "("..defT.ret.." *pOut"..comma..defT.args:sub(2)
+            defT2.ret = "void"
+            defT2.ov_cimguiname = (defT2.ov_cimguiname or defT2.cimguiname).."_nonUDT"
+            defT2.nonUDT = 1
+            defT2.retref = nil
+            defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT2
+            defsT[t.cimguiname][t.signature.."nonUDT"] = defT2
+            table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret,comment=comment})
+            --converting to Simple type----------------------------------------------------
+            local defT3 = {}
+            --first strings
+            for k,v in pairs(defT) do
+                defT3[k] = v
+            end
+            --then argsT table
+            defT3.argsT = {}
+            for k,v in ipairs(defT.argsT) do
+                table.insert(defT3.argsT,{type=v.type,name=v.name})
+            end
+            local comma = (#defT.argsT > 0) and "," or ""
+            --defT3.args = "("..defT.ret.." *pOut"..comma..defT.args:sub(2)
+            defT3.ret = defT.ret.."_Simple"
+            defT3.retorig = defT.ret
+            defT3.ov_cimguiname = (defT3.ov_cimguiname or defT3.cimguiname).."_nonUDT2"
+            defT3.nonUDT = 2
+            defT3.retref = nil
+            defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT3
+            defsT[t.cimguiname][t.signature.."nonUDT2"] = defT3
+            table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT2",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret,comment=comment})
+        end
+        end
+    end
+    for i,v in ipairs(newcdefs) do
+        table.insert(FP.cdefs,v)
+    end
 end
 
 local function gen_structs_and_enums_table(cdefs)
@@ -893,11 +931,11 @@ local function gen_structs_and_enums_table(cdefs)
         
         if (#enumnames > 0) then
             assert(#structnames==0,"enum in struct")
-			-- if #structnames~=0 then
-				-- print(line,#line)
-				-- print(linecom,#linecom)
-				-- error"enuminstruct"
-			-- end
+            -- if #structnames~=0 then
+                -- print(line,#line)
+                -- print(linecom,#linecom)
+                -- error"enuminstruct"
+            -- end
             if line:match(struct_closing_re) and not line:match(struct_op_close_re) then
                 enumnames[#enumnames] = nil
                 break
@@ -910,7 +948,7 @@ local function gen_structs_and_enums_table(cdefs)
                     table.insert(outtab.enums[enumnames[#enumnames]],{name=name,value=value})
                 else --increment by one
                     local name = line:match("%s*([^,]+)")
-					local enum_table = outtab.enums[enumnames[#enumnames]]
+                    local enum_table = outtab.enums[enumnames[#enumnames]]
                     local value = enum_table[#enum_table] and (enum_table[#enum_table].value + 1) or 0
                     table.insert(outtab.enums[enumnames[#enumnames]],{name=name,value=value})
                 end
@@ -935,14 +973,14 @@ local function gen_structs_and_enums_table(cdefs)
                 end
                 --split type name1,name2; in several lines
                 local typen,rest = line:match("([^,]+)%s(%S+[,;])")
-				--local template_type = typen:match("/%*<(.+)>%*/")
-				--if template_type then typen = typen:match("(.+)/%*") end
-				local template_type = typen:match("ImVector_(.+)")
-				if template_type then 
-					typen = "ImVector"
-					template_type = template_type:gsub("_"," ")
-					template_type = template_type:gsub("Ptr","%*")
-				end
+                --local template_type = typen:match("/%*<(.+)>%*/")
+                --if template_type then typen = typen:match("(.+)/%*") end
+                local template_type = typen:match("ImVector_(.+)")
+                if template_type then 
+                    typen = "ImVector"
+                    template_type = template_type:gsub("_"," ")
+                    template_type = template_type:gsub("Ptr","%*")
+                end
                 for name in rest:gmatch("([^%s,;]+)%s?[,;]") do
                     table.insert(outtab.structs[structnames[#structnames]],{type=typen,template_type=template_type,name=name})
                 end
@@ -998,14 +1036,14 @@ local function gen_structs_and_enums_table(cdefs)
 end
 
 local function generate_templates(code,templates,typedefs)
-	for k,v in pairs(templates) do
-	--[[typedef struct ImVector{int Size;int Capacity;void* Data;} ImVector;]]
-		local te = k:gsub("%s","_")
-		te = te:gsub("%*","Ptr")
-		--table.insert(code,"typedef struct ImVector_"..te.." {int Size;int Capacity;"..k.."* Data;} ImVector_"..te..";\n")
-		table.insert(code,"typedef struct ImVector_"..te.." {int Size;int Capacity;"..k.."* Data;} ImVector_"..te..";\n")
-		--table.insert(typedefs,"typedef struct ImVector_"..te.." ImVector_"..te..";\n")
-	end
+    for k,v in pairs(templates) do
+    --[[typedef struct ImVector{int Size;int Capacity;void* Data;} ImVector;]]
+        local te = k:gsub("%s","_")
+        te = te:gsub("%*","Ptr")
+        --table.insert(code,"typedef struct ImVector_"..te.." {int Size;int Capacity;"..k.."* Data;} ImVector_"..te..";\n")
+        table.insert(code,"typedef struct ImVector_"..te.." {int Size;int Capacity;"..k.."* Data;} ImVector_"..te..";\n")
+        --table.insert(typedefs,"typedef struct ImVector_"..te.." ImVector_"..te..";\n")
+    end
 end
 
 local function gen_structs_and_enums(cdefs,templates)
@@ -1020,7 +1058,7 @@ local function gen_structs_and_enums(cdefs,templates)
     local innerstructs = {}
     local typedefs_table = {}
     local typedefs_dict = {}
-	local linetypedefs = 1 --math.huge
+    local linetypedefs = 1 --math.huge
     local outtab = {}
     -- Output the file
     --table.insert(outtab,"/////////////// BEGIN AUTOGENERATED SEGMENT\n")
@@ -1050,7 +1088,7 @@ local function gen_structs_and_enums(cdefs,templates)
         if structnames[#structnames] == "ImVector" then
             if line:match(struct_closing_re) then
                 table.insert(outtab,[[typedef struct ImVector{int Size;int Capacity;void* Data;} ImVector;]].."\n")
-				generate_templates(outtab,templates,typedefs_table)
+                generate_templates(outtab,templates,typedefs_table)
                 structnames[#structnames] = nil
             end
             break -- dont write
@@ -1064,11 +1102,11 @@ local function gen_structs_and_enums(cdefs,templates)
         end
         
         if #structnames < 2 then -- not inner
-			if line:match("typedef") and line:match("ImDrawIdx") then --save typedefs of ImDrawIdx
-				table.insert(typedefs_table,line..";\n")
-				--linetypedefs = math.min(linetypedefs,#outtab)
+            if line:match("typedef") and line:match("ImDrawIdx") then --save typedefs of ImDrawIdx
+                table.insert(typedefs_table,line..";\n")
+                --linetypedefs = math.min(linetypedefs,#outtab)
                 break
-			end
+            end
             if (#structnames > 0) then
                 if line:match("typedef") then --dont allow inner typedefs
                     break --already saved
@@ -1080,7 +1118,7 @@ local function gen_structs_and_enums(cdefs,templates)
             local struct_closed_name = line:match(struct_closed_re)
             if struct_closed_name then
                 table.insert(typedefs_table,"typedef struct "..struct_closed_name.." "..struct_closed_name..";\n")
-				--linetypedefs = math.min(linetypedefs,#outtab)
+                --linetypedefs = math.min(linetypedefs,#outtab)
                 typedefs_dict[struct_closed_name] = "struct "..struct_closed_name
             end
         end
@@ -1097,7 +1135,7 @@ local function gen_structs_and_enums(cdefs,templates)
                     local structname = structnames[#structnames]
                     --st[#st + 1] = string.format("typedef struct %s %s;\n",structname,structname)
                     table.insert(typedefs_table,string.format("typedef struct %s %s;\n",structname,structname))
-					--linetypedefs = math.min(linetypedefs,#outtab)
+                    --linetypedefs = math.min(linetypedefs,#outtab)
                     typedefs_dict[structname] = "struct "..structname
                     structnames[#structnames] = nil
                 end
@@ -1105,7 +1143,7 @@ local function gen_structs_and_enums(cdefs,templates)
                 local structname = structnames[#structnames]
                 --table.insert(outtab,"typedef struct "..structname.." "..structname..";\n")
                 table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
-				--linetypedefs = math.min(linetypedefs,#outtab)
+                --linetypedefs = math.min(linetypedefs,#outtab)
                 typedefs_dict[structname] = "struct "..structname
                 structnames[#structnames] = nil
             end
@@ -1177,33 +1215,26 @@ local function func_header_generate(FP)
         if t.cimguiname then
         local cimf = FP.defsT[t.cimguiname]
         local def = cimf[t.signature]
+		assert(def,t.signature..t.cimguiname)
         local manual = get_manuals(def)
         if not manual then
-			local addcoment = def.comment or ""
-			local empty = def.args:match("^%(%)") --no args
-			if def.ret then --not constructor
-				if def.stname == "ImGui" or def.stname == "" then --ImGui namespace or top level
-					table.insert(outtab,"CIMGUI_API "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..(empty and "(void)" or def.args)..";"..addcoment.."\n")
-				else
-					--local imgui_stname = embeded_structs[def.stname] or def.stname
-					local imgui_stname = def.stname
-					local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
-					table.insert(outtab,"CIMGUI_API "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args..";"..addcoment.."\n")
-				end
-			else --constructor
-				assert(def.stname ~= "ImGui" and def.stname ~= "","constructor without struct")
-				if not def.funcname:match("~") then --constructor
-					table.insert(outtab,"CIMGUI_API "..def.stname.."* "..(def.ov_cimguiname or def.cimguiname)..(empty and "(void)" or def.args)..";"..addcoment.."\n")
-					if empty then
-						--make destructor also only once
-						local args = "("..def.stname.."* self)"
-						local fname = def.stname.."_destroy" 
-						table.insert(outtab,"CIMGUI_API void "..fname..args..";"..addcoment.."\n")
-					end
-				else --destructor
-				    --already done
-				end
-			end
+            local addcoment = def.comment or ""
+            local empty = def.args:match("^%(%)") --no args
+            if def.constructor then
+                assert(def.stname ~= "ImGui" and def.stname ~= "","constructor without struct")
+                table.insert(outtab,"CIMGUI_API "..def.stname.."* "..(def.ov_cimguiname or def.cimguiname)..(empty and "(void)" or def.args)..";"..addcoment.."\n")
+            elseif def.destructor then
+                table.insert(outtab,"CIMGUI_API void "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
+            else --not constructor
+                if def.stname == "ImGui" or def.stname == "" then --ImGui namespace or top level
+                    table.insert(outtab,"CIMGUI_API "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..(empty and "(void)" or def.args)..";"..addcoment.."\n")
+                else
+                    --local imgui_stname = embeded_structs[def.stname] or def.stname
+                    local imgui_stname = def.stname
+                    local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
+                    table.insert(outtab,"CIMGUI_API "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args..";"..addcoment.."\n")
+                end
+            end 
         end
         else --not cimguiname
             table.insert(outtab,t.comment:gsub("%%","%%%%").."\n")-- %% substitution for gsub
@@ -1214,6 +1245,90 @@ local function func_header_generate(FP)
     cfuncsstr = cfuncsstr:gsub("\n+","\n") --several empty lines to one empty line
     return cfuncsstr
 end
+local function ImGui_f_implementation(outtab,def)
+    local ptret = def.retref and "&" or ""
+    if def.isvararg then
+        local call_args = def.call_args:gsub("%.%.%.","args")
+        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
+        table.insert(outtab,"{\n")
+        table.insert(outtab,"    va_list args;\n")
+        table.insert(outtab,"    va_start(args, fmt);\n")
+        if def.ret~="void" then
+            table.insert(outtab,"    "..def.ret.." ret = ImGui::"..def.funcname.."V"..call_args..";\n")
+        else
+            table.insert(outtab,"    ImGui::"..def.funcname.."V"..call_args..";\n")
+        end
+        table.insert(outtab,"    va_end(args);\n")
+        if def.ret~="void" then
+            table.insert(outtab,"    return ret;\n")
+        end
+        --cppfile:write("    return ImGui::",def.funcname,def.call_args,";\n")
+        table.insert(outtab,"}\n")
+    elseif def.nonUDT then
+        if def.nonUDT == 1 then
+        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
+        table.insert(outtab,"{\n")
+        table.insert(outtab,"    *pOut = ImGui::"..def.funcname..def.call_args..";\n")
+        table.insert(outtab,"}\n")
+        else --nonUDT==2
+        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
+        table.insert(outtab,"{\n")
+        table.insert(outtab,"    "..def.retorig.." ret = ImGui::"..def.funcname..def.call_args..";\n")
+        table.insert(outtab,"    "..def.ret.." ret2 = "..def.retorig.."ToSimple(ret);\n")
+        table.insert(outtab,"    return ret2;\n")
+        table.insert(outtab,"}\n")
+        end
+    else --standard ImGui
+        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
+        table.insert(outtab,"{\n")
+        table.insert(outtab,"    return "..ptret.."ImGui::"..def.funcname..def.call_args..";\n")
+        table.insert(outtab,"}\n")
+    end
+end
+local function struct_f_implementation(outtab,def)
+	local empty = def.args:match("^%(%)") --no args
+	local ptret = def.retref and "&" or ""
+    --local imgui_stname = embeded_structs[def.stname] or def.stname
+    local imgui_stname = def.stname
+    local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
+    if def.isvararg then
+        local call_args = def.call_args:gsub("%.%.%.","args")
+        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
+        table.insert(outtab,"{\n")
+        table.insert(outtab,"    va_list args;\n")
+        table.insert(outtab,"    va_start(args, fmt);\n")
+        if def.ret~="void" then
+            table.insert(outtab,"    "..def.ret.." ret = self->"..def.funcname.."V"..call_args..";\n")
+        else
+            table.insert(outtab,"    self->"..def.funcname.."V"..call_args..";\n")
+        end
+        table.insert(outtab,"    va_end(args);\n")
+        if def.ret~="void" then
+            table.insert(outtab,"    return ret;\n")
+        end
+        --cppfile:write("    return self->",def.funcname,def.call_args,";\n")
+        table.insert(outtab,"}\n")
+    elseif def.nonUDT then
+        if def.nonUDT == 1 then
+        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
+        table.insert(outtab,"{\n")
+        table.insert(outtab,"    *pOut = self->"..def.funcname..def.call_args..";\n")
+        table.insert(outtab,"}\n")
+        else --nonUDT==2
+        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
+        table.insert(outtab,"{\n")
+        table.insert(outtab,"    "..def.retorig.." ret = self->"..def.funcname..def.call_args..";\n")
+        table.insert(outtab,"    "..def.ret.." ret2 = "..def.retorig.."ToSimple(ret);\n")
+        table.insert(outtab,"    return ret2;\n")
+        table.insert(outtab,"}\n")
+        end
+    else --standard struct
+        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
+        table.insert(outtab,"{\n")
+        table.insert(outtab,"    return "..ptret.."self->"..def.funcname..def.call_args..";\n")
+        table.insert(outtab,"}\n")
+    end
+end
 local function func_implementation(FP)
 
     local outtab = {}
@@ -1222,198 +1337,121 @@ local function func_implementation(FP)
         if not t.cimguiname then break end
         local cimf = FP.defsT[t.cimguiname]
         local def = cimf[t.signature]
+		assert(def)
         local manual = get_manuals(def)
-        if not manual and def.ret and def.stname~="" then --not constructor or manual or top level
-            local ptret = def.retref and "&" or ""
-            -- local castret = def.ret:gsub("[^%s]+",function(x)
-                    -- local y = x:gsub("%*","")
-                    -- local typ = embeded_structs[y]
-                    -- if typ then return "("..x..")" else return "" end
-                -- end)
-                local castret = ""
-            if def.stname == "ImGui" then
-                if def.isvararg then
-                    local call_args = def.call_args:gsub("%.%.%.","args")
-                    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
-                    table.insert(outtab,"{\n")
-                    table.insert(outtab,"    va_list args;\n")
-                    table.insert(outtab,"    va_start(args, fmt);\n")
-                    if def.ret~="void" then
-                        table.insert(outtab,"    "..def.ret.." ret = ImGui::"..def.funcname.."V"..call_args..";\n")
-                    else
-                        table.insert(outtab,"    ImGui::"..def.funcname.."V"..call_args..";\n")
-                    end
-                    table.insert(outtab,"    va_end(args);\n")
-                    if def.ret~="void" then
-                        table.insert(outtab,"    return ret;\n")
-                    end
-                    --cppfile:write("    return ImGui::",def.funcname,def.call_args,";\n")
-                    table.insert(outtab,"}\n")
-                elseif def.nonUDT then
-					if def.nonUDT == 1 then
-                    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
-                    table.insert(outtab,"{\n")
-                    table.insert(outtab,"    *pOut = ImGui::"..def.funcname..def.call_args..";\n")
-                    table.insert(outtab,"}\n")
-					else --nonUDT==2
-					table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
-                    table.insert(outtab,"{\n")
-                    table.insert(outtab,"    "..def.retorig.." ret = ImGui::"..def.funcname..def.call_args..";\n")
-					table.insert(outtab,"    "..def.ret.." ret2 = "..def.retorig.."ToSimple(ret);\n")
-					table.insert(outtab,"    return ret2;\n")
-                    table.insert(outtab,"}\n")
-					end
-                else --standard ImGui
-                    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
-                    table.insert(outtab,"{\n")
-                    table.insert(outtab,"    return "..castret..ptret.."ImGui::"..def.funcname..def.call_args..";\n")
-                    table.insert(outtab,"}\n")
-                end
-            else -- stname
-                local empty = def.args:match("^%(%)") --no args
-                --local imgui_stname = embeded_structs[def.stname] or def.stname
-                local imgui_stname = def.stname
-                local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
-                if def.isvararg then
-                    local call_args = def.call_args:gsub("%.%.%.","args")
-                    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
-                    table.insert(outtab,"{\n")
-                    table.insert(outtab,"    va_list args;\n")
-                    table.insert(outtab,"    va_start(args, fmt);\n")
-                    if def.ret~="void" then
-                        table.insert(outtab,"    "..def.ret.." ret = self->"..def.funcname.."V"..call_args..";\n")
-                    else
-                        table.insert(outtab,"    self->"..def.funcname.."V"..call_args..";\n")
-                    end
-                    table.insert(outtab,"    va_end(args);\n")
-                    if def.ret~="void" then
-                        table.insert(outtab,"    return ret;\n")
-                    end
-                    --cppfile:write("    return self->",def.funcname,def.call_args,";\n")
-                    table.insert(outtab,"}\n")
-                elseif def.nonUDT then
-					if def.nonUDT == 1 then
-                    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
-                    table.insert(outtab,"{\n")
-                    table.insert(outtab,"    *pOut = self->"..def.funcname..def.call_args..";\n")
-                    table.insert(outtab,"}\n")
-					else --nonUDT==2
-					table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
-                    table.insert(outtab,"{\n")
-					table.insert(outtab,"    "..def.retorig.." ret = self->"..def.funcname..def.call_args..";\n")
-					table.insert(outtab,"    "..def.ret.." ret2 = "..def.retorig.."ToSimple(ret);\n")
-					table.insert(outtab,"    return ret2;\n")
-                    table.insert(outtab,"}\n")
-					end
-                else --standard struct
-                    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
-                    table.insert(outtab,"{\n")
-                    table.insert(outtab,"    return "..castret..ptret.."self->"..def.funcname..def.call_args..";\n")
-                    table.insert(outtab,"}\n")
-                end
-            end
-		elseif not manual and not def.ret then --constructor and destructors
-			assert(def.stname ~= "ImGui" and def.stname ~= "","constructor without struct")
-			local empty = def.args:match("^%(%)") --no args
-			if not def.funcname:match("~") then --constructor
+        if not manual then 
+            if def.constructor then
+				assert(def.stname ~= "ImGui" and def.stname ~= "","constructor without struct")
+				local empty = def.args:match("^%(%)") --no args
 				table.insert(outtab,"CIMGUI_API "..def.stname.."* "..(def.ov_cimguiname or def.cimguiname)..(empty and "(void)" or def.args).."\n")
-				table.insert(outtab,"{\n")
-				table.insert(outtab,"    return IM_NEW("..def.stname..")"..def.call_args..";\n")
-				table.insert(outtab,"}\n")
-				if empty then
-					--do destructor only once
-					local args = "("..def.stname.."* self)"
-					local fname = def.stname.."_destroy" 
-					table.insert(outtab,"CIMGUI_API void "..fname..args.."\n")
-					table.insert(outtab,"{\n")
-					table.insert(outtab,"    IM_DELETE(self);\n")
-					table.insert(outtab,"}\n")
-				end
-			else --destructor
-			    --already done
-			end
+                table.insert(outtab,"{\n")
+                table.insert(outtab,"    return IM_NEW("..def.stname..")"..def.call_args..";\n")
+                table.insert(outtab,"}\n")
+            elseif def.destructor then
+				local args = "("..def.stname.."* self)"
+                local fname = def.stname.."_destroy" 
+                table.insert(outtab,"CIMGUI_API void "..fname..args.."\n")
+                table.insert(outtab,"{\n")
+                table.insert(outtab,"    IM_DELETE(self);\n")
+                table.insert(outtab,"}\n")
+            elseif def.stname == "ImGui" then
+                ImGui_f_implementation(outtab,def)
+            else -- stname
+                struct_f_implementation(outtab,def)
+            end
         end
         until true
     end
-    --cppfile:close()
     return table.concat(outtab)
 end
 --only basic ending
 local c_types = {
-	["char"]=true,
-	["int"]=true,
-	["float"]=true,
-	["double"]=true,
-	["short"]=true,
-	["long"]=true,
-	["signed"]=true,
-	["unsigned"]=true,
-	["size_t"]=true,
-	["ptrdiff_t"]=true,
+    ["char"]=true,
+    ["int"]=true,
+    ["float"]=true,
+    ["double"]=true,
+    ["short"]=true,
+    ["long"]=true,
+    ["signed"]=true,
+    ["unsigned"]=true,
+    ["size_t"]=true,
+    ["ptrdiff_t"]=true,
 }
 local function check_arg_detection(fdefs,typedefs)
-	print"-----------------check arg detection---------------------------"
-	for k,defT in pairs(fdefs) do
-		for i,def in ipairs(defT) do
-			for j,arg in ipairs(def.argsT) do
-				--check name is not type, which happens in declaration without name
-				if arg.name=="*" or not arg.type or not arg.name or c_types[arg.name] or typedefs[arg.name] then
-					print("bad argument name",arg.name, "in",def.funcname,def.args)
-				end
-			end
-		end
-	end
-	print"-----------------end check arg detection-----------------------"
+    print"-----------------check arg detection---------------------------"
+    for k,defT in pairs(fdefs) do
+        for i,def in ipairs(defT) do
+            for j,arg in ipairs(def.argsT) do
+                --check name is not type, which happens in declaration without name
+                if arg.name=="*" or not arg.type or not arg.name or c_types[arg.name] or typedefs[arg.name] then
+                    print("bad argument name",arg.name, "in",def.funcname,def.args)
+                end
+            end
+        end
+    end
+    print"-----------------end check arg detection-----------------------"
 end
 local function get_defines(t)
-	if COMPILER == "cl" then print"can't get defines with cl compiler"; return {} end
-	local pipe,err = io.popen(COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]],"r")
-	local defines = {}
-	while true do
-		local line = pipe:read"*l"
-		if not line then break end
-		local key,value = line:match([[#define%s+(%S+)%s+(.+)]])
-		if not key or not value then 
-			--print(line)
-		else
-			defines[key]=value
-		end
-	end
-	pipe:close()
-	--require"anima.utils"
-	--prtable(defines)
-	--FLT_MAX
-	local ret = {}
-	for i,v in ipairs(t) do
-		local aa = defines[v]
-		while true do
-			local tmp = defines[aa]
-			if not tmp then 
-				break
-			else
-				aa = tmp
-			end
-		end
-		ret[v] = aa
-	end
-	return ret
+    if COMPILER == "cl" then print"can't get defines with cl compiler"; return {} end
+    local pipe,err = io.popen(COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]],"r")
+    local defines = {}
+    while true do
+        local line = pipe:read"*l"
+        if not line then break end
+        local key,value = line:match([[#define%s+(%S+)%s+(.+)]])
+        if not key or not value then 
+            --print(line)
+        else
+            defines[key]=value
+        end
+    end
+    pipe:close()
+    --require"anima.utils"
+    --prtable(defines)
+    --FLT_MAX
+    local ret = {}
+    for i,v in ipairs(t) do
+        local aa = defines[v]
+        while true do
+            local tmp = defines[aa]
+            if not tmp then 
+                break
+            else
+                aa = tmp
+            end
+        end
+        ret[v] = aa
+    end
+    return ret
 end
 --subtitution of FLT_MAX value for FLT_MAX 
 local function set_defines(fdefs)
-	for k,defT in pairs(fdefs) do
-		for i,def in ipairs(defT) do
-			for name,default in pairs(def.defaults) do
-				if default == gdefines.FLT_MAX then
-					def.defaults[name] = "FLT_MAX"
-				end
-			end
-		end
+    for k,defT in pairs(fdefs) do
+        for i,def in ipairs(defT) do
+            for name,default in pairs(def.defaults) do
+                if default == gdefines.FLT_MAX then
+                    def.defaults[name] = "FLT_MAX"
+                end
+            end
+        end
+    end
+end 
+local function DefsByStruct(FP)
+	local structs = {}
+	for fun,defs in pairs(FP.defsT) do
+		local stname = defs[1].stname
+		structs[stname] = structs[stname] or {}
+		table.insert(structs[stname],fun)
 	end
-end   
+	for st,funs in pairs(struct) do
+		struct[st] = table.sort(funs)
+	end
+	FP.defsBystruct = struct
+end  
 --generate cimgui.cpp cimgui.h and auto versions depending on postfix
 local function cimgui_generation(postfix,STP,FP)
-	--get all ImVector templates
-	local ImVector_templates = mergeT(STP.ImVector_templates,FP.ImVector_templates)
+    --get all ImVector templates
+    local ImVector_templates = mergeT(STP.ImVector_templates,FP.ImVector_templates)
     --merge it in cimgui_template.h to cimgui.h
     local hfile = io.open("./cimgui_template.h","r")
     local hstrfile = hfile:read"*a"
@@ -1423,7 +1461,7 @@ local function cimgui_generation(postfix,STP,FP)
     if postfix == "_nopreprocess" then
         cstructsstr = "typedef unsigned short ImDrawIdx;\ntypedef void* ImTextureID;\n"..cstructsstr
     end
-	
+    
     hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
     local cfuncsstr = func_header_generate(FP)
     hstrfile = hstrfile:gsub([[#include "auto_funcs%.h"]],cfuncsstr)
@@ -1450,17 +1488,17 @@ if not pipe then
 end
 local imgui_version
 while true do
-	local line = pipe:read"*l"
-	imgui_version = line:match([[#define%s+IMGUI_VERSION%s+(".+")]])
-	if imgui_version then break end
+    local line = pipe:read"*l"
+    imgui_version = line:match([[#define%s+IMGUI_VERSION%s+(".+")]])
+    if imgui_version then break end
 end
 pipe:close()
 cimgui_header = cimgui_header:gsub("XXX",imgui_version)
 print("IMGUI_VERSION",imgui_version)
 --get some defines----------------------------
 if HAVE_COMPILER then
-	gdefines = get_defines{"IMGUI_VERSION","FLT_MAX"}
-end									
+    gdefines = get_defines{"IMGUI_VERSION","FLT_MAX"}
+end                                 
 
 --generation
 print("------------------generation with "..COMPILER.."------------------------")
@@ -1484,8 +1522,8 @@ local iterator = (HAVE_COMPILER and location) or filelines
 
 for line in iterator(pipe,{"imgui"}) do
     local line, comment = split_comment(line)
-	--line = clean_spaces(line)
-	--comment = ""
+    --line = clean_spaces(line)
+    --comment = ""
     pSTP.insert(line,comment)
     pFP.insert(line,comment)
 end
@@ -1493,6 +1531,8 @@ pipe:close()
 
 local ovstr = pFP:compute_overloads()
 ADDnonUDT(pFP)
+ADDdestructors(pFP)
+--DefsByStruct(pFP)
 save_data("./output/overloads.txt",ovstr)
 typedefs_dict2 = cimgui_generation("",pSTP,pFP)
 --check arg detection failure if no name in function declaration
@@ -1598,14 +1638,14 @@ require"anima.utils"
 print"//constructors------------------------------------------------------------------"
 for i,t in ipairs(pFP.cdefs) do
     if t.cimguiname and not t.ret then
-		local cimf = pFP.defsT[t.cimguiname]
+        local cimf = pFP.defsT[t.cimguiname]
         local def = cimf[t.signature]
-		if not def.ret then
-			print(t.cimguiname,"\t",t.signature,t.ret)
-		else
-			print"constructor error"
-			prtable(def)
-		end
+        if not def.ret then
+            print(t.cimguiname,"\t",t.signature,t.ret)
+        else
+            print"constructor error"
+            prtable(def)
+        end
     end
 end
 print"//-------------------------------------------------------------------------------------"
