@@ -1442,6 +1442,10 @@ CIMGUI_API ImGuiTextFilter* ImGuiTextFilter_ImGuiTextFilter(const char* default_
 {
     return IM_NEW(ImGuiTextFilter)(default_filter);
 }
+CIMGUI_API void ImGuiTextFilter_destroy(ImGuiTextFilter* self)
+{
+    IM_DELETE(self);
+}
 CIMGUI_API bool ImGuiTextFilter_Draw(ImGuiTextFilter* self,const char* label,float width)
 {
     return self->Draw(label,width);
@@ -1533,6 +1537,10 @@ CIMGUI_API void ImGuiTextBuffer_appendfv(ImGuiTextBuffer* self,const char* fmt,v
 CIMGUI_API Pair* Pair_PairInt(ImGuiID _key,int _val_i)
 {
     return IM_NEW(Pair)(_key,_val_i);
+}
+CIMGUI_API void Pair_destroy(Pair* self)
+{
+    IM_DELETE(self);
 }
 CIMGUI_API Pair* Pair_PairFloat(ImGuiID _key,float _val_f)
 {
@@ -1682,6 +1690,10 @@ CIMGUI_API ImGuiListClipper* ImGuiListClipper_ImGuiListClipper(int items_count,f
 {
     return IM_NEW(ImGuiListClipper)(items_count,items_height);
 }
+CIMGUI_API void ImGuiListClipper_destroy(ImGuiListClipper* self)
+{
+    IM_DELETE(self);
+}
 CIMGUI_API bool ImGuiListClipper_Step(ImGuiListClipper* self)
 {
     return self->Step();
@@ -1705,6 +1717,10 @@ CIMGUI_API void ImDrawCmd_destroy(ImDrawCmd* self)
 CIMGUI_API ImDrawList* ImDrawList_ImDrawList(const ImDrawListSharedData* shared_data)
 {
     return IM_NEW(ImDrawList)(shared_data);
+}
+CIMGUI_API void ImDrawList_destroy(ImDrawList* self)
+{
+    IM_DELETE(self);
 }
 CIMGUI_API void ImDrawList_PushClipRect(ImDrawList* self,ImVec2 clip_rect_min,ImVec2 clip_rect_max,bool intersect_with_current_clip_rect)
 {
@@ -2346,7 +2362,7 @@ CIMGUI_API ImVec2_Simple igGetMouseDragDelta_nonUDT2(int button,float lock_thres
     ImVec2_Simple ret2 = ImVec2ToSimple(ret);
     return ret2;
 }
-CIMGUI_API void ImColor_HSV_nonUDT(ImColor* self,ImColor *pOut,float h,float s,float v,float a)
+CIMGUI_API void ImColor_HSV_nonUDT(ImColor *pOut,ImColor* self,float h,float s,float v,float a)
 {
     *pOut = self->HSV(h,s,v,a);
 }
@@ -2356,7 +2372,7 @@ CIMGUI_API ImColor_Simple ImColor_HSV_nonUDT2(ImColor* self,float h,float s,floa
     ImColor_Simple ret2 = ImColorToSimple(ret);
     return ret2;
 }
-CIMGUI_API void ImDrawList_GetClipRectMin_nonUDT(ImDrawList* self,ImVec2 *pOut)
+CIMGUI_API void ImDrawList_GetClipRectMin_nonUDT(ImVec2 *pOut,ImDrawList* self)
 {
     *pOut = self->GetClipRectMin();
 }
@@ -2366,7 +2382,7 @@ CIMGUI_API ImVec2_Simple ImDrawList_GetClipRectMin_nonUDT2(ImDrawList* self)
     ImVec2_Simple ret2 = ImVec2ToSimple(ret);
     return ret2;
 }
-CIMGUI_API void ImDrawList_GetClipRectMax_nonUDT(ImDrawList* self,ImVec2 *pOut)
+CIMGUI_API void ImDrawList_GetClipRectMax_nonUDT(ImVec2 *pOut,ImDrawList* self)
 {
     *pOut = self->GetClipRectMax();
 }
@@ -2376,7 +2392,7 @@ CIMGUI_API ImVec2_Simple ImDrawList_GetClipRectMax_nonUDT2(ImDrawList* self)
     ImVec2_Simple ret2 = ImVec2ToSimple(ret);
     return ret2;
 }
-CIMGUI_API void ImFont_CalcTextSizeA_nonUDT(ImFont* self,ImVec2 *pOut,float size,float max_width,float wrap_width,const char* text_begin,const char* text_end,const char** remaining)
+CIMGUI_API void ImFont_CalcTextSizeA_nonUDT(ImVec2 *pOut,ImFont* self,float size,float max_width,float wrap_width,const char* text_begin,const char* text_end,const char** remaining)
 {
     *pOut = self->CalcTextSizeA(size,max_width,wrap_width,text_begin,text_end,remaining);
 }
