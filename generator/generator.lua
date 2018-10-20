@@ -301,15 +301,28 @@ local function serializeTable(name, value, saved)
             table.insert(string_table,saved[value].."\n")          
         else
             saved[value] = name   -- save name for next time
-            table.insert(string_table, "{}\n")   
+            table.insert(string_table, "{}\n")  
+---[[
             local ordered_keys = {}
             for k,v in pairs(value) do
                 table.insert(ordered_keys,k)
             end
-            table.sort(ordered_keys,function(a,b) return tostring(a)<tostring(b) end)
-            --for k,v in pairs(value) do      -- save its fields
-            for _,k in ipairs(ordered_keys) do
+			local function sorter(a,b)
+				if type(a)==type(b) then 
+					return a<b 
+				elseif type(a)=="number" then
+					return true
+				else
+					assert(type(b)=="number")
+					return false
+				end
+			end
+            table.sort(ordered_keys,sorter)
+			for _,k in ipairs(ordered_keys) do
                 local v = value[k]
+--]]
+           -- for k,v in pairs(value) do      -- save its fields
+
                 local fieldname = string.format("%s[%s]", name,basicSerialize(k))
                 table.insert(string_table, serializeTable(fieldname, v, saved))
             end
@@ -1238,8 +1251,8 @@ local function func_header_generate(FP)
                 else
                     --local imgui_stname = embeded_structs[def.stname] or def.stname
                     local imgui_stname = def.stname
-                    local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
-                    table.insert(outtab,"CIMGUI_API "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args..";"..addcoment.."\n")
+                    --local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
+                    table.insert(outtab,"CIMGUI_API "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args..";"..addcoment.."\n")
                 end
             end 
         end
@@ -1287,8 +1300,8 @@ local function struct_f_implementation(outtab,def)
     local ptret = def.retref and "&" or ""
     --local imgui_stname = embeded_structs[def.stname] or def.stname
     local imgui_stname = def.stname
-    local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
-    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
+    --local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
+    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
     table.insert(outtab,"{\n")
     if def.isvararg then
         local call_args = def.call_args:gsub("%.%.%.","args")
@@ -1435,6 +1448,20 @@ local function DefsByStruct(FP)
     end
     FP.defsBystruct = struct
 end  
+local function AdjustArguments(FP)
+	for fun,defs in pairs(FP.defsT) do
+		--struct function but no constructors
+		if defs[1].stname~="ImGui" and defs[1].stname~="" and defs[1].ret then
+			--print("adjusting",fun)
+			for i,def in ipairs(defs) do
+				local empty = def.args:match("^%(%)") --no args
+				--local ptret = def.retref and "&" or ""
+				def.args = def.args:gsub("^%(","("..def.stname.."* self"..(empty and "" or ","))
+				table.insert(def.argsT,1,{type=def.stname.."*",name="self"})
+			end
+		end
+	end
+end
 --generate cimgui.cpp cimgui.h and auto versions depending on postfix
 local function cimgui_generation(postfix,STP,FP)
     --get all ImVector templates
@@ -1517,6 +1544,7 @@ end
 pipe:close()
 
 local ovstr = pFP:compute_overloads()
+AdjustArguments(pFP)
 ADDnonUDT(pFP)
 ADDdestructors(pFP)
 --DefsByStruct(pFP)
