@@ -301,8 +301,15 @@ local function serializeTable(name, value, saved)
             table.insert(string_table,saved[value].."\n")          
         else
             saved[value] = name   -- save name for next time
-            table.insert(string_table, "{}\n")          
-            for k,v in pairs(value) do      -- save its fields
+            table.insert(string_table, "{}\n")   
+            local ordered_keys = {}
+            for k,v in pairs(value) do
+                table.insert(ordered_keys,k)
+            end
+            table.sort(ordered_keys,function(a,b) return tostring(a)<tostring(b) end)
+            --for k,v in pairs(value) do      -- save its fields
+            for _,k in ipairs(ordered_keys) do
+                local v = value[k]
                 local fieldname = string.format("%s[%s]", name,basicSerialize(k))
                 table.insert(string_table, serializeTable(fieldname, v, saved))
             end
