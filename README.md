@@ -1,6 +1,5 @@
 # cimgui [![Build Status](https://travis-ci.org/sonoro1234/cimgui.svg?branch=master)](https://travis-ci.org/sonoro1234/cimgui)
 
-![sample](screenshot.png)
 
 This is a thin c-api wrapper programmatically generated for the excellent C++ immediate mode gui [Dear ImGui](https://github.com/ocornut/imgui).
 All functions are programmatically wrapped except constructors, destructors and `ImVector`. (Unless someone find a use case for them)
