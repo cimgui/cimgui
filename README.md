@@ -42,12 +42,15 @@ Notes:
   * stname : the name of the struct the function belongs to (may be ImGui if it is top level in ImGui namespace)
   * ov_cimguiname : the overloaded cimgui name (if absent it would be taken from cimguiname)
   * cimguiname : the name without overloading (this should be used if there is not ov_cimguiname)
-  * call_args : a string with the argument names separated by commas
-  * args : the same as above but with types
   * ret : the return type
   * argsT : an array of collections (each one with type: argument type and name: the argument name)
+  * args : a string of argsT concatenated and separated by commas
+  * call_args : a string with the argument names separated by commas for calling imgui function
   * defaults : a collection in which key is argument name and value is the default value.
   * manual : will be true if this function is hand-written (not generated)
+  * isvararg : is setted if some argument is a vararg
+  * constructor : is setted if the function is a constructor for a class
+  * destructor : is setted if the functions is a destructor for a class
   * nonUDT : if present can be 1 or 2 (explained meaning in usage) if return type was a user defined type
 ### structs_and_enums description
 * Is is a collection with two items:
@@ -64,7 +67,7 @@ Notes:
 * use whatever method is in ImGui c++ namespace in the original [imgui.h](https://github.com/ocornut/imgui/blob/master/imgui.h) by prepending `ig`
 * methods have the same parameter list and return values (where possible)
 * functions that belong to a struct have an extra first argument with a pointer to the struct.
-* where a function returns UDT (user defined type) by value some compilers complain so another function with the name `function_name_nonUDT` is generated accepting a pointer to the UDT type as the first argument. (or second argument if it is a struct function)
+* where a function returns UDT (user defined type) by value some compilers complain so another function with the name `function_name_nonUDT` is generated accepting a pointer to the UDT type as the first argument.
 * also is generated `function_name_nonUDT2` which instead of returning the UDT type returns a simple version (without functions) called `UDTType_Simple` (`ImVec2_Simple` for `ImVec2`)
 
 # example bindings based on cimgui
