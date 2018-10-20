@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------
 --script for auto_funcs.h and auto_funcs.cpp generation
---expects Lua 5.1 or luajit
+--expects LuaJIT
 --------------------------------------------------------------------------
 assert(_VERSION=='Lua 5.1',"Must use LuaJIT")
 assert(bit,"Must use LuaJIT")
@@ -997,7 +997,7 @@ local function gen_structs_and_enums_table(cdefs)
                 --if template_type then typen = typen:match("(.+)/%*") end
                 local template_type = typen:match("ImVector_(.+)")
                 if template_type then 
-                    typen = "ImVector"
+                    --typen = "ImVector"
                     template_type = template_type:gsub("_"," ")
                     template_type = template_type:gsub("Ptr","%*")
                 end
