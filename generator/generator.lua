@@ -1254,10 +1254,10 @@ local function func_header_generate(FP)
 end
 local function ImGui_f_implementation(outtab,def)
     local ptret = def.retref and "&" or ""
+    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
+    table.insert(outtab,"{\n")
     if def.isvararg then
         local call_args = def.call_args:gsub("%.%.%.","args")
-        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
-        table.insert(outtab,"{\n")
         table.insert(outtab,"    va_list args;\n")
         table.insert(outtab,"    va_start(args, fmt);\n")
         if def.ret~="void" then
@@ -1269,28 +1269,18 @@ local function ImGui_f_implementation(outtab,def)
         if def.ret~="void" then
             table.insert(outtab,"    return ret;\n")
         end
-        --cppfile:write("    return ImGui::",def.funcname,def.call_args,";\n")
-        table.insert(outtab,"}\n")
     elseif def.nonUDT then
         if def.nonUDT == 1 then
-        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
-        table.insert(outtab,"{\n")
-        table.insert(outtab,"    *pOut = ImGui::"..def.funcname..def.call_args..";\n")
-        table.insert(outtab,"}\n")
+            table.insert(outtab,"    *pOut = ImGui::"..def.funcname..def.call_args..";\n")
         else --nonUDT==2
-        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
-        table.insert(outtab,"{\n")
-        table.insert(outtab,"    "..def.retorig.." ret = ImGui::"..def.funcname..def.call_args..";\n")
-        table.insert(outtab,"    "..def.ret.." ret2 = "..def.retorig.."ToSimple(ret);\n")
-        table.insert(outtab,"    return ret2;\n")
-        table.insert(outtab,"}\n")
+            table.insert(outtab,"    "..def.retorig.." ret = ImGui::"..def.funcname..def.call_args..";\n")
+            table.insert(outtab,"    "..def.ret.." ret2 = "..def.retorig.."ToSimple(ret);\n")
+            table.insert(outtab,"    return ret2;\n")
         end
     else --standard ImGui
-        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..def.args.."\n")
-        table.insert(outtab,"{\n")
         table.insert(outtab,"    return "..ptret.."ImGui::"..def.funcname..def.call_args..";\n")
-        table.insert(outtab,"}\n")
     end
+    table.insert(outtab,"}\n")
 end
 local function struct_f_implementation(outtab,def)
     local empty = def.args:match("^%(%)") --no args
@@ -1298,10 +1288,10 @@ local function struct_f_implementation(outtab,def)
     --local imgui_stname = embeded_structs[def.stname] or def.stname
     local imgui_stname = def.stname
     local args = def.args:gsub("^%(","("..imgui_stname.."* self"..(empty and "" or ","))
+    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
+    table.insert(outtab,"{\n")
     if def.isvararg then
         local call_args = def.call_args:gsub("%.%.%.","args")
-        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
-        table.insert(outtab,"{\n")
         table.insert(outtab,"    va_list args;\n")
         table.insert(outtab,"    va_start(args, fmt);\n")
         if def.ret~="void" then
@@ -1313,28 +1303,18 @@ local function struct_f_implementation(outtab,def)
         if def.ret~="void" then
             table.insert(outtab,"    return ret;\n")
         end
-        --cppfile:write("    return self->",def.funcname,def.call_args,";\n")
-        table.insert(outtab,"}\n")
     elseif def.nonUDT then
         if def.nonUDT == 1 then
-        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
-        table.insert(outtab,"{\n")
-        table.insert(outtab,"    *pOut = self->"..def.funcname..def.call_args..";\n")
-        table.insert(outtab,"}\n")
+            table.insert(outtab,"    *pOut = self->"..def.funcname..def.call_args..";\n")
         else --nonUDT==2
-        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
-        table.insert(outtab,"{\n")
-        table.insert(outtab,"    "..def.retorig.." ret = self->"..def.funcname..def.call_args..";\n")
-        table.insert(outtab,"    "..def.ret.." ret2 = "..def.retorig.."ToSimple(ret);\n")
-        table.insert(outtab,"    return ret2;\n")
-        table.insert(outtab,"}\n")
+            table.insert(outtab,"    "..def.retorig.." ret = self->"..def.funcname..def.call_args..";\n")
+            table.insert(outtab,"    "..def.ret.." ret2 = "..def.retorig.."ToSimple(ret);\n")
+            table.insert(outtab,"    return ret2;\n")
         end
     else --standard struct
-        table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..(def.ov_cimguiname or def.cimguiname)..args.."\n")
-        table.insert(outtab,"{\n")
         table.insert(outtab,"    return "..ptret.."self->"..def.funcname..def.call_args..";\n")
-        table.insert(outtab,"}\n")
     end
+    table.insert(outtab,"}\n")
 end
 local function func_implementation(FP)
 
