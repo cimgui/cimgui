@@ -2,7 +2,7 @@
 
 
 This is a thin c-api wrapper programmatically generated for the excellent C++ immediate mode gui [Dear ImGui](https://github.com/ocornut/imgui).
-All functions are programmatically wrapped except constructors, destructors and `ImVector`. (Unless someone find a use case for them)
+All functions are programmatically wrapped except `ImVector` constructors and destructors. (Unless someone find a use case for them)(Now they exist for `ImVector_ImWchar`)
 Generated files are: `cimgui.cpp`, `cimgui.h` for C compilation. Also for helping in bindings creation, `definitions.lua` with function definition information and `structs_and_enums.lua`.
 This library is intended as a intermediate layer to be able to use Dear ImGui from other languages that can interface with C (like D - see [D-binding](https://github.com/Extrawurst/DerelictImgui))
 
