@@ -307,18 +307,18 @@ local function serializeTable(name, value, saved)
             for k,v in pairs(value) do
                 table.insert(ordered_keys,k)
             end
-			local function sorter(a,b)
-				if type(a)==type(b) then 
-					return a<b 
-				elseif type(a)=="number" then
-					return true
-				else
-					assert(type(b)=="number")
-					return false
-				end
-			end
+            local function sorter(a,b)
+                if type(a)==type(b) then 
+                    return a<b 
+                elseif type(a)=="number" then
+                    return true
+                else
+                    assert(type(b)=="number")
+                    return false
+                end
+            end
             table.sort(ordered_keys,sorter)
-			for _,k in ipairs(ordered_keys) do
+            for _,k in ipairs(ordered_keys) do
                 local v = value[k]
 --]]
            -- for k,v in pairs(value) do      -- save its fields
@@ -778,6 +778,16 @@ local function func_parser()
                     --print(i,t.signature,t.ret,t.ov_cimguiname)--,post[i])--,typetoStr(post[i]))
                     table.insert(strt,string.format("%d\t%s\t%s %s",i,t.ret,t.ov_cimguiname,t.signature))
                     --prtable(typesc[i])
+                end
+                --check not two names are equal (produced by bad cimguiname_overload)
+                for i=1,#v-1 do 
+                    for j=i+1,#v-1 do
+                        if v[i].ov_cimguiname == v[j].ov_cimguiname then
+                          local t,tj = v[i],v[j]
+                          print("Error caused by Bad overloading "..t.ov_cimguiname.." of function ",t.funcname,t.signature,"conflicts with ",tj.funcname,tj.signature)
+                          error("Bad overloading:"..t.ov_cimguiname) 
+                        end
+                    end
                 end
             end
         end
@@ -1449,18 +1459,18 @@ local function DefsByStruct(FP)
     FP.defsBystruct = struct
 end  
 local function AdjustArguments(FP)
-	for fun,defs in pairs(FP.defsT) do
-		--struct function but no constructors
-		if defs[1].stname~="ImGui" and defs[1].stname~="" and defs[1].ret then
-			--print("adjusting",fun)
-			for i,def in ipairs(defs) do
-				local empty = def.args:match("^%(%)") --no args
-				--local ptret = def.retref and "&" or ""
-				def.args = def.args:gsub("^%(","("..def.stname.."* self"..(empty and "" or ","))
-				table.insert(def.argsT,1,{type=def.stname.."*",name="self"})
-			end
-		end
-	end
+    for fun,defs in pairs(FP.defsT) do
+        --struct function but no constructors
+        if defs[1].stname~="ImGui" and defs[1].stname~="" and defs[1].ret then
+            --print("adjusting",fun)
+            for i,def in ipairs(defs) do
+                local empty = def.args:match("^%(%)") --no args
+                --local ptret = def.retref and "&" or ""
+                def.args = def.args:gsub("^%(","("..def.stname.."* self"..(empty and "" or ","))
+                table.insert(def.argsT,1,{type=def.stname.."*",name="self"})
+            end
+        end
+    end
 end
 --generate cimgui.cpp cimgui.h and auto versions depending on postfix
 local function cimgui_generation(postfix,STP,FP)
