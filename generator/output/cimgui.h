@@ -588,7 +588,6 @@ typedef struct ImVector_TextRange {int Size;int Capacity;TextRange* Data;} ImVec
 typedef struct ImVector_ImVec4 {int Size;int Capacity;ImVec4* Data;} ImVector_ImVec4;
 typedef struct ImVector_ImDrawIdx {int Size;int Capacity;ImDrawIdx* Data;} ImVector_ImDrawIdx;
 typedef struct ImVector_ImVec2 {int Size;int Capacity;ImVec2* Data;} ImVector_ImVec2;
-struct ImNewDummy {};
 struct ImGuiOnceUponAFrame
 {
      int RefFrame;

@@ -1093,7 +1093,10 @@ local function gen_structs_and_enums(cdefs,templates)
         local desired_linelen = (linelen==0) and 0 or math.max(math.ceil(linelen/10)*10,40)
         local spaces_to_add = 0 --desired_linelen - linelen
         local linecom = line..string.rep(" ",spaces_to_add)..comment
-
+        
+         -- ImNewDummy drop for MSVC
+        if line:match"ImNewDummy" then break end
+        
         if line:match(namespace_re) then
             in_namespace = true
         end
@@ -1105,7 +1108,7 @@ local function gen_structs_and_enums(cdefs,templates)
                 break
             end
         end
-        
+       
         -- ImVector special treatment
         if structnames[#structnames] == "ImVector" then
             if line:match(struct_closing_re) then
