@@ -433,7 +433,7 @@ local function struct_parser()
         elseif line:match("public:") then
             --nothing
         else
-            local linea = line:gsub("%S+",{class="struct",mutable=""})
+            local linea = line:gsub("%S+",{class="struct",mutable="",static=""})
             local template = linea:match("ImVector<(.+)>")
             if template then
                 local te = template:gsub("%s","_")

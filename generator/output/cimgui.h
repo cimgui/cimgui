@@ -603,7 +603,7 @@ struct ImGuiTextFilter
 struct ImGuiTextBuffer
 {
     ImVector_char Buf;
-    static char EmptyString[1];
+     char EmptyString[1];
 };
 struct ImGuiStorage
 {
