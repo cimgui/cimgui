@@ -1,4 +1,5 @@
-
+#ifndef CIMGUI_INCLUDED
+#define CIMGUI_INCLUDED
 #include <stdio.h>
 #include <stdint.h>
 #if defined _WIN32 || defined __CYGWIN__
@@ -85,6 +86,7 @@ CIMGUI_API ImVector_ImWchar* ImVector_ImWchar_create();
 CIMGUI_API void ImVector_ImWchar_destroy(ImVector_ImWchar* p);
 CIMGUI_API void ImVector_ImWchar_Init(ImVector_ImWchar* p);
 CIMGUI_API void ImVector_ImWchar_UnInit(ImVector_ImWchar* p);
+#endif //CIMGUI_INCLUDED
 
 
 
