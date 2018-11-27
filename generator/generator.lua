@@ -411,6 +411,10 @@ local function struct_parser()
             table.insert(structcdefs,line)
             return 
         end
+        if line:match"^%s*static char" then
+			assert(line:match"EmptyString",line)
+			return --skip that static chat EmtyString
+        end
         
         --if in_function discard
         if in_functionst then 
@@ -434,7 +438,7 @@ local function struct_parser()
         elseif line:match("public:") then
             --nothing
         else
-            local linea = line:gsub("%S+",{class="struct",mutable="",static=""})
+            local linea = line:gsub("%S+",{class="struct",mutable=""})
             local template = linea:match("ImVector<(.+)>")
             if template then
                 local te = template:gsub("%s","_")
