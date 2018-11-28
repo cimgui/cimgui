@@ -16,9 +16,15 @@ else(WIN32)
     add_definitions("-DIMGUI_IMPL_API=extern \"C\" ")
 endif(WIN32)
 
+set(IMGUI_STATIC "no" CACHE STRING "Build as a static library")
 
 #add library and link
-add_library(cimgui SHARED ${IMGUI_SOURCES})
+if (IMGUI_STATIC)
+    add_library(cimgui STATIC ${IMGUI_SOURCES})
+else (IMGUI_STATIC)
+    add_library(cimgui SHARED ${IMGUI_SOURCES})
+endif (IMGUI_STATIC)
+
 target_link_libraries(cimgui ${IMGUI_LIBRARIES})
 set_target_properties(cimgui PROPERTIES PREFIX "")
 
@@ -26,5 +32,5 @@ set_target_properties(cimgui PROPERTIES PREFIX "")
 install(TARGETS cimgui
               RUNTIME DESTINATION  .
               LIBRARY DESTINATION  .
-              #ARCHIVE DESTINATION lib 
+              ARCHIVE DESTINATION  .
               )
