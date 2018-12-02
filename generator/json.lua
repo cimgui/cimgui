@@ -56,10 +56,10 @@ local function encode_nil(val)
 end
 
 
-local function encode_table(val, stack)
+local function encode_table(val, stack,level,isvalue)
   local res = {}
   stack = stack or {}
-
+  level = level or 0
   -- Circular reference?
   if stack[val] then error("circular reference") end
 
@@ -77,12 +77,16 @@ local function encode_table(val, stack)
     if n ~= #val then
       error("invalid table: sparse array")
     end
+
     -- Encode
     for i, v in ipairs(val) do
-      table.insert(res, encode(v, stack))
+      table.insert(res, encode(v, stack,level+1))
     end
+
     stack[val] = nil
-    return "[" .. table.concat(res, ",\n") .. "]"
+    local inner = table.concat(res, ",\n")
+    if #inner > 0 then inner = "\n"..inner end
+    return string.rep(isvalue and "" or "    ",level).."[" .. inner .. "]"
 
   else
   ---[[
@@ -94,30 +98,32 @@ local function encode_table(val, stack)
     -- Treat as an object
     for _,k in ipairs(ordered_keys) do
       local v = val[k]
-	--]]
+    --]]
     --for k, v in pairs(val) do
       if type(k) ~= "string" then
         error("invalid table: mixed or invalid key types")
       end
-      table.insert(res, encode(k, stack) .. ":" .. encode(v, stack))
+      table.insert(res, encode(k, stack,level+1) .. ":" .. encode(v, stack,level+1,true))
     end
     stack[val] = nil
-    return "{" .. table.concat(res, ",\n") .. "}"
+    local inner = table.concat(res, ",\n"..string.rep("",level))
+    if #inner > 0 then inner = "\n"..inner end
+    return string.rep(isvalue and "" or "    ",level).."{" .. inner .. "}"
   end
 end
 
 
-local function encode_string(val)
-  return '"' .. val:gsub('[%z\1-\31\\"]', escape_char) .. '"'
+local function encode_string(val,stack,level,isvalue)
+  return string.rep(isvalue and "" or "    ",level)..'"' .. val:gsub('[%z\1-\31\\"]', escape_char) .. '"'
 end
 
 
-local function encode_number(val)
+local function encode_number(val,stack,level,isvalue)
   -- Check for NaN, -inf and inf
   if val ~= val or val <= -math.huge or val >= math.huge then
     error("unexpected number value '" .. tostring(val) .. "'")
   end
-  return string.format("%.14g", val)
+  return string.rep(isvalue and "" or "    ",level)..string.format("%.14g", val)
 end
 
 
@@ -130,11 +136,11 @@ local type_func_map = {
 }
 
 
-encode = function(val, stack)
+encode = function(val, stack,level,isvalue)
   local t = type(val)
   local f = type_func_map[t]
   if f then
-    return f(val, stack)
+    return f(val, stack,level,isvalue)
   end
   error("unexpected type '" .. t .. "'")
 end
