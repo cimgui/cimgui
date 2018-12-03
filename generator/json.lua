@@ -27,7 +27,8 @@ local json = { _version = "0.1.1" }
 -------------------------------------------------------------------------------
 -- Encode
 -------------------------------------------------------------------------------
-
+local TAB = "  "
+local rep = string.rep
 local encode
 
 local escape_char_map = {
@@ -85,8 +86,8 @@ local function encode_table(val, stack,level,isvalue)
 
     stack[val] = nil
     local inner = table.concat(res, ",\n")
-    if #inner > 0 then inner = "\n"..inner end
-    return string.rep(isvalue and "" or "    ",level).."[" .. inner .. "]"
+    if #inner > 0 then inner = "\n"..inner.."\n"..rep(TAB,level) end
+    return rep(isvalue and "" or TAB,level).."[" .. inner .. "]"
 
   else
   ---[[
@@ -103,18 +104,18 @@ local function encode_table(val, stack,level,isvalue)
       if type(k) ~= "string" then
         error("invalid table: mixed or invalid key types")
       end
-      table.insert(res, encode(k, stack,level+1) .. ":" .. encode(v, stack,level+1,true))
+      table.insert(res, encode(k, stack,level+1) .. ": " .. encode(v, stack,level+1,true))
     end
     stack[val] = nil
-    local inner = table.concat(res, ",\n"..string.rep("",level))
-    if #inner > 0 then inner = "\n"..inner end
-    return string.rep(isvalue and "" or "    ",level).."{" .. inner .. "}"
+    local inner = table.concat(res, ",\n")
+    if #inner > 0 then inner = "\n"..inner.."\n"..rep(TAB,level) end
+    return rep(isvalue and "" or TAB,level).."{" .. inner .. "}"
   end
 end
 
 
 local function encode_string(val,stack,level,isvalue)
-  return string.rep(isvalue and "" or "    ",level)..'"' .. val:gsub('[%z\1-\31\\"]', escape_char) .. '"'
+  return rep(isvalue and "" or TAB,level)..'"' .. val:gsub('[%z\1-\31\\"]', escape_char) .. '"'
 end
 
 
@@ -123,7 +124,7 @@ local function encode_number(val,stack,level,isvalue)
   if val ~= val or val <= -math.huge or val >= math.huge then
     error("unexpected number value '" .. tostring(val) .. "'")
   end
-  return string.rep(isvalue and "" or "    ",level)..string.format("%.14g", val)
+  return rep(isvalue and "" or TAB,level)..string.format("%.14g", val)
 end
 
 
