@@ -49,6 +49,11 @@
     ],
     "ImDrawListFlags_": [
       {
+        "calc_value": 0,
+        "name": "ImDrawListFlags_None",
+        "value": "0"
+      },
+      {
         "calc_value": 1,
         "name": "ImDrawListFlags_AntiAliasedLines",
         "value": "1 << 0"
@@ -77,6 +82,11 @@
       }
     ],
     "ImGuiBackendFlags_": [
+      {
+        "calc_value": 0,
+        "name": "ImGuiBackendFlags_None",
+        "value": "0"
+      },
       {
         "calc_value": 1,
         "name": "ImGuiBackendFlags_HasGamepad",
@@ -512,6 +522,11 @@
       }
     ],
     "ImGuiConfigFlags_": [
+      {
+        "calc_value": 0,
+        "name": "ImGuiConfigFlags_None",
+        "value": "0"
+      },
       {
         "calc_value": 1,
         "name": "ImGuiConfigFlags_NavEnableKeyboard",
@@ -2053,6 +2068,14 @@
       {
         "name": "ConfigResizeWindowsFromEdges",
         "type": "bool"
+      },
+      {
+        "name": "BackendPlatformName",
+        "type": "const char*"
+      },
+      {
+        "name": "BackendRendererName",
+        "type": "const char*"
       },
       {
         "name": "GetClipboardTextFn",

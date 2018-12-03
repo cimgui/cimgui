@@ -13214,6 +13214,28 @@
       "stname": "ImGui"
     }
   ],
+  "igShowAboutWindow": [
+    {
+      "args": "(bool* p_open)",
+      "argsT": [
+        {
+          "name": "p_open",
+          "type": "bool*"
+        }
+      ],
+      "argsoriginal": "(bool* p_open=((void *)0))",
+      "call_args": "(p_open)",
+      "cimguiname": "igShowAboutWindow",
+      "comment": "",
+      "defaults": {
+        "p_open": "((void *)0)"
+      },
+      "funcname": "ShowAboutWindow",
+      "ret": "void",
+      "signature": "(bool*)",
+      "stname": "ImGui"
+    }
+  ],
   "igShowDemoWindow": [
     {
       "args": "(bool* p_open)",

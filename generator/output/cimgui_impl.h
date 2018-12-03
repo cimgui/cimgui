@@ -31,4 +31,4 @@ CIMGUI_API bool ImGui_ImplSDL2_InitForOpenGL(SDL_Window* window,void* sdl_gl_con
 CIMGUI_API bool ImGui_ImplSDL2_InitForVulkan(SDL_Window* window);
 CIMGUI_API void ImGui_ImplSDL2_Shutdown();
 CIMGUI_API void ImGui_ImplSDL2_NewFrame(SDL_Window* window);
-CIMGUI_API bool ImGui_ImplSDL2_ProcessEvent(SDL_Event* event);
+CIMGUI_API bool ImGui_ImplSDL2_ProcessEvent(const SDL_Event* event);

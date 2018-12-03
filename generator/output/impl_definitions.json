@@ -547,14 +547,14 @@
   ],
   "ImGui_ImplSDL2_ProcessEvent": [
     {
-      "args": "(SDL_Event* event)",
+      "args": "(const SDL_Event* event)",
       "argsT": [
         {
           "name": "event",
-          "type": "SDL_Event*"
+          "type": "const SDL_Event*"
         }
       ],
-      "argsoriginal": "(SDL_Event* event)",
+      "argsoriginal": "(const SDL_Event* event)",
       "call_args": "(event)",
       "cimguiname": "ImGui_ImplSDL2_ProcessEvent",
       "comment": "",
@@ -562,7 +562,7 @@
       "funcname": "ImGui_ImplSDL2_ProcessEvent",
       "location": "imgui_impl_sdl",
       "ret": "bool",
-      "signature": "(SDL_Event*)",
+      "signature": "(const SDL_Event*)",
       "stname": ""
     }
   ],
