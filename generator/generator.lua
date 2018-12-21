@@ -1004,6 +1004,9 @@ local function gen_structs_and_enums_table(cdefs)
                 end
                 --split type name1,name2; in several lines
                 local typen,rest = line:match("([^,]+)%s(%S+[,;])")
+                if not typen then -- Lets try Type*name
+                    typen,rest = line:match("([^,]+%*)(%S+[,;])")
+                end
                 --local template_type = typen:match("/%*<(.+)>%*/")
                 --if template_type then typen = typen:match("(.+)/%*") end
                 local template_type = typen:match("ImVector_(.+)")
