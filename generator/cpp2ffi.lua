@@ -108,8 +108,8 @@ local function getRE()
 	functypedef_re = "^\n*%s*(typedef[%w%s%*_]+%(%s*%*%s*[%w_]+%s*%)%s*%b()%s*;)",
 	functypedef_re = "^\n*%s*(typedef[%w%s%*_]+%([^*]*%*%s*[%w_]+%s*%)%s*%b()%s*;)",
 	vardef_re = "^\n*([^;{}%(%)]+;)",
-	functionD_re = "^([^;{}]-%b()[\n%s]*%b{})",
-	functionD_re = "^([^;{}]-%b()[^{}%(%)]*%b{})",
+	functionD_re = "^([^;{}]-%b()[\n%s%w]*%b{})",
+	--functionD_re = "^([^;{}]-%b()[^{}%(%)]*%b{})",
 	functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)%s*;"
 	}
 	
