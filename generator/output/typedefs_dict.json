@@ -1,6 +1,5 @@
 {
   "CustomRect": "struct CustomRect",
-  "GlyphRangesBuilder": "struct GlyphRangesBuilder",
   "ImColor": "struct ImColor",
   "ImDrawCallback": "void(*)(const ImDrawList* parent_list,const ImDrawCmd* cmd);",
   "ImDrawChannel": "struct ImDrawChannel",
@@ -17,6 +16,7 @@
   "ImFontAtlasFlags": "int",
   "ImFontConfig": "struct ImFontConfig",
   "ImFontGlyph": "struct ImFontGlyph",
+  "ImFontGlyphRangesBuilder": "struct ImFontGlyphRangesBuilder",
   "ImGuiBackendFlags": "int",
   "ImGuiCol": "int",
   "ImGuiColorEditFlags": "int",
@@ -47,6 +47,8 @@
   "ImGuiStorage": "struct ImGuiStorage",
   "ImGuiStyle": "struct ImGuiStyle",
   "ImGuiStyleVar": "int",
+  "ImGuiTabBarFlags": "int",
+  "ImGuiTabItemFlags": "int",
   "ImGuiTextBuffer": "struct ImGuiTextBuffer",
   "ImGuiTextFilter": "struct ImGuiTextFilter",
   "ImGuiTreeNodeFlags": "int",
