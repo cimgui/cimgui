@@ -271,58 +271,83 @@
       },
       {
         "calc_value": 33,
-        "name": "ImGuiCol_PlotLines",
+        "name": "ImGuiCol_Tab",
         "value": 33
       },
       {
         "calc_value": 34,
-        "name": "ImGuiCol_PlotLinesHovered",
+        "name": "ImGuiCol_TabHovered",
         "value": 34
       },
       {
         "calc_value": 35,
-        "name": "ImGuiCol_PlotHistogram",
+        "name": "ImGuiCol_TabActive",
         "value": 35
       },
       {
         "calc_value": 36,
-        "name": "ImGuiCol_PlotHistogramHovered",
+        "name": "ImGuiCol_TabUnfocused",
         "value": 36
       },
       {
         "calc_value": 37,
-        "name": "ImGuiCol_TextSelectedBg",
+        "name": "ImGuiCol_TabUnfocusedActive",
         "value": 37
       },
       {
         "calc_value": 38,
-        "name": "ImGuiCol_DragDropTarget",
+        "name": "ImGuiCol_PlotLines",
         "value": 38
       },
       {
         "calc_value": 39,
-        "name": "ImGuiCol_NavHighlight",
+        "name": "ImGuiCol_PlotLinesHovered",
         "value": 39
       },
       {
         "calc_value": 40,
-        "name": "ImGuiCol_NavWindowingHighlight",
+        "name": "ImGuiCol_PlotHistogram",
         "value": 40
       },
       {
         "calc_value": 41,
-        "name": "ImGuiCol_NavWindowingDimBg",
+        "name": "ImGuiCol_PlotHistogramHovered",
         "value": 41
       },
       {
         "calc_value": 42,
-        "name": "ImGuiCol_ModalWindowDimBg",
+        "name": "ImGuiCol_TextSelectedBg",
         "value": 42
       },
       {
         "calc_value": 43,
-        "name": "ImGuiCol_COUNT",
+        "name": "ImGuiCol_DragDropTarget",
         "value": 43
+      },
+      {
+        "calc_value": 44,
+        "name": "ImGuiCol_NavHighlight",
+        "value": 44
+      },
+      {
+        "calc_value": 45,
+        "name": "ImGuiCol_NavWindowingHighlight",
+        "value": 45
+      },
+      {
+        "calc_value": 46,
+        "name": "ImGuiCol_NavWindowingDimBg",
+        "value": 46
+      },
+      {
+        "calc_value": 47,
+        "name": "ImGuiCol_ModalWindowDimBg",
+        "value": 47
+      },
+      {
+        "calc_value": 48,
+        "name": "ImGuiCol_COUNT",
+        "value": 48
       }
     ],
     "ImGuiColorEditFlags_": [
@@ -1291,13 +1316,102 @@
       },
       {
         "calc_value": 20,
-        "name": "ImGuiStyleVar_ButtonTextAlign",
+        "name": "ImGuiStyleVar_TabRounding",
         "value": 20
       },
       {
         "calc_value": 21,
-        "name": "ImGuiStyleVar_COUNT",
+        "name": "ImGuiStyleVar_ButtonTextAlign",
         "value": 21
+      },
+      {
+        "calc_value": 22,
+        "name": "ImGuiStyleVar_COUNT",
+        "value": 22
+      }
+    ],
+    "ImGuiTabBarFlags_": [
+      {
+        "calc_value": 0,
+        "name": "ImGuiTabBarFlags_None",
+        "value": "0"
+      },
+      {
+        "calc_value": 1,
+        "name": "ImGuiTabBarFlags_Reorderable",
+        "value": "1 << 0"
+      },
+      {
+        "calc_value": 2,
+        "name": "ImGuiTabBarFlags_AutoSelectNewTabs",
+        "value": "1 << 1"
+      },
+      {
+        "calc_value": 4,
+        "name": "ImGuiTabBarFlags_NoCloseWithMiddleMouseButton",
+        "value": "1 << 2"
+      },
+      {
+        "calc_value": 8,
+        "name": "ImGuiTabBarFlags_NoTabListPopupButton",
+        "value": "1 << 3"
+      },
+      {
+        "calc_value": 16,
+        "name": "ImGuiTabBarFlags_NoTabListScrollingButtons",
+        "value": "1 << 4"
+      },
+      {
+        "calc_value": 32,
+        "name": "ImGuiTabBarFlags_NoTooltip",
+        "value": "1 << 5"
+      },
+      {
+        "calc_value": 64,
+        "name": "ImGuiTabBarFlags_FittingPolicyResizeDown",
+        "value": "1 << 6"
+      },
+      {
+        "calc_value": 128,
+        "name": "ImGuiTabBarFlags_FittingPolicyScroll",
+        "value": "1 << 7"
+      },
+      {
+        "calc_value": 192,
+        "name": "ImGuiTabBarFlags_FittingPolicyMask_",
+        "value": "ImGuiTabBarFlags_FittingPolicyResizeDown | ImGuiTabBarFlags_FittingPolicyScroll"
+      },
+      {
+        "calc_value": 64,
+        "name": "ImGuiTabBarFlags_FittingPolicyDefault_",
+        "value": "ImGuiTabBarFlags_FittingPolicyResizeDown"
+      }
+    ],
+    "ImGuiTabItemFlags_": [
+      {
+        "calc_value": 0,
+        "name": "ImGuiTabItemFlags_None",
+        "value": "0"
+      },
+      {
+        "calc_value": 1,
+        "name": "ImGuiTabItemFlags_UnsavedDocument",
+        "value": "1 << 0"
+      },
+      {
+        "calc_value": 2,
+        "name": "ImGuiTabItemFlags_SetSelected",
+        "value": "1 << 1"
+      },
+      {
+        "calc_value": 4,
+        "name": "ImGuiTabItemFlags_NoCloseWithMiddleMouseButton",
+        "value": "1 << 2"
+      },
+      {
+        "calc_value": 8,
+        "name": "ImGuiTabItemFlags_NoPushId",
+        "value": "1 << 3"
       }
     ],
     "ImGuiTreeNodeFlags_": [
@@ -1474,6 +1588,11 @@
         "value": "1 << 19"
       },
       {
+        "calc_value": 1048576,
+        "name": "ImGuiWindowFlags_UnsavedDocument",
+        "value": "1 << 20"
+      },
+      {
         "calc_value": 786432,
         "name": "ImGuiWindowFlags_NoNav",
         "value": "ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoNavFocus"
@@ -1553,13 +1672,6 @@
       {
         "name": "Font",
         "type": "ImFont*"
-      }
-    ],
-    "GlyphRangesBuilder": [
-      {
-        "name": "UsedChars",
-        "template_type": "unsigned char",
-        "type": "ImVector_unsigned_char"
       }
     ],
     "ImColor": [
@@ -1967,6 +2079,13 @@
         "type": "float"
       }
     ],
+    "ImFontGlyphRangesBuilder": [
+      {
+        "name": "UsedChars",
+        "template_type": "int",
+        "type": "ImVector_int"
+      }
+    ],
     "ImGuiIO": [
       {
         "name": "ConfigFlags",
@@ -2066,7 +2185,11 @@
         "type": "bool"
       },
       {
-        "name": "ConfigResizeWindowsFromEdges",
+        "name": "ConfigWindowsResizeFromEdges",
+        "type": "bool"
+      },
+      {
+        "name": "ConfigWindowsMoveFromTitleBarOnly",
         "type": "bool"
       },
       {
@@ -2076,6 +2199,18 @@
       {
         "name": "BackendRendererName",
         "type": "const char*"
+      },
+      {
+        "name": "BackendPlatformUserData",
+        "type": "void*"
+      },
+      {
+        "name": "BackendRendererUserData",
+        "type": "void*"
+      },
+      {
+        "name": "BackendLanguageUserData",
+        "type": "void*"
       },
       {
         "name": "GetClipboardTextFn",
@@ -2138,11 +2273,6 @@
         "name": "KeysDown[512]",
         "size": 512,
         "type": "bool"
-      },
-      {
-        "name": "InputCharacters[16+1]",
-        "size": 17,
-        "type": "ImWchar"
       },
       {
         "name": "NavInputs[ImGuiNavInput_COUNT]",
@@ -2278,6 +2408,11 @@
         "name": "NavInputsDownDurationPrev[ImGuiNavInput_COUNT]",
         "size": 21,
         "type": "float"
+      },
+      {
+        "name": "InputQueueCharacters",
+        "template_type": "ImWchar",
+        "type": "ImVector_ImWchar"
       }
     ],
     "ImGuiInputTextCallbackData": [
@@ -2512,6 +2647,14 @@
         "type": "float"
       },
       {
+        "name": "TabRounding",
+        "type": "float"
+      },
+      {
+        "name": "TabBorderSize",
+        "type": "float"
+      },
+      {
         "name": "ButtonTextAlign",
         "type": "ImVec2"
       },
@@ -2541,7 +2684,7 @@
       },
       {
         "name": "Colors[ImGuiCol_COUNT]",
-        "size": 43,
+        "size": 48,
         "type": "ImVec4"
       }
     ],
