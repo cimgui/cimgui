@@ -785,6 +785,9 @@ function M.Parser()
 			local typen,rest = line:match("%s*([^,]+)%s(%S+[,;])")
 			--local template_type = typen:match("/%*<(.+)>%*/")
 			--if template_type then typen = typen:match("(.+)/%*") end
+                if not typen then -- Lets try Type*name
+                    typen,rest = line:match("([^,]+%*)(%S+[,;])")
+                end
 			local template_type 
 			for k,v in pairs(self.templates) do
 				template_type = typen:match(k.."_(.+)")
