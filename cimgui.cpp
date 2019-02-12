@@ -1427,6 +1427,122 @@ CIMGUI_API void igMemFree(void* ptr)
 {
     return ImGui::MemFree(ptr);
 }
+CIMGUI_API ImVector* ImVector_ImVector(void)
+{
+    return IM_NEW(ImVector)();
+}
+CIMGUI_API void ImVector_destroy(ImVector* self)
+{
+    IM_DELETE(self);
+}
+CIMGUI_API bool ImVector_empty(ImVector* self)
+{
+    return self->empty();
+}
+CIMGUI_API int ImVector_size(ImVector* self)
+{
+    return self->size();
+}
+CIMGUI_API int ImVector_size_in_bytes(ImVector* self)
+{
+    return self->size_in_bytes();
+}
+CIMGUI_API int ImVector_capacity(ImVector* self)
+{
+    return self->capacity();
+}
+CIMGUI_API void ImVector_clear(ImVector* self)
+{
+    return self->clear();
+}
+CIMGUI_API const T* ImVector_begin(ImVector* self)
+{
+    return self->begin();
+}
+CIMGUI_API const T* ImVector_begin(ImVector* self)
+{
+    return self->begin();
+}
+CIMGUI_API const T* ImVector_end(ImVector* self)
+{
+    return self->end();
+}
+CIMGUI_API const T* ImVector_end(ImVector* self)
+{
+    return self->end();
+}
+CIMGUI_API const T* ImVector_front(ImVector* self)
+{
+    return &self->front();
+}
+CIMGUI_API const T* ImVector_front(ImVector* self)
+{
+    return &self->front();
+}
+CIMGUI_API const T* ImVector_back(ImVector* self)
+{
+    return &self->back();
+}
+CIMGUI_API const T* ImVector_back(ImVector* self)
+{
+    return &self->back();
+}
+CIMGUI_API void ImVector_swap(ImVector* self,ImVector_T rhs)
+{
+    return self->swap(rhs);
+}
+CIMGUI_API int ImVector__grow_capacity(ImVector* self,int sz)
+{
+    return self->_grow_capacity(sz);
+}
+CIMGUI_API void ImVector_resize(ImVector* self,int new_size)
+{
+    return self->resize(new_size);
+}
+CIMGUI_API void ImVector_resizeT(ImVector* self,int new_size,const T v)
+{
+    return self->resize(new_size,v);
+}
+CIMGUI_API void ImVector_reserve(ImVector* self,int new_capacity)
+{
+    return self->reserve(new_capacity);
+}
+CIMGUI_API void ImVector_push_back(ImVector* self,const T v)
+{
+    return self->push_back(v);
+}
+CIMGUI_API void ImVector_pop_back(ImVector* self)
+{
+    return self->pop_back();
+}
+CIMGUI_API void ImVector_push_front(ImVector* self,const T v)
+{
+    return self->push_front(v);
+}
+CIMGUI_API T* ImVector_erase(ImVector* self,const T* it)
+{
+    return self->erase(it);
+}
+CIMGUI_API T* ImVector_eraseTPtr(ImVector* self,const T* it,const T* it_last)
+{
+    return self->erase(it,it_last);
+}
+CIMGUI_API T* ImVector_erase_unsorted(ImVector* self,const T* it)
+{
+    return self->erase_unsorted(it);
+}
+CIMGUI_API T* ImVector_insert(ImVector* self,const T* it,const T v)
+{
+    return self->insert(it,v);
+}
+CIMGUI_API bool ImVector_contains(ImVector* self,const T v)
+{
+    return self->contains(v);
+}
+CIMGUI_API int ImVector_index_from_ptr(ImVector* self,const T* it)
+{
+    return self->index_from_ptr(it);
+}
 CIMGUI_API ImGuiStyle* ImGuiStyle_ImGuiStyle(void)
 {
     return IM_NEW(ImGuiStyle)();

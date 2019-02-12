@@ -660,6 +660,7 @@ function M.Parser()
 			elseif it.re_name == "struct_re" then
 				local nsp = it.item:match("%b{}"):sub(2,-2)
 				local stname = it.item:match("struct%s+(%S+)")
+				--if stname=="ImVector" then print"ImVector" end
 				local nspparr,itemsnsp = parseItems(nsp)
 				for insp,itnsp in ipairs(nspparr) do
 					if itnsp.re_name == "function_re" or itnsp.re_name == "functionD_re" then

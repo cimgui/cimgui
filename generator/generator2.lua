@@ -230,6 +230,7 @@ local function func_header_generate(FP)
 
     table.insert(outtab,"#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
     for _,t in ipairs(FP.funcdefs) do
+		if t.stname=="ImVector" then print(t.cimguiname) end
         if t.cimguiname then
         local cimf = FP.defsT[t.cimguiname]
         local def = cimf[t.signature]
@@ -244,6 +245,7 @@ local function func_header_generate(FP)
             elseif def.destructor then
                 table.insert(outtab,"CIMGUI_API void "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
             else --not constructor
+			if t.stname=="ImVector" then print("2",t.cimguiname) end
                 if def.stname == "" then --ImGui namespace or top level
                     table.insert(outtab,"CIMGUI_API "..def.ret.." ".. def.ov_cimguiname ..(empty and "(void)" or def.args)..";"..addcoment.."\n")
                 else

@@ -502,12 +502,14 @@ enum ImGuiCond_
     ImGuiCond_FirstUseEver = 1 << 2,
     ImGuiCond_Appearing = 1 << 3
 };
+struct ImVector
 typedef struct ImVector{int Size;int Capacity;void* Data;} ImVector;
 typedef struct ImVector_float {int Size;int Capacity;float* Data;} ImVector_float;
 typedef struct ImVector_ImWchar {int Size;int Capacity;ImWchar* Data;} ImVector_ImWchar;
 typedef struct ImVector_ImFontConfig {int Size;int Capacity;ImFontConfig* Data;} ImVector_ImFontConfig;
 typedef struct ImVector_ImFontGlyph {int Size;int Capacity;ImFontGlyph* Data;} ImVector_ImFontGlyph;
 typedef struct ImVector_TextRange {int Size;int Capacity;TextRange* Data;} ImVector_TextRange;
+typedef struct ImVector_T {int Size;int Capacity;T* Data;} ImVector_T;
 typedef struct ImVector_CustomRect {int Size;int Capacity;CustomRect* Data;} ImVector_CustomRect;
 typedef struct ImVector_ImDrawChannel {int Size;int Capacity;ImDrawChannel* Data;} ImVector_ImDrawChannel;
 typedef struct ImVector_char {int Size;int Capacity;char* Data;} ImVector_char;
@@ -888,8 +890,9 @@ inline ImColor_Simple ImColorToSimple(ImColor col)
 typedef ImFontAtlas::CustomRect CustomRect;
 typedef ImGuiTextFilter::TextRange TextRange;
 typedef ImGuiStorage::Pair Pair;
-typedef ImVector<TextRange> ImVector_TextRange;
+typedef ImVector<T> ImVector_T;
 typedef ImVector<ImWchar> ImVector_ImWchar;
+typedef ImVector<TextRange> ImVector_TextRange;
 #endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 CIMGUI_API ImVec2* ImVec2_ImVec2(void);
 CIMGUI_API void ImVec2_destroy(ImVec2* self);
@@ -1237,6 +1240,35 @@ CIMGUI_API const char* igSaveIniSettingsToMemory(size_t* out_ini_size);
 CIMGUI_API void igSetAllocatorFunctions(void*(*alloc_func)(size_t sz,void* user_data),void(*free_func)(void* ptr,void* user_data),void* user_data);
 CIMGUI_API void* igMemAlloc(size_t size);
 CIMGUI_API void igMemFree(void* ptr);
+CIMGUI_API ImVector* ImVector_ImVector(void);
+CIMGUI_API void ImVector_destroy(ImVector* self);
+CIMGUI_API bool ImVector_empty(ImVector* self);
+CIMGUI_API int ImVector_size(ImVector* self);
+CIMGUI_API int ImVector_size_in_bytes(ImVector* self);
+CIMGUI_API int ImVector_capacity(ImVector* self);
+CIMGUI_API void ImVector_clear(ImVector* self);
+CIMGUI_API const T* ImVector_begin(ImVector* self);
+CIMGUI_API const T* ImVector_begin(ImVector* self);
+CIMGUI_API const T* ImVector_end(ImVector* self);
+CIMGUI_API const T* ImVector_end(ImVector* self);
+CIMGUI_API const T* ImVector_front(ImVector* self);
+CIMGUI_API const T* ImVector_front(ImVector* self);
+CIMGUI_API const T* ImVector_back(ImVector* self);
+CIMGUI_API const T* ImVector_back(ImVector* self);
+CIMGUI_API void ImVector_swap(ImVector* self,ImVector_T rhs);
+CIMGUI_API int ImVector__grow_capacity(ImVector* self,int sz);
+CIMGUI_API void ImVector_resize(ImVector* self,int new_size);
+CIMGUI_API void ImVector_resizeT(ImVector* self,int new_size,const T v);
+CIMGUI_API void ImVector_reserve(ImVector* self,int new_capacity);
+CIMGUI_API void ImVector_push_back(ImVector* self,const T v);
+CIMGUI_API void ImVector_pop_back(ImVector* self);
+CIMGUI_API void ImVector_push_front(ImVector* self,const T v);
+CIMGUI_API T* ImVector_erase(ImVector* self,const T* it);
+CIMGUI_API T* ImVector_eraseTPtr(ImVector* self,const T* it,const T* it_last);
+CIMGUI_API T* ImVector_erase_unsorted(ImVector* self,const T* it);
+CIMGUI_API T* ImVector_insert(ImVector* self,const T* it,const T v);
+CIMGUI_API bool ImVector_contains(ImVector* self,const T v);
+CIMGUI_API int ImVector_index_from_ptr(ImVector* self,const T* it);
 CIMGUI_API ImGuiStyle* ImGuiStyle_ImGuiStyle(void);
 CIMGUI_API void ImGuiStyle_destroy(ImGuiStyle* self);
 CIMGUI_API void ImGuiStyle_ScaleAllSizes(ImGuiStyle* self,float scale_factor);

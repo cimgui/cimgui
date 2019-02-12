@@ -602,7 +602,7 @@ local function func_parser()
         and not line:match(functype_re) 
         then
             --if line:match(functype_re) then print("ft",line) end
-            if stname~="ImVector" 
+            if stname~="ImVectorNO" 
             --and stname~="GlyphRangesBuilder" and stname~="CustomRect"  and stname~="TextRange" and stname~="Pair"
             and not line:match("operator") then
             
@@ -993,7 +993,7 @@ local function gen_structs_and_enums_table(cdefs)
             end
             if line=="" or line:match("^{") then
                 break
-            elseif structnames[#structnames] ~="ImVector" then --avoid ImVector
+            elseif structnames[#structnames] ~="ImVectorNO" then --avoid ImVector
                 --local functype_re = "^%s*[%w%s%*]+(%(%*)[%w_]+(%)%([^%(%)]*%))"
                 local functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
                 local functype_reex = "^(%s*[%w%s%*]+%(%*)([%w_]+)(%)%([^%(%)]*%))"
@@ -1111,7 +1111,7 @@ local function gen_structs_and_enums(cdefs,templates)
         local structbegin = line:match(struct_re)
         if structbegin then
             structnames[#structnames + 1] = structbegin
-            if #structnames < 2 and structbegin~= "ImVector" then --not inner and not ImVector
+            if #structnames < 2 and structbegin~= "ImVectorNO" then --not inner and not ImVector
                 table.insert(outtab,linecom.."\n")
                 break
             end

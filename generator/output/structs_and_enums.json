@@ -2739,7 +2739,32 @@
         "type": "float"
       }
     ],
-    "ImVector": [],
+    "ImVector": [
+      {
+        "name": "Size",
+        "type": "int"
+      },
+      {
+        "name": "Capacity",
+        "type": "int"
+      },
+      {
+        "name": "Data",
+        "type": "T*"
+      },
+      {
+        "name": "value_type",
+        "type": "typedef T"
+      },
+      {
+        "name": "iterator",
+        "type": "typedef value_type*"
+      },
+      {
+        "name": "const_iterator",
+        "type": "typedef const value_type*"
+      }
+    ],
     "Pair": [
       {
         "name": "key",
