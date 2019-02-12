@@ -236,7 +236,7 @@ local function func_header_generate(FP)
         local def = cimf[t.signature]
         assert(def,t.signature..t.cimguiname)
         local manual = FP.get_manuals(def)
-        if not manual then
+        if not manual and not def.templated then
 			--if FP.templates[t.stname] then print(t.cimguiname) end
             local addcoment = def.comment or ""
             local empty = def.args:match("^%(%)") --no args
@@ -338,7 +338,7 @@ local function func_implementation(FP)
         local def = cimf[t.signature]
         assert(def)
         local manual = FP.get_manuals(def)
-        if not manual then 
+        if not manual and not def.templated then 
             if def.constructor then
                 assert(def.stname ~= "","constructor without struct")
                 local empty = def.args:match("^%(%)") --no args

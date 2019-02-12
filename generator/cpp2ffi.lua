@@ -831,7 +831,8 @@ function M.Parser()
 				table.insert(outtab,it.item)
 			elseif it.re_name == "struct_re" then
 				local cleanst,structname = self:clean_struct(it.item)
-				if structname then
+				--if not void stname or templated
+				if structname and not self.typenames[structname] then
 				table.insert(outtab,cleanst)
 				table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
 				self.typedefs_dict[structname]="struct "..structname
@@ -914,7 +915,8 @@ function M.Parser()
 				end
 			elseif it.re_name == "struct_re" then
 				local cleanst,structname,strtab = self:clean_struct(it.item)
-				if structname then --not empty struc
+				--if not void stname or templated
+				if structname and not self.typenames[structname] then
 					outtab.structs[structname] = {}
 					for j=3,#strtab-1 do
 						self:parse_struct_line(strtab[j],outtab.structs[structname])

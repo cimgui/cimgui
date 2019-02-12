@@ -45,7 +45,6 @@ typedef struct ImColor_Simple { ImVec4_Simple Value;} ImColor_Simple;
 typedef struct CustomRect CustomRect;
 typedef struct Pair Pair;
 typedef struct TextRange TextRange;
-typedef struct ImVector ImVector;
 typedef struct ImVec4 ImVec4;
 typedef struct ImVec2 ImVec2;
 typedef struct ImGuiTextFilter ImGuiTextFilter;
@@ -522,16 +521,6 @@ enum ImGuiCond_
     ImGuiCond_Once = 1 << 1,
     ImGuiCond_FirstUseEver = 1 << 2,
     ImGuiCond_Appearing = 1 << 3
-};
-template<typename T>
-struct ImVector
-{
-    int Size;
-    int Capacity;
-    T* Data;
-    typedef T value_type;
-    typedef value_type* iterator;
-    typedef const value_type* const_iterator;
 };
 struct ImGuiStyle
 {
@@ -1263,36 +1252,7 @@ CIMGUI_API const char* igSaveIniSettingsToMemory(size_t* out_ini_size);
 CIMGUI_API void igSetAllocatorFunctions(void*(*alloc_func)(size_t sz,void* user_data),void(*free_func)(void* ptr,void* user_data),void* user_data);
 CIMGUI_API void* igMemAlloc(size_t size);
 CIMGUI_API void igMemFree(void* ptr);
-CIMGUI_API ImVector* ImVector_ImVector(void);
 CIMGUI_API void ImVector_destroy(ImVector* self);
-CIMGUI_API ImVector* ImVector_ImVectorVector_(const ImVector_ src);
-CIMGUI_API bool ImVector_empty(ImVector* self);
-CIMGUI_API int ImVector_size(ImVector* self);
-CIMGUI_API int ImVector_size_in_bytes(ImVector* self);
-CIMGUI_API int ImVector_capacity(ImVector* self);
-CIMGUI_API void ImVector_clear(ImVector* self);
-CIMGUI_API const T* ImVector_begin(ImVector* self);
-CIMGUI_API const T* ImVector_begin(ImVector* self);
-CIMGUI_API const T* ImVector_end(ImVector* self);
-CIMGUI_API const T* ImVector_end(ImVector* self);
-CIMGUI_API const T* ImVector_front(ImVector* self);
-CIMGUI_API const T* ImVector_front(ImVector* self);
-CIMGUI_API const T* ImVector_back(ImVector* self);
-CIMGUI_API const T* ImVector_back(ImVector* self);
-CIMGUI_API void ImVector_swap(ImVector* self,ImVector_ rhs);
-CIMGUI_API int ImVector__grow_capacity(ImVector* self,int sz);
-CIMGUI_API void ImVector_resize(ImVector* self,int new_size);
-CIMGUI_API void ImVector_resizeT(ImVector* self,int new_size,const T v);
-CIMGUI_API void ImVector_reserve(ImVector* self,int new_capacity);
-CIMGUI_API void ImVector_push_back(ImVector* self,const T v);
-CIMGUI_API void ImVector_pop_back(ImVector* self);
-CIMGUI_API void ImVector_push_front(ImVector* self,const T v);
-CIMGUI_API T* ImVector_erase(ImVector* self,const T* it);
-CIMGUI_API T* ImVector_eraseTPtr(ImVector* self,const T* it,const T* it_last);
-CIMGUI_API T* ImVector_erase_unsorted(ImVector* self,const T* it);
-CIMGUI_API T* ImVector_insert(ImVector* self,const T* it,const T v);
-CIMGUI_API bool ImVector_contains(ImVector* self,const T v);
-CIMGUI_API int ImVector_index_from_ptr(ImVector* self,const T* it);
 CIMGUI_API ImGuiStyle* ImGuiStyle_ImGuiStyle(void);
 CIMGUI_API void ImGuiStyle_destroy(ImGuiStyle* self);
 CIMGUI_API void ImGuiStyle_ScaleAllSizes(ImGuiStyle* self,float scale_factor);
