@@ -18,7 +18,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplGlfw_CharCallback",
-      "location": "imgui_impl_glfw",
+      "ov_cimguiname": "ImGui_ImplGlfw_CharCallback",
       "ret": "void",
       "signature": "(GLFWwindow*,unsigned int)",
       "stname": ""
@@ -43,7 +43,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplGlfw_InitForOpenGL",
-      "location": "imgui_impl_glfw",
+      "ov_cimguiname": "ImGui_ImplGlfw_InitForOpenGL",
       "ret": "bool",
       "signature": "(GLFWwindow*,bool)",
       "stname": ""
@@ -68,7 +68,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplGlfw_InitForVulkan",
-      "location": "imgui_impl_glfw",
+      "ov_cimguiname": "ImGui_ImplGlfw_InitForVulkan",
       "ret": "bool",
       "signature": "(GLFWwindow*,bool)",
       "stname": ""
@@ -105,7 +105,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplGlfw_KeyCallback",
-      "location": "imgui_impl_glfw",
+      "ov_cimguiname": "ImGui_ImplGlfw_KeyCallback",
       "ret": "void",
       "signature": "(GLFWwindow*,int,int,int,int)",
       "stname": ""
@@ -138,7 +138,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplGlfw_MouseButtonCallback",
-      "location": "imgui_impl_glfw",
+      "ov_cimguiname": "ImGui_ImplGlfw_MouseButtonCallback",
       "ret": "void",
       "signature": "(GLFWwindow*,int,int,int)",
       "stname": ""
@@ -154,7 +154,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplGlfw_NewFrame",
-      "location": "imgui_impl_glfw",
+      "ov_cimguiname": "ImGui_ImplGlfw_NewFrame",
       "ret": "void",
       "signature": "()",
       "stname": ""
@@ -183,7 +183,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplGlfw_ScrollCallback",
-      "location": "imgui_impl_glfw",
+      "ov_cimguiname": "ImGui_ImplGlfw_ScrollCallback",
       "ret": "void",
       "signature": "(GLFWwindow*,double,double)",
       "stname": ""
@@ -199,7 +199,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplGlfw_Shutdown",
-      "location": "imgui_impl_glfw",
+      "ov_cimguiname": "ImGui_ImplGlfw_Shutdown",
       "ret": "void",
       "signature": "()",
       "stname": ""
@@ -215,7 +215,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL2_CreateDeviceObjects",
-      "location": "imgui_impl_opengl2",
+      "ov_cimguiname": "ImGui_ImplOpenGL2_CreateDeviceObjects",
       "ret": "bool",
       "signature": "()",
       "stname": ""
@@ -231,7 +231,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL2_CreateFontsTexture",
-      "location": "imgui_impl_opengl2",
+      "ov_cimguiname": "ImGui_ImplOpenGL2_CreateFontsTexture",
       "ret": "bool",
       "signature": "()",
       "stname": ""
@@ -247,7 +247,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL2_DestroyDeviceObjects",
-      "location": "imgui_impl_opengl2",
+      "ov_cimguiname": "ImGui_ImplOpenGL2_DestroyDeviceObjects",
       "ret": "void",
       "signature": "()",
       "stname": ""
@@ -263,7 +263,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL2_DestroyFontsTexture",
-      "location": "imgui_impl_opengl2",
+      "ov_cimguiname": "ImGui_ImplOpenGL2_DestroyFontsTexture",
       "ret": "void",
       "signature": "()",
       "stname": ""
@@ -279,7 +279,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL2_Init",
-      "location": "imgui_impl_opengl2",
+      "ov_cimguiname": "ImGui_ImplOpenGL2_Init",
       "ret": "bool",
       "signature": "()",
       "stname": ""
@@ -295,7 +295,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL2_NewFrame",
-      "location": "imgui_impl_opengl2",
+      "ov_cimguiname": "ImGui_ImplOpenGL2_NewFrame",
       "ret": "void",
       "signature": "()",
       "stname": ""
@@ -316,7 +316,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL2_RenderDrawData",
-      "location": "imgui_impl_opengl2",
+      "ov_cimguiname": "ImGui_ImplOpenGL2_RenderDrawData",
       "ret": "void",
       "signature": "(ImDrawData*)",
       "stname": ""
@@ -332,7 +332,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL2_Shutdown",
-      "location": "imgui_impl_opengl2",
+      "ov_cimguiname": "ImGui_ImplOpenGL2_Shutdown",
       "ret": "void",
       "signature": "()",
       "stname": ""
@@ -348,7 +348,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL3_CreateDeviceObjects",
-      "location": "imgui_impl_opengl3",
+      "ov_cimguiname": "ImGui_ImplOpenGL3_CreateDeviceObjects",
       "ret": "bool",
       "signature": "()",
       "stname": ""
@@ -364,7 +364,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL3_CreateFontsTexture",
-      "location": "imgui_impl_opengl3",
+      "ov_cimguiname": "ImGui_ImplOpenGL3_CreateFontsTexture",
       "ret": "bool",
       "signature": "()",
       "stname": ""
@@ -380,7 +380,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL3_DestroyDeviceObjects",
-      "location": "imgui_impl_opengl3",
+      "ov_cimguiname": "ImGui_ImplOpenGL3_DestroyDeviceObjects",
       "ret": "void",
       "signature": "()",
       "stname": ""
@@ -396,7 +396,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL3_DestroyFontsTexture",
-      "location": "imgui_impl_opengl3",
+      "ov_cimguiname": "ImGui_ImplOpenGL3_DestroyFontsTexture",
       "ret": "void",
       "signature": "()",
       "stname": ""
@@ -419,7 +419,7 @@
         "glsl_version": "NULL"
       },
       "funcname": "ImGui_ImplOpenGL3_Init",
-      "location": "imgui_impl_opengl3",
+      "ov_cimguiname": "ImGui_ImplOpenGL3_Init",
       "ret": "bool",
       "signature": "(const char*)",
       "stname": ""
@@ -435,7 +435,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL3_NewFrame",
-      "location": "imgui_impl_opengl3",
+      "ov_cimguiname": "ImGui_ImplOpenGL3_NewFrame",
       "ret": "void",
       "signature": "()",
       "stname": ""
@@ -456,7 +456,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL3_RenderDrawData",
-      "location": "imgui_impl_opengl3",
+      "ov_cimguiname": "ImGui_ImplOpenGL3_RenderDrawData",
       "ret": "void",
       "signature": "(ImDrawData*)",
       "stname": ""
@@ -472,7 +472,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplOpenGL3_Shutdown",
-      "location": "imgui_impl_opengl3",
+      "ov_cimguiname": "ImGui_ImplOpenGL3_Shutdown",
       "ret": "void",
       "signature": "()",
       "stname": ""
@@ -497,7 +497,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplSDL2_InitForOpenGL",
-      "location": "imgui_impl_sdl",
+      "ov_cimguiname": "ImGui_ImplSDL2_InitForOpenGL",
       "ret": "bool",
       "signature": "(SDL_Window*,void*)",
       "stname": ""
@@ -518,7 +518,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplSDL2_InitForVulkan",
-      "location": "imgui_impl_sdl",
+      "ov_cimguiname": "ImGui_ImplSDL2_InitForVulkan",
       "ret": "bool",
       "signature": "(SDL_Window*)",
       "stname": ""
@@ -539,7 +539,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplSDL2_NewFrame",
-      "location": "imgui_impl_sdl",
+      "ov_cimguiname": "ImGui_ImplSDL2_NewFrame",
       "ret": "void",
       "signature": "(SDL_Window*)",
       "stname": ""
@@ -560,7 +560,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplSDL2_ProcessEvent",
-      "location": "imgui_impl_sdl",
+      "ov_cimguiname": "ImGui_ImplSDL2_ProcessEvent",
       "ret": "bool",
       "signature": "(const SDL_Event*)",
       "stname": ""
@@ -576,7 +576,7 @@
       "comment": "",
       "defaults": [],
       "funcname": "ImGui_ImplSDL2_Shutdown",
-      "location": "imgui_impl_sdl",
+      "ov_cimguiname": "ImGui_ImplSDL2_Shutdown",
       "ret": "void",
       "signature": "()",
       "stname": ""

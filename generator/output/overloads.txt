@@ -35,6 +35,9 @@ igSetWindowSize	2
 igPushStyleColor	2
 1	void	igPushStyleColorU32 (ImGuiCol,ImU32)
 2	void	igPushStyleColor (ImGuiCol,const ImVec4)
+ImVector_ImVector	2
+1	nil	ImVector_ImVector ()
+2	nil	ImVector_ImVectorVector_ (const ImVector_)
 igSetWindowCollapsed	2
 1	void	igSetWindowCollapsedBool (bool,ImGuiCond)
 2	void	igSetWindowCollapsedStr (const char*,bool,ImGuiCond)
@@ -126,4 +129,4 @@ igTreeNode	3
 igTreeNodeV	2
 1	bool	igTreeNodeVStr (const char*,const char*,va_list)
 2	bool	igTreeNodeVPtr (const void*,const char*,va_list)
-89 overloaded
+91 overloaded

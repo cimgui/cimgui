@@ -60,6 +60,7 @@
   "ImU64": "uint64_t",
   "ImVec2": "struct ImVec2",
   "ImVec4": "struct ImVec4",
+  "ImVector": "struct ImVector",
   "ImWchar": "unsigned short",
   "Pair": "struct Pair",
   "TextRange": "struct TextRange",

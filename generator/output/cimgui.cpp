@@ -1435,6 +1435,10 @@ CIMGUI_API void ImVector_destroy(ImVector* self)
 {
     IM_DELETE(self);
 }
+CIMGUI_API ImVector* ImVector_ImVectorVector_(const ImVector_ src)
+{
+    return IM_NEW(ImVector)(src);
+}
 CIMGUI_API bool ImVector_empty(ImVector* self)
 {
     return self->empty();
@@ -1487,7 +1491,7 @@ CIMGUI_API const T* ImVector_back(ImVector* self)
 {
     return &self->back();
 }
-CIMGUI_API void ImVector_swap(ImVector* self,ImVector_T rhs)
+CIMGUI_API void ImVector_swap(ImVector* self,ImVector_ rhs)
 {
     return self->swap(rhs);
 }

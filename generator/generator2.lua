@@ -450,6 +450,7 @@ cpp2ffi.prtable(parser.typenames)
 	local outpre,outpost = parser:gen_structs_and_enums()
 	--parser.templates get completely defined here
 	--cpp2ffi.prtable(parser.templates)
+	
 	local outtab = {}
     generate_templates(outtab,parser.templates)
 	local cstructsstr = outpre..table.concat(outtab,"")..outpost
