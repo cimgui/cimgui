@@ -1,5 +1,80 @@
 local M = {}
 
+local function ToStr(t,dometatables)
+	local function basicToStr (o)
+		if type(o) == "number" or type(o)=="boolean" then
+			return tostring(o)
+		elseif type(o) == "string" then
+			return string.format("%q", o)
+		else
+			return tostring(o) --"nil"
+		end
+	end
+	local strTG = {}
+	--local basicToStr= basicSerialize --tostring
+	if type(t) ~="table" then  return basicToStr(t) end
+	local recG = 0
+	local nameG="SELF"..recG
+	local ancest ={}
+	local function _ToStr(t,strT,rec,name)
+		if ancest[t] then
+			strT[#strT + 1]=ancest[t]
+			return
+		end
+		rec = rec + 1
+		ancest[t]=name
+		strT[#strT + 1]='{'
+		local count=0
+		-------------
+		--if t.name then strT[#strT + 1]=string.rep("\t",rec).."name:"..tostring(t.name) end
+		----------------
+		for k,v in pairs(t) do
+			count=count+1
+			strT[#strT + 1]="\n"
+			local kstr
+			if type(k) == "table" then
+				local name2=string.format("%s.KEY%d",name,count)
+				strT[#strT + 1]=string.rep("\t",rec).."["
+				local strTK = {}
+				_ToStr(k,strTK,rec,name2)
+				kstr=table.concat(strTK)
+				strT[#strT + 1]=kstr.."]="
+			else
+				kstr = basicToStr(k)
+				strT[#strT + 1]=string.rep("\t",rec).."["..kstr.."]="
+			end
+			
+			if type(v) == "table" then
+					local name2=string.format("%s[%s]",name,kstr)
+					_ToStr(v,strT,rec,name2)
+			else
+				strT[#strT + 1]=basicToStr(v)
+			end
+		end
+		if dometatables then
+			local mt = getmetatable(t)
+			if mt then
+				local namemt = string.format("%s.METATABLE",name)
+				local strMT = {}
+				_ToStr(mt,strMT,rec,namemt)
+				local metastr=table.concat(strMT)
+				strT[#strT + 1] = "\n"..string.rep("\t",rec).."[METATABLE]="..metastr
+			end
+		end
+		strT[#strT + 1]='}'
+		rec = rec - 1
+		return
+	end
+	_ToStr(t,strTG,recG,nameG)
+	return table.concat(strTG)
+end
+function M.prtable(...)
+	for i=1, select('#', ...) do
+		local t = select(i, ...)
+		print(ToStr(t))
+		print("\n")
+	end
+end
 local function str_split(str, pat)
 	local t = {} 
 	local fpat = "(.-)" .. pat
@@ -285,10 +360,12 @@ local function parseFunction(self,stname,lineorig,namespace)
 	local ttype,template = argscsinpars:match("([^%s,%(%)]+)%s*<(.+)>")
 	local te=""
 	if template then
+		if self.typenames[stname] ~= template then --rule out template typename
 		te = template:gsub("%s","_")
         te = te:gsub("%*","Ptr")
 		self.templates[ttype] = self.templates[ttype] or {}
 		self.templates[ttype][template] = te
+		end
 	end
 	--end
     argscsinpars = argscsinpars:gsub("<([%w_%*]+)>","_"..te) --ImVector
@@ -379,6 +456,7 @@ local function parseFunction(self,stname,lineorig,namespace)
     for k,def in args:gmatch('([%w_]+)=([%w_%(%)%s,%*%.%-%+%%"]+)[,%)]') do
         defT.defaults[k]=def
     end
+	defT.templated = self.typenames[stname] and true
 	defT.namespace = namespace
     defT.cimguiname = cimguiname
     defT.stname = stname
@@ -587,6 +665,7 @@ function M.Parser()
 	par.embeded_structs = {}
 	par.inerstructs = {}
 	par.templates = {}
+	par.typenames = {}
 	par.typedefs_dict = {}
 	par.cname_overloads = {}
 	par.manuals = {}
@@ -643,7 +722,8 @@ function M.Parser()
 		printItems(items)
 	end
 	par.parseFunction = parseFunction
-
+	
+	--get all function definitions and template structs
 	function par:parseFunctions()
 		for i,it in ipairs(itemsarr) do
 			if it.re_name == "function_re" or it.re_name == "functionD_re" then
@@ -658,9 +738,14 @@ function M.Parser()
 					end
 				end
 			elseif it.re_name == "struct_re" then
+				--check template struct
+				local typename = it.item:match("%s*template%s*<%s*typename%s*(%S+)%s*>")
 				local nsp = it.item:match("%b{}"):sub(2,-2)
 				local stname = it.item:match("struct%s+(%S+)")
-				--if stname=="ImVector" then print"ImVector" end
+				if typename then -- it is a struct template
+					self.typenames = self.typenames or {}
+					self.typenames[stname] = typename
+				end
 				local nspparr,itemsnsp = parseItems(nsp)
 				for insp,itnsp in ipairs(nspparr) do
 					if itnsp.re_name == "function_re" or itnsp.re_name == "functionD_re" then
@@ -724,7 +809,7 @@ function M.Parser()
 		return table.concat(outtab,""),stname,outtab
 	end
 	function par:gen_structs_and_enums()
-		local outtab = {}
+		local outtab = {} 
 		local outtabpre = {}
 		local typedefs_table = {}
 
