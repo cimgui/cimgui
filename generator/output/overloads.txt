@@ -22,7 +22,7 @@ igPushStyleVar	2
 2	void	igPushStyleVarVec2 (ImGuiStyleVar,const ImVec2)
 ImVector_end	2
 1	T*	ImVector_end ()
-2	const T*	ImVector_end ()
+2	const T*	ImVector_end_const ()const
 igIsRectVisible	2
 1	bool	igIsRectVisible (const ImVec2)
 2	bool	igIsRectVisibleVec2 (const ImVec2,const ImVec2)
@@ -37,7 +37,7 @@ igPushStyleColor	2
 2	void	igPushStyleColor (ImGuiCol,const ImVec4)
 ImVector_ImVector	2
 1	nil	ImVector_ImVector ()
-2	nil	ImVector_ImVectorVector_ (const ImVector_)
+2	nil	ImVector_ImVectorVector (const ImVector)
 igSetWindowCollapsed	2
 1	void	igSetWindowCollapsedBool (bool,ImGuiCond)
 2	void	igSetWindowCollapsedStr (const char*,bool,ImGuiCond)
@@ -49,7 +49,7 @@ ImVec2_ImVec2	2
 2	nil	ImVec2_ImVec2Float (float,float)
 ImVector_back	2
 1	T*	ImVector_back ()
-2	const T*	ImVector_back ()
+2	const T*	ImVector_back_const ()const
 igPlotHistogram	2
 1	void	igPlotHistogramFloatPtr (const char*,const float*,int,int,const char*,float,float,ImVec2,int)
 2	void	igPlotHistogramFnPtr (const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)
@@ -65,7 +65,7 @@ ImDrawList_AddText	2
 2	void	ImDrawList_AddTextFontPtr (const ImFont*,float,const ImVec2,ImU32,const char*,const char*,float,const ImVec4*)
 ImVector_begin	2
 1	T*	ImVector_begin ()
-2	const T*	ImVector_begin ()
+2	const T*	ImVector_begin_const ()const
 igBeginChild	2
 1	bool	igBeginChild (const char*,const ImVec2,bool,ImGuiWindowFlags)
 2	bool	igBeginChildID (ImGuiID,const ImVec2,bool,ImGuiWindowFlags)
@@ -92,7 +92,7 @@ ImVector_resize	2
 2	void	ImVector_resizeT (int,const T)
 ImVector_front	2
 1	T*	ImVector_front ()
-2	const T*	ImVector_front ()
+2	const T*	ImVector_front_const ()const
 ImColor_ImColor	5
 1	nil	ImColor_ImColor ()
 2	nil	ImColor_ImColorInt (int,int,int,int)

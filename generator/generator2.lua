@@ -230,14 +230,14 @@ local function func_header_generate(FP)
 
     table.insert(outtab,"#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
     for _,t in ipairs(FP.funcdefs) do
-		--if t.stname=="ImVector" then print(t.cimguiname) end
+
         if t.cimguiname then
         local cimf = FP.defsT[t.cimguiname]
         local def = cimf[t.signature]
         assert(def,t.signature..t.cimguiname)
         local manual = FP.get_manuals(def)
         if not manual and not def.templated then
-			--if FP.templates[t.stname] then print(t.cimguiname) end
+
             local addcoment = def.comment or ""
             local empty = def.args:match("^%(%)") --no args
             if def.constructor then
@@ -246,8 +246,7 @@ local function func_header_generate(FP)
             elseif def.destructor then
                 table.insert(outtab,"CIMGUI_API void "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
             else --not constructor
-			--if t.stname=="ImVector" then print("2",t.cimguiname) end
-			
+
                 if def.stname == "" then --ImGui namespace or top level
                     table.insert(outtab,"CIMGUI_API "..def.ret.." ".. def.ov_cimguiname ..(empty and "(void)" or def.args)..";"..addcoment.."\n")
                 else
@@ -264,6 +263,8 @@ local function func_header_generate(FP)
     cfuncsstr = cfuncsstr:gsub("\n+","\n") --several empty lines to one empty line
     return cfuncsstr
 end
+
+
 local function ImGui_f_implementation(outtab,def)
     local ptret = def.retref and "&" or ""
     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname..def.args.."\n")

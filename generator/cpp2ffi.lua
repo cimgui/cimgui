@@ -248,7 +248,14 @@ local function name_overloadsAlgo(v)
     local maxnum = 0
     for i,t in ipairs(v) do
         bb[i] = ""
-        local signature = t.signature:sub(2,-2) -- without parenthesis
+        --local signature = t.signature:sub(2,-2) -- without parenthesis
+		--inside parenthesis
+		local signature = t.signature:match("%b()")
+		signature = signature:sub(2,-2)
+		--add const function
+		if t.signature:match("const$") then
+			signature = signature .. ",_const"
+		end
         aa[i] = {}
         local num = 1
         --for typec in t.signature:gmatch(".-([^,%(%s]+)[,%)]") do
@@ -336,8 +343,10 @@ local function parseFunction(self,stname,lineorig,namespace)
 	if line:match("template") then return end
     
     local ret = line:match("([^%(%)]+[%*%s])%s?~?[_%w]+%b()")
-    local funcname, args = line:match("(~?[_%w]+)%s*(%b())")
-	
+    --local funcname, args = line:match("(~?[_%w]+)%s*(%b())")
+	local funcname, args, extraconst = line:match("(~?[_%w]+)%s*(%b())(.*)")
+	extraconst = extraconst:match("const")
+
 	if not args then
 	print"not gettint args in"
 	print(line,lineorig)
@@ -357,18 +366,21 @@ local function parseFunction(self,stname,lineorig,namespace)
 
 	--for _,ttype in ipairs(self.templatedTypes) do
     --local template = argscsinpars:match(ttype.."%s*<(.+)>")
+	--TODO several diferent templates
 	local ttype,template = argscsinpars:match("([^%s,%(%)]+)%s*<(.+)>")
 	local te=""
 	if template then
 		if self.typenames[stname] ~= template then --rule out template typename
 		te = template:gsub("%s","_")
         te = te:gsub("%*","Ptr")
+		te = "_"..te
+
 		self.templates[ttype] = self.templates[ttype] or {}
 		self.templates[ttype][template] = te
 		end
 	end
 	--end
-    argscsinpars = argscsinpars:gsub("<([%w_%*]+)>","_"..te) --ImVector
+    argscsinpars = argscsinpars:gsub("<([%w_%*]+)>",te) --ImVector
     
     local argsArr = {}
     local functype_re =       "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
@@ -431,6 +443,7 @@ local function parseFunction(self,stname,lineorig,namespace)
     signature = signature:gsub(",%s*",",")--space after ,
     signature = signature:gsub("([%w_]+)%s[%w_]+(%[%d*%])","%1%2") -- float[2]
     signature = signature:gsub("(%(%*)[%w_]+(%)%([^%(%)]*%))","%1%2") --func defs
+	signature = signature .. (extraconst or "")
     
     local call_args = argscsinpars:gsub("([%w_]+%s[%w_]+)%[%d*%]","%1") --float[2]
     call_args = call_args:gsub("%(%*([%w_]+)%)%([^%(%)]*%)"," %1") --func type
@@ -589,9 +602,13 @@ local function ADDdestructors(FP)
             for j,cons in ipairs(defT) do
                 cons.constructor = true
             end
-            assert(defT[1].stname==defT[1].funcname)
+            if(defT[1].stname~=defT[1].funcname) then
+				print(defT[1].stname, defT[1].funcname)
+				error"names should be equal"
+			end
             local def = {}
             def.stname = defT[1].stname
+			def.templated = defT[1].templated
             def.ret = "void"
             def.ov_cimguiname = def.stname.."_destroy"
             def.cimguiname = def.ov_cimguiname
@@ -691,6 +708,9 @@ function M.Parser()
 		self:parseItems()
 		self:parseFunctions()
 		self:compute_overloads()
+		self:gen_structs_and_enums()
+		self:compute_templated()
+		ADDdestructors(self)
 	end
 	function par:parseItems()
 		--typedefs dictionary
@@ -812,7 +832,8 @@ function M.Parser()
 		local outtab = {} 
 		local outtabpre = {}
 		local typedefs_table = {}
-
+		self.inerstructs = {}
+		
 		--first typedefs
 		for i,it in ipairs(itemsarr) do
 			if it.re_name == "typedef_re" or it.re_name == "functypedef_re" or it.re_name == "vardef_re" then
@@ -1040,9 +1061,114 @@ function M.Parser()
         table.insert(strt,string.format("%d overloaded",numoverloaded))
 		AdjustArguments(self)
 		ADDnonUDT(self)
-		ADDdestructors(self)
+		--ADDdestructors(self)
         self.overloadstxt  = table.concat(strt,"\n")
     end
+	local function typename_gsub(cad,typename,tname)
+		local str,n = "",0
+		if tname:match"%*" then
+		str,n = cad:gsub("(const%s+)("..typename..")", tname.." %1")
+		end
+		if n==0 then
+		str,n = cad:gsub("(const%s+)("..typename..")(%s*%*)", tname.." %1%3")
+		end
+		if n==0 then
+		str,n = cad:gsub("([^_%w])("..typename..")([^_%w])", "%1"..tname.."%3")
+		end
+		if n==0 then
+		str,n = cad:gsub("([^_%w])("..typename..")$", "%1"..tname)
+		end
+		if n==0 then
+		str,n = cad:gsub("^("..typename..")(%s*%*)", tname.."%2")
+		end
+		return str
+	end
+	function par:compute_templated()
+		local defsT = self.defsT
+		local newcdefs = {}
+		for numcdef,t in ipairs(self.funcdefs) do
+			if t.cimguiname then
+			local cimf = defsT[t.cimguiname]
+			local defT = cimf[t.signature]
+			if defT.templated then
+				local templates = self.templates[defT.stname]
+				local typename = self.typenames[defT.stname]
+				for tname,tnamestr in pairs(templates) do
+					--local tnamestr = typetoStr(tname)
+					local stname = defT.stname .. "_" .. tnamestr
+					local templ_stname = defT.stname .. "_" .. typename
+					local cimguiname = t.cimguiname:gsub(defT.stname,stname)
+					local ov_cimguiname = defT.ov_cimguiname:gsub(defT.stname,stname)
+					local signature = defT.signature:gsub(typename, tname)
+					local ret 
+					if defT.ret then
+						--ret = defT.ret:gsub(typename, tname)
+						ret = typename_gsub(defT.ret, typename, tname)
+					end
+
+					local args = defT.args:gsub(defT.stname,stname)
+
+					args = typename_gsub(args, typename, tname)
+					
+					local argsT = {}
+					for i,ar in ipairs(defT.argsT) do
+						argsT[i] = {}
+						for k,v in pairs(ar) do
+							if k=="type" then
+								v = v:gsub(defT.stname,stname)
+								v = typename_gsub(v, typename, tname)
+							end
+							argsT[i][k]=v
+						end
+					end
+					-----------reconstruct args
+					--if(#argsT==0 and not defT.constructor) then M.prtable(defT) end
+					--if is const function make self const
+					if #argsT>0 and signature:match"const$" then
+						argsT[1].type = "const "..argsT[1].type
+					end
+					
+					args = "("
+					for i=1,#argsT-1 do
+						local ar = argsT[i]
+						args = args .. ar.type .. " " ..ar.name .. ","
+					end
+					local ar = argsT[#argsT]
+					if ar then args = args .. ar.type .. " " ..ar.name .. ")" 
+					else args = args .. ")" end
+					args = args:gsub("&","")
+					------------------------------
+					
+					defTnew = {}
+					defTnew.cimguiname = cimguiname
+					defTnew.ov_cimguiname = ov_cimguiname
+					defTnew.signature = signature
+					defTnew.ret = ret
+					defTnew.retref = defT.retref
+					defTnew.templatedgen = true
+					defTnew.call_args = defT.call_args
+					defTnew.stname = stname
+					local funcname = defT.funcname
+					if funcname == defT.stname then --is constructor
+						funcname = stname
+					end
+					defTnew.funcname = funcname
+					defTnew.args = args
+					defTnew.argsT = argsT
+					defTnew.defaults = {}
+					--print(cimguiname,ov_cimguiname, signature , ret)
+					defsT[cimguiname] = defsT[cimguiname] or {}
+					defsT[cimguiname][#defsT[cimguiname] + 1] = defTnew
+					defsT[cimguiname][signature] = defTnew
+					table.insert(newcdefs,{stname=stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=signature,cimguiname=cimguiname,call_args=call_args,ret =t.ret,comment=comment})
+				end
+			end -- templated
+			end --cimguiname
+		end
+		for i,v in ipairs(newcdefs) do
+			table.insert(self.funcdefs,v)
+		end
+	end
 	return par
 end
 
