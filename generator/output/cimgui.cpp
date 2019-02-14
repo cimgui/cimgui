@@ -4343,63 +4343,11 @@ CIMGUI_API bool ImVector_ImWchar_contains(const ImVector_ImWchar* self,const ImW
 {
     return self->contains(v);
 }
-CIMGUI_API bool ImVector_ImFontConfig_contains(const ImVector_ImFontConfig* self,const ImFontConfig v)
-{
-    return self->contains(v);
-}
-CIMGUI_API bool ImVector_ImFontGlyph_contains(const ImVector_ImFontGlyph* self,const ImFontGlyph v)
-{
-    return self->contains(v);
-}
-CIMGUI_API bool ImVector_TextRange_contains(const ImVector_TextRange* self,const TextRange v)
-{
-    return self->contains(v);
-}
-CIMGUI_API bool ImVector_CustomRect_contains(const ImVector_CustomRect* self,const CustomRect v)
-{
-    return self->contains(v);
-}
-CIMGUI_API bool ImVector_ImDrawChannel_contains(const ImVector_ImDrawChannel* self,const ImDrawChannel v)
-{
-    return self->contains(v);
-}
 CIMGUI_API bool ImVector_char_contains(const ImVector_char* self,const char v)
 {
     return self->contains(v);
 }
-CIMGUI_API bool ImVector_ImTextureID_contains(const ImVector_ImTextureID* self,const ImTextureID v)
-{
-    return self->contains(v);
-}
-CIMGUI_API bool ImVector_ImDrawVert_contains(const ImVector_ImDrawVert* self,const ImDrawVert v)
-{
-    return self->contains(v);
-}
 CIMGUI_API bool ImVector_int_contains(const ImVector_int* self,const int v)
-{
-    return self->contains(v);
-}
-CIMGUI_API bool ImVector_Pair_contains(const ImVector_Pair* self,const Pair v)
-{
-    return self->contains(v);
-}
-CIMGUI_API bool ImVector_ImFontPtr_contains(const ImVector_ImFontPtr* self,ImFont* const  v)
-{
-    return self->contains(v);
-}
-CIMGUI_API bool ImVector_ImVec4_contains(const ImVector_ImVec4* self,const ImVec4 v)
-{
-    return self->contains(v);
-}
-CIMGUI_API bool ImVector_ImDrawCmd_contains(const ImVector_ImDrawCmd* self,const ImDrawCmd v)
-{
-    return self->contains(v);
-}
-CIMGUI_API bool ImVector_ImDrawIdx_contains(const ImVector_ImDrawIdx* self,const ImDrawIdx v)
-{
-    return self->contains(v);
-}
-CIMGUI_API bool ImVector_ImVec2_contains(const ImVector_ImVec2* self,const ImVec2 v)
 {
     return self->contains(v);
 }

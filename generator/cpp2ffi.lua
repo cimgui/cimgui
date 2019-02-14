@@ -1096,7 +1096,6 @@ function M.Parser()
 				for tname,tnamestr in pairs(templates) do
 					--local tnamestr = typetoStr(tname)
 					local stname = defT.stname .. "_" .. tnamestr
-					local templ_stname = defT.stname .. "_" .. typename
 					local cimguiname = t.cimguiname:gsub(defT.stname,stname)
 					local ov_cimguiname = defT.ov_cimguiname:gsub(defT.stname,stname)
 					local signature = defT.signature:gsub(typename, tname)

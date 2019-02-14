@@ -444,8 +444,26 @@ local function generate_templates(code,templates)
 end
 --generate cimgui.cpp cimgui.h 
 local function cimgui_generation(parser)
-cpp2ffi.prtable(parser.templates)
-cpp2ffi.prtable(parser.typenames)
+	cpp2ffi.prtable(parser.templates)
+	cpp2ffi.prtable(parser.typenames)
+	--clean ImVector:contains() for not applicable types
+	local clean_f = {}
+	for k,v in pairs(parser.defsT) do
+		if k:match"ImVector" and k:match"contains" then
+			--cpp2ffi.prtable(k,v)
+			local stname = v[1].stname
+			if not(stname:match"float" or stname:match"int" or stname:match"char") then
+				parser.defsT[k] = nil
+				for i,t in ipairs(parser.funcdefs) do
+					if t.cimguiname == k then
+						table.remove(parser.funcdefs, i)
+						break
+					end
+				end
+			end
+		end
+	end
+	--------------------------------------------------
     local hstrfile = read_data"./cimgui_template.h"
 
 	local outpre,outpost = parser:gen_structs_and_enums()

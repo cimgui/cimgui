@@ -5733,30 +5733,6 @@
       "templatedgen": true
     }
   ],
-  "ImVector_CustomRect_contains": [
-    {
-      "args": "(const ImVector_CustomRect* self,const CustomRect v)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "const ImVector_CustomRect*"
-        },
-        {
-          "name": "v",
-          "type": "const CustomRect"
-        }
-      ],
-      "call_args": "(v)",
-      "cimguiname": "ImVector_CustomRect_contains",
-      "defaults": [],
-      "funcname": "contains",
-      "ov_cimguiname": "ImVector_CustomRect_contains",
-      "ret": "bool",
-      "signature": "(const CustomRect)const",
-      "stname": "ImVector_CustomRect",
-      "templatedgen": true
-    }
-  ],
   "ImVector_CustomRect_destroy": [
     {
       "args": "(ImVector_CustomRect* self)",
@@ -6377,30 +6353,6 @@
       "ov_cimguiname": "ImVector_ImDrawChannel_clear",
       "ret": "void",
       "signature": "()",
-      "stname": "ImVector_ImDrawChannel",
-      "templatedgen": true
-    }
-  ],
-  "ImVector_ImDrawChannel_contains": [
-    {
-      "args": "(const ImVector_ImDrawChannel* self,const ImDrawChannel v)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "const ImVector_ImDrawChannel*"
-        },
-        {
-          "name": "v",
-          "type": "const ImDrawChannel"
-        }
-      ],
-      "call_args": "(v)",
-      "cimguiname": "ImVector_ImDrawChannel_contains",
-      "defaults": [],
-      "funcname": "contains",
-      "ov_cimguiname": "ImVector_ImDrawChannel_contains",
-      "ret": "bool",
-      "signature": "(const ImDrawChannel)const",
       "stname": "ImVector_ImDrawChannel",
       "templatedgen": true
     }
@@ -7029,30 +6981,6 @@
       "templatedgen": true
     }
   ],
-  "ImVector_ImDrawCmd_contains": [
-    {
-      "args": "(const ImVector_ImDrawCmd* self,const ImDrawCmd v)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "const ImVector_ImDrawCmd*"
-        },
-        {
-          "name": "v",
-          "type": "const ImDrawCmd"
-        }
-      ],
-      "call_args": "(v)",
-      "cimguiname": "ImVector_ImDrawCmd_contains",
-      "defaults": [],
-      "funcname": "contains",
-      "ov_cimguiname": "ImVector_ImDrawCmd_contains",
-      "ret": "bool",
-      "signature": "(const ImDrawCmd)const",
-      "stname": "ImVector_ImDrawCmd",
-      "templatedgen": true
-    }
-  ],
   "ImVector_ImDrawCmd_destroy": [
     {
       "args": "(ImVector_ImDrawCmd* self)",
@@ -7673,30 +7601,6 @@
       "ov_cimguiname": "ImVector_ImDrawIdx_clear",
       "ret": "void",
       "signature": "()",
-      "stname": "ImVector_ImDrawIdx",
-      "templatedgen": true
-    }
-  ],
-  "ImVector_ImDrawIdx_contains": [
-    {
-      "args": "(const ImVector_ImDrawIdx* self,const ImDrawIdx v)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "const ImVector_ImDrawIdx*"
-        },
-        {
-          "name": "v",
-          "type": "const ImDrawIdx"
-        }
-      ],
-      "call_args": "(v)",
-      "cimguiname": "ImVector_ImDrawIdx_contains",
-      "defaults": [],
-      "funcname": "contains",
-      "ov_cimguiname": "ImVector_ImDrawIdx_contains",
-      "ret": "bool",
-      "signature": "(const ImDrawIdx)const",
       "stname": "ImVector_ImDrawIdx",
       "templatedgen": true
     }
@@ -8325,30 +8229,6 @@
       "templatedgen": true
     }
   ],
-  "ImVector_ImDrawVert_contains": [
-    {
-      "args": "(const ImVector_ImDrawVert* self,const ImDrawVert v)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "const ImVector_ImDrawVert*"
-        },
-        {
-          "name": "v",
-          "type": "const ImDrawVert"
-        }
-      ],
-      "call_args": "(v)",
-      "cimguiname": "ImVector_ImDrawVert_contains",
-      "defaults": [],
-      "funcname": "contains",
-      "ov_cimguiname": "ImVector_ImDrawVert_contains",
-      "ret": "bool",
-      "signature": "(const ImDrawVert)const",
-      "stname": "ImVector_ImDrawVert",
-      "templatedgen": true
-    }
-  ],
   "ImVector_ImDrawVert_destroy": [
     {
       "args": "(ImVector_ImDrawVert* self)",
@@ -8969,30 +8849,6 @@
       "ov_cimguiname": "ImVector_ImFontConfig_clear",
       "ret": "void",
       "signature": "()",
-      "stname": "ImVector_ImFontConfig",
-      "templatedgen": true
-    }
-  ],
-  "ImVector_ImFontConfig_contains": [
-    {
-      "args": "(const ImVector_ImFontConfig* self,const ImFontConfig v)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "const ImVector_ImFontConfig*"
-        },
-        {
-          "name": "v",
-          "type": "const ImFontConfig"
-        }
-      ],
-      "call_args": "(v)",
-      "cimguiname": "ImVector_ImFontConfig_contains",
-      "defaults": [],
-      "funcname": "contains",
-      "ov_cimguiname": "ImVector_ImFontConfig_contains",
-      "ret": "bool",
-      "signature": "(const ImFontConfig)const",
       "stname": "ImVector_ImFontConfig",
       "templatedgen": true
     }
@@ -9621,30 +9477,6 @@
       "templatedgen": true
     }
   ],
-  "ImVector_ImFontGlyph_contains": [
-    {
-      "args": "(const ImVector_ImFontGlyph* self,const ImFontGlyph v)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "const ImVector_ImFontGlyph*"
-        },
-        {
-          "name": "v",
-          "type": "const ImFontGlyph"
-        }
-      ],
-      "call_args": "(v)",
-      "cimguiname": "ImVector_ImFontGlyph_contains",
-      "defaults": [],
-      "funcname": "contains",
-      "ov_cimguiname": "ImVector_ImFontGlyph_contains",
-      "ret": "bool",
-      "signature": "(const ImFontGlyph)const",
-      "stname": "ImVector_ImFontGlyph",
-      "templatedgen": true
-    }
-  ],
   "ImVector_ImFontGlyph_destroy": [
     {
       "args": "(ImVector_ImFontGlyph* self)",
@@ -10265,30 +10097,6 @@
       "ov_cimguiname": "ImVector_ImFontPtr_clear",
       "ret": "void",
       "signature": "()",
-      "stname": "ImVector_ImFontPtr",
-      "templatedgen": true
-    }
-  ],
-  "ImVector_ImFontPtr_contains": [
-    {
-      "args": "(const ImVector_ImFontPtr* self,ImFont* const  v)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "const ImVector_ImFontPtr*"
-        },
-        {
-          "name": "v",
-          "type": "ImFont* const "
-        }
-      ],
-      "call_args": "(v)",
-      "cimguiname": "ImVector_ImFontPtr_contains",
-      "defaults": [],
-      "funcname": "contains",
-      "ov_cimguiname": "ImVector_ImFontPtr_contains",
-      "ret": "bool",
-      "signature": "(const ImFont*)const",
       "stname": "ImVector_ImFontPtr",
       "templatedgen": true
     }
@@ -10917,30 +10725,6 @@
       "templatedgen": true
     }
   ],
-  "ImVector_ImTextureID_contains": [
-    {
-      "args": "(const ImVector_ImTextureID* self,const ImTextureID v)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "const ImVector_ImTextureID*"
-        },
-        {
-          "name": "v",
-          "type": "const ImTextureID"
-        }
-      ],
-      "call_args": "(v)",
-      "cimguiname": "ImVector_ImTextureID_contains",
-      "defaults": [],
-      "funcname": "contains",
-      "ov_cimguiname": "ImVector_ImTextureID_contains",
-      "ret": "bool",
-      "signature": "(const ImTextureID)const",
-      "stname": "ImVector_ImTextureID",
-      "templatedgen": true
-    }
-  ],
   "ImVector_ImTextureID_destroy": [
     {
       "args": "(ImVector_ImTextureID* self)",
@@ -11565,30 +11349,6 @@
       "templatedgen": true
     }
   ],
-  "ImVector_ImVec2_contains": [
-    {
-      "args": "(const ImVector_ImVec2* self,const ImVec2 v)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "const ImVector_ImVec2*"
-        },
-        {
-          "name": "v",
-          "type": "const ImVec2"
-        }
-      ],
-      "call_args": "(v)",
-      "cimguiname": "ImVector_ImVec2_contains",
-      "defaults": [],
-      "funcname": "contains",
-      "ov_cimguiname": "ImVector_ImVec2_contains",
-      "ret": "bool",
-      "signature": "(const ImVec2)const",
-      "stname": "ImVector_ImVec2",
-      "templatedgen": true
-    }
-  ],
   "ImVector_ImVec2_destroy": [
     {
       "args": "(ImVector_ImVec2* self)",
@@ -12209,30 +11969,6 @@
       "ov_cimguiname": "ImVector_ImVec4_clear",
       "ret": "void",
       "signature": "()",
-      "stname": "ImVector_ImVec4",
-      "templatedgen": true
-    }
-  ],
-  "ImVector_ImVec4_contains": [
-    {
-      "args": "(const ImVector_ImVec4* self,const ImVec4 v)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "const ImVector_ImVec4*"
-        },
-        {
-          "name": "v",
-          "type": "const ImVec4"
-        }
-      ],
-      "call_args": "(v)",
-      "cimguiname": "ImVector_ImVec4_contains",
-      "defaults": [],
-      "funcname": "contains",
-      "ov_cimguiname": "ImVector_ImVec4_contains",
-      "ret": "bool",
-      "signature": "(const ImVec4)const",
       "stname": "ImVector_ImVec4",
       "templatedgen": true
     }
@@ -13546,30 +13282,6 @@
       "templatedgen": true
     }
   ],
-  "ImVector_Pair_contains": [
-    {
-      "args": "(const ImVector_Pair* self,const Pair v)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "const ImVector_Pair*"
-        },
-        {
-          "name": "v",
-          "type": "const Pair"
-        }
-      ],
-      "call_args": "(v)",
-      "cimguiname": "ImVector_Pair_contains",
-      "defaults": [],
-      "funcname": "contains",
-      "ov_cimguiname": "ImVector_Pair_contains",
-      "ret": "bool",
-      "signature": "(const Pair)const",
-      "stname": "ImVector_Pair",
-      "templatedgen": true
-    }
-  ],
   "ImVector_Pair_destroy": [
     {
       "args": "(ImVector_Pair* self)",
@@ -14190,30 +13902,6 @@
       "ov_cimguiname": "ImVector_TextRange_clear",
       "ret": "void",
       "signature": "()",
-      "stname": "ImVector_TextRange",
-      "templatedgen": true
-    }
-  ],
-  "ImVector_TextRange_contains": [
-    {
-      "args": "(const ImVector_TextRange* self,const TextRange v)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "const ImVector_TextRange*"
-        },
-        {
-          "name": "v",
-          "type": "const TextRange"
-        }
-      ],
-      "call_args": "(v)",
-      "cimguiname": "ImVector_TextRange_contains",
-      "defaults": [],
-      "funcname": "contains",
-      "ov_cimguiname": "ImVector_TextRange_contains",
-      "ret": "bool",
-      "signature": "(const TextRange)const",
       "stname": "ImVector_TextRange",
       "templatedgen": true
     }
@@ -15467,32 +15155,6 @@
       "ov_cimguiname": "ImVector_clear",
       "ret": "void",
       "signature": "()",
-      "stname": "ImVector",
-      "templated": true
-    }
-  ],
-  "ImVector_contains": [
-    {
-      "args": "(ImVector* self,const T v)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "ImVector*"
-        },
-        {
-          "name": "v",
-          "type": "const T"
-        }
-      ],
-      "argsoriginal": "(const T& v)",
-      "call_args": "(v)",
-      "cimguiname": "ImVector_contains",
-      "comment": "",
-      "defaults": [],
-      "funcname": "contains",
-      "ov_cimguiname": "ImVector_contains",
-      "ret": "bool",
-      "signature": "(const T)const",
       "stname": "ImVector",
       "templated": true
     }
