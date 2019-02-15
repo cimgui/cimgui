@@ -458,7 +458,7 @@ local function parseFunction(self,stname,lineorig,namespace)
     end
     
     local cimguiname = self.getCname(stname,funcname)
-    table.insert(self.funcdefs,{stname=stname,funcname=funcname,args=args,argsc=argscsinpars,signature=signature,cimguiname=cimguiname,call_args=call_args,ret =ret,comment=comment})
+    table.insert(self.funcdefs,{stname=stname,funcname=funcname,args=args,argsc=argscsinpars,signature=signature,cimguiname=cimguiname,call_args=call_args,ret =ret})
 	local defsT = self.defsT
 	            defsT[cimguiname] = defsT[cimguiname] or {}
                 table.insert(defsT[cimguiname],{})
@@ -480,7 +480,7 @@ local function parseFunction(self,stname,lineorig,namespace)
     defT.call_args = call_args
     defT.isvararg = signature:match("%.%.%.%)$")
     defT.location = locat
-    defT.comment = "" --comment
+    --defT.comment = "" --comment
     defT.argsT = argsArr
     if self.get_manuals(defT) then
         defT.manual = true
@@ -553,7 +553,7 @@ local function ADDnonUDT(FP)
             defT2.retref = nil
             defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT2
             defsT[t.cimguiname][t.signature.."nonUDT"] = defT2
-            table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret,comment=comment})
+            table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret})
             --converting to Simple type----------------------------------------------------
             local defT3 = {}
             --first strings
@@ -574,7 +574,7 @@ local function ADDnonUDT(FP)
             defT3.retref = nil
             defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT3
             defsT[t.cimguiname][t.signature.."nonUDT2"] = defT3
-            table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT2",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret,comment=comment})
+            table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT2",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret})
         end
         end
 		--end
@@ -1159,7 +1159,7 @@ function M.Parser()
 					defsT[cimguiname] = defsT[cimguiname] or {}
 					defsT[cimguiname][#defsT[cimguiname] + 1] = defTnew
 					defsT[cimguiname][signature] = defTnew
-					table.insert(newcdefs,{stname=stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=signature,cimguiname=cimguiname,call_args=call_args,ret =t.ret,comment=comment})
+					table.insert(newcdefs,{stname=stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=signature,cimguiname=cimguiname,call_args=call_args,ret =t.ret})
 				end
 			end -- templated
 			end --cimguiname

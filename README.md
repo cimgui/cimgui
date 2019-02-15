@@ -42,7 +42,7 @@ Notes:
 ### definitions description
 * It is a collection in which key is the cimgui name that would result without overloadings and the value is an array of overloadings (may be only one overloading)
 * Each overloading is a collection. Some relevant keys and values are:
-  * stname : the name of the struct the function belongs to (may be ImGui if it is top level in ImGui namespace)
+  * stname : the name of the struct the function belongs to (will be "" if it is top level in ImGui namespace)
   * ov_cimguiname : the overloaded cimgui name (if absent it would be taken from cimguiname)
   * cimguiname : the name without overloading (this should be used if there is not ov_cimguiname)
   * ret : the return type
