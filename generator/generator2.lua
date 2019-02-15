@@ -446,7 +446,7 @@ end
 local function cimgui_generation(parser)
 	cpp2ffi.prtable(parser.templates)
 	cpp2ffi.prtable(parser.typenames)
-	--clean ImVector:contains() for not applicable types
+	-- clean ImVector:contains() for not applicable types
 	local clean_f = {}
 	for k,v in pairs(parser.defsT) do
 		if k:match"ImVector" and k:match"contains" then
@@ -463,6 +463,7 @@ local function cimgui_generation(parser)
 			end
 		end
 	end
+	
 	--------------------------------------------------
     local hstrfile = read_data"./cimgui_template.h"
 
@@ -556,6 +557,10 @@ save_data("./output/definitions.lua",serializeTableF(parser1.defsT))
 
 ----------save struct and enums lua table in structs_and_enums.lua for using in bindings
 local structs_and_enums_table = parser1:gen_structs_and_enums_table()
+--correct Pair union member
+structs_and_enums_table["structs"]["Pair"][2]["name"] = ""
+structs_and_enums_table["structs"]["Pair"][2]["type"] = structs_and_enums_table["structs"]["Pair"][2]["type"] .. "}"
+-----------------------
 save_data("./output/structs_and_enums.lua",serializeTableF(structs_and_enums_table))
 save_data("./output/typedefs_dict.lua",serializeTableF(parser1.typedefs_dict))
 

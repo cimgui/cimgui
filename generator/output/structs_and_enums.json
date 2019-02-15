@@ -2745,8 +2745,8 @@
         "type": "ImGuiID"
       },
       {
-        "name": "}",
-        "type": "union { int val_i; float val_f; void* val_p;"
+        "name": "",
+        "type": "union { int val_i; float val_f; void* val_p;}"
       }
     ],
     "TextRange": [
