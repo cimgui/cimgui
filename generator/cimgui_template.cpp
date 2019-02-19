@@ -43,10 +43,7 @@ CIMGUI_API ImVector_ImWchar* ImVector_ImWchar_create()
 {
 	return IM_NEW(ImVector<ImWchar>) ();
 }
-CIMGUI_API void ImVector_ImWchar_destroy(ImVector_ImWchar* p)
-{
-	IM_DELETE(p);
-}
+
 CIMGUI_API void ImVector_ImWchar_Init(ImVector_ImWchar* p)
 {
 	IM_PLACEMENT_NEW(p) ImVector<ImWchar>();

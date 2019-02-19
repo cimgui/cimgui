@@ -230,12 +230,14 @@ local function func_header_generate(FP)
 
     table.insert(outtab,"#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
     for _,t in ipairs(FP.funcdefs) do
+
         if t.cimguiname then
         local cimf = FP.defsT[t.cimguiname]
         local def = cimf[t.signature]
         assert(def,t.signature..t.cimguiname)
         local manual = FP.get_manuals(def)
-        if not manual then
+        if not manual and not def.templated then
+
             local addcoment = def.comment or ""
             local empty = def.args:match("^%(%)") --no args
             if def.constructor then
@@ -244,6 +246,7 @@ local function func_header_generate(FP)
             elseif def.destructor then
                 table.insert(outtab,"CIMGUI_API void "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
             else --not constructor
+
                 if def.stname == "" then --ImGui namespace or top level
                     table.insert(outtab,"CIMGUI_API "..def.ret.." ".. def.ov_cimguiname ..(empty and "(void)" or def.args)..";"..addcoment.."\n")
                 else
@@ -260,6 +263,8 @@ local function func_header_generate(FP)
     cfuncsstr = cfuncsstr:gsub("\n+","\n") --several empty lines to one empty line
     return cfuncsstr
 end
+
+
 local function ImGui_f_implementation(outtab,def)
     local ptret = def.retref and "&" or ""
     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname..def.args.."\n")
@@ -334,7 +339,7 @@ local function func_implementation(FP)
         local def = cimf[t.signature]
         assert(def)
         local manual = FP.get_manuals(def)
-        if not manual then 
+        if not manual and not def.templated then 
             if def.constructor then
                 assert(def.stname ~= "","constructor without struct")
                 local empty = def.args:match("^%(%)") --no args
@@ -439,11 +444,34 @@ local function generate_templates(code,templates)
 end
 --generate cimgui.cpp cimgui.h 
 local function cimgui_generation(parser)
-
+	cpp2ffi.prtable(parser.templates)
+	cpp2ffi.prtable(parser.typenames)
+	-- clean ImVector:contains() for not applicable types
+	local clean_f = {}
+	for k,v in pairs(parser.defsT) do
+		if k:match"ImVector" and k:match"contains" then
+			--cpp2ffi.prtable(k,v)
+			local stname = v[1].stname
+			if not(stname:match"float" or stname:match"int" or stname:match"char") then
+				parser.defsT[k] = nil
+				--delete also from funcdefs
+				for i,t in ipairs(parser.funcdefs) do
+					if t.cimguiname == k then
+						table.remove(parser.funcdefs, i)
+						break
+					end
+				end
+			end
+		end
+	end
+	
+	--------------------------------------------------
     local hstrfile = read_data"./cimgui_template.h"
 
 	local outpre,outpost = parser:gen_structs_and_enums()
-
+	--parser.templates get completely defined here
+	--cpp2ffi.prtable(parser.templates)
+	
 	local outtab = {}
     generate_templates(outtab,parser.templates)
 	local cstructsstr = outpre..table.concat(outtab,"")..outpost
@@ -516,7 +544,7 @@ end
 pipe:close()
 
 parser1:do_parse()
-
+--table.sort(parser1.funcdefs, function(a,b) return a.cimguiname < b.cimguiname end)
 --parser1:dump_alltypes()
 --parser1:printItems()
 
@@ -530,6 +558,10 @@ save_data("./output/definitions.lua",serializeTableF(parser1.defsT))
 
 ----------save struct and enums lua table in structs_and_enums.lua for using in bindings
 local structs_and_enums_table = parser1:gen_structs_and_enums_table()
+--correct Pair union member
+structs_and_enums_table["structs"]["Pair"][2]["name"] = ""
+structs_and_enums_table["structs"]["Pair"][2]["type"] = structs_and_enums_table["structs"]["Pair"][2]["type"] .. "}"
+-----------------------
 save_data("./output/structs_and_enums.lua",serializeTableF(structs_and_enums_table))
 save_data("./output/typedefs_dict.lua",serializeTableF(parser1.typedefs_dict))
 

@@ -1,5 +1,80 @@
 local M = {}
 
+local function ToStr(t,dometatables)
+	local function basicToStr (o)
+		if type(o) == "number" or type(o)=="boolean" then
+			return tostring(o)
+		elseif type(o) == "string" then
+			return string.format("%q", o)
+		else
+			return tostring(o) --"nil"
+		end
+	end
+	local strTG = {}
+	--local basicToStr= basicSerialize --tostring
+	if type(t) ~="table" then  return basicToStr(t) end
+	local recG = 0
+	local nameG="SELF"..recG
+	local ancest ={}
+	local function _ToStr(t,strT,rec,name)
+		if ancest[t] then
+			strT[#strT + 1]=ancest[t]
+			return
+		end
+		rec = rec + 1
+		ancest[t]=name
+		strT[#strT + 1]='{'
+		local count=0
+		-------------
+		--if t.name then strT[#strT + 1]=string.rep("\t",rec).."name:"..tostring(t.name) end
+		----------------
+		for k,v in pairs(t) do
+			count=count+1
+			strT[#strT + 1]="\n"
+			local kstr
+			if type(k) == "table" then
+				local name2=string.format("%s.KEY%d",name,count)
+				strT[#strT + 1]=string.rep("\t",rec).."["
+				local strTK = {}
+				_ToStr(k,strTK,rec,name2)
+				kstr=table.concat(strTK)
+				strT[#strT + 1]=kstr.."]="
+			else
+				kstr = basicToStr(k)
+				strT[#strT + 1]=string.rep("\t",rec).."["..kstr.."]="
+			end
+			
+			if type(v) == "table" then
+					local name2=string.format("%s[%s]",name,kstr)
+					_ToStr(v,strT,rec,name2)
+			else
+				strT[#strT + 1]=basicToStr(v)
+			end
+		end
+		if dometatables then
+			local mt = getmetatable(t)
+			if mt then
+				local namemt = string.format("%s.METATABLE",name)
+				local strMT = {}
+				_ToStr(mt,strMT,rec,namemt)
+				local metastr=table.concat(strMT)
+				strT[#strT + 1] = "\n"..string.rep("\t",rec).."[METATABLE]="..metastr
+			end
+		end
+		strT[#strT + 1]='}'
+		rec = rec - 1
+		return
+	end
+	_ToStr(t,strTG,recG,nameG)
+	return table.concat(strTG)
+end
+function M.prtable(...)
+	for i=1, select('#', ...) do
+		local t = select(i, ...)
+		print(ToStr(t))
+		print("\n")
+	end
+end
 local function str_split(str, pat)
 	local t = {} 
 	local fpat = "(.-)" .. pat
@@ -173,7 +248,14 @@ local function name_overloadsAlgo(v)
     local maxnum = 0
     for i,t in ipairs(v) do
         bb[i] = ""
-        local signature = t.signature:sub(2,-2) -- without parenthesis
+        --local signature = t.signature:sub(2,-2) -- without parenthesis
+		--inside parenthesis
+		local signature = t.signature:match("%b()")
+		signature = signature:sub(2,-2)
+		--add const function
+		if t.signature:match("const$") then
+			signature = signature .. ",_const"
+		end
         aa[i] = {}
         local num = 1
         --for typec in t.signature:gmatch(".-([^,%(%s]+)[,%)]") do
@@ -261,8 +343,10 @@ local function parseFunction(self,stname,lineorig,namespace)
 	if line:match("template") then return end
     
     local ret = line:match("([^%(%)]+[%*%s])%s?~?[_%w]+%b()")
-    local funcname, args = line:match("(~?[_%w]+)%s*(%b())")
-	
+    --local funcname, args = line:match("(~?[_%w]+)%s*(%b())")
+	local funcname, args, extraconst = line:match("(~?[_%w]+)%s*(%b())(.*)")
+	extraconst = extraconst:match("const")
+
 	if not args then
 	print"not gettint args in"
 	print(line,lineorig)
@@ -282,16 +366,21 @@ local function parseFunction(self,stname,lineorig,namespace)
 
 	--for _,ttype in ipairs(self.templatedTypes) do
     --local template = argscsinpars:match(ttype.."%s*<(.+)>")
+	--TODO several diferent templates
 	local ttype,template = argscsinpars:match("([^%s,%(%)]+)%s*<(.+)>")
 	local te=""
 	if template then
+		if self.typenames[stname] ~= template then --rule out template typename
 		te = template:gsub("%s","_")
         te = te:gsub("%*","Ptr")
+		te = "_"..te
+
 		self.templates[ttype] = self.templates[ttype] or {}
 		self.templates[ttype][template] = te
+		end
 	end
 	--end
-    argscsinpars = argscsinpars:gsub("<([%w_%*]+)>","_"..te) --ImVector
+    argscsinpars = argscsinpars:gsub("<([%w_%*]+)>",te) --ImVector
     
     local argsArr = {}
     local functype_re =       "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
@@ -354,6 +443,7 @@ local function parseFunction(self,stname,lineorig,namespace)
     signature = signature:gsub(",%s*",",")--space after ,
     signature = signature:gsub("([%w_]+)%s[%w_]+(%[%d*%])","%1%2") -- float[2]
     signature = signature:gsub("(%(%*)[%w_]+(%)%([^%(%)]*%))","%1%2") --func defs
+	signature = signature .. (extraconst or "")
     
     local call_args = argscsinpars:gsub("([%w_]+%s[%w_]+)%[%d*%]","%1") --float[2]
     call_args = call_args:gsub("%(%*([%w_]+)%)%([^%(%)]*%)"," %1") --func type
@@ -368,7 +458,7 @@ local function parseFunction(self,stname,lineorig,namespace)
     end
     
     local cimguiname = self.getCname(stname,funcname)
-    table.insert(self.funcdefs,{stname=stname,funcname=funcname,args=args,argsc=argscsinpars,signature=signature,cimguiname=cimguiname,call_args=call_args,ret =ret,comment=comment})
+    table.insert(self.funcdefs,{stname=stname,funcname=funcname,args=args,argsc=argscsinpars,signature=signature,cimguiname=cimguiname,call_args=call_args,ret =ret})
 	local defsT = self.defsT
 	            defsT[cimguiname] = defsT[cimguiname] or {}
                 table.insert(defsT[cimguiname],{})
@@ -379,6 +469,7 @@ local function parseFunction(self,stname,lineorig,namespace)
     for k,def in args:gmatch('([%w_]+)=([%w_%(%)%s,%*%.%-%+%%"]+)[,%)]') do
         defT.defaults[k]=def
     end
+	defT.templated = self.typenames[stname] and true
 	defT.namespace = namespace
     defT.cimguiname = cimguiname
     defT.stname = stname
@@ -389,7 +480,7 @@ local function parseFunction(self,stname,lineorig,namespace)
     defT.call_args = call_args
     defT.isvararg = signature:match("%.%.%.%)$")
     defT.location = locat
-    defT.comment = "" --comment
+    --defT.comment = "" --comment
     defT.argsT = argsArr
     if self.get_manuals(defT) then
         defT.manual = true
@@ -462,7 +553,7 @@ local function ADDnonUDT(FP)
             defT2.retref = nil
             defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT2
             defsT[t.cimguiname][t.signature.."nonUDT"] = defT2
-            table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret,comment=comment})
+            table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret})
             --converting to Simple type----------------------------------------------------
             local defT3 = {}
             --first strings
@@ -483,7 +574,7 @@ local function ADDnonUDT(FP)
             defT3.retref = nil
             defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT3
             defsT[t.cimguiname][t.signature.."nonUDT2"] = defT3
-            table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT2",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret,comment=comment})
+            table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT2",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret})
         end
         end
 		--end
@@ -511,9 +602,13 @@ local function ADDdestructors(FP)
             for j,cons in ipairs(defT) do
                 cons.constructor = true
             end
-            assert(defT[1].stname==defT[1].funcname)
+            if(defT[1].stname~=defT[1].funcname) then
+				print(defT[1].stname, defT[1].funcname)
+				error"names should be equal"
+			end
             local def = {}
             def.stname = defT[1].stname
+			def.templated = defT[1].templated
             def.ret = "void"
             def.ov_cimguiname = def.stname.."_destroy"
             def.cimguiname = def.ov_cimguiname
@@ -587,6 +682,7 @@ function M.Parser()
 	par.embeded_structs = {}
 	par.inerstructs = {}
 	par.templates = {}
+	par.typenames = {}
 	par.typedefs_dict = {}
 	par.cname_overloads = {}
 	par.manuals = {}
@@ -612,6 +708,9 @@ function M.Parser()
 		self:parseItems()
 		self:parseFunctions()
 		self:compute_overloads()
+		self:gen_structs_and_enums()
+		self:compute_templated()
+		ADDdestructors(self)
 	end
 	function par:parseItems()
 		--typedefs dictionary
@@ -643,7 +742,8 @@ function M.Parser()
 		printItems(items)
 	end
 	par.parseFunction = parseFunction
-
+	
+	--get all function definitions and template structs
 	function par:parseFunctions()
 		for i,it in ipairs(itemsarr) do
 			if it.re_name == "function_re" or it.re_name == "functionD_re" then
@@ -658,8 +758,14 @@ function M.Parser()
 					end
 				end
 			elseif it.re_name == "struct_re" then
+				--check template struct
+				local typename = it.item:match("%s*template%s*<%s*typename%s*(%S+)%s*>")
 				local nsp = it.item:match("%b{}"):sub(2,-2)
 				local stname = it.item:match("struct%s+(%S+)")
+				if typename then -- it is a struct template
+					self.typenames = self.typenames or {}
+					self.typenames[stname] = typename
+				end
 				local nspparr,itemsnsp = parseItems(nsp)
 				for insp,itnsp in ipairs(nspparr) do
 					if itnsp.re_name == "function_re" or itnsp.re_name == "functionD_re" then
@@ -723,10 +829,11 @@ function M.Parser()
 		return table.concat(outtab,""),stname,outtab
 	end
 	function par:gen_structs_and_enums()
-		local outtab = {}
+		local outtab = {} 
 		local outtabpre = {}
 		local typedefs_table = {}
-
+		self.inerstructs = {}
+		
 		--first typedefs
 		for i,it in ipairs(itemsarr) do
 			if it.re_name == "typedef_re" or it.re_name == "functypedef_re" or it.re_name == "vardef_re" then
@@ -745,7 +852,8 @@ function M.Parser()
 				table.insert(outtab,it.item)
 			elseif it.re_name == "struct_re" then
 				local cleanst,structname = self:clean_struct(it.item)
-				if structname then
+				--if not void stname or templated
+				if structname and not self.typenames[structname] then
 				table.insert(outtab,cleanst)
 				table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
 				self.typedefs_dict[structname]="struct "..structname
@@ -828,7 +936,8 @@ function M.Parser()
 				end
 			elseif it.re_name == "struct_re" then
 				local cleanst,structname,strtab = self:clean_struct(it.item)
-				if structname then --not empty struc
+				--if not void stname or templated
+				if structname and not self.typenames[structname] then
 					outtab.structs[structname] = {}
 					for j=3,#strtab-1 do
 						self:parse_struct_line(strtab[j],outtab.structs[structname])
@@ -952,9 +1061,113 @@ function M.Parser()
         table.insert(strt,string.format("%d overloaded",numoverloaded))
 		AdjustArguments(self)
 		ADDnonUDT(self)
-		ADDdestructors(self)
+		--ADDdestructors(self)
         self.overloadstxt  = table.concat(strt,"\n")
     end
+	local function typename_gsub(cad,typename,tname)
+		local str,n = "",0
+		if tname:match"%*" then
+		str,n = cad:gsub("(const%s+)("..typename..")", tname.." %1")
+		end
+		if n==0 then
+		str,n = cad:gsub("(const%s+)("..typename..")(%s*%*)", tname.." %1%3")
+		end
+		if n==0 then
+		str,n = cad:gsub("([^_%w])("..typename..")([^_%w])", "%1"..tname.."%3")
+		end
+		if n==0 then
+		str,n = cad:gsub("([^_%w])("..typename..")$", "%1"..tname)
+		end
+		if n==0 then
+		str,n = cad:gsub("^("..typename..")(%s*%*)", tname.."%2")
+		end
+		return str
+	end
+	function par:compute_templated()
+		local defsT = self.defsT
+		local newcdefs = {}
+		for numcdef,t in ipairs(self.funcdefs) do
+			if t.cimguiname then
+			local cimf = defsT[t.cimguiname]
+			local defT = cimf[t.signature]
+			if defT.templated then
+				local templates = self.templates[defT.stname]
+				local typename = self.typenames[defT.stname]
+				for tname,tnamestr in pairs(templates) do
+					--local tnamestr = typetoStr(tname)
+					local stname = defT.stname .. "_" .. tnamestr
+					local cimguiname = t.cimguiname:gsub(defT.stname,stname)
+					local ov_cimguiname = defT.ov_cimguiname:gsub(defT.stname,stname)
+					local signature = defT.signature:gsub(typename, tname)
+					local ret 
+					if defT.ret then
+						--ret = defT.ret:gsub(typename, tname)
+						ret = typename_gsub(defT.ret, typename, tname)
+					end
+
+					local args = defT.args:gsub(defT.stname,stname)
+
+					args = typename_gsub(args, typename, tname)
+					
+					local argsT = {}
+					for i,ar in ipairs(defT.argsT) do
+						argsT[i] = {}
+						for k,v in pairs(ar) do
+							if k=="type" then
+								v = v:gsub(defT.stname,stname)
+								v = typename_gsub(v, typename, tname)
+							end
+							argsT[i][k]=v
+						end
+					end
+					-----------reconstruct args
+					--if(#argsT==0 and not defT.constructor) then M.prtable(defT) end
+					--if is const function make self const
+					if #argsT>0 and signature:match"const$" then
+						argsT[1].type = "const "..argsT[1].type
+					end
+					
+					args = "("
+					for i=1,#argsT-1 do
+						local ar = argsT[i]
+						args = args .. ar.type .. " " ..ar.name .. ","
+					end
+					local ar = argsT[#argsT]
+					if ar then args = args .. ar.type .. " " ..ar.name .. ")" 
+					else args = args .. ")" end
+					args = args:gsub("&","")
+					------------------------------
+					
+					defTnew = {}
+					defTnew.cimguiname = cimguiname
+					defTnew.ov_cimguiname = ov_cimguiname
+					defTnew.signature = signature
+					defTnew.ret = ret
+					defTnew.retref = defT.retref
+					defTnew.templatedgen = true
+					defTnew.call_args = defT.call_args
+					defTnew.stname = stname
+					local funcname = defT.funcname
+					if funcname == defT.stname then --is constructor
+						funcname = stname
+					end
+					defTnew.funcname = funcname
+					defTnew.args = args
+					defTnew.argsT = argsT
+					defTnew.defaults = {}
+					--print(cimguiname,ov_cimguiname, signature , ret)
+					defsT[cimguiname] = defsT[cimguiname] or {}
+					defsT[cimguiname][#defsT[cimguiname] + 1] = defTnew
+					defsT[cimguiname][signature] = defTnew
+					table.insert(newcdefs,{stname=stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=signature,cimguiname=cimguiname,call_args=call_args,ret =t.ret})
+				end
+			end -- templated
+			end --cimguiname
+		end
+		for i,v in ipairs(newcdefs) do
+			table.insert(self.funcdefs,v)
+		end
+	end
 	return par
 end
 

@@ -2,7 +2,7 @@
 
 
 This is a thin c-api wrapper programmatically generated for the excellent C++ immediate mode gui [Dear ImGui](https://github.com/ocornut/imgui).
-All functions are programmatically wrapped except `ImVector` constructors and destructors. (Unless someone find a use case for them)(Now they exist for `ImVector_ImWchar`)
+All imgui.h functions are programmatically wrapped.
 Generated files are: `cimgui.cpp`, `cimgui.h` for C compilation. Also for helping in bindings creation, `definitions.lua` with function definition information and `structs_and_enums.lua`.
 This library is intended as a intermediate layer to be able to use Dear ImGui from other languages that can interface with C (like D - see [D-binding](https://github.com/Extrawurst/DerelictImgui))
 
@@ -42,10 +42,11 @@ Notes:
 ### definitions description
 * It is a collection in which key is the cimgui name that would result without overloadings and the value is an array of overloadings (may be only one overloading)
 * Each overloading is a collection. Some relevant keys and values are:
-  * stname : the name of the struct the function belongs to (may be ImGui if it is top level in ImGui namespace)
+  * stname : the name of the struct the function belongs to (will be "" if it is top level in ImGui namespace)
   * ov_cimguiname : the overloaded cimgui name (if absent it would be taken from cimguiname)
   * cimguiname : the name without overloading (this should be used if there is not ov_cimguiname)
   * ret : the return type
+  * retref : is setted if original return type is a reference. (will be a pointer in cimgui)
   * argsT : an array of collections (each one with type: argument type and name: the argument name)
   * args : a string of argsT concatenated and separated by commas
   * call_args : a string with the argument names separated by commas for calling imgui function
@@ -53,7 +54,9 @@ Notes:
   * manual : will be true if this function is hand-written (not generated)
   * isvararg : is setted if some argument is a vararg
   * constructor : is setted if the function is a constructor for a class
-  * destructor : is setted if the functions is a destructor for a class
+  * destructor : is setted if the function is a destructor for a class
+  * templated : is setted if the function belongs to a templated class (ImVector)
+  * templatedgen: is setted if the function belongs to a struct generated from template (ImVector_ImWchar)
   * nonUDT : if present can be 1 or 2 (explained meaning in usage) if return type was a user defined type
 ### structs_and_enums description
 * Is is a collection with two items:
