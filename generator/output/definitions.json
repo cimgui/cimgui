@@ -433,19 +433,19 @@
   ],
   "ImDrawData_ScaleClipRects": [
     {
-      "args": "(ImDrawData* self,const ImVec2 sc)",
+      "args": "(ImDrawData* self,const ImVec2 fb_scale)",
       "argsT": [
         {
           "name": "self",
           "type": "ImDrawData*"
         },
         {
-          "name": "sc",
+          "name": "fb_scale",
           "type": "const ImVec2"
         }
       ],
-      "argsoriginal": "(const ImVec2& sc)",
-      "call_args": "(sc)",
+      "argsoriginal": "(const ImVec2& fb_scale)",
+      "call_args": "(fb_scale)",
       "cimguiname": "ImDrawData_ScaleClipRects",
       "defaults": [],
       "funcname": "ScaleClipRects",
@@ -4871,6 +4871,36 @@
       "funcname": "ImGuiTextBuffer",
       "ov_cimguiname": "ImGuiTextBuffer_ImGuiTextBuffer",
       "signature": "()",
+      "stname": "ImGuiTextBuffer"
+    }
+  ],
+  "ImGuiTextBuffer_append": [
+    {
+      "args": "(ImGuiTextBuffer* self,const char* str,const char* str_end)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiTextBuffer*"
+        },
+        {
+          "name": "str",
+          "type": "const char*"
+        },
+        {
+          "name": "str_end",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const char* str,const char* str_end=((void*)0))",
+      "call_args": "(str,str_end)",
+      "cimguiname": "ImGuiTextBuffer_append",
+      "defaults": {
+        "str_end": "((void*)0)"
+      },
+      "funcname": "append",
+      "ov_cimguiname": "ImGuiTextBuffer_append",
+      "ret": "void",
+      "signature": "(const char*,const char*)",
       "stname": "ImGuiTextBuffer"
     }
   ],
@@ -21813,6 +21843,22 @@
       "funcname": "IsAnyMouseDown",
       "namespace": "ImGui",
       "ov_cimguiname": "igIsAnyMouseDown",
+      "ret": "bool",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "igIsItemActivated": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "igIsItemActivated",
+      "defaults": [],
+      "funcname": "IsItemActivated",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igIsItemActivated",
       "ret": "bool",
       "signature": "()",
       "stname": ""

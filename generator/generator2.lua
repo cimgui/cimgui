@@ -454,6 +454,7 @@ local function cimgui_generation(parser)
 			local stname = v[1].stname
 			if not(stname:match"float" or stname:match"int" or stname:match"char") then
 				parser.defsT[k] = nil
+				--delete also from funcdefs
 				for i,t in ipairs(parser.funcdefs) do
 					if t.cimguiname == k then
 						table.remove(parser.funcdefs, i)
@@ -543,7 +544,7 @@ end
 pipe:close()
 
 parser1:do_parse()
-
+--table.sort(parser1.funcdefs, function(a,b) return a.cimguiname < b.cimguiname end)
 --parser1:dump_alltypes()
 --parser1:printItems()
 
