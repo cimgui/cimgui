@@ -46,11 +46,18 @@ endif
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-all:imgui_example
+all:$(OUTPUTNAME)
 	@echo Build complete for $(ECHO_MESSAGE)
 
-imgui_example:$(OBJS)
+$(OUTPUTNAME):$(OBJS)
 	$(CXX) -o $(OUTPUTNAME) $(OBJS) $(CXXFLAGS) $(LINKFLAGS)
 
 clean:
-	rm $(OBJS)
+	rm -f $(OBJS)
+
+fclean: clean
+	rm -f $(OUTPUTNAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re
