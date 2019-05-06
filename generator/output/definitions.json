@@ -722,7 +722,7 @@
       "call_args": "(user_texture_id,a,b,uv_a,uv_b,col)",
       "cimguiname": "ImDrawList_AddImage",
       "defaults": {
-        "col": "(((ImU32)(255",
+        "col": "(((ImU32)(255)<<24)|((ImU32)(255)<<16)|((ImU32)(255)<<8)|((ImU32)(255)<<0))",
         "uv_a": "ImVec2(0,0)",
         "uv_b": "ImVec2(1,1)"
       },
@@ -786,7 +786,7 @@
       "call_args": "(user_texture_id,a,b,c,d,uv_a,uv_b,uv_c,uv_d,col)",
       "cimguiname": "ImDrawList_AddImageQuad",
       "defaults": {
-        "col": "(((ImU32)(255",
+        "col": "(((ImU32)(255)<<24)|((ImU32)(255)<<16)|((ImU32)(255)<<8)|((ImU32)(255)<<0))",
         "uv_a": "ImVec2(0,0)",
         "uv_b": "ImVec2(1,0)",
         "uv_c": "ImVec2(1,1)",

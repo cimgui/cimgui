@@ -536,11 +536,16 @@ if not pipe then
     error("could not execute gcc "..err)
 end
 
+--local file,err = io.open("output_compiler.txt","w")
+--if not file then error(err) end
+
 local iterator = (HAVE_COMPILER and cpp2ffi.location) or filelines
 
 for line in iterator(pipe,{"imgui"},{}) do
 	parser1:insert(line)
+	--file:write(line)
 end
+--file:close()
 pipe:close()
 
 parser1:do_parse()
