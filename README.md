@@ -11,7 +11,7 @@ History:
 Initially cimgui was developed by Stephan Dilly as hand-written code but lately turned into an auto-generated version by sonoro1234 in order to keep up with imgui more easily (letting the user select the desired branch and commit)
 
 Notes:
-* currently this wrapper is based on version [1.69 of Dear ImGui]
+* currently this wrapper is based on version [1.70 of Dear ImGui]
 * only functions, structs and enums from imgui.h are wrapped.
 * if you are interested in imgui implementations you should look LuaJIT-ImGui project.
 * overloaded function names try to be the most compatible with traditional cimgui names. So all naming is algorithmic except for those names that were in conflict with widely used cimgui names and were thus coded in a table (https://github.com/cimgui/cimgui/blob/master/generator/generator.lua#L58). Current overloaded function names can be found in (https://github.com/cimgui/cimgui/blob/master/generator/output/overloads.txt)
