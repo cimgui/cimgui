@@ -10,6 +10,7 @@
   "ImDrawList": "struct ImDrawList",
   "ImDrawListFlags": "int",
   "ImDrawListSharedData": "struct ImDrawListSharedData",
+  "ImDrawListSplitter": "struct ImDrawListSplitter",
   "ImDrawVert": "struct ImDrawVert",
   "ImFont": "struct ImFont",
   "ImFontAtlas": "struct ImFontAtlas",
