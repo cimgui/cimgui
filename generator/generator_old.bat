@@ -16,7 +16,7 @@ set PATH=%PATH%;C:\luaGL;C:\mingw32\bin;
 ::process  files
 :: arg[1] compiler name gcc, clang, cl or nocompiler
 :: arg[2..n] name of implementations to generate
-luajit ./generator2.lua gcc glfw opengl3 opengl2 sdl
+luajit ./generator_old.lua gcc glfw opengl3 opengl2 sdl
 
 ::leave console open
 cmd /k

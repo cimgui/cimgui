@@ -31,7 +31,7 @@ Notes:
 * you will need LuaJIT (https://github.com/LuaJIT/LuaJIT.git better 2.1 branch) or precompiled for linux/macOS/windows in https://luapower.com/luajit/download
 * you can use also a C++ compiler for doing preprocessing: gcc (In windows MinGW-W64-builds for example), clang or cl (MSVC) or not use a compiler (experimental nocompiler option) at all. (this repo was done with gcc)
 * update `imgui` folder to the version you desire.
-* edit `generator/generator2.bat` (or make a .sh version and please PR) to choose between gcc, clang, cl or nocompiler. Run it with gcc, clang or cl and LuaJIT on your PATH.
+* edit `generator/generator.bat` (or make a .sh version and please PR) to choose between gcc, clang, cl or nocompiler. Run it with gcc, clang or cl and LuaJIT on your PATH.
 * as a result some files are generated: `cimgui.cpp` and `cimgui.h` for compiling and some lua/json files with information about the binding: `definitions.json` with function info, `structs_and_enums.json` with struct and enum info, `impl_definitions.json` with functions from the implementations info. 
 
 # generate binding
