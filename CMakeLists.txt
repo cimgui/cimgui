@@ -26,6 +26,9 @@ else (IMGUI_STATIC)
 endif (IMGUI_STATIC)
 
 target_link_libraries(cimgui ${IMGUI_LIBRARIES})
+if (APPLE)
+	target_link_libraries(cimgui "-framework ApplicationServices")
+endif()
 set_target_properties(cimgui PROPERTIES PREFIX "")
 
 #install
