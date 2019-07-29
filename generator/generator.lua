@@ -563,9 +563,11 @@ save_data("./output/definitions.lua",serializeTableF(parser1.defsT))
 
 ----------save struct and enums lua table in structs_and_enums.lua for using in bindings
 local structs_and_enums_table = parser1:gen_structs_and_enums_table()
---correct Pair union member
+--correct Pair union member if exists (until 1.71)
+if structs_and_enums_table["structs"]["Pair"] then
 structs_and_enums_table["structs"]["Pair"][2]["name"] = ""
 structs_and_enums_table["structs"]["Pair"][2]["type"] = structs_and_enums_table["structs"]["Pair"][2]["type"] .. "}"
+end
 -----------------------
 save_data("./output/structs_and_enums.lua",serializeTableF(structs_and_enums_table))
 save_data("./output/typedefs_dict.lua",serializeTableF(parser1.typedefs_dict))

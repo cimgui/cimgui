@@ -812,6 +812,7 @@ function M.Parser()
 					te = te:gsub("%*","Ptr")
 					self.templates[ttype] = self.templates[ttype] or {}
 					self.templates[ttype][template] = te
+					it2 = it2:gsub("(<[%w_%*%s]+>)([^%s])","%1 %2") --add if not present space after <>
 					it2 = it2:gsub("<([%w_%*%s]+)>","_"..te)
 				end
 				--clean mutable
@@ -937,6 +938,7 @@ function M.Parser()
 			elseif it.re_name == "struct_re" then
 				local cleanst,structname,strtab = self:clean_struct(it.item)
 				--if not void stname or templated
+				--M.prtable(cleanst,structname,strtab)
 				if structname and not self.typenames[structname] then
 					outtab.structs[structname] = {}
 					for j=3,#strtab-1 do
