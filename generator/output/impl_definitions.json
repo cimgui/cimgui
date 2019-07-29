@@ -454,6 +454,26 @@
       "stname": ""
     }
   ],
+  "ImGui_ImplSDL2_InitForD3D": [
+    {
+      "args": "(SDL_Window* window)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "SDL_Window*"
+        }
+      ],
+      "argsoriginal": "(SDL_Window* window)",
+      "call_args": "(window)",
+      "cimguiname": "ImGui_ImplSDL2_InitForD3D",
+      "defaults": [],
+      "funcname": "ImGui_ImplSDL2_InitForD3D",
+      "ov_cimguiname": "ImGui_ImplSDL2_InitForD3D",
+      "ret": "bool",
+      "signature": "(SDL_Window*)",
+      "stname": ""
+    }
+  ],
   "ImGui_ImplSDL2_InitForOpenGL": [
     {
       "args": "(SDL_Window* window,void* sdl_gl_context)",
