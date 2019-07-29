@@ -568,6 +568,11 @@ if structs_and_enums_table["structs"]["Pair"] then
 structs_and_enums_table["structs"]["Pair"][2]["name"] = ""
 structs_and_enums_table["structs"]["Pair"][2]["type"] = structs_and_enums_table["structs"]["Pair"][2]["type"] .. "}"
 end
+-- 1.72 and after
+if structs_and_enums_table["structs"]["ImGuiStoragePair"] then
+structs_and_enums_table["structs"]["ImGuiStoragePair"][2]["name"] = ""
+structs_and_enums_table["structs"]["ImGuiStoragePair"][2]["type"] = structs_and_enums_table["structs"]["ImGuiStoragePair"][2]["type"] .. "}"
+end
 -----------------------
 save_data("./output/structs_and_enums.lua",serializeTableF(structs_and_enums_table))
 save_data("./output/typedefs_dict.lua",serializeTableF(parser1.typedefs_dict))
