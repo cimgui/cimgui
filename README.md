@@ -1,4 +1,4 @@
-# cimgui [![Build Status](https://travis-ci.org/sonoro1234/cimgui.svg?branch=master)](https://travis-ci.org/sonoro1234/cimgui)
+# cimgui [![Build Status](https://travis-ci.org/cimgui/cimgui.svg?branch=master)](https://travis-ci.org/cimgui/cimgui)
 
 
 This is a thin c-api wrapper programmatically generated for the excellent C++ immediate mode gui [Dear ImGui](https://github.com/ocornut/imgui).
