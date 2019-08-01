@@ -1,11 +1,32 @@
 language: cpp
+dist: trusty
 
 os:
   - linux
+  - osx
+  - windows
 
 compiler:
   - gcc
   - clang
 
+env:
+  - MSBUILD_PATH="c:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin"
+
 script:
-  make
+  - mkdir bld
+  - cd bld
+  - cmake -D CIMGUI_TEST=1 ..
+  - |
+    if [ "$TRAVIS_OS_NAME" == "windows" ]; then
+      export PATH=$MSBUILD_PATH:$PATH
+      MSBuild.exe cimgui.sln
+    else
+      make
+    fi
+  - |
+    if [ "$TRAVIS_OS_NAME" == "windows" ]; then
+      ./Debug/cimgui_test.exe
+    else
+      ./cimgui_test
+    fi
