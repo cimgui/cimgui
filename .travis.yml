@@ -1,11 +1,17 @@
 language: cpp
+dist: trusty
 
 os:
   - linux
+  - osx
 
 compiler:
   - gcc
   - clang
 
 script:
-  make
+  - mkdir bld
+  - cd bld
+  - cmake -D CIMGUI_TEST=1 ..
+  - make
+  - ./cimgui_test
