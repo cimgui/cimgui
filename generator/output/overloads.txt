@@ -67,9 +67,6 @@ igSetWindowFocus	2
 ImVector_end	2
 1	T*	ImVector_end ()
 2	const T*	ImVector_end_const ()const
-igSetWindowSize	2
-1	void	igSetWindowSizeVec2 (const ImVec2,ImGuiCond)
-2	void	igSetWindowSizeStr (const char*,const ImVec2,ImGuiCond)
 ImVector_ImVector	2
 1	nil	ImVector_ImVector ()
 2	nil	ImVector_ImVectorVector (const ImVector)
@@ -88,15 +85,15 @@ igTreeNodeExV	2
 igListBox	2
 1	bool	igListBoxStr_arr (const char*,int*,const char* const[],int,int)
 2	bool	igListBoxFnPtr (const char*,int*,bool(*)(void*,int,const char**),void*,int,int)
+ImVec2_ImVec2	2
+1	nil	ImVec2_ImVec2 ()
+2	nil	ImVec2_ImVec2Float (float,float)
 igCollapsingHeader	2
 1	bool	igCollapsingHeader (const char*,ImGuiTreeNodeFlags)
 2	bool	igCollapsingHeaderBoolPtr (const char*,bool*,ImGuiTreeNodeFlags)
 igTreePush	2
 1	void	igTreePushStr (const char*)
 2	void	igTreePushPtr (const void*)
-igSelectable	2
-1	bool	igSelectable (const char*,bool,ImGuiSelectableFlags,const ImVec2)
-2	bool	igSelectableBoolPtr (const char*,bool*,ImGuiSelectableFlags,const ImVec2)
 igGetColorU32	3
 1	ImU32	igGetColorU32 (ImGuiCol,float)
 2	ImU32	igGetColorU32Vec4 (const ImVec4)
@@ -107,9 +104,6 @@ ImColor_ImColor	5
 3	nil	ImColor_ImColorU32 (ImU32)
 4	nil	ImColor_ImColorFloat (float,float,float,float)
 5	nil	ImColor_ImColorVec4 (const ImVec4)
-ImVec2_ImVec2	2
-1	nil	ImVec2_ImVec2 ()
-2	nil	ImVec2_ImVec2Float (float,float)
 ImVector_front	2
 1	T*	ImVector_front ()
 2	const T*	ImVector_front_const ()const
@@ -123,10 +117,19 @@ igTreeNodeEx	3
 1	bool	igTreeNodeExStr (const char*,ImGuiTreeNodeFlags)
 2	bool	igTreeNodeExStrStr (const char*,ImGuiTreeNodeFlags,const char*,...)
 3	bool	igTreeNodeExPtr (const void*,ImGuiTreeNodeFlags,const char*,...)
+igSelectable	2
+1	bool	igSelectable (const char*,bool,ImGuiSelectableFlags,const ImVec2)
+2	bool	igSelectableBoolPtr (const char*,bool*,ImGuiSelectableFlags,const ImVec2)
+ImVector_find	2
+1	T*	ImVector_find (const T)
+2	const T*	ImVector_find_const (const T)const
 igMenuItem	2
 1	bool	igMenuItemBool (const char*,const char*,bool,bool)
 2	bool	igMenuItemBoolPtr (const char*,const char*,bool*,bool)
+igSetWindowSize	2
+1	void	igSetWindowSizeVec2 (const ImVec2,ImGuiCond)
+2	void	igSetWindowSizeStr (const char*,const ImVec2,ImGuiCond)
 igTreeNodeV	2
 1	bool	igTreeNodeVStr (const char*,const char*,va_list)
 2	bool	igTreeNodeVPtr (const void*,const char*,va_list)
-91 overloaded
+93 overloaded
