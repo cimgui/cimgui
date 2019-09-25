@@ -446,6 +446,7 @@ end
 local function cimgui_generation(parser)
 	cpp2ffi.prtable(parser.templates)
 	cpp2ffi.prtable(parser.typenames)
+--[[
 	-- clean ImVector:contains() for not applicable types
 	local clean_f = {}
 	for k,v in pairs(parser.defsT) do
@@ -464,7 +465,7 @@ local function cimgui_generation(parser)
 			end
 		end
 	end
-	
+--]]
 	--------------------------------------------------
     local hstrfile = read_data"./cimgui_template.h"
 

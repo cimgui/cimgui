@@ -709,7 +709,7 @@ function M.Parser()
 		self:parseFunctions()
 		self:compute_overloads()
 		self:gen_structs_and_enums()
-		self:compute_templated()
+		--self:compute_templated()
 		ADDdestructors(self)
 	end
 	function par:parseItems()
