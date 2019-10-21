@@ -8,7 +8,7 @@ OBJS += ./imgui/imgui_draw.o
 OBJS += ./imgui/imgui_demo.o
 OBJS += ./imgui/imgui_widgets.o
 
-CXXFLAGS=-O2
+CXXFLAGS=-O2 -fno-exceptions -fno-rtti
 
 UNAME_S := $(shell uname -s)
 
