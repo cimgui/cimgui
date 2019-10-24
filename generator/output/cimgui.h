@@ -41,7 +41,7 @@ typedef struct ImVec4_Simple { float x; float y; float z; float w;} ImVec4_Simpl
 typedef struct ImColor_Simple { ImVec4_Simple Value;} ImColor_Simple;
 
 
-#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 typedef struct ImGuiStoragePair ImGuiStoragePair;
 typedef struct ImGuiTextRange ImGuiTextRange;
 typedef struct ImFontAtlasCustomRect ImFontAtlasCustomRect;
@@ -1033,9 +1033,9 @@ inline ImColor_Simple ImColorToSimple(ImColor col)
     result.Value = ImVec4ToSimple(col.Value);
     return result;
 }
-#endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#endif // ndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
-#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 typedef ImGuiStorage::ImGuiStoragePair ImGuiStoragePair;
 typedef ImGuiTextFilter::ImGuiTextRange ImGuiTextRange;
 typedef ImVector<float> ImVector_float;
@@ -1057,7 +1057,7 @@ typedef ImVector<ImDrawCmd> ImVector_ImDrawCmd;
 typedef ImVector<ImVec4> ImVector_ImVec4;
 typedef ImVector<ImDrawIdx> ImVector_ImDrawIdx;
 typedef ImVector<ImVec2> ImVector_ImVec2;
-#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 CIMGUI_API ImVec2* ImVec2_ImVec2(void);
 CIMGUI_API void ImVec2_destroy(ImVec2* self);
 CIMGUI_API ImVec2* ImVec2_ImVec2Float(float _x,float _y);

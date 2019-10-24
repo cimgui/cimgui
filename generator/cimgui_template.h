@@ -39,7 +39,7 @@ typedef struct ImVec4_Simple { float x; float y; float z; float w;} ImVec4_Simpl
 typedef struct ImColor_Simple { ImVec4_Simple Value;} ImColor_Simple;
 
 
-#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 #include "imgui_structs.h"
 #else
 struct GLFWwindow;
@@ -67,7 +67,7 @@ inline ImColor_Simple ImColorToSimple(ImColor col)
     result.Value = ImVec4ToSimple(col.Value);
     return result;
 }
-#endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#endif // ndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
 #include "auto_funcs.h"
 

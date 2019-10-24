@@ -216,7 +216,7 @@ end
 local function func_header_generate(FP)
 
     local outtab = {}
-    table.insert(outtab,"#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
+    table.insert(outtab,"#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
     for k,v in pairs(FP.embeded_structs) do
         table.insert(outtab,"typedef "..v.." "..k..";\n")
     end
@@ -228,7 +228,7 @@ local function func_header_generate(FP)
 		end
     end
 
-    table.insert(outtab,"#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
+    table.insert(outtab,"#endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
     for _,t in ipairs(FP.funcdefs) do
 
         if t.cimguiname then
