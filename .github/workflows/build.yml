@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  push: {}
+  pull_request: {}
+  schedule:
+    - cron:  '0 9 * * 1'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Download Submodules
+      run: |
+        git submodule update --init --recursive
+      if: github.event_name != 'schedule'
+
+    - name: Download Latest ImGui
+      shell: bash
+      run: |
+        rm -rf imgui
+        git clone https://github.com/ocornut/imgui.git
+      if: github.event_name == 'schedule'
+
+    - name: CMake
+      run: |
+        mkdir cmake-build
+        cd cmake-build
+        cmake -DCIMGUI_TEST=1 ..
+
+    - name: Build
+      working-directory: cmake-build
+      run: |
+        cmake --build .
+
+    - name: Test
+      shell: bash
+      env:
+        GITHUB_OS: ${{ matrix.os }}
+      working-directory: cmake-build
+      run: |
+        if [ "$GITHUB_OS" == "windows-latest" ]; then
+          ./Debug/cimgui_test.exe
+        else
+          ./cimgui_test
+        fi
