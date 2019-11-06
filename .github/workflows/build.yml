@@ -1,0 +1,76 @@
+name: Build
+
+on:
+  push: {}
+  pull_request: {}
+  schedule:
+    - cron:  '0 9 * * 1'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Install Dependencies
+      shell: bash
+      env:
+        GITHUB_OS: ${{ matrix.os }}
+      run: |
+        if [ "$GITHUB_OS" == "macOS-latest" ];
+        then
+          brew install luajit
+        elif [ "$GITHUB_OS" == "ubuntu-latest" ];
+        then
+          sudo apt-get install -y luajit
+        elif [ "$GITHUB_OS" == "windows-latest" ];
+        then
+          vcpkg install luajit
+        fi
+
+    - name: Download Submodules
+      run: |
+        git submodule update --init --recursive
+      if: github.event_name != 'schedule'
+
+    - name: Download Latest ImGui
+      shell: bash
+      run: |
+        rm -rf imgui
+        git clone https://github.com/ocornut/imgui.git
+      if: github.event_name == 'schedule'
+
+    - name: Generate Bindings
+      shell: bash
+      run: |
+        export PATH=$PATH:/C/vcpkg/packages/luajit_x86-windows/tools/:/C/vcpkg/packages/luajit_x86-windows/bin/
+        cd ./generator
+        bash ./generator.sh
+
+    - name: CMake
+      run: |
+        mkdir cmake-build
+        cd cmake-build
+        cmake -DCIMGUI_TEST=1 ..
+
+    - name: Build
+      working-directory: cmake-build
+      run: |
+        cmake --build .
+
+    - name: Test
+      shell: bash
+      env:
+        GITHUB_OS: ${{ matrix.os }}
+      working-directory: cmake-build
+      run: |
+        if [ "$GITHUB_OS" == "windows-latest" ];
+        then
+          ./Debug/cimgui_test.exe
+        else
+          ./cimgui_test
+        fi
