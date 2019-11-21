@@ -342,7 +342,7 @@ local function parseFunction(self,stname,lineorig,namespace)
 	--skip template
 	if line:match("template") then return end
     
-    local ret = line:match("([^%(%)]+[%*%s])%s?~?[_%w]+%b()")
+    local ret = line:match("([^%(%):,]+[%*%s])%s?~?[_%w]+%b()")
     --local funcname, args = line:match("(~?[_%w]+)%s*(%b())")
 	local funcname, args, extraconst = line:match("(~?[_%w]+)%s*(%b())(.*)")
 	extraconst = extraconst:match("const")
