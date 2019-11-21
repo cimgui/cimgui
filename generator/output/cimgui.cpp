@@ -2,9 +2,10 @@
 //based on imgui.h file version "1.73" from Dear ImGui https://github.com/ocornut/imgui
 
 #include "./imgui/imgui.h"
+#include "./imgui/imgui_internal.h"
 #include "cimgui.h"
 
-#include "./imgui/imgui_internal.h"
+
 
 CIMGUI_API ImVec2* ImVec2_ImVec2(void)
 {
