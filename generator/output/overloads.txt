@@ -67,6 +67,9 @@ igSetWindowFocus	2
 ImVector_end	2
 1	T*	ImVector_end ()
 2	const T*	ImVector_end_const ()const
+igSetWindowSize	2
+1	void	igSetWindowSizeVec2 (const ImVec2,ImGuiCond)
+2	void	igSetWindowSizeStr (const char*,const ImVec2,ImGuiCond)
 ImVector_ImVector	2
 1	nil	ImVector_ImVector ()
 2	nil	ImVector_ImVectorVector (const ImVector)
@@ -76,9 +79,9 @@ igSetWindowCollapsed	2
 igPlotLines	2
 1	void	igPlotLines (const char*,const float*,int,int,const char*,float,float,ImVec2,int)
 2	void	igPlotLinesFnPtr (const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)
-igListBoxHeader	2
-1	bool	igListBoxHeaderVec2 (const char*,const ImVec2)
-2	bool	igListBoxHeaderInt (const char*,int,int)
+igPushStyleColor	2
+1	void	igPushStyleColorU32 (ImGuiCol,ImU32)
+2	void	igPushStyleColor (ImGuiCol,const ImVec4)
 igTreeNodeExV	2
 1	bool	igTreeNodeExVStr (const char*,ImGuiTreeNodeFlags,const char*,va_list)
 2	bool	igTreeNodeExVPtr (const void*,ImGuiTreeNodeFlags,const char*,va_list)
@@ -104,15 +107,15 @@ ImColor_ImColor	5
 3	nil	ImColor_ImColorU32 (ImU32)
 4	nil	ImColor_ImColorFloat (float,float,float,float)
 5	nil	ImColor_ImColorVec4 (const ImVec4)
-ImVector_front	2
-1	T*	ImVector_front ()
-2	const T*	ImVector_front_const ()const
 ImVector_begin	2
 1	T*	ImVector_begin ()
 2	const T*	ImVector_begin_const ()const
-igPushStyleColor	2
-1	void	igPushStyleColorU32 (ImGuiCol,ImU32)
-2	void	igPushStyleColor (ImGuiCol,const ImVec4)
+ImVector_front	2
+1	T*	ImVector_front ()
+2	const T*	ImVector_front_const ()const
+ImVector_find	2
+1	T*	ImVector_find (const T)
+2	const T*	ImVector_find_const (const T)const
 igTreeNodeEx	3
 1	bool	igTreeNodeExStr (const char*,ImGuiTreeNodeFlags)
 2	bool	igTreeNodeExStrStr (const char*,ImGuiTreeNodeFlags,const char*,...)
@@ -120,15 +123,12 @@ igTreeNodeEx	3
 igSelectable	2
 1	bool	igSelectable (const char*,bool,ImGuiSelectableFlags,const ImVec2)
 2	bool	igSelectableBoolPtr (const char*,bool*,ImGuiSelectableFlags,const ImVec2)
-ImVector_find	2
-1	T*	ImVector_find (const T)
-2	const T*	ImVector_find_const (const T)const
 igMenuItem	2
 1	bool	igMenuItemBool (const char*,const char*,bool,bool)
 2	bool	igMenuItemBoolPtr (const char*,const char*,bool*,bool)
-igSetWindowSize	2
-1	void	igSetWindowSizeVec2 (const ImVec2,ImGuiCond)
-2	void	igSetWindowSizeStr (const char*,const ImVec2,ImGuiCond)
+igListBoxHeader	2
+1	bool	igListBoxHeaderVec2 (const char*,const ImVec2)
+2	bool	igListBoxHeaderInt (const char*,int,int)
 igTreeNodeV	2
 1	bool	igTreeNodeVStr (const char*,const char*,va_list)
 2	bool	igTreeNodeVPtr (const void*,const char*,va_list)

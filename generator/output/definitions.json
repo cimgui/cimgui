@@ -2792,7 +2792,7 @@
       "funcname": "CalcCustomRectUV",
       "ov_cimguiname": "ImFontAtlas_CalcCustomRectUV",
       "ret": "void",
-      "signature": "(const ImFontAtlasCustomRect*,ImVec2*,ImVec2*)",
+      "signature": "(const ImFontAtlasCustomRect*,ImVec2*,ImVec2*)const",
       "stname": "ImFontAtlas"
     }
   ],
@@ -3207,7 +3207,7 @@
       "funcname": "IsBuilt",
       "ov_cimguiname": "ImFontAtlas_IsBuilt",
       "ret": "bool",
-      "signature": "()",
+      "signature": "()const",
       "stname": "ImFontAtlas"
     }
   ],
@@ -5338,7 +5338,7 @@
       "funcname": "empty",
       "ov_cimguiname": "ImGuiTextBuffer_empty",
       "ret": "bool",
-      "signature": "()",
+      "signature": "()const",
       "stname": "ImGuiTextBuffer"
     }
   ],
@@ -6497,6 +6497,31 @@
       "ov_cimguiname": "ImVector_resizeT",
       "ret": "void",
       "signature": "(int,const T)",
+      "stname": "ImVector",
+      "templated": true
+    }
+  ],
+  "ImVector_shrink": [
+    {
+      "args": "(ImVector* self,int new_size)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImVector*"
+        },
+        {
+          "name": "new_size",
+          "type": "int"
+        }
+      ],
+      "argsoriginal": "(int new_size)",
+      "call_args": "(new_size)",
+      "cimguiname": "ImVector_shrink",
+      "defaults": [],
+      "funcname": "shrink",
+      "ov_cimguiname": "ImVector_shrink",
+      "ret": "void",
+      "signature": "(int)",
       "stname": "ImVector",
       "templated": true
     }
@@ -8648,7 +8673,7 @@
   ],
   "igDragScalar": [
     {
-      "args": "(const char* label,ImGuiDataType data_type,void* v,float v_speed,const void* v_min,const void* v_max,const char* format,float power)",
+      "args": "(const char* label,ImGuiDataType data_type,void* p_data,float v_speed,const void* p_min,const void* p_max,const char* format,float power)",
       "argsT": [
         {
           "name": "label",
@@ -8659,7 +8684,7 @@
           "type": "ImGuiDataType"
         },
         {
-          "name": "v",
+          "name": "p_data",
           "type": "void*"
         },
         {
@@ -8667,11 +8692,11 @@
           "type": "float"
         },
         {
-          "name": "v_min",
+          "name": "p_min",
           "type": "const void*"
         },
         {
-          "name": "v_max",
+          "name": "p_max",
           "type": "const void*"
         },
         {
@@ -8683,14 +8708,14 @@
           "type": "float"
         }
       ],
-      "argsoriginal": "(const char* label,ImGuiDataType data_type,void* v,float v_speed,const void* v_min=((void*)0),const void* v_max=((void*)0),const char* format=((void*)0),float power=1.0f)",
-      "call_args": "(label,data_type,v,v_speed,v_min,v_max,format,power)",
+      "argsoriginal": "(const char* label,ImGuiDataType data_type,void* p_data,float v_speed,const void* p_min=((void*)0),const void* p_max=((void*)0),const char* format=((void*)0),float power=1.0f)",
+      "call_args": "(label,data_type,p_data,v_speed,p_min,p_max,format,power)",
       "cimguiname": "igDragScalar",
       "defaults": {
         "format": "((void*)0)",
-        "power": "1.0f",
-        "v_max": "((void*)0)",
-        "v_min": "((void*)0)"
+        "p_max": "((void*)0)",
+        "p_min": "((void*)0)",
+        "power": "1.0f"
       },
       "funcname": "DragScalar",
       "namespace": "ImGui",
@@ -8702,7 +8727,7 @@
   ],
   "igDragScalarN": [
     {
-      "args": "(const char* label,ImGuiDataType data_type,void* v,int components,float v_speed,const void* v_min,const void* v_max,const char* format,float power)",
+      "args": "(const char* label,ImGuiDataType data_type,void* p_data,int components,float v_speed,const void* p_min,const void* p_max,const char* format,float power)",
       "argsT": [
         {
           "name": "label",
@@ -8713,7 +8738,7 @@
           "type": "ImGuiDataType"
         },
         {
-          "name": "v",
+          "name": "p_data",
           "type": "void*"
         },
         {
@@ -8725,11 +8750,11 @@
           "type": "float"
         },
         {
-          "name": "v_min",
+          "name": "p_min",
           "type": "const void*"
         },
         {
-          "name": "v_max",
+          "name": "p_max",
           "type": "const void*"
         },
         {
@@ -8741,14 +8766,14 @@
           "type": "float"
         }
       ],
-      "argsoriginal": "(const char* label,ImGuiDataType data_type,void* v,int components,float v_speed,const void* v_min=((void*)0),const void* v_max=((void*)0),const char* format=((void*)0),float power=1.0f)",
-      "call_args": "(label,data_type,v,components,v_speed,v_min,v_max,format,power)",
+      "argsoriginal": "(const char* label,ImGuiDataType data_type,void* p_data,int components,float v_speed,const void* p_min=((void*)0),const void* p_max=((void*)0),const char* format=((void*)0),float power=1.0f)",
+      "call_args": "(label,data_type,p_data,components,v_speed,p_min,p_max,format,power)",
       "cimguiname": "igDragScalarN",
       "defaults": {
         "format": "((void*)0)",
-        "power": "1.0f",
-        "v_max": "((void*)0)",
-        "v_min": "((void*)0)"
+        "p_max": "((void*)0)",
+        "p_min": "((void*)0)",
+        "power": "1.0f"
       },
       "funcname": "DragScalarN",
       "namespace": "ImGui",
@@ -11139,7 +11164,7 @@
   ],
   "igInputScalar": [
     {
-      "args": "(const char* label,ImGuiDataType data_type,void* v,const void* step,const void* step_fast,const char* format,ImGuiInputTextFlags flags)",
+      "args": "(const char* label,ImGuiDataType data_type,void* p_data,const void* p_step,const void* p_step_fast,const char* format,ImGuiInputTextFlags flags)",
       "argsT": [
         {
           "name": "label",
@@ -11150,15 +11175,15 @@
           "type": "ImGuiDataType"
         },
         {
-          "name": "v",
+          "name": "p_data",
           "type": "void*"
         },
         {
-          "name": "step",
+          "name": "p_step",
           "type": "const void*"
         },
         {
-          "name": "step_fast",
+          "name": "p_step_fast",
           "type": "const void*"
         },
         {
@@ -11170,14 +11195,14 @@
           "type": "ImGuiInputTextFlags"
         }
       ],
-      "argsoriginal": "(const char* label,ImGuiDataType data_type,void* v,const void* step=((void*)0),const void* step_fast=((void*)0),const char* format=((void*)0),ImGuiInputTextFlags flags=0)",
-      "call_args": "(label,data_type,v,step,step_fast,format,flags)",
+      "argsoriginal": "(const char* label,ImGuiDataType data_type,void* p_data,const void* p_step=((void*)0),const void* p_step_fast=((void*)0),const char* format=((void*)0),ImGuiInputTextFlags flags=0)",
+      "call_args": "(label,data_type,p_data,p_step,p_step_fast,format,flags)",
       "cimguiname": "igInputScalar",
       "defaults": {
         "flags": "0",
         "format": "((void*)0)",
-        "step": "((void*)0)",
-        "step_fast": "((void*)0)"
+        "p_step": "((void*)0)",
+        "p_step_fast": "((void*)0)"
       },
       "funcname": "InputScalar",
       "namespace": "ImGui",
@@ -11189,7 +11214,7 @@
   ],
   "igInputScalarN": [
     {
-      "args": "(const char* label,ImGuiDataType data_type,void* v,int components,const void* step,const void* step_fast,const char* format,ImGuiInputTextFlags flags)",
+      "args": "(const char* label,ImGuiDataType data_type,void* p_data,int components,const void* p_step,const void* p_step_fast,const char* format,ImGuiInputTextFlags flags)",
       "argsT": [
         {
           "name": "label",
@@ -11200,7 +11225,7 @@
           "type": "ImGuiDataType"
         },
         {
-          "name": "v",
+          "name": "p_data",
           "type": "void*"
         },
         {
@@ -11208,11 +11233,11 @@
           "type": "int"
         },
         {
-          "name": "step",
+          "name": "p_step",
           "type": "const void*"
         },
         {
-          "name": "step_fast",
+          "name": "p_step_fast",
           "type": "const void*"
         },
         {
@@ -11224,14 +11249,14 @@
           "type": "ImGuiInputTextFlags"
         }
       ],
-      "argsoriginal": "(const char* label,ImGuiDataType data_type,void* v,int components,const void* step=((void*)0),const void* step_fast=((void*)0),const char* format=((void*)0),ImGuiInputTextFlags flags=0)",
-      "call_args": "(label,data_type,v,components,step,step_fast,format,flags)",
+      "argsoriginal": "(const char* label,ImGuiDataType data_type,void* p_data,int components,const void* p_step=((void*)0),const void* p_step_fast=((void*)0),const char* format=((void*)0),ImGuiInputTextFlags flags=0)",
+      "call_args": "(label,data_type,p_data,components,p_step,p_step_fast,format,flags)",
       "cimguiname": "igInputScalarN",
       "defaults": {
         "flags": "0",
         "format": "((void*)0)",
-        "step": "((void*)0)",
-        "step_fast": "((void*)0)"
+        "p_step": "((void*)0)",
+        "p_step_fast": "((void*)0)"
       },
       "funcname": "InputScalarN",
       "namespace": "ImGui",
@@ -11613,6 +11638,22 @@
       "ov_cimguiname": "igIsItemHovered",
       "ret": "bool",
       "signature": "(ImGuiHoveredFlags)",
+      "stname": ""
+    }
+  ],
+  "igIsItemToggledOpen": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "igIsItemToggledOpen",
+      "defaults": [],
+      "funcname": "IsItemToggledOpen",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igIsItemToggledOpen",
+      "ret": "bool",
+      "signature": "()",
       "stname": ""
     }
   ],
@@ -15166,7 +15207,7 @@
   ],
   "igSliderScalar": [
     {
-      "args": "(const char* label,ImGuiDataType data_type,void* v,const void* v_min,const void* v_max,const char* format,float power)",
+      "args": "(const char* label,ImGuiDataType data_type,void* p_data,const void* p_min,const void* p_max,const char* format,float power)",
       "argsT": [
         {
           "name": "label",
@@ -15177,15 +15218,15 @@
           "type": "ImGuiDataType"
         },
         {
-          "name": "v",
+          "name": "p_data",
           "type": "void*"
         },
         {
-          "name": "v_min",
+          "name": "p_min",
           "type": "const void*"
         },
         {
-          "name": "v_max",
+          "name": "p_max",
           "type": "const void*"
         },
         {
@@ -15197,8 +15238,8 @@
           "type": "float"
         }
       ],
-      "argsoriginal": "(const char* label,ImGuiDataType data_type,void* v,const void* v_min,const void* v_max,const char* format=((void*)0),float power=1.0f)",
-      "call_args": "(label,data_type,v,v_min,v_max,format,power)",
+      "argsoriginal": "(const char* label,ImGuiDataType data_type,void* p_data,const void* p_min,const void* p_max,const char* format=((void*)0),float power=1.0f)",
+      "call_args": "(label,data_type,p_data,p_min,p_max,format,power)",
       "cimguiname": "igSliderScalar",
       "defaults": {
         "format": "((void*)0)",
@@ -15214,7 +15255,7 @@
   ],
   "igSliderScalarN": [
     {
-      "args": "(const char* label,ImGuiDataType data_type,void* v,int components,const void* v_min,const void* v_max,const char* format,float power)",
+      "args": "(const char* label,ImGuiDataType data_type,void* p_data,int components,const void* p_min,const void* p_max,const char* format,float power)",
       "argsT": [
         {
           "name": "label",
@@ -15225,7 +15266,7 @@
           "type": "ImGuiDataType"
         },
         {
-          "name": "v",
+          "name": "p_data",
           "type": "void*"
         },
         {
@@ -15233,11 +15274,11 @@
           "type": "int"
         },
         {
-          "name": "v_min",
+          "name": "p_min",
           "type": "const void*"
         },
         {
-          "name": "v_max",
+          "name": "p_max",
           "type": "const void*"
         },
         {
@@ -15249,8 +15290,8 @@
           "type": "float"
         }
       ],
-      "argsoriginal": "(const char* label,ImGuiDataType data_type,void* v,int components,const void* v_min,const void* v_max,const char* format=((void*)0),float power=1.0f)",
-      "call_args": "(label,data_type,v,components,v_min,v_max,format,power)",
+      "argsoriginal": "(const char* label,ImGuiDataType data_type,void* p_data,int components,const void* p_min,const void* p_max,const char* format=((void*)0),float power=1.0f)",
+      "call_args": "(label,data_type,p_data,components,p_min,p_max,format,power)",
       "cimguiname": "igSliderScalarN",
       "defaults": {
         "format": "((void*)0)",
@@ -16071,7 +16112,7 @@
   ],
   "igVSliderScalar": [
     {
-      "args": "(const char* label,const ImVec2 size,ImGuiDataType data_type,void* v,const void* v_min,const void* v_max,const char* format,float power)",
+      "args": "(const char* label,const ImVec2 size,ImGuiDataType data_type,void* p_data,const void* p_min,const void* p_max,const char* format,float power)",
       "argsT": [
         {
           "name": "label",
@@ -16086,15 +16127,15 @@
           "type": "ImGuiDataType"
         },
         {
-          "name": "v",
+          "name": "p_data",
           "type": "void*"
         },
         {
-          "name": "v_min",
+          "name": "p_min",
           "type": "const void*"
         },
         {
-          "name": "v_max",
+          "name": "p_max",
           "type": "const void*"
         },
         {
@@ -16106,8 +16147,8 @@
           "type": "float"
         }
       ],
-      "argsoriginal": "(const char* label,const ImVec2& size,ImGuiDataType data_type,void* v,const void* v_min,const void* v_max,const char* format=((void*)0),float power=1.0f)",
-      "call_args": "(label,size,data_type,v,v_min,v_max,format,power)",
+      "argsoriginal": "(const char* label,const ImVec2& size,ImGuiDataType data_type,void* p_data,const void* p_min,const void* p_max,const char* format=((void*)0),float power=1.0f)",
+      "call_args": "(label,size,data_type,p_data,p_min,p_max,format,power)",
       "cimguiname": "igVSliderScalar",
       "defaults": {
         "format": "((void*)0)",

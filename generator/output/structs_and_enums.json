@@ -1217,33 +1217,28 @@
       },
       {
         "calc_value": 17,
-        "name": "ImGuiNavInput_KeyTab_",
+        "name": "ImGuiNavInput_KeyLeft_",
         "value": 17
       },
       {
         "calc_value": 18,
-        "name": "ImGuiNavInput_KeyLeft_",
+        "name": "ImGuiNavInput_KeyRight_",
         "value": 18
       },
       {
         "calc_value": 19,
-        "name": "ImGuiNavInput_KeyRight_",
+        "name": "ImGuiNavInput_KeyUp_",
         "value": 19
       },
       {
         "calc_value": 20,
-        "name": "ImGuiNavInput_KeyUp_",
+        "name": "ImGuiNavInput_KeyDown_",
         "value": 20
       },
       {
         "calc_value": 21,
-        "name": "ImGuiNavInput_KeyDown_",
-        "value": 21
-      },
-      {
-        "calc_value": 22,
         "name": "ImGuiNavInput_COUNT",
-        "value": 22
+        "value": 21
       },
       {
         "calc_value": 16,
@@ -2387,7 +2382,7 @@
       },
       {
         "name": "NavInputs[ImGuiNavInput_COUNT]",
-        "size": 22,
+        "size": 21,
         "type": "float"
       },
       {
@@ -2517,12 +2512,12 @@
       },
       {
         "name": "NavInputsDownDuration[ImGuiNavInput_COUNT]",
-        "size": 22,
+        "size": 21,
         "type": "float"
       },
       {
         "name": "NavInputsDownDurationPrev[ImGuiNavInput_COUNT]",
-        "size": 22,
+        "size": 21,
         "type": "float"
       },
       {
