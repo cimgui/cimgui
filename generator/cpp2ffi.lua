@@ -917,11 +917,13 @@ function M.Parser()
 		local typedefs_table = {}
 
 		self.inerstructs = {}
+		self.order = {}
 		--then structs and enums
 		for i,it in ipairs(itemsarr) do
 			if it.re_name == "enum_re" then
 				local enumname = it.item:match"^%s*enum%s+([^%s;{}]+)"
 				outtab.enums[enumname] = {}
+				self.order[enumname] = i
 				local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
 				local enumarr = str_split(inner,",")
 				for j,line in ipairs(enumarr) do
@@ -941,6 +943,7 @@ function M.Parser()
 				--M.prtable(cleanst,structname,strtab)
 				if structname and not self.typenames[structname] then
 					outtab.structs[structname] = {}
+					self.order[structname]=i
 					for j=3,#strtab-1 do
 						self:parse_struct_line(strtab[j],outtab.structs[structname])
 					end
