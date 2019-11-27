@@ -438,16 +438,20 @@ local function generate_templates(code,templates)
         --local te = k:gsub("%s","_")
         --te = te:gsub("%*","Ptr")
 		if ttype == "ImVector" then
-		for te,newte in pairs(v) do
-        table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
-		end
+			for te,newte in pairs(v) do
+				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
+			end
+		elseif ttype == "ImPool" then
+			for te,newte in pairs(v) do
+				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
+				table.insert(code,"typedef struct ImPool_"..newte.." {ImVector_"..te.." Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_"..newte..";\n")
+			end
 		end
     end
 end
 --generate cimgui.cpp cimgui.h 
 local function cimgui_generation(parser)
-	cpp2ffi.prtable(parser.templates)
-	cpp2ffi.prtable(parser.typenames)
+
 --[[
 	-- clean ImVector:contains() for not applicable types
 	local clean_f = {}
@@ -472,6 +476,9 @@ local function cimgui_generation(parser)
     local hstrfile = read_data"./cimgui_template.h"
 
 	local outpre,outpost = parser:gen_structs_and_enums()
+	parser.templates.ImVector.T = nil
+	cpp2ffi.prtable(parser.templates)
+	cpp2ffi.prtable(parser.typenames)
 	
 	local outtab = {}
     generate_templates(outtab,parser.templates)
@@ -560,19 +567,42 @@ parser1:do_parse()
 local parser1i = parseImGuiHeader([[../imgui/imgui_internal.h]],{[[imgui_internal]],[[imstb_textedit]]})
 parser1i:do_parse()
 local p1isten = parser1i:gen_structs_and_enums_table()
-
+--parser1i:printItems()
+print"typedefs_table---------------------------"
+cpp2ffi.prtable(parser1i.typedefs_table)
+print"typedefs_table end---------------------------"
 local needed = {ImGuiContext = {type = "ImGuiContext", kind = "structs", order = parser1i.order["ImGuiContext"]}}
-local function RecurseNeeded(Ini,IniKind)
+local seen = {}
+local function RecurseNeeded(Ini,IniKind,level)
+	--if level > 5 then return end
+	if seen[Ini] then return end
+	seen[Ini] = true
+	print("RecurseNeeded",Ini,IniKind,level)
 	for i,v in ipairs(p1isten[IniKind][Ini]) do
-		local kind = p1isten.enums[v.type] and "enums" or p1isten.structs[v.type] and "structs"
-		if kind then
-			needed[v.type] = {type = v.type, kind = kind, order = parser1i.order[v.type]}
-			RecurseNeeded(v.type,kind)
+		--if not v.type then print("nil type in",Ini,IniKind) end
+		--dont want pointers
+		local type = v.type:match"([^%*]+)"
+		--ImVector out
+		if type:match"ImVector_" then type=type:match"ImVector_(.+)" end
+		
+		local kind = p1isten.enums[type] and "enums" or p1isten.structs[type] and "structs" or nil
+		if kind=="structs" then
+			if not needed[type] then RecurseNeeded(type,kind,level+1) end
+			needed[type] = {type = type, kind = kind, order = parser1i.order[type]}
+		elseif kind=="enums" then
+			needed[type] = {type = type, kind = kind, order = parser1i.order[type]}
+		elseif parser1i.typedefs_table[type] then
+			needed[type] = {type = type, kind = "typedef", order = parser1i.order[type]}
+		elseif parser1i.vardefs[type] then
+			needed[type] = {type = type, kind = "vardef", order = parser1i.order[type]}
+		elseif not cpp2ffi.c_types[type] then
+			print("RecurseNeded failed",type)
+			--error"failed recurse"
 		end
 	end
 end
 
-RecurseNeeded("ImGuiContext","structs")
+RecurseNeeded("ImGuiContext","structs",0)
 
 
 local ordered_needed = {}
@@ -581,13 +611,15 @@ for k,v in pairs(needed) do
 end
 table.sort(ordered_needed, function(a,b) return a.order < b.order end)
 
+print"needed are-----------------------"
 for i,vv in ipairs(ordered_needed) do
-	print(vv.order,vv.type)
+	print(vv.order,vv.type,vv.kind)
 	local v = parser1i.itemsarr[vv.order]
 
-	if v.item:match"^[%s\n\r]*struct%s*ImGuiContext" then
+	--if v.item:match"^[%s\n\r]*struct%s*ImGuiContext" then
+	if vv.kind=="structs" then
 			--add enum keyword where necessary
-			print"setting enum keyword------------------------"
+			--print"setting enum keyword------------------------"
 			local newitem = ""
 			for line in v.item:gmatch("([^\n]+)") do
 				local typen = line:match"^%s*(%S+)"

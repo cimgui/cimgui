@@ -161,8 +161,7 @@ struct ImVec4
 {
     float x, y, z, w;
 };
-enum ImGuiWindowFlags_
-{
+typedef enum {
     ImGuiWindowFlags_None = 0,
     ImGuiWindowFlags_NoTitleBar = 1 << 0,
     ImGuiWindowFlags_NoResize = 1 << 1,
@@ -193,9 +192,8 @@ enum ImGuiWindowFlags_
     ImGuiWindowFlags_Popup = 1 << 26,
     ImGuiWindowFlags_Modal = 1 << 27,
     ImGuiWindowFlags_ChildMenu = 1 << 28
-};
-enum ImGuiInputTextFlags_
-{
+}ImGuiWindowFlags_;
+typedef enum {
     ImGuiInputTextFlags_None = 0,
     ImGuiInputTextFlags_CharsDecimal = 1 << 0,
     ImGuiInputTextFlags_CharsHexadecimal = 1 << 1,
@@ -218,9 +216,8 @@ enum ImGuiInputTextFlags_
     ImGuiInputTextFlags_CallbackResize = 1 << 18,
     ImGuiInputTextFlags_Multiline = 1 << 20,
     ImGuiInputTextFlags_NoMarkEdited = 1 << 21
-};
-enum ImGuiTreeNodeFlags_
-{
+}ImGuiInputTextFlags_;
+typedef enum {
     ImGuiTreeNodeFlags_None = 0,
     ImGuiTreeNodeFlags_Selected = 1 << 0,
     ImGuiTreeNodeFlags_Framed = 1 << 1,
@@ -237,18 +234,16 @@ enum ImGuiTreeNodeFlags_
     ImGuiTreeNodeFlags_SpanFullWidth = 1 << 12,
     ImGuiTreeNodeFlags_NavLeftJumpsBackHere = 1 << 13,
     ImGuiTreeNodeFlags_CollapsingHeader = ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_NoAutoOpenOnLog
-};
-enum ImGuiSelectableFlags_
-{
+}ImGuiTreeNodeFlags_;
+typedef enum {
     ImGuiSelectableFlags_None = 0,
     ImGuiSelectableFlags_DontClosePopups = 1 << 0,
     ImGuiSelectableFlags_SpanAllColumns = 1 << 1,
     ImGuiSelectableFlags_AllowDoubleClick = 1 << 2,
     ImGuiSelectableFlags_Disabled = 1 << 3,
     ImGuiSelectableFlags_AllowItemOverlap = 1 << 4
-};
-enum ImGuiComboFlags_
-{
+}ImGuiSelectableFlags_;
+typedef enum {
     ImGuiComboFlags_None = 0,
     ImGuiComboFlags_PopupAlignLeft = 1 << 0,
     ImGuiComboFlags_HeightSmall = 1 << 1,
@@ -258,9 +253,8 @@ enum ImGuiComboFlags_
     ImGuiComboFlags_NoArrowButton = 1 << 5,
     ImGuiComboFlags_NoPreview = 1 << 6,
     ImGuiComboFlags_HeightMask_ = ImGuiComboFlags_HeightSmall | ImGuiComboFlags_HeightRegular | ImGuiComboFlags_HeightLarge | ImGuiComboFlags_HeightLargest
-};
-enum ImGuiTabBarFlags_
-{
+}ImGuiComboFlags_;
+typedef enum {
     ImGuiTabBarFlags_None = 0,
     ImGuiTabBarFlags_Reorderable = 1 << 0,
     ImGuiTabBarFlags_AutoSelectNewTabs = 1 << 1,
@@ -272,25 +266,22 @@ enum ImGuiTabBarFlags_
     ImGuiTabBarFlags_FittingPolicyScroll = 1 << 7,
     ImGuiTabBarFlags_FittingPolicyMask_ = ImGuiTabBarFlags_FittingPolicyResizeDown | ImGuiTabBarFlags_FittingPolicyScroll,
     ImGuiTabBarFlags_FittingPolicyDefault_ = ImGuiTabBarFlags_FittingPolicyResizeDown
-};
-enum ImGuiTabItemFlags_
-{
+}ImGuiTabBarFlags_;
+typedef enum {
     ImGuiTabItemFlags_None = 0,
     ImGuiTabItemFlags_UnsavedDocument = 1 << 0,
     ImGuiTabItemFlags_SetSelected = 1 << 1,
     ImGuiTabItemFlags_NoCloseWithMiddleMouseButton = 1 << 2,
     ImGuiTabItemFlags_NoPushId = 1 << 3
-};
-enum ImGuiFocusedFlags_
-{
+}ImGuiTabItemFlags_;
+typedef enum {
     ImGuiFocusedFlags_None = 0,
     ImGuiFocusedFlags_ChildWindows = 1 << 0,
     ImGuiFocusedFlags_RootWindow = 1 << 1,
     ImGuiFocusedFlags_AnyWindow = 1 << 2,
     ImGuiFocusedFlags_RootAndChildWindows = ImGuiFocusedFlags_RootWindow | ImGuiFocusedFlags_ChildWindows
-};
-enum ImGuiHoveredFlags_
-{
+}ImGuiFocusedFlags_;
+typedef enum {
     ImGuiHoveredFlags_None = 0,
     ImGuiHoveredFlags_ChildWindows = 1 << 0,
     ImGuiHoveredFlags_RootWindow = 1 << 1,
@@ -301,9 +292,8 @@ enum ImGuiHoveredFlags_
     ImGuiHoveredFlags_AllowWhenDisabled = 1 << 7,
     ImGuiHoveredFlags_RectOnly = ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem | ImGuiHoveredFlags_AllowWhenOverlapped,
     ImGuiHoveredFlags_RootAndChildWindows = ImGuiHoveredFlags_RootWindow | ImGuiHoveredFlags_ChildWindows
-};
-enum ImGuiDragDropFlags_
-{
+}ImGuiHoveredFlags_;
+typedef enum {
     ImGuiDragDropFlags_None = 0,
     ImGuiDragDropFlags_SourceNoPreviewTooltip = 1 << 0,
     ImGuiDragDropFlags_SourceNoDisableHover = 1 << 1,
@@ -315,9 +305,8 @@ enum ImGuiDragDropFlags_
     ImGuiDragDropFlags_AcceptNoDrawDefaultRect = 1 << 11,
     ImGuiDragDropFlags_AcceptNoPreviewTooltip = 1 << 12,
     ImGuiDragDropFlags_AcceptPeekOnly = ImGuiDragDropFlags_AcceptBeforeDelivery | ImGuiDragDropFlags_AcceptNoDrawDefaultRect
-};
-enum ImGuiDataType_
-{
+}ImGuiDragDropFlags_;
+typedef enum {
     ImGuiDataType_S8,
     ImGuiDataType_U8,
     ImGuiDataType_S16,
@@ -329,18 +318,16 @@ enum ImGuiDataType_
     ImGuiDataType_Float,
     ImGuiDataType_Double,
     ImGuiDataType_COUNT
-};
-enum ImGuiDir_
-{
+}ImGuiDataType_;
+typedef enum {
     ImGuiDir_None = -1,
     ImGuiDir_Left = 0,
     ImGuiDir_Right = 1,
     ImGuiDir_Up = 2,
     ImGuiDir_Down = 3,
     ImGuiDir_COUNT
-};
-enum ImGuiKey_
-{
+}ImGuiDir_;
+typedef enum {
     ImGuiKey_Tab,
     ImGuiKey_LeftArrow,
     ImGuiKey_RightArrow,
@@ -364,9 +351,8 @@ enum ImGuiKey_
     ImGuiKey_Y,
     ImGuiKey_Z,
     ImGuiKey_COUNT
-};
-enum ImGuiNavInput_
-{
+}ImGuiKey_;
+typedef enum {
     ImGuiNavInput_Activate,
     ImGuiNavInput_Cancel,
     ImGuiNavInput_Input,
@@ -390,9 +376,8 @@ enum ImGuiNavInput_
     ImGuiNavInput_KeyDown_,
     ImGuiNavInput_COUNT,
     ImGuiNavInput_InternalStart_ = ImGuiNavInput_KeyMenu_
-};
-enum ImGuiConfigFlags_
-{
+}ImGuiNavInput_;
+typedef enum {
     ImGuiConfigFlags_None = 0,
     ImGuiConfigFlags_NavEnableKeyboard = 1 << 0,
     ImGuiConfigFlags_NavEnableGamepad = 1 << 1,
@@ -402,17 +387,15 @@ enum ImGuiConfigFlags_
     ImGuiConfigFlags_NoMouseCursorChange = 1 << 5,
     ImGuiConfigFlags_IsSRGB = 1 << 20,
     ImGuiConfigFlags_IsTouchScreen = 1 << 21
-};
-enum ImGuiBackendFlags_
-{
+}ImGuiConfigFlags_;
+typedef enum {
     ImGuiBackendFlags_None = 0,
     ImGuiBackendFlags_HasGamepad = 1 << 0,
     ImGuiBackendFlags_HasMouseCursors = 1 << 1,
     ImGuiBackendFlags_HasSetMousePos = 1 << 2,
     ImGuiBackendFlags_RendererHasVtxOffset = 1 << 3
-};
-enum ImGuiCol_
-{
+}ImGuiBackendFlags_;
+typedef enum {
     ImGuiCol_Text,
     ImGuiCol_TextDisabled,
     ImGuiCol_WindowBg,
@@ -462,9 +445,8 @@ enum ImGuiCol_
     ImGuiCol_NavWindowingDimBg,
     ImGuiCol_ModalWindowDimBg,
     ImGuiCol_COUNT
-};
-enum ImGuiStyleVar_
-{
+}ImGuiCol_;
+typedef enum {
     ImGuiStyleVar_Alpha,
     ImGuiStyleVar_WindowPadding,
     ImGuiStyleVar_WindowRounding,
@@ -489,9 +471,8 @@ enum ImGuiStyleVar_
     ImGuiStyleVar_ButtonTextAlign,
     ImGuiStyleVar_SelectableTextAlign,
     ImGuiStyleVar_COUNT
-};
-enum ImGuiColorEditFlags_
-{
+}ImGuiStyleVar_;
+typedef enum {
     ImGuiColorEditFlags_None = 0,
     ImGuiColorEditFlags_NoAlpha = 1 << 1,
     ImGuiColorEditFlags_NoPicker = 1 << 2,
@@ -520,9 +501,8 @@ enum ImGuiColorEditFlags_
     ImGuiColorEditFlags__DataTypeMask = ImGuiColorEditFlags_Uint8|ImGuiColorEditFlags_Float,
     ImGuiColorEditFlags__PickerMask = ImGuiColorEditFlags_PickerHueWheel|ImGuiColorEditFlags_PickerHueBar,
     ImGuiColorEditFlags__InputMask = ImGuiColorEditFlags_InputRGB|ImGuiColorEditFlags_InputHSV
-};
-enum ImGuiMouseCursor_
-{
+}ImGuiColorEditFlags_;
+typedef enum {
     ImGuiMouseCursor_None = -1,
     ImGuiMouseCursor_Arrow = 0,
     ImGuiMouseCursor_TextInput,
@@ -533,14 +513,13 @@ enum ImGuiMouseCursor_
     ImGuiMouseCursor_ResizeNWSE,
     ImGuiMouseCursor_Hand,
     ImGuiMouseCursor_COUNT
-};
-enum ImGuiCond_
-{
+}ImGuiMouseCursor_;
+typedef enum {
     ImGuiCond_Always = 1 << 0,
     ImGuiCond_Once = 1 << 1,
     ImGuiCond_FirstUseEver = 1 << 2,
     ImGuiCond_Appearing = 1 << 3
-};
+}ImGuiCond_;
 struct ImGuiStyle
 {
     float Alpha;
@@ -747,8 +726,7 @@ struct ImDrawListSplitter
     int _Count;
     ImVector_ImDrawChannel _Channels;
 };
-enum ImDrawCornerFlags_
-{
+typedef enum {
     ImDrawCornerFlags_None = 0,
     ImDrawCornerFlags_TopLeft = 1 << 0,
     ImDrawCornerFlags_TopRight = 1 << 1,
@@ -759,14 +737,13 @@ enum ImDrawCornerFlags_
     ImDrawCornerFlags_Left = ImDrawCornerFlags_TopLeft | ImDrawCornerFlags_BotLeft,
     ImDrawCornerFlags_Right = ImDrawCornerFlags_TopRight | ImDrawCornerFlags_BotRight,
     ImDrawCornerFlags_All = 0xF
-};
-enum ImDrawListFlags_
-{
+}ImDrawCornerFlags_;
+typedef enum {
     ImDrawListFlags_None = 0,
     ImDrawListFlags_AntiAliasedLines = 1 << 0,
     ImDrawListFlags_AntiAliasedFill = 1 << 1,
     ImDrawListFlags_AllowVtxOffset = 1 << 2
-};
+}ImDrawListFlags_;
 struct ImDrawList
 {
     ImVector_ImDrawCmd CmdBuffer;
@@ -837,12 +814,11 @@ struct ImFontAtlasCustomRect
     ImVec2 GlyphOffset;
     ImFont* Font;
 };
-enum ImFontAtlasFlags_
-{
+typedef enum {
     ImFontAtlasFlags_None = 0,
     ImFontAtlasFlags_NoPowerOfTwoHeight = 1 << 0,
     ImFontAtlasFlags_NoMouseCursors = 1 << 1
-};
+}ImFontAtlasFlags_;
 struct ImFontAtlas
 {
     bool Locked;

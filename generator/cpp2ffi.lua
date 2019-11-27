@@ -104,7 +104,7 @@ local function strip(cad)
     return cad:gsub("^%s*(.-)%s*$","%1") --remove initial and final spaces
 end
 local function strip_end(cad)
-    return cad:gsub("^(.-)%s*$","%1") --remove initial and final spaces
+    return cad:gsub("^(.-)%s*$","%1") --remove  final spaces
 end
 local function clean_spaces(cad)
     cad = strip(cad)
@@ -630,6 +630,7 @@ end
 
 --only basic ending
 local c_types = {
+    ["bool"]=true,
     ["char"]=true,
     ["int"]=true,
     ["float"]=true,
@@ -641,6 +642,7 @@ local c_types = {
     ["size_t"]=true,
     ["ptrdiff_t"]=true,
 }
+M.c_types = c_types
 local function check_arg_detection(fdefs,typedefs)
     print"-----------------check arg detection---------------------------"
     for k,defT in pairs(fdefs) do
@@ -808,6 +810,7 @@ function M.Parser()
 				--local ttype,template = it.item:match("([^%s,%(%)]+)%s*<(.+)>")
 				local ttype,template =    it.item:match"([^%s,%(%)]+)%s*<(.+)>"
 				if template then
+					--if template=="T" then print("T found in---------");print(stru) end
 					local te = template:gsub("%s","_")
 					te = te:gsub("%*","Ptr")
 					self.templates[ttype] = self.templates[ttype] or {}
@@ -850,7 +853,9 @@ function M.Parser()
 		--then structs and enums
 		for i,it in ipairs(itemsarr) do
 			if it.re_name == "enum_re" then
-				table.insert(outtab,it.item)
+				local enumname, enumbody = it.item:match"^%s*enum%s+([^%s;{}]+)[%s\n\r]*(%b{})"
+				--print("enum is:",enumname, enumbody)
+				table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
 			elseif it.re_name == "struct_re" then
 				local cleanst,structname = self:clean_struct(it.item)
 				--if not void stname or templated
@@ -913,11 +918,38 @@ function M.Parser()
 	end
 	function par:gen_structs_and_enums_table()
 		local outtab = {enums={},structs={}}
-		local outtabpre = {}
-		local typedefs_table = {}
+		self.typedefs_table = {}
+		self.vardefs = {}
 
 		self.inerstructs = {}
 		self.order = {}
+		
+		--first typedefs
+		for i,it in ipairs(itemsarr) do
+			if it.re_name == "typedef_re" then --or it.re_name == "functypedef_re" or it.re_name == "vardef_re" then
+				local typedefdef,typedefname = it.item:match"typedef(.+)%s([^%s;]+);$"
+				typedefname = strip(typedefname)
+				self.typedefs_table[typedefname] = strip(typedefdef)
+				self.order[typedefname] = i
+				-- add typedef after struct name
+				-- if it.re_name == "vardef_re" and it.item:match"struct" then
+					-- local stname = it.item:match("struct%s*(%S+)%s*;")
+					-- table.insert(typedefs_table,"typedef struct "..stname.." "..stname..";\n")
+					-- self.typedefs_dict[stname]="struct "..stname
+				-- end
+			end
+		end
+		--vardefs
+		for i,it in ipairs(itemsarr) do
+			if it.re_name == "vardef_re" then 
+				local stname = it.item:match"struct%s(%S+)$"
+				if stname then
+					stname = strip(stname)
+					self.vardefs[stname] = true
+					self.order[stname] = i
+				end
+			end
+		end
 		--then structs and enums
 		for i,it in ipairs(itemsarr) do
 			if it.re_name == "enum_re" then
