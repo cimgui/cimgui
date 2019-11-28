@@ -433,7 +433,7 @@ local serializeTableF = cpp2ffi.serializeTableF
 
 ----------custom ImVector templates
 local function generate_templates(code,templates)
-    table.insert(code,[[typedef struct ImVector{int Size;int Capacity;void* Data;} ImVector;]].."\n")
+    table.insert(code,"\n"..[[typedef struct ImVector{int Size;int Capacity;void* Data;} ImVector;]].."\n")
     for ttype,v in pairs(templates) do
         --local te = k:gsub("%s","_")
         --te = te:gsub("%*","Ptr")
@@ -442,9 +442,15 @@ local function generate_templates(code,templates)
 				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
 			end
 		elseif ttype == "ImPool" then
+			--declare ImGuiStorage
 			for te,newte in pairs(v) do
 				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
 				table.insert(code,"typedef struct ImPool_"..newte.." {ImVector_"..te.." Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_"..newte..";\n")
+			end
+		elseif ttype == "ImChunkStream" then
+			for te,newte in pairs(v) do
+				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
+				table.insert(code,"typedef struct ImChunkStream_"..newte.." {ImVector_"..te.." Buf;} ImChunkStream_"..newte..";\n")
 			end
 		end
     end
@@ -482,6 +488,7 @@ local function cimgui_generation(parser)
 	
 	local outtab = {}
     generate_templates(outtab,parser.templates)
+
 	local cstructsstr = outpre..table.concat(outtab,"")..outpost..(extra or "")
 
     hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
@@ -562,7 +569,25 @@ print("------------------generation with "..COMPILER.."------------------------"
 local parser1 = parseImGuiHeader([[../imgui/imgui.h]],{[[imgui]]})
 parser1:do_parse()
 
------------ add ImGuiContext from imgui_internal.h
+---------- generate cimgui_internal.h
+local parser1i = parseImGuiHeader([[../imgui/imgui_internal.h]],{[[imgui_internal]],[[imstb_textedit]]})
+parser1i:do_parse()
+local outpre,outpost = parser1i:gen_structs_and_enums()
+--avoid T
+parser1i.templates.ImVector.T = nil
+for k,v in pairs(parser1i.templates.ImVector) do
+	if parser1.templates.ImVector[k] then parser1i.templates.ImVector[k]=nil end
+end
+local outtab = {}
+generate_templates(outtab,parser1i.templates)
+--drop first
+table.remove(outtab,1)
+local cstructsstr = outpre..table.concat(outtab,"")..outpost..(extra or "")
+local cfuncsstr = func_header_generate(parser1i)
+save_data("./output/cimgui_internal.h",cimgui_header,"#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n",cstructsstr,"\n#endif\n")--,cfuncsstr)
+copyfile("./output/cimgui_internal.h", "../cimgui_internal.h")
+
+----------- add only ImGuiContext from imgui_internal.h to parser1
 --[=[
 local parser1i = parseImGuiHeader([[../imgui/imgui_internal.h]],{[[imgui_internal]],[[imstb_textedit]]})
 parser1i:do_parse()
