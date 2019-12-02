@@ -570,6 +570,7 @@ local parser1 = parseImGuiHeader([[../imgui/imgui.h]],{[[imgui]]})
 parser1:do_parse()
 
 ---------- generate cimgui_internal.h
+--[=[
 local parser1i = parseImGuiHeader([[../imgui/imgui_internal.h]],{[[imgui_internal]],[[imstb_textedit]]})
 parser1i:do_parse()
 local outpre,outpost = parser1i:gen_structs_and_enums()
@@ -586,7 +587,7 @@ local cstructsstr = outpre..table.concat(outtab,"")..outpost..(extra or "")
 local cfuncsstr = func_header_generate(parser1i)
 save_data("./output/cimgui_internal.h",cimgui_header,"#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n",cstructsstr,"\n#endif\n")--,cfuncsstr)
 copyfile("./output/cimgui_internal.h", "../cimgui_internal.h")
-
+--]=]
 ----------- add only ImGuiContext from imgui_internal.h to parser1
 --[=[
 local parser1i = parseImGuiHeader([[../imgui/imgui_internal.h]],{[[imgui_internal]],[[imstb_textedit]]})
