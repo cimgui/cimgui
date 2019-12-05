@@ -159,6 +159,14 @@ CIMGUI_API ImDrawList* igGetWindowDrawList()
 {
     return ImGui::GetWindowDrawList();
 }
+CIMGUI_API float igGetWindowDpiScale()
+{
+    return ImGui::GetWindowDpiScale();
+}
+CIMGUI_API ImGuiViewport* igGetWindowViewport()
+{
+    return ImGui::GetWindowViewport();
+}
 CIMGUI_API ImVec2 igGetWindowPos()
 {
     return ImGui::GetWindowPos();
@@ -202,6 +210,10 @@ CIMGUI_API void igSetNextWindowFocus()
 CIMGUI_API void igSetNextWindowBgAlpha(float alpha)
 {
     return ImGui::SetNextWindowBgAlpha(alpha);
+}
+CIMGUI_API void igSetNextWindowViewport(ImGuiID viewport_id)
+{
+    return ImGui::SetNextWindowViewport(viewport_id);
 }
 CIMGUI_API void igSetWindowPosVec2(const ImVec2 pos,ImGuiCond cond)
 {
@@ -1132,6 +1144,30 @@ CIMGUI_API void igSetTabItemClosed(const char* tab_or_docked_window_label)
 {
     return ImGui::SetTabItemClosed(tab_or_docked_window_label);
 }
+CIMGUI_API void igDockSpace(ImGuiID id,const ImVec2 size,ImGuiDockNodeFlags flags,const ImGuiWindowClass* window_class)
+{
+    return ImGui::DockSpace(id,size,flags,window_class);
+}
+CIMGUI_API ImGuiID igDockSpaceOverViewport(ImGuiViewport* viewport,ImGuiDockNodeFlags flags,const ImGuiWindowClass* window_class)
+{
+    return ImGui::DockSpaceOverViewport(viewport,flags,window_class);
+}
+CIMGUI_API void igSetNextWindowDockID(ImGuiID dock_id,ImGuiCond cond)
+{
+    return ImGui::SetNextWindowDockID(dock_id,cond);
+}
+CIMGUI_API void igSetNextWindowClass(const ImGuiWindowClass* window_class)
+{
+    return ImGui::SetNextWindowClass(window_class);
+}
+CIMGUI_API ImGuiID igGetWindowDockID()
+{
+    return ImGui::GetWindowDockID();
+}
+CIMGUI_API bool igIsWindowDocked()
+{
+    return ImGui::IsWindowDocked();
+}
 CIMGUI_API void igLogToTTY(int auto_open_depth)
 {
     return ImGui::LogToTTY(auto_open_depth);
@@ -1287,6 +1323,14 @@ CIMGUI_API ImDrawList* igGetBackgroundDrawList()
 CIMGUI_API ImDrawList* igGetForegroundDrawList()
 {
     return ImGui::GetForegroundDrawList();
+}
+CIMGUI_API ImDrawList* igGetBackgroundDrawListViewportPtr(ImGuiViewport* viewport)
+{
+    return ImGui::GetBackgroundDrawList(viewport);
+}
+CIMGUI_API ImDrawList* igGetForegroundDrawListViewportPtr(ImGuiViewport* viewport)
+{
+    return ImGui::GetForegroundDrawList(viewport);
 }
 CIMGUI_API ImDrawListSharedData* igGetDrawListSharedData()
 {
@@ -1448,6 +1492,34 @@ CIMGUI_API void igMemFree(void* ptr)
 {
     return ImGui::MemFree(ptr);
 }
+CIMGUI_API ImGuiPlatformIO* igGetPlatformIO()
+{
+    return &ImGui::GetPlatformIO();
+}
+CIMGUI_API ImGuiViewport* igGetMainViewport()
+{
+    return ImGui::GetMainViewport();
+}
+CIMGUI_API void igUpdatePlatformWindows()
+{
+    return ImGui::UpdatePlatformWindows();
+}
+CIMGUI_API void igRenderPlatformWindowsDefault(void* platform_arg,void* renderer_arg)
+{
+    return ImGui::RenderPlatformWindowsDefault(platform_arg,renderer_arg);
+}
+CIMGUI_API void igDestroyPlatformWindows()
+{
+    return ImGui::DestroyPlatformWindows();
+}
+CIMGUI_API ImGuiViewport* igFindViewportByID(ImGuiID id)
+{
+    return ImGui::FindViewportByID(id);
+}
+CIMGUI_API ImGuiViewport* igFindViewportByPlatformHandle(void* platform_handle)
+{
+    return ImGui::FindViewportByPlatformHandle(platform_handle);
+}
 CIMGUI_API ImGuiStyle* ImGuiStyle_ImGuiStyle(void)
 {
     return IM_NEW(ImGuiStyle)();
@@ -1499,6 +1571,14 @@ CIMGUI_API void ImGuiInputTextCallbackData_InsertChars(ImGuiInputTextCallbackDat
 CIMGUI_API bool ImGuiInputTextCallbackData_HasSelection(ImGuiInputTextCallbackData* self)
 {
     return self->HasSelection();
+}
+CIMGUI_API ImGuiWindowClass* ImGuiWindowClass_ImGuiWindowClass(void)
+{
+    return IM_NEW(ImGuiWindowClass)();
+}
+CIMGUI_API void ImGuiWindowClass_destroy(ImGuiWindowClass* self)
+{
+    IM_DELETE(self);
 }
 CIMGUI_API ImGuiPayload* ImGuiPayload_ImGuiPayload(void)
 {
@@ -2263,6 +2343,30 @@ CIMGUI_API void ImFont_AddRemapChar(ImFont* self,ImWchar dst,ImWchar src,bool ov
 CIMGUI_API void ImFont_SetFallbackChar(ImFont* self,ImWchar c)
 {
     return self->SetFallbackChar(c);
+}
+CIMGUI_API ImGuiPlatformMonitor* ImGuiPlatformMonitor_ImGuiPlatformMonitor(void)
+{
+    return IM_NEW(ImGuiPlatformMonitor)();
+}
+CIMGUI_API void ImGuiPlatformMonitor_destroy(ImGuiPlatformMonitor* self)
+{
+    IM_DELETE(self);
+}
+CIMGUI_API ImGuiPlatformIO* ImGuiPlatformIO_ImGuiPlatformIO(void)
+{
+    return IM_NEW(ImGuiPlatformIO)();
+}
+CIMGUI_API void ImGuiPlatformIO_destroy(ImGuiPlatformIO* self)
+{
+    IM_DELETE(self);
+}
+CIMGUI_API ImGuiViewport* ImGuiViewport_ImGuiViewport(void)
+{
+    return IM_NEW(ImGuiViewport)();
+}
+CIMGUI_API void ImGuiViewport_destroy(ImGuiViewport* self)
+{
+    IM_DELETE(self);
 }
 CIMGUI_API void igGetWindowPos_nonUDT(ImVec2 *pOut)
 {
