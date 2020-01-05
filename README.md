@@ -46,17 +46,17 @@ Notes:
   * ov_cimguiname : the overloaded cimgui name (if absent it would be taken from cimguiname)
   * cimguiname : the name without overloading (this should be used if there is not ov_cimguiname)
   * ret : the return type
-  * retref : is setted if original return type is a reference. (will be a pointer in cimgui)
+  * retref : is set if original return type is a reference. (will be a pointer in cimgui)
   * argsT : an array of collections (each one with type: argument type and name: the argument name)
   * args : a string of argsT concatenated and separated by commas
   * call_args : a string with the argument names separated by commas for calling imgui function
   * defaults : a collection in which key is argument name and value is the default value.
   * manual : will be true if this function is hand-written (not generated)
-  * isvararg : is setted if some argument is a vararg
-  * constructor : is setted if the function is a constructor for a class
-  * destructor : is setted if the function is a destructor for a class
-  * templated : is setted if the function belongs to a templated class (ImVector)
-  * templatedgen: is setted if the function belongs to a struct generated from template (ImVector_ImWchar)
+  * isvararg : is set if some argument is a vararg
+  * constructor : is set if the function is a constructor for a class
+  * destructor : is set if the function is a destructor for a class
+  * templated : is set if the function belongs to a templated class (ImVector)
+  * templatedgen: is set if the function belongs to a struct generated from template (ImVector_ImWchar)
   * nonUDT : if present can be 1 or 2 (explained meaning in usage) if return type was a user defined type
 ### structs_and_enums description
 * Is is a collection with two items:
