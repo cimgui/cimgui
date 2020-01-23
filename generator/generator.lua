@@ -553,7 +553,15 @@ local function parseImGuiHeader(header,names)
 	local iterator = (HAVE_COMPILER and cpp2ffi.location) or filelines
 	
 	local tableo = {}
-	for line,loca,loca2 in iterator(pipe,names,{}) do
+	--[[
+	local line
+	repeat 
+		line =pipe:read"*l"
+		table.insert(tableo,line)
+	until not line
+	cpp2ffi.save_data("cdefs1.lua",table.concat(tableo,"\n"))
+	--]]
+	for line,loca,loca2 in iterator(pipe,names,{},COMPILER) do
 		parser:insert(line)
 		--table.insert(tableo,line)
 		--print(loca,loca2)
@@ -719,7 +727,7 @@ if #implementations > 0 then
         
         local iterator = (HAVE_COMPILER and cpp2ffi.location) or filelines
         
-        for line,locat in iterator(pipe,{locati},{}) do
+        for line,locat in iterator(pipe,{locati},{},COMPILER) do
             --local line, comment = split_comment(line)
 			parser2:insert(line)
         end
