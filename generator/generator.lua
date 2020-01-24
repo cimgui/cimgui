@@ -189,6 +189,13 @@ end
 
 
 --------------------------------functions for C generation
+--load parser module
+local cpp2ffi = require"cpp2ffi"
+local read_data = cpp2ffi.read_data
+local save_data = cpp2ffi.save_data
+local copyfile = cpp2ffi.copyfile
+local serializeTableF = cpp2ffi.serializeTableF
+
 local function func_header_impl_generate(FP)
 
     local outtab = {}
@@ -197,11 +204,19 @@ local function func_header_impl_generate(FP)
         if t.cimguiname then
             local cimf = FP.defsT[t.cimguiname]
             local def = cimf[t.signature]
-            if def.ret then --not constructor
-                local addcoment = def.comment or ""
+			local addcoment = def.comment or ""
+			if def.constructor then
+				-- it happens with vulkan impl but constructor ImGui_ImplVulkanH_Window is not needed
+			    --assert(def.stname ~= "","constructor without struct")
+                --table.insert(outtab,"CIMGUI_API "..def.stname.."* "..def.ov_cimguiname ..(empty and "(void)" or --def.args)..";"..addcoment.."\n")
+            elseif def.destructor then
+                --table.insert(outtab,"CIMGUI_API void "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
+			else
+                
                 if def.stname == "" then --ImGui namespace or top level
                     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
                 else
+					cpp2ffi.prtable(def)
                     error("class function in implementations")
                 end
             end
@@ -424,12 +439,7 @@ local function DefsByStruct(FP)
 end  
 
 
---load parser module
-local cpp2ffi = require"cpp2ffi"
-local read_data = cpp2ffi.read_data
-local save_data = cpp2ffi.save_data
-local copyfile = cpp2ffi.copyfile
-local serializeTableF = cpp2ffi.serializeTableF
+
 
 ----------custom ImVector templates
 local function generate_templates(code,templates)
@@ -710,14 +720,22 @@ local parser2
 if #implementations > 0 then
 
     parser2 = cpp2ffi.Parser()
-
+	
+	local config = require"config_generator"
     
     for i,impl in ipairs(implementations) do
         local source = [[../imgui/examples/imgui_impl_]].. impl .. ".h "
         local locati = [[imgui_impl_]].. impl
         local pipe,err
+		local extra_includes = ""
+		local include_cmd = COMPILER=="cl" and [[ /I ]] or [[ -I ]]
+		if config[impl] then
+			for j,inc in ipairs(config[impl]) do
+				extra_includes = extra_includes .. include_cmd .. inc .. " "
+			end
+		end
         if HAVE_COMPILER then
-            pipe,err = io.popen(CPRE..source,"r")
+            pipe,err = io.popen(CPRE..extra_includes..source,"r")
         else
             pipe,err = io.open(source,"r")
         end
