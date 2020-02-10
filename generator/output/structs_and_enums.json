@@ -1077,6 +1077,28 @@
         "value": 22
       }
     ],
+    "ImGuiMouseButton_": [
+      {
+        "calc_value": 0,
+        "name": "ImGuiMouseButton_Left",
+        "value": "0"
+      },
+      {
+        "calc_value": 1,
+        "name": "ImGuiMouseButton_Right",
+        "value": "1"
+      },
+      {
+        "calc_value": 2,
+        "name": "ImGuiMouseButton_Middle",
+        "value": "2"
+      },
+      {
+        "calc_value": 5,
+        "name": "ImGuiMouseButton_COUNT",
+        "value": "5"
+      }
+    ],
     "ImGuiMouseCursor_": [
       {
         "calc_value": -1,
@@ -1125,8 +1147,13 @@
       },
       {
         "calc_value": 8,
-        "name": "ImGuiMouseCursor_COUNT",
+        "name": "ImGuiMouseCursor_NotAllowed",
         "value": 8
+      },
+      {
+        "calc_value": 9,
+        "name": "ImGuiMouseCursor_COUNT",
+        "value": 9
       }
     ],
     "ImGuiNavInput_": [
@@ -1948,6 +1975,10 @@
         "type": "ImWchar"
       },
       {
+        "name": "DirtyLookupTables",
+        "type": "bool"
+      },
+      {
         "name": "Scale",
         "type": "float"
       },
@@ -1962,10 +1993,6 @@
       {
         "name": "MetricsTotalSurface",
         "type": "int"
-      },
-      {
-        "name": "DirtyLookupTables",
-        "type": "bool"
       }
     ],
     "ImFontAtlas": [
@@ -2578,12 +2605,12 @@
     ],
     "ImGuiListClipper": [
       {
-        "name": "StartPosY",
-        "type": "float"
+        "name": "DisplayStart",
+        "type": "int"
       },
       {
-        "name": "ItemsHeight",
-        "type": "float"
+        "name": "DisplayEnd",
+        "type": "int"
       },
       {
         "name": "ItemsCount",
@@ -2594,12 +2621,12 @@
         "type": "int"
       },
       {
-        "name": "DisplayStart",
-        "type": "int"
+        "name": "ItemsHeight",
+        "type": "float"
       },
       {
-        "name": "DisplayEnd",
-        "type": "int"
+        "name": "StartPosY",
+        "type": "float"
       }
     ],
     "ImGuiOnceUponAFrame": [
@@ -2813,6 +2840,10 @@
       },
       {
         "name": "CurveTessellationTol",
+        "type": "float"
+      },
+      {
+        "name": "CircleSegmentMaxError",
         "type": "float"
       },
       {

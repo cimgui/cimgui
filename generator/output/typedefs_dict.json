@@ -37,6 +37,7 @@
   "ImGuiInputTextFlags": "int",
   "ImGuiKey": "int",
   "ImGuiListClipper": "struct ImGuiListClipper",
+  "ImGuiMouseButton": "int",
   "ImGuiMouseCursor": "int",
   "ImGuiNavInput": "int",
   "ImGuiOnceUponAFrame": "struct ImGuiOnceUponAFrame",
