@@ -59,3 +59,62 @@ CIMGUI_API void ImVector_ImWchar_UnInit(ImVector_ImWchar* p)
 	p->~ImVector<ImWchar>();
 }
 
+#ifdef IMGUI_DOCKING
+
+// NOTE: Some function pointers in the ImGuiPlatformIO structure are not C-compatible because of their
+// use of a complex return type. To work around this, we store a custom CimguiStorage object inside
+// ImGuiIO::BackendLanguageUserData, which contains C-compatible function pointer variants for these
+// functions. When a user function pointer is provided, we hook up the underlying ImGuiPlatformIO
+// function pointer to a thunk which accesses the user function pointer through CimguiStorage.
+
+struct CimguiStorage
+{
+    void(*Platform_GetWindowPos)(ImGuiViewport* vp, ImVec2* out_pos);
+    void(*Platform_GetWindowSize)(ImGuiViewport* vp, ImVec2* out_pos);
+};
+
+// Gets a reference to the CimguiStorage object stored in the current ImGui context's BackendLanguageUserData.
+CimguiStorage& GetCimguiStorage()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.BackendLanguageUserData == NULL)
+    {
+        io.BackendLanguageUserData = new CimguiStorage();
+    }
+
+    return *(CimguiStorage*)io.BackendLanguageUserData;
+}
+
+// Thunk satisfying the signature of ImGuiPlatformIO::Platform_GetWindowPos.
+ImVec2 Platform_GetWindowPos_hook(ImGuiViewport* vp)
+{
+    ImVec2 pos;
+    GetCimguiStorage().Platform_GetWindowPos(vp, &pos);
+    return pos;
+};
+
+// Fully C-compatible function pointer setter for ImGuiPlatformIO::Platform_GetWindowPos.
+CIMGUI_API void ImGuiPlatformIO_Set_Platform_GetWindowPos(ImGuiPlatformIO* platform_io, void(*user_callback)(ImGuiViewport* vp, ImVec2* out_pos))
+{
+    CimguiStorage& storage = GetCimguiStorage();
+    storage.Platform_GetWindowPos = user_callback;
+    platform_io->Platform_GetWindowPos = &Platform_GetWindowPos_hook;
+}
+
+// Thunk satisfying the signature of ImGuiPlatformIO::Platform_GetWindowSize.
+ImVec2 Platform_GetWindowSize_hook(ImGuiViewport* vp)
+{
+    ImVec2 size;
+    GetCimguiStorage().Platform_GetWindowSize(vp, &size);
+    return size;
+};
+
+// Fully C-compatible function pointer setter for ImGuiPlatformIO::Platform_GetWindowSize.
+CIMGUI_API void ImGuiPlatformIO_Set_Platform_GetWindowSize(ImGuiPlatformIO* platform_io, void(*user_callback)(ImGuiViewport* vp, ImVec2* out_size))
+{
+    CimguiStorage& storage = GetCimguiStorage();
+    storage.Platform_GetWindowSize = user_callback;
+    platform_io->Platform_GetWindowSize = &Platform_GetWindowSize_hook;
+}
+
+#endif
