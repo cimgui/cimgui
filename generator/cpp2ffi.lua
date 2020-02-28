@@ -432,7 +432,7 @@ local function parseFunction(self,stname,lineorig,namespace)
             --only post error if not manual
             local cname = self.getCname(stname,funcname) --cimguiname
             if not self.manuals[cname] then
-                print("reference to no const arg in",funcname,argscsinpars)
+                print("reference to no const arg in",funcname,argscsinpars,arg)
             end
         end
     end
@@ -794,14 +794,29 @@ function M.Parser()
 	function par:clean_struct(stru)
 		local outtab = {}
 		local iner = strip_end(stru:match("%b{}"):sub(2,-2))
-		local stname = stru:match("struct%s*(%S+)%s*%b{}")
+		local inistruct = clean_spaces(stru:match("(.-)%b{}"))
+		--local stname = stru:match("struct%s*(%S+)%s*%b{}")
+		local stname, derived
+		if inistruct:match":" then
+			stname,derived = inistruct:match"struct%s*([^%s:]+):(.+)"
+			derived = derived:match"(%S+)$"
+		else
+			stname = inistruct:match"struct%s(%S+)"
+		end
+
+		if derived then print(stname,"derived from",derived) end
+		
 		if not stname then
 			print(stru)
 			error"could not get stname"
 		end
 		--initial
-		table.insert(outtab,stru:match("(.-)%b{}"))
+		--table.insert(outtab,stru:match("(.-)%b{}"))
+		table.insert(outtab,"\nstruct "..stname.."\n")
 		table.insert(outtab,"{")
+		if derived then
+			table.insert(outtab,"\n    "..derived.." _"..derived..";")
+		end
 		local itlist,itemsin = parseItems(iner)
 		if #itlist == 0 then return "" end --here we avoid empty structs
 		for j,it in ipairs(itlist) do
@@ -874,6 +889,9 @@ function M.Parser()
 				table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
 			elseif it.re_name == "struct_re" then
 				local cleanst,structname = self:clean_struct(it.item)
+				
+				--if not structname then print("NO NAME",cleanst,it.item) end
+				
 				--if not void stname or templated
 				if structname and not self.typenames[structname] then
 				table.insert(outtab,cleanst)

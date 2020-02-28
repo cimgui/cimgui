@@ -868,13 +868,13 @@ struct ImFont
     float Ascent, Descent;
     int MetricsTotalSurface;
 };
-    struct ImGuiTextRange
-    {
+struct ImGuiTextRange
+{
         const char* b;
         const char* e;
 };
-    struct ImGuiStoragePair
-    {
+struct ImGuiStoragePair
+{
         ImGuiID key;
         union { int val_i; float val_f; void* val_p; };
 };
