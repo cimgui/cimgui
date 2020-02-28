@@ -71,6 +71,7 @@ Notes:
     * type : the type of the struct member
     * template_type : if type has a template argument (as ImVector) here will be
     * name : the name of the struct member
+	* bitfield : the bitfield width (in case it is a bitfield)
 # usage
 
 * use whatever method is in ImGui c++ namespace in the original [imgui.h](https://github.com/ocornut/imgui/blob/master/imgui.h) by prepending `ig`
