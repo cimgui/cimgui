@@ -696,7 +696,7 @@ if structs_and_enums_table["structs"]["Pair"] then
 structs_and_enums_table["structs"]["Pair"][2]["name"] = ""
 structs_and_enums_table["structs"]["Pair"][2]["type"] = structs_and_enums_table["structs"]["Pair"][2]["type"] .. "}"
 end
--- 1.72 and after
+-- union in 1.72 and after
 if structs_and_enums_table["structs"]["ImGuiStoragePair"] then
 structs_and_enums_table["structs"]["ImGuiStoragePair"][2]["name"] = ""
 structs_and_enums_table["structs"]["ImGuiStoragePair"][2]["type"] = structs_and_enums_table["structs"]["ImGuiStoragePair"][2]["type"] .. "}"

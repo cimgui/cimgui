@@ -109,7 +109,7 @@ end
 local function clean_spaces(cad)
     cad = strip(cad)
     cad = cad:gsub("%s+"," ") --not more than one space
-    cad = cad:gsub("%s*([%(%),=])%s*","%1") --not spaces with ( , )
+    cad = cad:gsub("%s*([%(%),=:])%s*","%1") --not spaces with ( , ) or ( = ) or ( : )
     return cad
 end
 function strsplit(str, pat)
@@ -915,9 +915,10 @@ function M.Parser()
 			local typen,rest = line:match("%s*([^,]+)%s(%S+[,;])")
 			--local template_type = typen:match("/%*<(.+)>%*/")
 			--if template_type then typen = typen:match("(.+)/%*") end
-                if not typen then -- Lets try Type*name
-                    typen,rest = line:match("([^,]+%*)(%S+[,;])")
-                end
+            if not typen then -- Lets try Type*name
+                typen,rest = line:match("([^,]+%*)(%S+[,;])")
+            end
+
 			local template_type 
 			for k,v in pairs(self.templates) do
 				template_type = typen:match(k.."_(.+)")
@@ -928,7 +929,8 @@ function M.Parser()
 				template_type = template_type:gsub("Ptr","%*")
 			end
 			for name in rest:gmatch("([^%s,;]+)%s?[,;]") do
-				table.insert(outtab,{type=typen,template_type=template_type,name=name})
+				local namebitfield,bitfield = name:match("([^:]+):(%d+)") --take care of bitfields
+				table.insert(outtab,{type=typen,template_type=template_type,name=namebitfield or name,bitfield=bitfield})
 			end
 		end
 	end
