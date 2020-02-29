@@ -93,6 +93,26 @@ local function str_split(str, pat)
 	end
 	return t
 end
+local function strsplit(str, pat)
+    local t = {} 
+	local t2 = {}
+    local fpat = "(.-)" .. pat
+    local last_end = 1
+    local s, e, cap, cap2 = str:find(fpat, 1)
+    while s do
+        table.insert(t,cap)
+		table.insert(t2,cap2)
+        last_end = e+1
+        s, e, cap, cap2 = str:find(fpat, last_end)
+    end
+    if last_end <= #str then
+        cap = str:sub(last_end)
+        table.insert(t, cap)
+    elseif str:sub(-1)==pat then
+        table.insert(t, "")
+    end
+    return t,t2
+end
 local function split_comment(line)
     local comment = line:match("(%s*//.*)") or ""
     line = line:gsub("%s*//.*","")
@@ -112,23 +132,101 @@ local function clean_spaces(cad)
     cad = cad:gsub("%s*([%(%),=:])%s*","%1") --not spaces with ( , ) or ( = ) or ( : )
     return cad
 end
-function strsplit(str, pat)
-    local t = {} 
-    local fpat = "(.-)" .. pat
-    local last_end = 1
-    local s, e, cap = str:find(fpat, 1)
-    while s do
-        table.insert(t,cap)
-        last_end = e+1
-        s, e, cap = str:find(fpat, last_end)
-    end
-    if last_end <= #str then
-        cap = str:sub(last_end)
-        table.insert(t, cap)
-    elseif str:sub(-1)==pat then
-        table.insert(t, "")
-    end
-    return t
+
+------------------------------------
+local function parse_enum_value(value, allenums)
+	local function clean(val)
+		if type(val)=="string" then
+			return clean_spaces(val)
+		else
+			return val
+		end
+	end
+	
+	if type(value)=="number" then
+		return value
+	elseif type(value)=="string" then 
+		--numbers
+		local numval = tonumber(value)
+		if numval then return numval end 
+		--already in allenums
+		if allenums[clean(value)] then return allenums[clean(value)] end
+		--must be several and operators
+		--precedence order (hope not ())
+		assert(not value:match("[%(%)]"))
+		local several,seps = strsplit(value,"([<>&|~]+)") 
+		--M.prtable(t.value,several,seps)
+		assert(#seps+1==#several)
+		
+		local i = 1
+		local ik = 1
+		local sepk = {"~","<<",">>","&","^","|"}
+		while(#seps>0) do
+			local sep = sepk[ik]
+			local v = seps[i]
+			if sep==v then
+				if v=="~" then
+					local val = clean(several[i+1])
+					if allenums[val] then val = allenums[val] end
+					assert(several[i]==" " or several[i]=="")
+					several[i] = bit.bnot(val)
+					table.remove(several,i+1)
+					table.remove(seps,i)
+				elseif v=="<<" then
+					local val1 = clean(several[i])
+					local val2 = clean(several[i+1])
+					if allenums[val1] then val1 = allenums[val1] end
+					if allenums[val2] then val2 = allenums[val2] end
+					several[i] = bit.lshift(val1,val2)
+					table.remove(several,i+1)
+					table.remove(seps,i)
+				elseif v==">>" then
+					local val1 = clean(several[i])
+					local val2 = clean(several[i+1])
+					if allenums[val1] then val1 = allenums[val1] end
+					if allenums[val2] then val2 = allenums[val2] end
+					several[i] = bit.rshift(val1,val2)
+					table.remove(several,i+1)
+					table.remove(seps,i)
+				elseif v=="&" then
+					local val1 = clean(several[i])
+					local val2 = clean(several[i+1])
+					if allenums[val1] then val1 = allenums[val1] end
+					if allenums[val2] then val2 = allenums[val2] end
+					several[i] = bit.band(val1,val2)
+					table.remove(several,i+1)
+					table.remove(seps,i)
+				elseif v=="^" then
+					error"^ operator still not done"
+				elseif v=="|" then
+					local val1 = clean(several[i])
+					local val2 = clean(several[i+1])
+					if allenums[val1] then val1 = allenums[val1] end
+					if allenums[val2] then val2 = allenums[val2] end
+					several[i] = bit.bor(val1,val2)
+					table.remove(several,i+1)
+					table.remove(seps,i)
+				else
+					error("unknown operator "..v)
+				end
+			else
+				i = i + 1
+			end				
+
+			if i>#seps then
+				ik = ik + 1 --next operator
+				if ik > #sepk then break end
+				i = 1
+			end
+		end
+		if #seps>0 then
+			print("value",value)
+			M.prtable(several,seps)
+		end
+		assert(#seps==0)
+		assert(type(several[1])=="number")
+		return several[1]
+	end
 end
 --------------------------------------------------------------------------
 local function save_data(filename,...)
@@ -1043,22 +1141,7 @@ function M.Parser()
 		--first calc_value in enums
 		for enumname,enum in pairs(outtab.enums) do
 			for i,t in ipairs(enum) do
-				local val = tonumber(t.value)
-				if val then
-					t.calc_value = val
-				elseif t.value:match"<<" then
-					local v1,v2 = t.value:match("(%d+)%s*<<%s*(%d+)")
-					t.calc_value = bit.lshift(v1,v2)
-				elseif t.value:match"|" then --or several enums
-					local ens = t.value
-					ens = strsplit(ens,"|")
-					for i,v in ipairs(ens) do ens[i] = allenums[clean_spaces(v)] end
-					t.calc_value = bit.bor(unpack(ens))
-				elseif allenums[t.value] then
-					t.calc_value = allenums[t.value]
-				else
-					print("Error unknown value in enums",t.value)
-				end
+				t.calc_value = parse_enum_value(t.value,allenums)
 				assert(t.calc_value)
 				allenums[t.name] = t.calc_value
 			end

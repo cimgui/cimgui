@@ -605,82 +605,18 @@ local cstructsstr = outpre..table.concat(outtab,"")..outpost..(extra or "")
 local cfuncsstr = func_header_generate(parser1i)
 save_data("./output/cimgui_internal.h",cimgui_header,"#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n",cstructsstr,"\n#endif\n")--,cfuncsstr)
 copyfile("./output/cimgui_internal.h", "../cimgui_internal.h")
---local structs_and_enums_table_i = parser1i:gen_structs_and_enums_table()
---save_data("./output/structs_and_enums_i.lua",serializeTableF(structs_and_enums_table_i))
 --]=]
------------ add only ImGuiContext from imgui_internal.h to parser1
---[=[
-local parser1i = parseImGuiHeader([[../imgui/imgui_internal.h]],{[[imgui_internal]],[[imstb_textedit]]})
+---------- generate now structs_and_enums_i
+---[=[
+save_data([[../imgui/temp.h]],[[#include "imgui.h"
+#include "imgui_internal.h"]])
+local parser1i = parseImGuiHeader([[../imgui/temp.h]],{[[imgui]],[[imgui_internal]],[[imstb_textedit]]})
+os.remove([[../imgui/temp.h]])
 parser1i:do_parse()
-local p1isten = parser1i:gen_structs_and_enums_table()
---parser1i:printItems()
-print"typedefs_table---------------------------"
-cpp2ffi.prtable(parser1i.typedefs_table)
-print"typedefs_table end---------------------------"
-local needed = {ImGuiContext = {type = "ImGuiContext", kind = "structs", order = parser1i.order["ImGuiContext"]}}
-local seen = {}
-local function RecurseNeeded(Ini,IniKind,level)
-	--if level > 5 then return end
-	if seen[Ini] then return end
-	seen[Ini] = true
-	print("RecurseNeeded",Ini,IniKind,level)
-	for i,v in ipairs(p1isten[IniKind][Ini]) do
-		--if not v.type then print("nil type in",Ini,IniKind) end
-		--dont want pointers
-		local type = v.type:match"([^%*]+)"
-		--ImVector out
-		if type:match"ImVector_" then type=type:match"ImVector_(.+)" end
-		
-		local kind = p1isten.enums[type] and "enums" or p1isten.structs[type] and "structs" or nil
-		if kind=="structs" then
-			if not needed[type] then RecurseNeeded(type,kind,level+1) end
-			needed[type] = {type = type, kind = kind, order = parser1i.order[type]}
-		elseif kind=="enums" then
-			needed[type] = {type = type, kind = kind, order = parser1i.order[type]}
-		elseif parser1i.typedefs_table[type] then
-			needed[type] = {type = type, kind = "typedef", order = parser1i.order[type]}
-		elseif parser1i.vardefs[type] then
-			needed[type] = {type = type, kind = "vardef", order = parser1i.order[type]}
-		elseif not cpp2ffi.c_types[type] then
-			print("RecurseNeded failed",type)
-			--error"failed recurse"
-		end
-	end
-end
-
-RecurseNeeded("ImGuiContext","structs",0)
-
-
-local ordered_needed = {}
-for k,v in pairs(needed) do
-	table.insert(ordered_needed,v)
-end
-table.sort(ordered_needed, function(a,b) return a.order < b.order end)
-
-print"needed are-----------------------"
-for i,vv in ipairs(ordered_needed) do
-	print(vv.order,vv.type,vv.kind)
-	local v = parser1i.itemsarr[vv.order]
-
-	--if v.item:match"^[%s\n\r]*struct%s*ImGuiContext" then
-	if vv.kind=="structs" then
-			--add enum keyword where necessary
-			--print"setting enum keyword------------------------"
-			local newitem = ""
-			for line in v.item:gmatch("([^\n]+)") do
-				local typen = line:match"^%s*(%S+)"
-				if p1isten.enums[typen] then
-					print("add enum",typen)
-					newitem = newitem.."\nenum"..line
-				else
-					newitem = newitem.."\n"..line
-				end
-			end
-			v.item = newitem
-	end
-	table.insert(parser1.itemsarr,v)
-end
+local structs_and_enums_table_i = parser1i:gen_structs_and_enums_table()
+save_data("./output/structs_and_enums_i.lua",serializeTableF(structs_and_enums_table_i))
 --]=]
+
 ----------------------
 
 save_data("./output/overloads.txt",parser1.overloadstxt)
@@ -782,6 +718,7 @@ end
 local json = require"json"
 save_data("./output/definitions.json",json.encode(json_prepare(parser1.defsT)))
 save_data("./output/structs_and_enums.json",json.encode(structs_and_enums_table))
+save_data("./output/structs_and_enums_i.json",json.encode(structs_and_enums_table_i))
 save_data("./output/typedefs_dict.json",json.encode(parser1.typedefs_dict))
 if parser2 then
     save_data("./output/impl_definitions.json",json.encode(json_prepare(parser2.defsT)))
