@@ -165,50 +165,28 @@ local function parse_enum_value(value, allenums)
 			local sep = sepk[ik]
 			local v = seps[i]
 			if sep==v then
+				local val1 = clean(several[i])
+				local val2 = clean(several[i+1])
+				if allenums[val1] then val1 = allenums[val1] end
+				if allenums[val2] then val2 = allenums[val2] end
 				if v=="~" then
-					local val = clean(several[i+1])
-					if allenums[val] then val = allenums[val] end
 					assert(several[i]==" " or several[i]=="")
-					several[i] = bit.bnot(val)
-					table.remove(several,i+1)
-					table.remove(seps,i)
+					several[i] = bit.bnot(val2)
 				elseif v=="<<" then
-					local val1 = clean(several[i])
-					local val2 = clean(several[i+1])
-					if allenums[val1] then val1 = allenums[val1] end
-					if allenums[val2] then val2 = allenums[val2] end
 					several[i] = bit.lshift(val1,val2)
-					table.remove(several,i+1)
-					table.remove(seps,i)
 				elseif v==">>" then
-					local val1 = clean(several[i])
-					local val2 = clean(several[i+1])
-					if allenums[val1] then val1 = allenums[val1] end
-					if allenums[val2] then val2 = allenums[val2] end
 					several[i] = bit.rshift(val1,val2)
-					table.remove(several,i+1)
-					table.remove(seps,i)
 				elseif v=="&" then
-					local val1 = clean(several[i])
-					local val2 = clean(several[i+1])
-					if allenums[val1] then val1 = allenums[val1] end
-					if allenums[val2] then val2 = allenums[val2] end
 					several[i] = bit.band(val1,val2)
-					table.remove(several,i+1)
-					table.remove(seps,i)
 				elseif v=="^" then
 					error"^ operator still not done"
 				elseif v=="|" then
-					local val1 = clean(several[i])
-					local val2 = clean(several[i+1])
-					if allenums[val1] then val1 = allenums[val1] end
-					if allenums[val2] then val2 = allenums[val2] end
 					several[i] = bit.bor(val1,val2)
-					table.remove(several,i+1)
-					table.remove(seps,i)
 				else
 					error("unknown operator "..v)
 				end
+				table.remove(several,i+1)
+				table.remove(seps,i)
 			else
 				i = i + 1
 			end				
