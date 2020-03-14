@@ -2550,7 +2550,7 @@ CIMGUI_API void ImVector_ImWchar_UnInit(ImVector_ImWchar* p)
 	p->~ImVector<ImWchar>();
 }
 
-#ifdef IMGUI_DOCKING
+#ifdef IMGUI_HAS_DOCK
 
 // NOTE: Some function pointers in the ImGuiPlatformIO structure are not C-compatible because of their
 // use of a complex return type. To work around this, we store a custom CimguiStorage object inside
