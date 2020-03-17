@@ -35,7 +35,6 @@ Notes:
 * edit config_generator.lua for adding includes needed by your chosen implementations.
 * Run generator.bat or generator.sh with gcc, clang or cl and LuaJIT on your PATH.
 * as a result some files are generated: `cimgui.cpp` and `cimgui.h` for compiling and some lua/json files with information about the binding: `definitions.json` with function info, `structs_and_enums.json` with struct and enum info, `impl_definitions.json` with functions from the implementations info. 
-* If you are generating bindings for the [docking](https://github.com/ocornut/imgui/tree/docking) branch of imgui, you must define the `IMGUI_DOCKING` constant in CMakeLists.txt. This includes extra custom definitions that are needed for some functionality on the docking branch.
 
 # generate binding
 * C interface is exposed by cimgui.h when you define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
