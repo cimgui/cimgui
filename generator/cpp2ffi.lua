@@ -258,7 +258,10 @@ local function getRE()
 	typedef_re = "^\n*(typedef[^;]+;)",
 	functypedef_re = "^\n*%s*(typedef[%w%s%*_]+%(%s*%*%s*[%w_]+%s*%)%s*%b()%s*;)",
 	functypedef_re = "^\n*%s*(typedef[%w%s%*_]+%([^*]*%*%s*[%w_]+%s*%)%s*%b()%s*;)",
-	vardef_re = "^\n*([^;{}%(%)]+;)",
+	--vardef_re = "^\n*([^;{}%(%)]+;)",
+	--change for things as
+	--[[ImU8 Used4kPagesMap[((sizeof(ImWchar16) == 2 ? 0xFFFF : 0x10FFFF)+1)/4096/8];]]
+	vardef_re = "^\n*([^;{}]+;)",
 	functionD_re = "^([^;{}]-%b()[\n%s%w]*%b{})",
 	--functionD_re = "^([^;{}]-%b()[^{}%(%)]*%b{})",
 	functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)%s*;"
@@ -307,6 +310,7 @@ local function parseItems(txt,dumpit)
 				if not onlyspaces then
 					print(ini,#txt);
 					print(txt);
+					print"item:"
 					print(item)
 					error"parseItems error"
 				end
