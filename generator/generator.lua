@@ -582,13 +582,14 @@ local function parseImGuiHeader(header,names)
 end
 --generation
 print("------------------generation with "..COMPILER.."------------------------")
-
---local parser1 = parseImGuiHeader([[headers.h]],{[[imgui]],[[imgui_internal]],[[imstb_textedit]]})
-local parser1 = parseImGuiHeader([[../imgui/imgui.h]],{[[imgui]]})
+save_data("headers.h",[[#include "../imgui/imgui.h" 
+#include "../imgui/imgui_internal.h"]])
+local parser1 = parseImGuiHeader([[headers.h]],{[[imgui]],[[imgui_internal]],[[imstb_textedit]]})
+--local parser1 = parseImGuiHeader([[../imgui/imgui.h]],{[[imgui]]})
 parser1:do_parse()
-
+os.remove("headers.h")
 ---------- generate cimgui_internal.h
----[=[
+--[=[
 local parser1i = parseImGuiHeader([[../imgui/imgui_internal.h]],{[[imgui_internal]],[[imstb_textedit]]})
 parser1i:do_parse()
 local outpre,outpost = parser1i:gen_structs_and_enums()
@@ -607,7 +608,7 @@ save_data("./output/cimgui_internal.h",cimgui_header,"#ifdef CIMGUI_DEFINE_ENUMS
 copyfile("./output/cimgui_internal.h", "../cimgui_internal.h")
 --]=]
 ---------- generate now structs_and_enums_i
----[=[
+--[=[
 save_data([[../imgui/temp.h]],[[#include "imgui.h"
 #include "imgui_internal.h"]])
 local parser1i = parseImGuiHeader([[../imgui/temp.h]],{[[imgui]],[[imgui_internal]],[[imstb_textedit]]})
@@ -718,7 +719,6 @@ end
 local json = require"json"
 save_data("./output/definitions.json",json.encode(json_prepare(parser1.defsT)))
 save_data("./output/structs_and_enums.json",json.encode(structs_and_enums_table))
-save_data("./output/structs_and_enums_i.json",json.encode(structs_and_enums_table_i))
 save_data("./output/typedefs_dict.json",json.encode(parser1.typedefs_dict))
 if parser2 then
     save_data("./output/impl_definitions.json",json.encode(json_prepare(parser2.defsT)))
