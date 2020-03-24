@@ -20336,7 +20336,7 @@
       "defaults": [],
       "funcname": "IsPopupOpen",
       "namespace": "ImGui",
-      "ov_cimguiname": "igIsPopupOpenStr",
+      "ov_cimguiname": "igIsPopupOpen",
       "ret": "bool",
       "signature": "(const char*)",
       "stname": ""
@@ -24258,7 +24258,7 @@
       },
       "funcname": "SetScrollFromPosX",
       "namespace": "ImGui",
-      "ov_cimguiname": "igSetScrollFromPosXFloat",
+      "ov_cimguiname": "igSetScrollFromPosX",
       "ret": "void",
       "signature": "(float,float)",
       "stname": ""
@@ -24314,7 +24314,7 @@
       },
       "funcname": "SetScrollFromPosY",
       "namespace": "ImGui",
-      "ov_cimguiname": "igSetScrollFromPosYFloat",
+      "ov_cimguiname": "igSetScrollFromPosY",
       "ret": "void",
       "signature": "(float,float)",
       "stname": ""
@@ -24410,7 +24410,7 @@
       "defaults": [],
       "funcname": "SetScrollX",
       "namespace": "ImGui",
-      "ov_cimguiname": "igSetScrollXFloat",
+      "ov_cimguiname": "igSetScrollX",
       "ret": "void",
       "signature": "(float)",
       "stname": ""
@@ -24454,7 +24454,7 @@
       "defaults": [],
       "funcname": "SetScrollY",
       "namespace": "ImGui",
-      "ov_cimguiname": "igSetScrollYFloat",
+      "ov_cimguiname": "igSetScrollY",
       "ret": "void",
       "signature": "(float)",
       "stname": ""

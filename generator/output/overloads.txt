@@ -3,7 +3,7 @@ ImVector_resize	2
 1	void	ImVector_resize (int)
 2	void	ImVector_resizeT (int,const T)
 igSetScrollFromPosY	2
-1	void	igSetScrollFromPosYFloat (float,float)
+1	void	igSetScrollFromPosY (float,float)
 2	void	igSetScrollFromPosYWindowPtr (ImGuiWindow*,float,float)
 ImVec4_ImVec4	2
 1	nil	ImVec4_ImVec4 ()
@@ -61,7 +61,7 @@ ImGuiStoragePair_ImGuiStoragePair	3
 2	nil	ImGuiStoragePair_ImGuiStoragePairFloat (ImGuiID,float)
 3	nil	ImGuiStoragePair_ImGuiStoragePairPtr (ImGuiID,void*)
 igSetScrollFromPosX	2
-1	void	igSetScrollFromPosXFloat (float,float)
+1	void	igSetScrollFromPosX (float,float)
 2	void	igSetScrollFromPosXWindowPtr (ImGuiWindow*,float,float)
 igGetForegroundDrawList	2
 1	ImDrawList*	igGetForegroundDrawList ()
@@ -85,7 +85,7 @@ igCombo	3
 2	bool	igComboStr (const char*,int*,const char*,int)
 3	bool	igComboFnPtr (const char*,int*,bool(*)(void*,int,const char**),void*,int,int)
 igSetScrollY	2
-1	void	igSetScrollYFloat (float)
+1	void	igSetScrollY (float)
 2	void	igSetScrollYWindowPtr (ImGuiWindow*,float)
 ImVector_erase	2
 1	T*	ImVector_erase (const T*)
@@ -117,7 +117,7 @@ igMarkIniSettingsDirty	2
 1	void	igMarkIniSettingsDirty ()
 2	void	igMarkIniSettingsDirtyWindowPtr (ImGuiWindow*)
 igIsPopupOpen	2
-1	bool	igIsPopupOpenStr (const char*)
+1	bool	igIsPopupOpen (const char*)
 2	bool	igIsPopupOpenID (ImGuiID)
 ImVector_ImVector	2
 1	nil	ImVector_ImVector ()
@@ -200,7 +200,7 @@ igTreeNodeEx	3
 2	bool	igTreeNodeExStrStr (const char*,ImGuiTreeNodeFlags,const char*,...)
 3	bool	igTreeNodeExPtr (const void*,ImGuiTreeNodeFlags,const char*,...)
 igSetScrollX	2
-1	void	igSetScrollXFloat (float)
+1	void	igSetScrollX (float)
 2	void	igSetScrollXWindowPtr (ImGuiWindow*,float)
 igMenuItem	2
 1	bool	igMenuItemBool (const char*,const char*,bool,bool)

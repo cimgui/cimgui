@@ -275,11 +275,11 @@ CIMGUI_API float igGetScrollMaxY()
 {
     return ImGui::GetScrollMaxY();
 }
-CIMGUI_API void igSetScrollXFloat(float scroll_x)
+CIMGUI_API void igSetScrollX(float scroll_x)
 {
     return ImGui::SetScrollX(scroll_x);
 }
-CIMGUI_API void igSetScrollYFloat(float scroll_y)
+CIMGUI_API void igSetScrollY(float scroll_y)
 {
     return ImGui::SetScrollY(scroll_y);
 }
@@ -291,11 +291,11 @@ CIMGUI_API void igSetScrollHereY(float center_y_ratio)
 {
     return ImGui::SetScrollHereY(center_y_ratio);
 }
-CIMGUI_API void igSetScrollFromPosXFloat(float local_x,float center_x_ratio)
+CIMGUI_API void igSetScrollFromPosX(float local_x,float center_x_ratio)
 {
     return ImGui::SetScrollFromPosX(local_x,center_x_ratio);
 }
-CIMGUI_API void igSetScrollFromPosYFloat(float local_y,float center_y_ratio)
+CIMGUI_API void igSetScrollFromPosY(float local_y,float center_y_ratio)
 {
     return ImGui::SetScrollFromPosY(local_y,center_y_ratio);
 }
@@ -1072,7 +1072,7 @@ CIMGUI_API bool igOpenPopupOnItemClick(const char* str_id,ImGuiMouseButton mouse
 {
     return ImGui::OpenPopupOnItemClick(str_id,mouse_button);
 }
-CIMGUI_API bool igIsPopupOpenStr(const char* str_id)
+CIMGUI_API bool igIsPopupOpen(const char* str_id)
 {
     return ImGui::IsPopupOpen(str_id);
 }

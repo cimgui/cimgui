@@ -6,6 +6,7 @@ assert(_VERSION=='Lua 5.1',"Must use LuaJIT")
 assert(bit,"Must use LuaJIT")
 local script_args = {...}
 local COMPILER = script_args[1]
+local INTERNAL_GENERATION = script_args[2]=="true" 
 local CPRE,CTEST
 if COMPILER == "gcc" or COMPILER == "clang" then
     CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]
@@ -39,7 +40,7 @@ end --CTEST
 print("HAVE_COMPILER",HAVE_COMPILER)
 --get implementations
 local implementations = {}
-for i=2,#script_args do table.insert(implementations,script_args[i]) end
+for i=3,#script_args do table.insert(implementations,script_args[i]) end
 
 --------------------------------------------------------------------------
 --this table has the functions to be skipped in generation
@@ -88,7 +89,22 @@ local cimgui_overloads = {
     },
     igPushStyleColor = {
         ["(ImGuiCol,const ImVec4)"] = "igPushStyleColor"
-    }
+    },
+	igSetScrollFromPosX = {
+	    ["(float,float)"] = "igSetScrollFromPosX"
+	},
+	igSetScrollFromPosY = {
+	    ["(float,float)"] = "igSetScrollFromPosY"
+	},
+	igSetScrollX = {
+	    ["(float)"] = "igSetScrollX"
+	},
+	igSetScrollY = {
+	    ["(float)"] = "igSetScrollY"
+	},
+	igIsPopupOpen ={
+	    ["(const char*)"] = "igIsPopupOpen"
+	},
 }
 
 --------------------------header definitions
@@ -582,12 +598,17 @@ local function parseImGuiHeader(header,names)
 end
 --generation
 print("------------------generation with "..COMPILER.."------------------------")
-save_data("headers.h",[[#include "../imgui/imgui.h" 
-#include "../imgui/imgui_internal.h"]])
-local parser1 = parseImGuiHeader([[headers.h]],{[[imgui]],[[imgui_internal]],[[imstb_textedit]]})
---local parser1 = parseImGuiHeader([[../imgui/imgui.h]],{[[imgui]]})
+local parser1
+if INTERNAL_GENERATION then
+	save_data("headers.h",[[#include "../imgui/imgui.h" 
+	#include "../imgui/imgui_internal.h"]])
+	parser1 = parseImGuiHeader([[headers.h]],{[[imgui]],[[imgui_internal]],[[imstb_textedit]]})
+	os.remove("headers.h")
+else
+	parser1 = parseImGuiHeader([[../imgui/imgui.h]],{[[imgui]]})
+end
 parser1:do_parse()
-os.remove("headers.h")
+
 ---------- generate cimgui_internal.h
 --[=[
 local parser1i = parseImGuiHeader([[../imgui/imgui_internal.h]],{[[imgui_internal]],[[imstb_textedit]]})
