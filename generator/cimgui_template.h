@@ -82,10 +82,18 @@ CIMGUI_API float igGET_FLT_MAX();
 CIMGUI_API void igColorConvertRGBtoHSV(float r,float g,float b,float *out_h,float *out_s,float *out_v);
 CIMGUI_API void igColorConvertHSVtoRGB(float h,float s,float v,float *out_r,float *out_g,float *out_b);
 
-CIMGUI_API ImVector_ImWchar* ImVector_ImWchar_create();
-CIMGUI_API void ImVector_ImWchar_destroy(ImVector_ImWchar* self);
-CIMGUI_API void ImVector_ImWchar_Init(ImVector_ImWchar* p);
-CIMGUI_API void ImVector_ImWchar_UnInit(ImVector_ImWchar* p);
+#ifndef IMGUI_USE_WCHAR32
+CIMGUI_API ImVector_ImWchar16* ImVector_ImWchar16_create();
+CIMGUI_API void ImVector_ImWchar16_destroy(ImVector_ImWchar16* self);
+CIMGUI_API void ImVector_ImWchar16_Init(ImVector_ImWchar16* p);
+CIMGUI_API void ImVector_ImWchar16_UnInit(ImVector_ImWchar16* p);
+#else
+CIMGUI_API ImVector_ImWchar32* ImVector_ImWchar32_create();
+CIMGUI_API void ImVector_ImWchar32_destroy(ImVector_ImWchar32* self);
+CIMGUI_API void ImVector_ImWchar32_Init(ImVector_ImWchar32* p);
+CIMGUI_API void ImVector_ImWchar32_UnInit(ImVector_ImWchar32* p);
+#endif
+
 #endif //CIMGUI_INCLUDED
 
 
