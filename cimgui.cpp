@@ -4255,45 +4255,25 @@ CIMGUI_API void igColorConvertHSVtoRGB(float h,float s,float v,float *out_r,floa
     ImGui::ColorConvertHSVtoRGB(h,s,v,*out_r,*out_g,*out_b);
 }
 
-#ifndef IMGUI_USE_WCHAR32
-CIMGUI_API ImVector_ImWchar16* ImVector_ImWchar16_create()
+CIMGUI_API ImVector_ImWchar* ImVector_ImWchar_create()
 {
-	return IM_NEW(ImVector<ImWchar16>) ();
+	return IM_NEW(ImVector<ImWchar>) ();
 }
 
-CIMGUI_API void ImVector_ImWchar16_destroy(ImVector_ImWchar16* self)
+CIMGUI_API void ImVector_ImWchar_destroy(ImVector_ImWchar* self)
 {
     IM_DELETE(self);
 }
 
-CIMGUI_API void ImVector_ImWchar16_Init(ImVector_ImWchar16* p)
+CIMGUI_API void ImVector_ImWchar_Init(ImVector_ImWchar* p)
 {
-	IM_PLACEMENT_NEW(p) ImVector<ImWchar16>();
+	IM_PLACEMENT_NEW(p) ImVector<ImWchar>();
 }
-CIMGUI_API void ImVector_ImWchar16_UnInit(ImVector_ImWchar16* p)
+CIMGUI_API void ImVector_ImWchar_UnInit(ImVector_ImWchar* p)
 {
-	p->~ImVector<ImWchar16>();
-}
-#else
-CIMGUI_API ImVector_ImWchar32* ImVector_ImWchar32_create()
-{
-	return IM_NEW(ImVector<ImWchar32>) ();
+	p->~ImVector<ImWchar>();
 }
 
-CIMGUI_API void ImVector_ImWchar32_destroy(ImVector_ImWchar32* self)
-{
-    IM_DELETE(self);
-}
-
-CIMGUI_API void ImVector_ImWchar32_Init(ImVector_ImWchar32* p)
-{
-	IM_PLACEMENT_NEW(p) ImVector<ImWchar32>();
-}
-CIMGUI_API void ImVector_ImWchar32_UnInit(ImVector_ImWchar32* p)
-{
-	p->~ImVector<ImWchar32>();
-}
-#endif
 
 #ifdef IMGUI_HAS_DOCK
 
