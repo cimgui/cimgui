@@ -458,7 +458,7 @@ end
 
 
 ----------custom ImVector templates
-local function generate_templates(code,templates)
+local function generate_templates(code,codeimpool,templates)
     table.insert(code,"\n"..[[typedef struct ImVector{int Size;int Capacity;void* Data;} ImVector;]].."\n")
     for ttype,v in pairs(templates) do
         --local te = k:gsub("%s","_")
@@ -470,8 +470,8 @@ local function generate_templates(code,templates)
 		elseif ttype == "ImPool" then
 			--declare ImGuiStorage
 			for te,newte in pairs(v) do
-				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
-				table.insert(code,"typedef struct ImPool_"..newte.." {ImVector_"..te.." Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_"..newte..";\n")
+				table.insert(codeimpool,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
+				table.insert(codeimpool,"typedef struct ImPool_"..newte.." {ImVector_"..te.." Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_"..newte..";\n")
 			end
 		elseif ttype == "ImChunkStream" then
 			for te,newte in pairs(v) do
@@ -513,9 +513,14 @@ local function cimgui_generation(parser)
 	cpp2ffi.prtable(parser.typenames)
 	
 	local outtab = {}
-    generate_templates(outtab,parser.templates)
+	local outtabpool = {}
+    generate_templates(outtab, outtabpool, parser.templates)
+	
+	--move outtabpool after ImGuiStorage definition
+	local outpost1, outpost2 = outpost:match("^(.+struct ImGuiStorage%s*\n%b{};\n)(.+)$")
+	outpost = outpost1..table.concat(outtabpool)..outpost2
 
-	local cstructsstr = outpre..table.concat(outtab,"")..outpost..(extra or "")
+	local cstructsstr = outpre..table.concat(outtab,"")..outpost --..(extra or "")
 
     hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
     local cfuncsstr = func_header_generate(parser)
