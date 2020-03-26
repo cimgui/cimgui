@@ -428,9 +428,9 @@ local function parseFunction(self,stname,lineorig,namespace)
 	extraconst = extraconst:match("const")
 
 	if not args then
-	print"not gettint args in"
-	print(line,lineorig)
-	print(funcname,"args",args)
+		print"not gettint args in"
+		print(line,lineorig)
+		print(funcname,"args",args)
     end
 	
     local argscsinpars = args:gsub("(=[^,%(%)]*)(%b())","%1")
@@ -460,8 +460,7 @@ local function parseFunction(self,stname,lineorig,namespace)
 		end
 	end
 	--end
-    argscsinpars = argscsinpars:gsub("<([%w_%*]+)>",te) --ImVector
-    
+	argscsinpars = argscsinpars:gsub("<([%w_%*%s]+)>",te) --ImVector
     local argsArr = {}
     local functype_re =       "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
     local functype_reex =     "^(%s*[%w%s%*]+)%(%*([%w_]+)%)(%([^%(%)]*%))"
@@ -1457,4 +1456,14 @@ local function location(file,locpathT,defines,COMPILER)
     return location_it
 end
 M.location = location
+
+--[=[
+-- tests
+local line = [[void          DockBuilderCopyDockSpace(ImGuiID src_dockspace_id, ImGuiID dst_dockspace_id, ImVector<const char*>* in_window_remap_pairs);]]
+local parser = M.Parser()
+parser:insert(line)
+parser:do_parse()
+--M.prtable(parser)
+--]=]
+
 return M
