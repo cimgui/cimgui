@@ -129,7 +129,7 @@ end
 local function clean_spaces(cad)
     cad = strip(cad)
     cad = cad:gsub("%s+"," ") --not more than one space
-    cad = cad:gsub("%s*([%(%),=:])%s*","%1") --not spaces with ( , ) or ( = ) or ( : )
+    cad = cad:gsub("%s*([%(%),=:%+])%s*","%1") --not spaces with ( , ) or ( = ) or ( : ) or + 
     return cad
 end
 
@@ -1017,7 +1017,6 @@ function M.Parser()
             if not typen then -- Lets try Type*name
                 typen,rest = line:match("([^,]+%*)(%S+[,;])")
             end
-
 			local template_type 
 			for k,v in pairs(self.templates) do
 				template_type = typen:match(k.."_(.+)")
@@ -1138,13 +1137,13 @@ function M.Parser()
 						t.size = tonumber(val)
 					elseif allenums[val] then
 						t.size = allenums[val]
-					elseif val:match"%+" then
-						local s1,s2 = val:match("(%d+)%s*%+%s*(%d+)")
-						t.size = s1+s2
 					else
-						print("Error size is",val)
+						local f,err = loadstring("estevalor="..val)
+						if not f then print("error on loadstring",err,"with val:",val) end
+						f()
+						t.size = estevalor
 					end
-					assert(t.size)
+					assert(t.size,val)
 				end
 			end
 		end

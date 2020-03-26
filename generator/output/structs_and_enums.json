@@ -3796,7 +3796,7 @@
       },
       {
         "name": "TempBuffer[1024*3+1]",
-        "size": 4,
+        "size": 3073,
         "type": "char"
       }
     ],
