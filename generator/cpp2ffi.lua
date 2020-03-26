@@ -453,14 +453,16 @@ local function parseFunction(self,stname,lineorig,namespace)
 		if self.typenames[stname] ~= template then --rule out template typename
 		te = template:gsub("%s","_")
         te = te:gsub("%*","Ptr")
-		te = "_"..te
 
 		self.templates[ttype] = self.templates[ttype] or {}
 		self.templates[ttype][template] = te
+		te = "_"..te
 		end
 	end
 	--end
+
 	argscsinpars = argscsinpars:gsub("<([%w_%*%s]+)>",te) --ImVector
+
     local argsArr = {}
     local functype_re =       "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
     local functype_reex =     "^(%s*[%w%s%*]+)%(%*([%w_]+)%)(%([^%(%)]*%))"
@@ -1463,7 +1465,7 @@ local line = [[void          DockBuilderCopyDockSpace(ImGuiID src_dockspace_id, 
 local parser = M.Parser()
 parser:insert(line)
 parser:do_parse()
---M.prtable(parser)
+M.prtable(parser)
 --]=]
 
 return M
