@@ -58,54 +58,12 @@ local cimgui_manuals = {
 --desired name
 ---------------------------------------------------------------------------
 local cimgui_overloads = {
-    igPushID = {
+    --igPushID = {
         --["(const char*)"] =           "igPushIDStr",
-        ["(const char*,const char*)"] = "igPushIDRange",
+        --["(const char*,const char*)"] = "igPushIDRange",
         --["(const void*)"] =           "igPushIDPtr",
         --["(int)"] =                   "igPushIDInt"
-    },
-    igGetID = {
-        ["(const char*,const char*)"] = "igGetIDRange",
-    },
-    ImDrawList_AddText = {
-        ["(const ImVec2,ImU32,const char*,const char*)"] = "ImDrawList_AddText",
-    },
-    igGetColorU32 = {
-        ["(ImGuiCol,float)"] = "igGetColorU32",
-    },
-    igCollapsingHeader = {
-        ["(const char*,ImGuiTreeNodeFlags)"] =  "igCollapsingHeader",
-    },
-    igCombo = {
-        ["(const char*,int*,const char* const[],int,int)"] = "igCombo",
-    },
-    igPlotLines = {
-        ["(const char*,const float*,int,int,const char*,float,float,ImVec2,int)"] = "igPlotLines",
-    },
-    igBeginChild = {
-        ["(const char*,const ImVec2,bool,ImGuiWindowFlags)"] = "igBeginChild",
-    },
-    igSelectable = {
-        ["(const char*,bool,ImGuiSelectableFlags,const ImVec2)"] = "igSelectable"
-    },
-    igPushStyleColor = {
-        ["(ImGuiCol,const ImVec4)"] = "igPushStyleColor"
-    },
-	igSetScrollFromPosX = {
-	    ["(float,float)"] = "igSetScrollFromPosX"
-	},
-	igSetScrollFromPosY = {
-	    ["(float,float)"] = "igSetScrollFromPosY"
-	},
-	igSetScrollX = {
-	    ["(float)"] = "igSetScrollX"
-	},
-	igSetScrollY = {
-	    ["(float)"] = "igSetScrollY"
-	},
-	igIsPopupOpen ={
-	    ["(const char*)"] = "igIsPopupOpen"
-	},
+    --},
 }
 
 --------------------------header definitions
@@ -319,10 +277,6 @@ local function ImGui_f_implementation(outtab,def)
     elseif def.nonUDT then
         if def.nonUDT == 1 then
             table.insert(outtab,"    *pOut = "..namespace..def.funcname..def.call_args..";\n")
-        else --nonUDT==2
-            table.insert(outtab,"    "..def.retorig.." ret = "..namespace..def.funcname..def.call_args..";\n")
-            table.insert(outtab,"    "..def.ret.." ret2 = "..def.retorig.."ToSimple(ret);\n")
-            table.insert(outtab,"    return ret2;\n")
         end
     else --standard ImGui
         table.insert(outtab,"    return "..ptret..namespace..def.funcname..def.call_args..";\n")
@@ -353,10 +307,6 @@ local function struct_f_implementation(outtab,def)
     elseif def.nonUDT then
         if def.nonUDT == 1 then
             table.insert(outtab,"    *pOut = self->"..def.funcname..def.call_args..";\n")
-        else --nonUDT==2
-            table.insert(outtab,"    "..def.retorig.." ret = self->"..def.funcname..def.call_args..";\n")
-            table.insert(outtab,"    "..def.ret.." ret2 = "..def.retorig.."ToSimple(ret);\n")
-            table.insert(outtab,"    return ret2;\n")
         end
     else --standard struct
         table.insert(outtab,"    return "..ptret.."self->"..def.funcname..def.call_args..";\n")

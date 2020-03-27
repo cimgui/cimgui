@@ -35,11 +35,6 @@ typedef unsigned __int64 ImU64;
 //typedef unsigned long long ImU64;
 #endif
 
-//UDT stuff
-typedef struct ImVec2_Simple { float x; float y; } ImVec2_Simple;
-typedef struct ImVec4_Simple { float x; float y; float z; float w;} ImVec4_Simple;
-typedef struct ImColor_Simple { ImVec4_Simple Value;} ImColor_Simple;
-
 
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 typedef struct ImGuiStoragePair ImGuiStoragePair;
@@ -882,28 +877,6 @@ struct ImGuiStoragePair
 struct GLFWwindow;
 struct SDL_Window;
 typedef union SDL_Event SDL_Event;
-inline ImVec2_Simple ImVec2ToSimple(ImVec2 vec)
-{
-	ImVec2_Simple result;
-    result.x = vec.x;
-    result.y = vec.y;
-    return result;
-}
-inline ImVec4_Simple ImVec4ToSimple(ImVec4 vec)
-{
-	ImVec4_Simple result;
-    result.x = vec.x;
-    result.y = vec.y;
-	result.z = vec.z;
-    result.w = vec.w;
-    return result;
-}
-inline ImColor_Simple ImColorToSimple(ImColor col)
-{
-	ImColor_Simple result;
-    result.Value = ImVec4ToSimple(col.Value);
-    return result;
-}
 #endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
 #ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
@@ -957,7 +930,7 @@ CIMGUI_API void igStyleColorsClassic(ImGuiStyle* dst);
 CIMGUI_API void igStyleColorsLight(ImGuiStyle* dst);
 CIMGUI_API bool igBegin(const char* name,bool* p_open,ImGuiWindowFlags flags);
 CIMGUI_API void igEnd(void);
-CIMGUI_API bool igBeginChild(const char* str_id,const ImVec2 size,bool border,ImGuiWindowFlags flags);
+CIMGUI_API bool igBeginChildStr(const char* str_id,const ImVec2 size,bool border,ImGuiWindowFlags flags);
 CIMGUI_API bool igBeginChildID(ImGuiID id,const ImVec2 size,bool border,ImGuiWindowFlags flags);
 CIMGUI_API void igEndChild(void);
 CIMGUI_API bool igIsWindowAppearing(void);
@@ -1003,7 +976,7 @@ CIMGUI_API void igSetScrollFromPosY(float local_y,float center_y_ratio);
 CIMGUI_API void igPushFont(ImFont* font);
 CIMGUI_API void igPopFont(void);
 CIMGUI_API void igPushStyleColorU32(ImGuiCol idx,ImU32 col);
-CIMGUI_API void igPushStyleColor(ImGuiCol idx,const ImVec4 col);
+CIMGUI_API void igPushStyleColorVec4(ImGuiCol idx,const ImVec4 col);
 CIMGUI_API void igPopStyleColor(int count);
 CIMGUI_API void igPushStyleVarFloat(ImGuiStyleVar idx,float val);
 CIMGUI_API void igPushStyleVarVec2(ImGuiStyleVar idx,const ImVec2 val);
@@ -1012,7 +985,7 @@ CIMGUI_API const ImVec4* igGetStyleColorVec4(ImGuiCol idx);
 CIMGUI_API ImFont* igGetFont(void);
 CIMGUI_API float igGetFontSize(void);
 CIMGUI_API ImVec2 igGetFontTexUvWhitePixel(void);
-CIMGUI_API ImU32 igGetColorU32(ImGuiCol idx,float alpha_mul);
+CIMGUI_API ImU32 igGetColorU32Col(ImGuiCol idx,float alpha_mul);
 CIMGUI_API ImU32 igGetColorU32Vec4(const ImVec4 col);
 CIMGUI_API ImU32 igGetColorU32U32(ImU32 col);
 CIMGUI_API void igPushItemWidth(float item_width);
@@ -1049,12 +1022,12 @@ CIMGUI_API float igGetTextLineHeightWithSpacing(void);
 CIMGUI_API float igGetFrameHeight(void);
 CIMGUI_API float igGetFrameHeightWithSpacing(void);
 CIMGUI_API void igPushIDStr(const char* str_id);
-CIMGUI_API void igPushIDRange(const char* str_id_begin,const char* str_id_end);
+CIMGUI_API void igPushIDStrStr(const char* str_id_begin,const char* str_id_end);
 CIMGUI_API void igPushIDPtr(const void* ptr_id);
 CIMGUI_API void igPushIDInt(int int_id);
 CIMGUI_API void igPopID(void);
 CIMGUI_API ImGuiID igGetIDStr(const char* str_id);
-CIMGUI_API ImGuiID igGetIDRange(const char* str_id_begin,const char* str_id_end);
+CIMGUI_API ImGuiID igGetIDStrStr(const char* str_id_begin,const char* str_id_end);
 CIMGUI_API ImGuiID igGetIDPtr(const void* ptr_id);
 CIMGUI_API void igTextUnformatted(const char* text,const char* text_end);
 CIMGUI_API void igText(const char* fmt,...);
@@ -1083,7 +1056,7 @@ CIMGUI_API void igProgressBar(float fraction,const ImVec2 size_arg,const char* o
 CIMGUI_API void igBullet(void);
 CIMGUI_API bool igBeginCombo(const char* label,const char* preview_value,ImGuiComboFlags flags);
 CIMGUI_API void igEndCombo(void);
-CIMGUI_API bool igCombo(const char* label,int* current_item,const char* const items[],int items_count,int popup_max_height_in_items);
+CIMGUI_API bool igComboStr_arr(const char* label,int* current_item,const char* const items[],int items_count,int popup_max_height_in_items);
 CIMGUI_API bool igComboStr(const char* label,int* current_item,const char* items_separated_by_zeros,int popup_max_height_in_items);
 CIMGUI_API bool igComboFnPtr(const char* label,int* current_item,bool(*items_getter)(void* data,int idx,const char** out_text),void* data,int items_count,int popup_max_height_in_items);
 CIMGUI_API bool igDragFloat(const char* label,float* v,float v_speed,float v_min,float v_max,const char* format,float power);
@@ -1146,17 +1119,17 @@ CIMGUI_API void igTreePushStr(const char* str_id);
 CIMGUI_API void igTreePushPtr(const void* ptr_id);
 CIMGUI_API void igTreePop(void);
 CIMGUI_API float igGetTreeNodeToLabelSpacing(void);
-CIMGUI_API bool igCollapsingHeader(const char* label,ImGuiTreeNodeFlags flags);
+CIMGUI_API bool igCollapsingHeaderTreeNodeFlags(const char* label,ImGuiTreeNodeFlags flags);
 CIMGUI_API bool igCollapsingHeaderBoolPtr(const char* label,bool* p_open,ImGuiTreeNodeFlags flags);
 CIMGUI_API void igSetNextItemOpen(bool is_open,ImGuiCond cond);
-CIMGUI_API bool igSelectable(const char* label,bool selected,ImGuiSelectableFlags flags,const ImVec2 size);
+CIMGUI_API bool igSelectableBool(const char* label,bool selected,ImGuiSelectableFlags flags,const ImVec2 size);
 CIMGUI_API bool igSelectableBoolPtr(const char* label,bool* p_selected,ImGuiSelectableFlags flags,const ImVec2 size);
 CIMGUI_API bool igListBoxStr_arr(const char* label,int* current_item,const char* const items[],int items_count,int height_in_items);
 CIMGUI_API bool igListBoxFnPtr(const char* label,int* current_item,bool(*items_getter)(void* data,int idx,const char** out_text),void* data,int items_count,int height_in_items);
 CIMGUI_API bool igListBoxHeaderVec2(const char* label,const ImVec2 size);
 CIMGUI_API bool igListBoxHeaderInt(const char* label,int items_count,int height_in_items);
 CIMGUI_API void igListBoxFooter(void);
-CIMGUI_API void igPlotLines(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride);
+CIMGUI_API void igPlotLinesFloatPtr(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride);
 CIMGUI_API void igPlotLinesFnPtr(const char* label,float(*values_getter)(void* data,int idx),void* data,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size);
 CIMGUI_API void igPlotHistogramFloatPtr(const char* label,const float* values,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size,int stride);
 CIMGUI_API void igPlotHistogramFnPtr(const char* label,float(*values_getter)(void* data,int idx),void* data,int values_count,int values_offset,const char* overlay_text,float scale_min,float scale_max,ImVec2 graph_size);
@@ -1384,7 +1357,7 @@ CIMGUI_API void ImDrawList_AddCircle(ImDrawList* self,const ImVec2 center,float 
 CIMGUI_API void ImDrawList_AddCircleFilled(ImDrawList* self,const ImVec2 center,float radius,ImU32 col,int num_segments);
 CIMGUI_API void ImDrawList_AddNgon(ImDrawList* self,const ImVec2 center,float radius,ImU32 col,int num_segments,float thickness);
 CIMGUI_API void ImDrawList_AddNgonFilled(ImDrawList* self,const ImVec2 center,float radius,ImU32 col,int num_segments);
-CIMGUI_API void ImDrawList_AddText(ImDrawList* self,const ImVec2 pos,ImU32 col,const char* text_begin,const char* text_end);
+CIMGUI_API void ImDrawList_AddTextVec2(ImDrawList* self,const ImVec2 pos,ImU32 col,const char* text_begin,const char* text_end);
 CIMGUI_API void ImDrawList_AddTextFontPtr(ImDrawList* self,const ImFont* font,float font_size,const ImVec2 pos,ImU32 col,const char* text_begin,const char* text_end,float wrap_width,const ImVec4* cpu_fine_clip_rect);
 CIMGUI_API void ImDrawList_AddPolyline(ImDrawList* self,const ImVec2* points,int num_points,ImU32 col,bool closed,float thickness);
 CIMGUI_API void ImDrawList_AddConvexPolyFilled(ImDrawList* self,const ImVec2* points,int num_points,ImU32 col);
@@ -1486,49 +1459,27 @@ CIMGUI_API void ImFont_AddGlyph(ImFont* self,ImWchar c,float x0,float y0,float x
 CIMGUI_API void ImFont_AddRemapChar(ImFont* self,ImWchar dst,ImWchar src,bool overwrite_dst);
 CIMGUI_API void ImFont_SetFallbackChar(ImFont* self,ImWchar c);
 CIMGUI_API void igGetWindowPos_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetWindowPos_nonUDT2(void);
 CIMGUI_API void igGetWindowSize_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetWindowSize_nonUDT2(void);
 CIMGUI_API void igGetContentRegionMax_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetContentRegionMax_nonUDT2(void);
 CIMGUI_API void igGetContentRegionAvail_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetContentRegionAvail_nonUDT2(void);
 CIMGUI_API void igGetWindowContentRegionMin_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetWindowContentRegionMin_nonUDT2(void);
 CIMGUI_API void igGetWindowContentRegionMax_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetWindowContentRegionMax_nonUDT2(void);
 CIMGUI_API void igGetFontTexUvWhitePixel_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetFontTexUvWhitePixel_nonUDT2(void);
 CIMGUI_API void igGetCursorPos_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetCursorPos_nonUDT2(void);
 CIMGUI_API void igGetCursorStartPos_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetCursorStartPos_nonUDT2(void);
 CIMGUI_API void igGetCursorScreenPos_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetCursorScreenPos_nonUDT2(void);
 CIMGUI_API void igGetItemRectMin_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetItemRectMin_nonUDT2(void);
 CIMGUI_API void igGetItemRectMax_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetItemRectMax_nonUDT2(void);
 CIMGUI_API void igGetItemRectSize_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetItemRectSize_nonUDT2(void);
 CIMGUI_API void igCalcTextSize_nonUDT(ImVec2 *pOut,const char* text,const char* text_end,bool hide_text_after_double_hash,float wrap_width);
-CIMGUI_API ImVec2_Simple igCalcTextSize_nonUDT2(const char* text,const char* text_end,bool hide_text_after_double_hash,float wrap_width);
 CIMGUI_API void igColorConvertU32ToFloat4_nonUDT(ImVec4 *pOut,ImU32 in);
-CIMGUI_API ImVec4_Simple igColorConvertU32ToFloat4_nonUDT2(ImU32 in);
 CIMGUI_API void igGetMousePos_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetMousePos_nonUDT2(void);
 CIMGUI_API void igGetMousePosOnOpeningCurrentPopup_nonUDT(ImVec2 *pOut);
-CIMGUI_API ImVec2_Simple igGetMousePosOnOpeningCurrentPopup_nonUDT2(void);
 CIMGUI_API void igGetMouseDragDelta_nonUDT(ImVec2 *pOut,ImGuiMouseButton button,float lock_threshold);
-CIMGUI_API ImVec2_Simple igGetMouseDragDelta_nonUDT2(ImGuiMouseButton button,float lock_threshold);
 CIMGUI_API void ImColor_HSV_nonUDT(ImColor *pOut,ImColor* self,float h,float s,float v,float a);
-CIMGUI_API ImColor_Simple ImColor_HSV_nonUDT2(ImColor* self,float h,float s,float v,float a);
 CIMGUI_API void ImDrawList_GetClipRectMin_nonUDT(ImVec2 *pOut,ImDrawList* self);
-CIMGUI_API ImVec2_Simple ImDrawList_GetClipRectMin_nonUDT2(ImDrawList* self);
 CIMGUI_API void ImDrawList_GetClipRectMax_nonUDT(ImVec2 *pOut,ImDrawList* self);
-CIMGUI_API ImVec2_Simple ImDrawList_GetClipRectMax_nonUDT2(ImDrawList* self);
 CIMGUI_API void ImFont_CalcTextSizeA_nonUDT(ImVec2 *pOut,ImFont* self,float size,float max_width,float wrap_width,const char* text_begin,const char* text_end,const char** remaining);
-CIMGUI_API ImVec2_Simple ImFont_CalcTextSizeA_nonUDT2(ImFont* self,float size,float max_width,float wrap_width,const char* text_begin,const char* text_end,const char** remaining);
 
 
 /////////////////////////hand written functions
