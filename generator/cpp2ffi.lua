@@ -600,11 +600,16 @@ local function AdjustArguments(FP)
 end
 local function ADDnonUDT(FP)
     local defsT = FP.defsT
-    local newcdefs = {}
+    --local newcdefs = {}
     for numcdef,t in ipairs(FP.funcdefs) do
         if t.cimguiname then
         local cimf = defsT[t.cimguiname]
         local defT = cimf[t.signature]
+		--find index
+		local index
+		for ind,ddd in ipairs(cimf) do
+			if ddd == defT then index=ind; break end
+		end
         --if UDT return generate nonUDT version
 		local isUDT = false
 		for _,udt_ret in ipairs(FP.UDTs) do
@@ -626,19 +631,25 @@ local function ADDnonUDT(FP)
             local comma = (#defT.argsT > 0) and "," or ""
             defT2.args = "("..defT.ret.." *pOut"..comma..defT.args:sub(2)
             defT2.ret = "void"
-            defT2.ov_cimguiname = (defT2.ov_cimguiname or defT2.cimguiname).."_nonUDT"
+            defT2.ov_cimguiname = (defT2.ov_cimguiname or defT2.cimguiname) --.."_nonUDT"
             defT2.nonUDT = 1
             defT2.retref = nil
-            defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT2
-            defsT[t.cimguiname][t.signature.."nonUDT"] = defT2
-            table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret})
+			
+			--replace
+			cimf[index] = defT2
+			cimf[t.signature] = defT2
+			FP.funcdefs[numcdef] = {stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature,cimguiname=t.cimguiname,call_args=call_args,ret =t.ret}
+			
+            -- defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT2
+            -- defsT[t.cimguiname][t.signature.."nonUDT"] = defT2
+            -- table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret})
         end
 		else print("not cimguiname in");M.prtable(t)
         end
     end
-    for i,v in ipairs(newcdefs) do
-        table.insert(FP.funcdefs,v)
-    end
+    -- for i,v in ipairs(newcdefs) do
+        -- table.insert(FP.funcdefs,v)
+    -- end
 end
 
 local function ADDdestructors(FP)
