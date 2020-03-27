@@ -35,47 +35,6 @@
       "ret": "ImColor",
       "signature": "(float,float,float,float)",
       "stname": "ImColor"
-    },
-    {
-      "args": "(ImColor *pOut,ImColor* self,float h,float s,float v,float a)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImColor*"
-        },
-        {
-          "name": "self",
-          "type": "ImColor*"
-        },
-        {
-          "name": "h",
-          "type": "float"
-        },
-        {
-          "name": "s",
-          "type": "float"
-        },
-        {
-          "name": "v",
-          "type": "float"
-        },
-        {
-          "name": "a",
-          "type": "float"
-        }
-      ],
-      "argsoriginal": "(float h,float s,float v,float a=1.0f)",
-      "call_args": "(h,s,v,a)",
-      "cimguiname": "ImColor_HSV",
-      "defaults": {
-        "a": "1.0f"
-      },
-      "funcname": "HSV",
-      "nonUDT": 1,
-      "ov_cimguiname": "ImColor_HSV_nonUDT",
-      "ret": "void",
-      "signature": "(float,float,float,float)",
-      "stname": "ImColor"
     }
   ],
   "ImColor_ImColor": [
@@ -1608,29 +1567,6 @@
       "ret": "ImVec2",
       "signature": "()const",
       "stname": "ImDrawList"
-    },
-    {
-      "args": "(ImVec2 *pOut,ImDrawList* self)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        },
-        {
-          "name": "self",
-          "type": "ImDrawList*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "ImDrawList_GetClipRectMax",
-      "defaults": [],
-      "funcname": "GetClipRectMax",
-      "nonUDT": 1,
-      "ov_cimguiname": "ImDrawList_GetClipRectMax_nonUDT",
-      "ret": "void",
-      "signature": "()const",
-      "stname": "ImDrawList"
     }
   ],
   "ImDrawList_GetClipRectMin": [
@@ -1649,29 +1585,6 @@
       "funcname": "GetClipRectMin",
       "ov_cimguiname": "ImDrawList_GetClipRectMin",
       "ret": "ImVec2",
-      "signature": "()const",
-      "stname": "ImDrawList"
-    },
-    {
-      "args": "(ImVec2 *pOut,ImDrawList* self)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        },
-        {
-          "name": "self",
-          "type": "ImDrawList*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "ImDrawList_GetClipRectMin",
-      "defaults": [],
-      "funcname": "GetClipRectMin",
-      "nonUDT": 1,
-      "ov_cimguiname": "ImDrawList_GetClipRectMin_nonUDT",
-      "ret": "void",
       "signature": "()const",
       "stname": "ImDrawList"
     }
@@ -3677,56 +3590,6 @@
       "funcname": "CalcTextSizeA",
       "ov_cimguiname": "ImFont_CalcTextSizeA",
       "ret": "ImVec2",
-      "signature": "(float,float,float,const char*,const char*,const char**)const",
-      "stname": "ImFont"
-    },
-    {
-      "args": "(ImVec2 *pOut,ImFont* self,float size,float max_width,float wrap_width,const char* text_begin,const char* text_end,const char** remaining)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        },
-        {
-          "name": "self",
-          "type": "ImFont*"
-        },
-        {
-          "name": "size",
-          "type": "float"
-        },
-        {
-          "name": "max_width",
-          "type": "float"
-        },
-        {
-          "name": "wrap_width",
-          "type": "float"
-        },
-        {
-          "name": "text_begin",
-          "type": "const char*"
-        },
-        {
-          "name": "text_end",
-          "type": "const char*"
-        },
-        {
-          "name": "remaining",
-          "type": "const char**"
-        }
-      ],
-      "argsoriginal": "(float size,float max_width,float wrap_width,const char* text_begin,const char* text_end=((void*)0),const char** remaining=((void*)0))",
-      "call_args": "(size,max_width,wrap_width,text_begin,text_end,remaining)",
-      "cimguiname": "ImFont_CalcTextSizeA",
-      "defaults": {
-        "remaining": "((void*)0)",
-        "text_end": "((void*)0)"
-      },
-      "funcname": "CalcTextSizeA",
-      "nonUDT": 1,
-      "ov_cimguiname": "ImFont_CalcTextSizeA_nonUDT",
-      "ret": "void",
       "signature": "(float,float,float,const char*,const char*,const char**)const",
       "stname": "ImFont"
     }
@@ -7323,46 +7186,6 @@
       "ret": "ImVec2",
       "signature": "(const char*,const char*,bool,float)",
       "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut,const char* text,const char* text_end,bool hide_text_after_double_hash,float wrap_width)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        },
-        {
-          "name": "text",
-          "type": "const char*"
-        },
-        {
-          "name": "text_end",
-          "type": "const char*"
-        },
-        {
-          "name": "hide_text_after_double_hash",
-          "type": "bool"
-        },
-        {
-          "name": "wrap_width",
-          "type": "float"
-        }
-      ],
-      "argsoriginal": "(const char* text,const char* text_end=((void*)0),bool hide_text_after_double_hash=false,float wrap_width=-1.0f)",
-      "call_args": "(text,text_end,hide_text_after_double_hash,wrap_width)",
-      "cimguiname": "igCalcTextSize",
-      "defaults": {
-        "hide_text_after_double_hash": "false",
-        "text_end": "((void*)0)",
-        "wrap_width": "-1.0f"
-      },
-      "funcname": "CalcTextSize",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igCalcTextSize_nonUDT",
-      "ret": "void",
-      "signature": "(const char*,const char*,bool,float)",
-      "stname": ""
     }
   ],
   "igCaptureKeyboardFromApp": [
@@ -7695,30 +7518,6 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igColorConvertU32ToFloat4",
       "ret": "ImVec4",
-      "signature": "(ImU32)",
-      "stname": ""
-    },
-    {
-      "args": "(ImVec4 *pOut,ImU32 in)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec4*"
-        },
-        {
-          "name": "in",
-          "type": "ImU32"
-        }
-      ],
-      "argsoriginal": "(ImU32 in)",
-      "call_args": "(in)",
-      "cimguiname": "igColorConvertU32ToFloat4",
-      "defaults": [],
-      "funcname": "ColorConvertU32ToFloat4",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igColorConvertU32ToFloat4_nonUDT",
-      "ret": "void",
       "signature": "(ImU32)",
       "stname": ""
     }
@@ -9156,26 +8955,6 @@
       "ret": "ImVec2",
       "signature": "()",
       "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetContentRegionAvail",
-      "defaults": [],
-      "funcname": "GetContentRegionAvail",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetContentRegionAvail_nonUDT",
-      "ret": "void",
-      "signature": "()",
-      "stname": ""
     }
   ],
   "igGetContentRegionMax": [
@@ -9190,26 +8969,6 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igGetContentRegionMax",
       "ret": "ImVec2",
-      "signature": "()",
-      "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetContentRegionMax",
-      "defaults": [],
-      "funcname": "GetContentRegionMax",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetContentRegionMax_nonUDT",
-      "ret": "void",
       "signature": "()",
       "stname": ""
     }
@@ -9242,26 +9001,6 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igGetCursorPos",
       "ret": "ImVec2",
-      "signature": "()",
-      "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetCursorPos",
-      "defaults": [],
-      "funcname": "GetCursorPos",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetCursorPos_nonUDT",
-      "ret": "void",
       "signature": "()",
       "stname": ""
     }
@@ -9312,26 +9051,6 @@
       "ret": "ImVec2",
       "signature": "()",
       "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetCursorScreenPos",
-      "defaults": [],
-      "funcname": "GetCursorScreenPos",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetCursorScreenPos_nonUDT",
-      "ret": "void",
-      "signature": "()",
-      "stname": ""
     }
   ],
   "igGetCursorStartPos": [
@@ -9346,26 +9065,6 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igGetCursorStartPos",
       "ret": "ImVec2",
-      "signature": "()",
-      "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetCursorStartPos",
-      "defaults": [],
-      "funcname": "GetCursorStartPos",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetCursorStartPos_nonUDT",
-      "ret": "void",
       "signature": "()",
       "stname": ""
     }
@@ -9462,26 +9161,6 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igGetFontTexUvWhitePixel",
       "ret": "ImVec2",
-      "signature": "()",
-      "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetFontTexUvWhitePixel",
-      "defaults": [],
-      "funcname": "GetFontTexUvWhitePixel",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetFontTexUvWhitePixel_nonUDT",
-      "ret": "void",
       "signature": "()",
       "stname": ""
     }
@@ -9644,26 +9323,6 @@
       "ret": "ImVec2",
       "signature": "()",
       "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetItemRectMax",
-      "defaults": [],
-      "funcname": "GetItemRectMax",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetItemRectMax_nonUDT",
-      "ret": "void",
-      "signature": "()",
-      "stname": ""
     }
   ],
   "igGetItemRectMin": [
@@ -9680,26 +9339,6 @@
       "ret": "ImVec2",
       "signature": "()",
       "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetItemRectMin",
-      "defaults": [],
-      "funcname": "GetItemRectMin",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetItemRectMin_nonUDT",
-      "ret": "void",
-      "signature": "()",
-      "stname": ""
     }
   ],
   "igGetItemRectSize": [
@@ -9714,26 +9353,6 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igGetItemRectSize",
       "ret": "ImVec2",
-      "signature": "()",
-      "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetItemRectSize",
-      "defaults": [],
-      "funcname": "GetItemRectSize",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetItemRectSize_nonUDT",
-      "ret": "void",
       "signature": "()",
       "stname": ""
     }
@@ -9830,37 +9449,6 @@
       "ret": "ImVec2",
       "signature": "(ImGuiMouseButton,float)",
       "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut,ImGuiMouseButton button,float lock_threshold)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        },
-        {
-          "name": "button",
-          "type": "ImGuiMouseButton"
-        },
-        {
-          "name": "lock_threshold",
-          "type": "float"
-        }
-      ],
-      "argsoriginal": "(ImGuiMouseButton button=0,float lock_threshold=-1.0f)",
-      "call_args": "(button,lock_threshold)",
-      "cimguiname": "igGetMouseDragDelta",
-      "defaults": {
-        "button": "0",
-        "lock_threshold": "-1.0f"
-      },
-      "funcname": "GetMouseDragDelta",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetMouseDragDelta_nonUDT",
-      "ret": "void",
-      "signature": "(ImGuiMouseButton,float)",
-      "stname": ""
     }
   ],
   "igGetMousePos": [
@@ -9877,26 +9465,6 @@
       "ret": "ImVec2",
       "signature": "()",
       "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetMousePos",
-      "defaults": [],
-      "funcname": "GetMousePos",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetMousePos_nonUDT",
-      "ret": "void",
-      "signature": "()",
-      "stname": ""
     }
   ],
   "igGetMousePosOnOpeningCurrentPopup": [
@@ -9911,26 +9479,6 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igGetMousePosOnOpeningCurrentPopup",
       "ret": "ImVec2",
-      "signature": "()",
-      "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetMousePosOnOpeningCurrentPopup",
-      "defaults": [],
-      "funcname": "GetMousePosOnOpeningCurrentPopup",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetMousePosOnOpeningCurrentPopup_nonUDT",
-      "ret": "void",
       "signature": "()",
       "stname": ""
     }
@@ -10169,26 +9717,6 @@
       "ret": "ImVec2",
       "signature": "()",
       "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetWindowContentRegionMax",
-      "defaults": [],
-      "funcname": "GetWindowContentRegionMax",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetWindowContentRegionMax_nonUDT",
-      "ret": "void",
-      "signature": "()",
-      "stname": ""
     }
   ],
   "igGetWindowContentRegionMin": [
@@ -10203,26 +9731,6 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igGetWindowContentRegionMin",
       "ret": "ImVec2",
-      "signature": "()",
-      "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetWindowContentRegionMin",
-      "defaults": [],
-      "funcname": "GetWindowContentRegionMin",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetWindowContentRegionMin_nonUDT",
-      "ret": "void",
       "signature": "()",
       "stname": ""
     }
@@ -10289,26 +9797,6 @@
       "ret": "ImVec2",
       "signature": "()",
       "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetWindowPos",
-      "defaults": [],
-      "funcname": "GetWindowPos",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetWindowPos_nonUDT",
-      "ret": "void",
-      "signature": "()",
-      "stname": ""
     }
   ],
   "igGetWindowSize": [
@@ -10323,26 +9811,6 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igGetWindowSize",
       "ret": "ImVec2",
-      "signature": "()",
-      "stname": ""
-    },
-    {
-      "args": "(ImVec2 *pOut)",
-      "argsT": [
-        {
-          "name": "pOut",
-          "type": "ImVec2*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "igGetWindowSize",
-      "defaults": [],
-      "funcname": "GetWindowSize",
-      "namespace": "ImGui",
-      "nonUDT": 1,
-      "ov_cimguiname": "igGetWindowSize_nonUDT",
-      "ret": "void",
       "signature": "()",
       "stname": ""
     }
