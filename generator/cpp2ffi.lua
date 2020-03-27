@@ -129,7 +129,7 @@ end
 local function clean_spaces(cad)
     cad = strip(cad)
     cad = cad:gsub("%s+"," ") --not more than one space
-    cad = cad:gsub("%s*([%(%),=:])%s*","%1") --not spaces with ( , ) or ( = ) or ( : )
+    cad = cad:gsub("%s*([%(%),=:%+])%s*","%1") --not spaces with ( , ) or ( = ) or ( : ) or + 
     return cad
 end
 
@@ -428,9 +428,9 @@ local function parseFunction(self,stname,lineorig,namespace)
 	extraconst = extraconst:match("const")
 
 	if not args then
-	print"not gettint args in"
-	print(line,lineorig)
-	print(funcname,"args",args)
+		print"not gettint args in"
+		print(line,lineorig)
+		print(funcname,"args",args)
     end
 	
     local argscsinpars = args:gsub("(=[^,%(%)]*)(%b())","%1")
@@ -453,15 +453,16 @@ local function parseFunction(self,stname,lineorig,namespace)
 		if self.typenames[stname] ~= template then --rule out template typename
 		te = template:gsub("%s","_")
         te = te:gsub("%*","Ptr")
-		te = "_"..te
 
 		self.templates[ttype] = self.templates[ttype] or {}
 		self.templates[ttype][template] = te
+		te = "_"..te
 		end
 	end
 	--end
-    argscsinpars = argscsinpars:gsub("<([%w_%*]+)>",te) --ImVector
-    
+
+	argscsinpars = argscsinpars:gsub("<([%w_%*%s]+)>",te) --ImVector
+
     local argsArr = {}
     local functype_re =       "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
     local functype_reex =     "^(%s*[%w%s%*]+)%(%*([%w_]+)%)(%([^%(%)]*%))"
@@ -1016,7 +1017,6 @@ function M.Parser()
             if not typen then -- Lets try Type*name
                 typen,rest = line:match("([^,]+%*)(%S+[,;])")
             end
-
 			local template_type 
 			for k,v in pairs(self.templates) do
 				template_type = typen:match(k.."_(.+)")
@@ -1137,13 +1137,13 @@ function M.Parser()
 						t.size = tonumber(val)
 					elseif allenums[val] then
 						t.size = allenums[val]
-					elseif val:match"%+" then
-						local s1,s2 = val:match("(%d+)%s*%+%s*(%d+)")
-						t.size = s1+s2
 					else
-						print("Error size is",val)
+						local f,err = loadstring("estevalor="..val)
+						if not f then print("error on loadstring",err,"with val:",val) end
+						f()
+						t.size = estevalor
 					end
-					assert(t.size)
+					assert(t.size,val)
 				end
 			end
 		end
@@ -1457,4 +1457,14 @@ local function location(file,locpathT,defines,COMPILER)
     return location_it
 end
 M.location = location
+
+--[=[
+-- tests
+local line = [[void          DockBuilderCopyDockSpace(ImGuiID src_dockspace_id, ImGuiID dst_dockspace_id, ImVector<const char*>* in_window_remap_pairs);]]
+local parser = M.Parser()
+parser:insert(line)
+parser:do_parse()
+M.prtable(parser)
+--]=]
+
 return M

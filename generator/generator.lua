@@ -6,6 +6,7 @@ assert(_VERSION=='Lua 5.1',"Must use LuaJIT")
 assert(bit,"Must use LuaJIT")
 local script_args = {...}
 local COMPILER = script_args[1]
+local INTERNAL_GENERATION = script_args[2]=="true" 
 local CPRE,CTEST
 if COMPILER == "gcc" or COMPILER == "clang" then
     CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]
@@ -37,9 +38,10 @@ if CTEST then
 end --CTEST
 
 print("HAVE_COMPILER",HAVE_COMPILER)
+print("INTERNAL_GENERATION",INTERNAL_GENERATION)
 --get implementations
 local implementations = {}
-for i=2,#script_args do table.insert(implementations,script_args[i]) end
+for i=3,#script_args do table.insert(implementations,script_args[i]) end
 
 --------------------------------------------------------------------------
 --this table has the functions to be skipped in generation
@@ -88,7 +90,22 @@ local cimgui_overloads = {
     },
     igPushStyleColor = {
         ["(ImGuiCol,const ImVec4)"] = "igPushStyleColor"
-    }
+    },
+	igSetScrollFromPosX = {
+	    ["(float,float)"] = "igSetScrollFromPosX"
+	},
+	igSetScrollFromPosY = {
+	    ["(float,float)"] = "igSetScrollFromPosY"
+	},
+	igSetScrollX = {
+	    ["(float)"] = "igSetScrollX"
+	},
+	igSetScrollY = {
+	    ["(float)"] = "igSetScrollY"
+	},
+	igIsPopupOpen ={
+	    ["(const char*)"] = "igIsPopupOpen"
+	},
 }
 
 --------------------------header definitions
@@ -442,7 +459,7 @@ end
 
 
 ----------custom ImVector templates
-local function generate_templates(code,templates)
+local function generate_templates(code,codeimpool,templates)
     table.insert(code,"\n"..[[typedef struct ImVector{int Size;int Capacity;void* Data;} ImVector;]].."\n")
     for ttype,v in pairs(templates) do
         --local te = k:gsub("%s","_")
@@ -454,8 +471,8 @@ local function generate_templates(code,templates)
 		elseif ttype == "ImPool" then
 			--declare ImGuiStorage
 			for te,newte in pairs(v) do
-				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
-				table.insert(code,"typedef struct ImPool_"..newte.." {ImVector_"..te.." Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_"..newte..";\n")
+				table.insert(codeimpool,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
+				table.insert(codeimpool,"typedef struct ImPool_"..newte.." {ImVector_"..te.." Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_"..newte..";\n")
 			end
 		elseif ttype == "ImChunkStream" then
 			for te,newte in pairs(v) do
@@ -497,9 +514,14 @@ local function cimgui_generation(parser)
 	cpp2ffi.prtable(parser.typenames)
 	
 	local outtab = {}
-    generate_templates(outtab,parser.templates)
+	local outtabpool = {}
+    generate_templates(outtab, outtabpool, parser.templates)
+	
+	--move outtabpool after ImGuiStorage definition
+	local outpost1, outpost2 = outpost:match("^(.+struct ImGuiStorage%s*\n%b{};\n)(.+)$")
+	outpost = outpost1..table.concat(outtabpool)..outpost2
 
-	local cstructsstr = outpre..table.concat(outtab,"")..outpost..(extra or "")
+	local cstructsstr = outpre..table.concat(outtab,"")..outpost --..(extra or "")
 
     hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
     local cfuncsstr = func_header_generate(parser)
@@ -582,13 +604,19 @@ local function parseImGuiHeader(header,names)
 end
 --generation
 print("------------------generation with "..COMPILER.."------------------------")
-
---local parser1 = parseImGuiHeader([[headers.h]],{[[imgui]],[[imgui_internal]],[[imstb_textedit]]})
-local parser1 = parseImGuiHeader([[../imgui/imgui.h]],{[[imgui]]})
+local parser1
+if INTERNAL_GENERATION then
+	save_data("headers.h",[[#include "../imgui/imgui.h" 
+	#include "../imgui/imgui_internal.h"]])
+	parser1 = parseImGuiHeader([[headers.h]],{[[imgui]],[[imgui_internal]],[[imstb_textedit]]})
+	os.remove("headers.h")
+else
+	parser1 = parseImGuiHeader([[../imgui/imgui.h]],{[[imgui]]})
+end
 parser1:do_parse()
 
 ---------- generate cimgui_internal.h
----[=[
+--[=[
 local parser1i = parseImGuiHeader([[../imgui/imgui_internal.h]],{[[imgui_internal]],[[imstb_textedit]]})
 parser1i:do_parse()
 local outpre,outpost = parser1i:gen_structs_and_enums()
@@ -607,7 +635,7 @@ save_data("./output/cimgui_internal.h",cimgui_header,"#ifdef CIMGUI_DEFINE_ENUMS
 copyfile("./output/cimgui_internal.h", "../cimgui_internal.h")
 --]=]
 ---------- generate now structs_and_enums_i
----[=[
+--[=[
 save_data([[../imgui/temp.h]],[[#include "imgui.h"
 #include "imgui_internal.h"]])
 local parser1i = parseImGuiHeader([[../imgui/temp.h]],{[[imgui]],[[imgui_internal]],[[imstb_textedit]]})
@@ -718,7 +746,6 @@ end
 local json = require"json"
 save_data("./output/definitions.json",json.encode(json_prepare(parser1.defsT)))
 save_data("./output/structs_and_enums.json",json.encode(structs_and_enums_table))
-save_data("./output/structs_and_enums_i.json",json.encode(structs_and_enums_table_i))
 save_data("./output/typedefs_dict.json",json.encode(parser1.typedefs_dict))
 if parser2 then
     save_data("./output/impl_definitions.json",json.encode(json_prepare(parser2.defsT)))

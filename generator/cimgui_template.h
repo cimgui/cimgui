@@ -82,10 +82,13 @@ CIMGUI_API float igGET_FLT_MAX();
 CIMGUI_API void igColorConvertRGBtoHSV(float r,float g,float b,float *out_h,float *out_s,float *out_v);
 CIMGUI_API void igColorConvertHSVtoRGB(float h,float s,float v,float *out_r,float *out_g,float *out_b);
 
+
 CIMGUI_API ImVector_ImWchar* ImVector_ImWchar_create();
 CIMGUI_API void ImVector_ImWchar_destroy(ImVector_ImWchar* self);
 CIMGUI_API void ImVector_ImWchar_Init(ImVector_ImWchar* p);
 CIMGUI_API void ImVector_ImWchar_UnInit(ImVector_ImWchar* p);
+
+
 #endif //CIMGUI_INCLUDED
 
 
