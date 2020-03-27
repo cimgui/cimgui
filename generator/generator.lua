@@ -38,6 +38,7 @@ if CTEST then
 end --CTEST
 
 print("HAVE_COMPILER",HAVE_COMPILER)
+print("INTERNAL_GENERATION",INTERNAL_GENERATION)
 --get implementations
 local implementations = {}
 for i=3,#script_args do table.insert(implementations,script_args[i]) end
