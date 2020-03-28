@@ -24,7 +24,7 @@ Notes:
   * git submodule update
 * compile 
   * using makefile on linux/macOS/mingw (Or use CMake to generate project)
-  * or as in https://github.com/sonoro1234/LuaJIT-ImGui/tree/master_auto_implementations/build
+  * or as in https://github.com/sonoro1234/LuaJIT-ImGui/tree/master/build
 
 # using generator
 
@@ -40,7 +40,7 @@ Notes:
 # generate binding
 * C interface is exposed by cimgui.h when you define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 * with your prefered language you can use the lua or json files generated as in:
-  * https://github.com/sonoro1234/LuaJIT-ImGui/blob/master_auto_implementations/lua/build.bat (with lua code generation in https://github.com/sonoro1234/LuaJIT-ImGui/blob/master_auto_implementations/lua/class_gen.lua)
+  * https://github.com/sonoro1234/LuaJIT-ImGui/blob/master/lua/build.bat (with lua code generation in https://github.com/sonoro1234/LuaJIT-ImGui/blob/master/lua/class_gen.lua)
   * https://github.com/mellinoe/ImGui.NET/tree/autogen/src/CodeGenerator
 ### definitions description
 * It is a collection in which key is the cimgui name that would result without overloadings and the value is an array of overloadings (may be only one overloading)
