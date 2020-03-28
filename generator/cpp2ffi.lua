@@ -380,6 +380,8 @@ local function name_overloadsAlgo(v)
             end
         end
     end
+	--avoid empty postfix which will be reserved to generic
+	for i,v in ipairs(bb) do if v=="" then bb[i]="Nil" end end
     return aa,bb
 end
 local function typetoStr(typ)
@@ -600,14 +602,16 @@ local function AdjustArguments(FP)
 end
 local function ADDnonUDT(FP)
     local defsT = FP.defsT
-    local newcdefs = {}
-    --for cimguiname,defs in pairs(defsT) do
-    --for i,defT in ipairs(defs) do
-		--local t = {cimguiname=cimguiname,signature=defT.signature,ret=defT.ret}
+    --local newcdefs = {}
     for numcdef,t in ipairs(FP.funcdefs) do
         if t.cimguiname then
         local cimf = defsT[t.cimguiname]
         local defT = cimf[t.signature]
+		--find index
+		local index
+		for ind,ddd in ipairs(cimf) do
+			if ddd == defT then index=ind; break end
+		end
         --if UDT return generate nonUDT version
 		local isUDT = false
 		for _,udt_ret in ipairs(FP.UDTs) do
@@ -629,40 +633,25 @@ local function ADDnonUDT(FP)
             local comma = (#defT.argsT > 0) and "," or ""
             defT2.args = "("..defT.ret.." *pOut"..comma..defT.args:sub(2)
             defT2.ret = "void"
-            defT2.ov_cimguiname = (defT2.ov_cimguiname or defT2.cimguiname).."_nonUDT"
+            defT2.ov_cimguiname = (defT2.ov_cimguiname or defT2.cimguiname) --.."_nonUDT"
             defT2.nonUDT = 1
             defT2.retref = nil
-            defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT2
-            defsT[t.cimguiname][t.signature.."nonUDT"] = defT2
-            table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret})
-            --converting to Simple type----------------------------------------------------
-            local defT3 = {}
-            --first strings
-            for k,v in pairs(defT) do
-                defT3[k] = v
-            end
-            --then argsT table
-            defT3.argsT = {}
-            for k,v in ipairs(defT.argsT) do
-                table.insert(defT3.argsT,{type=v.type,name=v.name})
-            end
-            local comma = (#defT.argsT > 0) and "," or ""
-            --defT3.args = "("..defT.ret.." *pOut"..comma..defT.args:sub(2)
-            defT3.ret = defT.ret.."_Simple"
-            defT3.retorig = defT.ret
-            defT3.ov_cimguiname = (defT3.ov_cimguiname or defT3.cimguiname).."_nonUDT2"
-            defT3.nonUDT = 2
-            defT3.retref = nil
-            defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT3
-            defsT[t.cimguiname][t.signature.."nonUDT2"] = defT3
-            table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT2",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret})
+			
+			--replace
+			cimf[index] = defT2
+			cimf[t.signature] = defT2
+			FP.funcdefs[numcdef] = {stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature,cimguiname=t.cimguiname,call_args=call_args,ret =t.ret}
+			
+            -- defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT2
+            -- defsT[t.cimguiname][t.signature.."nonUDT"] = defT2
+            -- table.insert(newcdefs,{stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature.."nonUDT",cimguiname=t.cimguiname,call_args=call_args,ret =t.ret})
         end
+		else print("not cimguiname in");M.prtable(t)
         end
-		--end
     end
-    for i,v in ipairs(newcdefs) do
-        table.insert(FP.funcdefs,v)
-    end
+    -- for i,v in ipairs(newcdefs) do
+        -- table.insert(FP.funcdefs,v)
+    -- end
 end
 
 local function ADDdestructors(FP)
@@ -1179,7 +1168,7 @@ function M.Parser()
                     --take overloaded name from manual table or algorythm
                     t.ov_cimguiname = self.getCname_overload(t.stname,t.funcname,t.signature) or k..typetoStr(post[i])
                     table.insert(strt,string.format("%d\t%s\t%s %s",i,t.ret,t.ov_cimguiname,t.signature))
-                    --prtable(typesc[i])
+                    --M.prtable(typesc[i],post)
                 end
                 --check not two names are equal (produced by bad cimguiname_overload)
                 for i=1,#v-1 do 

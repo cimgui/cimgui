@@ -12,9 +12,10 @@ Initially cimgui was developed by Stephan Dilly as hand-written code but lately 
 
 Notes:
 * currently this wrapper is based on version [1.75 of Dear ImGui]
-* only functions, structs and enums from imgui.h are wrapped.
+* only functions, structs and enums from imgui.h (an optionally imgui_internal.h) are wrapped.
 * if you are interested in imgui implementations you should look LuaJIT-ImGui project.
-* overloaded function names try to be the most compatible with traditional cimgui names. So all naming is algorithmic except for those names that were in conflict with widely used cimgui names and were thus coded in a table (https://github.com/cimgui/cimgui/blob/master/generator/generator.lua#L58). Current overloaded function names can be found in (https://github.com/cimgui/cimgui/blob/master/generator/output/overloads.txt)
+* All naming is algorithmic except for those names that were coded in cimgui_overloads table (https://github.com/cimgui/cimgui/blob/master/generator/generator.lua#L60). In the official version this table is empty.
+* Current overloaded function names can be found in (https://github.com/cimgui/cimgui/blob/master/generator/output/overloads.txt)
 
 # compilation
 
@@ -23,7 +24,7 @@ Notes:
   * git submodule update
 * compile 
   * using makefile on linux/macOS/mingw (Or use CMake to generate project)
-  * or as in https://github.com/sonoro1234/LuaJIT-ImGui/tree/master_auto_implementations/build
+  * or as in https://github.com/sonoro1234/LuaJIT-ImGui/tree/master/build
 
 # using generator
 
@@ -31,15 +32,15 @@ Notes:
 * you will need LuaJIT (https://github.com/LuaJIT/LuaJIT.git better 2.1 branch) or precompiled for linux/macOS/windows in https://luapower.com/luajit/download
 * you can use also a C++ compiler for doing preprocessing: gcc (In windows MinGW-W64-builds for example), clang or cl (MSVC) or not use a compiler (experimental nocompiler option) at all. (this repo was done with gcc)
 * update `imgui` folder to the version you desire.
-* edit `generator/generator.bat` on windows, or `generator/generator.sh` on linux, to choose between gcc, clang, cl or nocompiler and to choose desired implementations and if imgui_internal is generated or not. 
-* edit config_generator.lua for adding includes needed by your chosen implementations.
+* edit `generator/generator.bat` on windows, or `generator/generator.sh` on linux, to choose between gcc, clang, cl or nocompiler and to choose desired implementations and weather imgui_internal is generated or not. 
+* edit config_generator.lua for adding includes needed by your chosen implementations (vulkan needs that).
 * Run generator.bat or generator.sh with gcc, clang or cl and LuaJIT on your PATH.
 * as a result some files are generated: `cimgui.cpp` and `cimgui.h` for compiling and some lua/json files with information about the binding: `definitions.json` with function info, `structs_and_enums.json` with struct and enum info, `impl_definitions.json` with functions from the implementations info. 
 
 # generate binding
 * C interface is exposed by cimgui.h when you define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 * with your prefered language you can use the lua or json files generated as in:
-  * https://github.com/sonoro1234/LuaJIT-ImGui/blob/master_auto_implementations/lua/build.bat (with lua code generation in https://github.com/sonoro1234/LuaJIT-ImGui/blob/master_auto_implementations/lua/class_gen.lua)
+  * https://github.com/sonoro1234/LuaJIT-ImGui/blob/master/lua/build.bat (with lua code generation in https://github.com/sonoro1234/LuaJIT-ImGui/blob/master/lua/class_gen.lua)
   * https://github.com/mellinoe/ImGui.NET/tree/autogen/src/CodeGenerator
 ### definitions description
 * It is a collection in which key is the cimgui name that would result without overloadings and the value is an array of overloadings (may be only one overloading)
@@ -59,7 +60,7 @@ Notes:
   * destructor : is set if the function is a destructor for a class
   * templated : is set if the function belongs to a templated class (ImVector)
   * templatedgen: is set if the function belongs to a struct generated from template (ImVector_ImWchar)
-  * nonUDT : if present can be 1 or 2 (explained meaning in usage) if return type was a user defined type
+  * nonUDT : if present the original function was returning a user defined type so that signature has been changed to accept a pointer to the UDT as first argument.
 ### structs_and_enums description
 * Is is a collection with two items:
   * under key enums we get the enums collection in which each key is the enum tagname and the value is an array of the ordered values represented as a collection with keys
@@ -76,8 +77,7 @@ Notes:
 * use whatever method is in ImGui c++ namespace in the original [imgui.h](https://github.com/ocornut/imgui/blob/master/imgui.h) by prepending `ig`
 * methods have the same parameter list and return values (where possible)
 * functions that belong to a struct have an extra first argument with a pointer to the struct.
-* where a function returns UDT (user defined type) by value some compilers complain so another function with the name `function_name_nonUDT` is generated accepting a pointer to the UDT type as the first argument.
-* also is generated `function_name_nonUDT2` which instead of returning the UDT type returns a simple version (without functions) called `UDTType_Simple` (`ImVec2_Simple` for `ImVec2`)
+* where a function returns UDT (user defined type) by value some compilers complain so the function is generated accepting a pointer to the UDT type as the first argument (or second if belongs to a struct).
 
 # example bindings based on cimgui
 
