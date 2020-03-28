@@ -380,6 +380,8 @@ local function name_overloadsAlgo(v)
             end
         end
     end
+	--avoid empty postfix which will be reserved to generic
+	for i,v in ipairs(bb) do if v=="" then bb[i]="Nil" end end
     return aa,bb
 end
 local function typetoStr(typ)
@@ -1166,7 +1168,7 @@ function M.Parser()
                     --take overloaded name from manual table or algorythm
                     t.ov_cimguiname = self.getCname_overload(t.stname,t.funcname,t.signature) or k..typetoStr(post[i])
                     table.insert(strt,string.format("%d\t%s\t%s %s",i,t.ret,t.ov_cimguiname,t.signature))
-                    --prtable(typesc[i])
+                    --M.prtable(typesc[i],post)
                 end
                 --check not two names are equal (produced by bad cimguiname_overload)
                 for i=1,#v-1 do 

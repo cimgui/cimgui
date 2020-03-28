@@ -1,9 +1,9 @@
 ----------------overloadings---------------------------
 ImVector_resize	2
-1	void	ImVector_resize (int)
+1	void	ImVector_resizeNil (int)
 2	void	ImVector_resizeT (int,const T)
 ImVec4_ImVec4	2
-1	nil	ImVec4_ImVec4 ()
+1	nil	ImVec4_ImVec4Nil ()
 2	nil	ImVec4_ImVec4Float (float,float,float,float)
 igValue	4
 1	void	igValueBool (const char*,bool)
@@ -11,16 +11,16 @@ igValue	4
 3	void	igValueUint (const char*,unsigned int)
 4	void	igValueFloat (const char*,float,const char*)
 igIsRectVisible	2
-1	bool	igIsRectVisible (const ImVec2)
+1	bool	igIsRectVisibleNil (const ImVec2)
 2	bool	igIsRectVisibleVec2 (const ImVec2,const ImVec2)
 igRadioButton	2
 1	bool	igRadioButtonBool (const char*,bool)
 2	bool	igRadioButtonIntPtr (const char*,int*,int)
 ImGuiTextRange_ImGuiTextRange	2
-1	nil	ImGuiTextRange_ImGuiTextRange ()
+1	nil	ImGuiTextRange_ImGuiTextRangeNil ()
 2	nil	ImGuiTextRange_ImGuiTextRangeStr (const char*,const char*)
 ImVector_back	2
-1	T*	ImVector_back ()
+1	T*	ImVector_backNil ()
 2	const T*	ImVector_back_const ()const
 igPlotHistogram	2
 1	void	igPlotHistogramFloatPtr (const char*,const float*,int,int,const char*,float,float,ImVec2,int)
@@ -53,7 +53,7 @@ igCombo	3
 2	bool	igComboStr (const char*,int*,const char*,int)
 3	bool	igComboFnPtr (const char*,int*,bool(*)(void*,int,const char**),void*,int,int)
 ImVector_erase	2
-1	T*	ImVector_erase (const T*)
+1	T*	ImVector_eraseNil (const T*)
 2	T*	ImVector_eraseTPtr (const T*,const T*)
 ImDrawList_AddText	2
 1	void	ImDrawList_AddTextVec2 (const ImVec2,ImU32,const char*,const char*)
@@ -62,16 +62,16 @@ igPushStyleVar	2
 1	void	igPushStyleVarFloat (ImGuiStyleVar,float)
 2	void	igPushStyleVarVec2 (ImGuiStyleVar,const ImVec2)
 igSetWindowFocus	2
-1	void	igSetWindowFocus ()
+1	void	igSetWindowFocusNil ()
 2	void	igSetWindowFocusStr (const char*)
 ImVector_end	2
-1	T*	ImVector_end ()
+1	T*	ImVector_endNil ()
 2	const T*	ImVector_end_const ()const
 igSetWindowSize	2
 1	void	igSetWindowSizeVec2 (const ImVec2,ImGuiCond)
 2	void	igSetWindowSizeStr (const char*,const ImVec2,ImGuiCond)
 ImVector_ImVector	2
-1	nil	ImVector_ImVector ()
+1	nil	ImVector_ImVectorNil ()
 2	nil	ImVector_ImVectorVector (const ImVector)
 igSetWindowCollapsed	2
 1	void	igSetWindowCollapsedBool (bool,ImGuiCond)
@@ -89,7 +89,7 @@ igListBox	2
 1	bool	igListBoxStr_arr (const char*,int*,const char* const[],int,int)
 2	bool	igListBoxFnPtr (const char*,int*,bool(*)(void*,int,const char**),void*,int,int)
 ImVec2_ImVec2	2
-1	nil	ImVec2_ImVec2 ()
+1	nil	ImVec2_ImVec2Nil ()
 2	nil	ImVec2_ImVec2Float (float,float)
 igCollapsingHeader	2
 1	bool	igCollapsingHeaderTreeNodeFlags (const char*,ImGuiTreeNodeFlags)
@@ -102,7 +102,7 @@ igGetColorU32	3
 2	ImU32	igGetColorU32Vec4 (const ImVec4)
 3	ImU32	igGetColorU32U32 (ImU32)
 ImColor_ImColor	5
-1	nil	ImColor_ImColor ()
+1	nil	ImColor_ImColorNil ()
 2	nil	ImColor_ImColorInt (int,int,int,int)
 3	nil	ImColor_ImColorU32 (ImU32)
 4	nil	ImColor_ImColorFloat (float,float,float,float)
@@ -111,13 +111,13 @@ igSelectable	2
 1	bool	igSelectableBool (const char*,bool,ImGuiSelectableFlags,const ImVec2)
 2	bool	igSelectableBoolPtr (const char*,bool*,ImGuiSelectableFlags,const ImVec2)
 ImVector_begin	2
-1	T*	ImVector_begin ()
+1	T*	ImVector_beginNil ()
 2	const T*	ImVector_begin_const ()const
 ImVector_front	2
-1	T*	ImVector_front ()
+1	T*	ImVector_frontNil ()
 2	const T*	ImVector_front_const ()const
 ImVector_find	2
-1	T*	ImVector_find (const T)
+1	T*	ImVector_findNil (const T)
 2	const T*	ImVector_find_const (const T)const
 igTreeNodeEx	3
 1	bool	igTreeNodeExStr (const char*,ImGuiTreeNodeFlags)

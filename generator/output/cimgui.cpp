@@ -7,7 +7,7 @@
 
 
 
-CIMGUI_API ImVec2* ImVec2_ImVec2(void)
+CIMGUI_API ImVec2* ImVec2_ImVec2Nil(void)
 {
     return IM_NEW(ImVec2)();
 }
@@ -19,7 +19,7 @@ CIMGUI_API ImVec2* ImVec2_ImVec2Float(float _x,float _y)
 {
     return IM_NEW(ImVec2)(_x,_y);
 }
-CIMGUI_API ImVec4* ImVec4_ImVec4(void)
+CIMGUI_API ImVec4* ImVec4_ImVec4Nil(void)
 {
     return IM_NEW(ImVec4)();
 }
@@ -215,7 +215,7 @@ CIMGUI_API void igSetWindowCollapsedBool(bool collapsed,ImGuiCond cond)
 {
     return ImGui::SetWindowCollapsed(collapsed,cond);
 }
-CIMGUI_API void igSetWindowFocus()
+CIMGUI_API void igSetWindowFocusNil()
 {
     return ImGui::SetWindowFocus();
 }
@@ -1264,7 +1264,7 @@ CIMGUI_API void igSetItemAllowOverlap()
 {
     return ImGui::SetItemAllowOverlap();
 }
-CIMGUI_API bool igIsRectVisible(const ImVec2 size)
+CIMGUI_API bool igIsRectVisibleNil(const ImVec2 size)
 {
     return ImGui::IsRectVisible(size);
 }
@@ -1560,7 +1560,7 @@ CIMGUI_API bool ImGuiTextFilter_IsActive(ImGuiTextFilter* self)
 {
     return self->IsActive();
 }
-CIMGUI_API ImGuiTextRange* ImGuiTextRange_ImGuiTextRange(void)
+CIMGUI_API ImGuiTextRange* ImGuiTextRange_ImGuiTextRangeNil(void)
 {
     return IM_NEW(ImGuiTextRange)();
 }
@@ -1720,7 +1720,7 @@ CIMGUI_API void ImGuiListClipper_End(ImGuiListClipper* self)
 {
     return self->End();
 }
-CIMGUI_API ImColor* ImColor_ImColor(void)
+CIMGUI_API ImColor* ImColor_ImColorNil(void)
 {
     return IM_NEW(ImColor)();
 }
