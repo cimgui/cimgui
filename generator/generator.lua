@@ -519,7 +519,7 @@ local function parseImGuiHeader(header,names)
 	end
 	parser.cname_overloads = cimgui_overloads
 	parser.manuals = cimgui_manuals
-	parser.UDTs = {"ImVec2","ImVec4","ImColor"}
+	parser.UDTs = {"ImVec2","ImVec4","ImColor","ImRect"}
 	
 	local pipe,err
 	if HAVE_COMPILER then
