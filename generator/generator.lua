@@ -643,13 +643,15 @@ if #implementations > 0 then
         local source = [[../imgui/examples/imgui_impl_]].. impl .. ".h "
         local locati = [[imgui_impl_]].. impl
         local pipe,err
-		local extra_includes = ""
+
 		local include_cmd = COMPILER=="cl" and [[ /I ]] or [[ -I ]]
+		local extra_includes = include_cmd.." ../imgui "
 		if config[impl] then
 			for j,inc in ipairs(config[impl]) do
 				extra_includes = extra_includes .. include_cmd .. inc .. " "
 			end
 		end
+
         if HAVE_COMPILER then
             pipe,err = io.popen(CPRE..extra_includes..source,"r")
         else
