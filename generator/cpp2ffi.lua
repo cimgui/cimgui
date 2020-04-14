@@ -256,6 +256,7 @@ local function getRE()
 	namespace_re = "^([^;{}]-namespace[^;{}]-%b{})",
 	class_re = "^([^;{}]-class[^;{}]-%b{}%s*;)",
 	typedef_re = "^\n*(typedef[^;]+;)",
+	typedef_st_re = "^\n*(typedef%s+struct%s*%b{}.+;)",
 	functypedef_re = "^\n*%s*(typedef[%w%s%*_]+%(%s*%*%s*[%w_]+%s*%)%s*%b()%s*;)",
 	functypedef_re = "^\n*%s*(typedef[%w%s%*_]+%([^*]*%*%s*[%w_]+%s*%)%s*%b()%s*;)",
 	--vardef_re = "^\n*([^;{}%(%)]+;)",
@@ -267,7 +268,7 @@ local function getRE()
 	functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)%s*;"
 	}
 	
-	local resN = {"functypedef_re","functype_re","function_re","functionD_re","struct_re","enum_re","union_re","namespace_re","class_re","typedef_re","vardef_re"}
+	local resN = {"functypedef_re","functype_re","function_re","functionD_re","typedef_st_re","struct_re","enum_re","union_re","namespace_re","class_re","typedef_re","vardef_re"}
 	
 	return res,resN
 end
@@ -298,7 +299,7 @@ local function parseItems(txt,dumpit)
 				ini = e + 1
 				if dumpit then
 					print(item)
-					print(ire,"------------------------------------------------------")
+					print(ire,re_name,"------------------------------------------------------")
 				end
 				break
 			end
@@ -944,7 +945,7 @@ function M.Parser()
 				local namespace = it.item:match("namespace%s+(%S+)")
 				local nspparr,itemsnsp = parseItems(nsp)
 				for insp,itnsp in ipairs(nspparr) do
-					if itnsp.re_name == "struct_re" then --or itnsp.re_name == "functionD_re" then
+					if itnsp.re_name == "struct_re"  or itnsp.re_name == "typedef_st_re" then
 						--print("in mamespace",itnsp.item,namespace)
 						table.insert(outtab,itnsp.item)
 					end
