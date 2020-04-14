@@ -16,26 +16,27 @@ elseif COMPILER == "cl" then
     CTEST = COMPILER
 else
     print("Working without compiler ")
+	error("cant work with "..COMPILER.." compiler")
 end
 --test compiler present
 local HAVE_COMPILER = false
-if CTEST then
-    local pipe,err = io.popen(CTEST,"r")
-    if pipe then
-        local str = pipe:read"*a"
-        print(str)
-        pipe:close()
-        if str=="" then
-            HAVE_COMPILER = false
-        else
-            HAVE_COMPILER = true
-        end
-    else
+
+local pipe,err = io.popen(CTEST,"r")
+if pipe then
+    local str = pipe:read"*a"
+    print(str)
+    pipe:close()
+    if str=="" then
         HAVE_COMPILER = false
-        print(err)
+    else
+        HAVE_COMPILER = true
     end
-    assert(HAVE_COMPILER,"gcc, clang or cl needed to run script")
-end --CTEST
+else
+    HAVE_COMPILER = false
+    print(err)
+end
+assert(HAVE_COMPILER,"gcc, clang or cl needed to run script")
+
 
 print("HAVE_COMPILER",HAVE_COMPILER)
 print("INTERNAL_GENERATION",INTERNAL_GENERATION)
@@ -74,95 +75,6 @@ local cimgui_header =
 local gdefines = {} --for FLT_MAX and others
 --------------------------------------------------------------------------
 --helper functions
-
-
----------------------------minimal preprocessor without compiler for ImGui.h
-local function filelines(file,locats)
-    local split_comment = require"cpp2ffi".split_comment
-    local iflevels = {}
-   --generated known prepros
-local prepro = {
-["#if"]={
-    [   "defined(__clang__) || defined(__GNUC__)"       ]=false,
-    [   "defined(__clang__)"    ]=false,
-    [   "defined(_MSC_VER) && !defined(__clang__)"      ]=false,
-    [   "!defined(IMGUI_DISABLE_INCLUDE_IMCONFIG_H) || defined(IMGUI_INCLUDE_IMCONFIG_H)"       ]=false,
-    [   "!defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)     \\"        ]=false,
-},
-["#elif"]={
-    [   "defined(__GNUC__) && __GNUC__ >= 8"    ]=false,
-    [   "(defined(__clang__) || defined(__GNUC__)) && (__cplusplus < 201100)"   ]=false,
-},
-["#ifdef"]={
-    [   "IM_VEC4_CLASS_EXTRA"   ]=false,
-    [   "IMGUI_USER_CONFIG"     ]=false,
-    [   "IMGUI_INCLUDE_IMGUI_USER_H"    ]=false,
-    [   "IMGUI_USE_BGRA_PACKED_COLOR"   ]=false,
-    [   "IM_VEC2_CLASS_EXTRA"   ]=false,
-},
-["#ifndef"]={
-    [   "IMGUI_API"     ]=false,
-    [   "IMGUI_IMPL_API"        ]=false,
-    [   "IMGUI_OVERRIDE_DRAWVERT_STRUCT_LAYOUT" ]=true,
-    [   "IM_ASSERT"     ]=false,
-    [   "ImTextureID"   ]=true,
-    [   "ImDrawIdx"     ]=true,
-    [   "IMGUI_DISABLE_OBSOLETE_FUNCTIONS"      ]=false,
-},
-}
-
-    local function prepro_boolif(pre,cond)
-        local conds = prepro[pre]
-        assert(conds,pre.." has no conds-----------------------------")
-        local res = conds[cond]
-        --assert(type(res)~="nil",cond.." not found")
-        if type(res)=="nil" then
-            print(pre,cond,"not found in precompiler database, returning false.")
-            res = false
-        end
-        return res
-    end
-    local function location_it()
-        repeat
-            local line = file:read"*l"
-
-            if not line then return nil end
-            line,_ = split_comment(line)
-            --if line:sub(1,1) == "#" then
-            if line:match("^%s*#") then
-                
-                local pre,cond = line:match("^%s*(#%S*)%s+(.*)%s*$")
-                if line:match("#if") then 
-                    iflevels[#iflevels +1 ] = prepro_boolif(pre,cond)
-                elseif line:match("#endif") then
-                    iflevels[#iflevels] = nil
-                elseif line:match("#elif") then
-                    if not iflevels[#iflevels] then
-                        iflevels[#iflevels] = prepro_boolif(pre,cond)
-                    else --was true
-                        iflevels[#iflevels] = false
-                    end
-                elseif line:match("#else") then
-                    iflevels[#iflevels] = not iflevels[#iflevels]
-                else
-                    if not (pre:match("#define") or pre:match"#include" or pre:match"#pragma") then
-                        print("not expected preprocessor directive ",pre)
-                    end
-                end
-                -- skip
-            elseif #iflevels == 0 or iflevels[#iflevels] then
-                -- drop IMGUI_APIX
-                line = line:gsub("IMGUI_IMPL_API","")
-                -- drop IMGUI_API
-                line = line:gsub("IMGUI_API","")
-                return line,locats[1]
-            end
-        until false
-    end
-    return location_it
-end
-
-
 --------------------------------functions for C generation
 --load parser module
 local cpp2ffi = require"cpp2ffi"
@@ -505,9 +417,8 @@ pipe:close()
 cimgui_header = cimgui_header:gsub("XXX",imgui_version)
 print("IMGUI_VERSION",imgui_version)
 --get some defines----------------------------
-if HAVE_COMPILER then
-    gdefines = get_defines{"IMGUI_VERSION","FLT_MAX"}
-end                                 
+gdefines = get_defines{"IMGUI_VERSION","FLT_MAX"}
+                                
 
 --funtion for parsing imgui headers
 local function parseImGuiHeader(header,names)
@@ -521,21 +432,16 @@ local function parseImGuiHeader(header,names)
 	parser.manuals = cimgui_manuals
 	parser.UDTs = {"ImVec2","ImVec4","ImColor","ImRect"}
 	
-	local pipe,err
-	if HAVE_COMPILER then
-		pipe,err = io.popen(CPRE..header,"r")
-	else
-		pipe,err = io.open(header,"r")
-	end
+	local pipe,err = io.popen(CPRE..header,"r")
 	
 	if not pipe then
-		error("could not execute gcc "..err)
+		error("could not execute COMPILER "..err)
 	end
 	
-	local iterator = (HAVE_COMPILER and cpp2ffi.location) or filelines
+	local iterator = cpp2ffi.location
 	
-	local tableo = {}
 	--[[
+	local tableo = {}
 	local line
 	repeat 
 		line =pipe:read"*l"
@@ -544,7 +450,7 @@ local function parseImGuiHeader(header,names)
 	cpp2ffi.save_data("cdefs1.lua",table.concat(tableo,"\n"))
 	--]]
 	for line,loca,loca2 in iterator(pipe,names,{},COMPILER) do
-		parser:insert(line)
+		parser:insert(line, loca)
 		--table.insert(tableo,line)
 		--print(loca,loca2)
 	end
@@ -564,38 +470,6 @@ else
 	parser1 = parseImGuiHeader([[../imgui/imgui.h]],{[[imgui]]})
 end
 parser1:do_parse()
-
----------- generate cimgui_internal.h
---[=[
-local parser1i = parseImGuiHeader([[../imgui/imgui_internal.h]],{[[imgui_internal]],[[imstb_textedit]]})
-parser1i:do_parse()
-local outpre,outpost = parser1i:gen_structs_and_enums()
---avoid T
-parser1i.templates.ImVector.T = nil
-for k,v in pairs(parser1i.templates.ImVector) do
-	if parser1.templates.ImVector[k] then parser1i.templates.ImVector[k]=nil end
-end
-local outtab = {}
-generate_templates(outtab,parser1i.templates)
---drop first
-table.remove(outtab,1)
-local cstructsstr = outpre..table.concat(outtab,"")..outpost..(extra or "")
-local cfuncsstr = func_header_generate(parser1i)
-save_data("./output/cimgui_internal.h",cimgui_header,"#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n",cstructsstr,"\n#endif\n")--,cfuncsstr)
-copyfile("./output/cimgui_internal.h", "../cimgui_internal.h")
---]=]
----------- generate now structs_and_enums_i
---[=[
-save_data([[../imgui/temp.h]],[[#include "imgui.h"
-#include "imgui_internal.h"]])
-local parser1i = parseImGuiHeader([[../imgui/temp.h]],{[[imgui]],[[imgui_internal]],[[imstb_textedit]]})
-os.remove([[../imgui/temp.h]])
-parser1i:do_parse()
-local structs_and_enums_table_i = parser1i:gen_structs_and_enums_table()
-save_data("./output/structs_and_enums_i.lua",serializeTableF(structs_and_enums_table_i))
---]=]
-
-----------------------
 
 save_data("./output/overloads.txt",parser1.overloadstxt)
 cimgui_generation(parser1)
@@ -634,7 +508,7 @@ save_data("./output/typedefs_dict.lua",serializeTableF(parser1.typedefs_dict))
 local parser2
 
 if #implementations > 0 then
-
+	print("------------------implementations generation with "..COMPILER.."------------------------")
     parser2 = cpp2ffi.Parser()
 	
 	local config = require"config_generator"
@@ -642,7 +516,6 @@ if #implementations > 0 then
     for i,impl in ipairs(implementations) do
         local source = [[../imgui/examples/imgui_impl_]].. impl .. ".h "
         local locati = [[imgui_impl_]].. impl
-        local pipe,err
 
 		local define_cmd = COMPILER=="cl" and [[ /E /D]] or [[ -E -D]]
 		local extra_defines = ""
@@ -655,20 +528,17 @@ if #implementations > 0 then
 			end
 		end
 
-        if HAVE_COMPILER then
-            pipe,err = io.popen(CPRE..extra_defines..extra_includes..source,"r")
-        else
-            pipe,err = io.open(source,"r")
-        end
+        local pipe,err = io.popen(CPRE..extra_defines..extra_includes..source,"r")
+
         if not pipe then
             error("could not get file: "..err)
         end
         
-        local iterator = (HAVE_COMPILER and cpp2ffi.location) or filelines
+        local iterator = cpp2ffi.location
         
         for line,locat in iterator(pipe,{locati},{},COMPILER) do
             --local line, comment = split_comment(line)
-			parser2:insert(line)
+			parser2:insert(line,locat)
         end
         pipe:close()
     end

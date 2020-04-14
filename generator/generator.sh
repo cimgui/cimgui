@@ -12,7 +12,7 @@
 # impl_definitions.lua for implementation function definitions
 
 #process  files
-# arg[1] compiler name gcc, clang, cl or nocompiler
+# arg[1] compiler name gcc, clang, or cl
 # arg[2] imgui_internal functions generation: true or false
 # arg[3..n] name of implementations to generate
 luajit ./generator.lua gcc true glfw opengl3 opengl2 sdl
