@@ -800,8 +800,8 @@ function M.Parser()
 						linet = linet:gsub("typedef ","")
 						linet = linet:gsub("%(%*("..key..")%)","(*)")
 						self.typedefs_dict[key] = linet
-					else
-						print("not found function typedef")
+					elseif not line:match"typedef%s*struct" then --discard typedef struct
+						print("typedef not found")
 						print(key,value,line)
 					end
 				end
