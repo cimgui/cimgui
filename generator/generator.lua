@@ -644,6 +644,9 @@ if #implementations > 0 then
         local locati = [[imgui_impl_]].. impl
         local pipe,err
 
+		local define_cmd = COMPILER=="cl" and [[ /E /D]] or [[ -E -D]]
+		local extra_defines = ""
+		if impl == "opengl3" then extra_defines = define_cmd .. "IMGUI_IMPL_OPENGL_LOADER_GL3W " end
 		local include_cmd = COMPILER=="cl" and [[ /I ]] or [[ -I ]]
 		local extra_includes = include_cmd.." ../imgui "
 		if config[impl] then
@@ -653,7 +656,7 @@ if #implementations > 0 then
 		end
 
         if HAVE_COMPILER then
-            pipe,err = io.popen(CPRE..extra_includes..source,"r")
+            pipe,err = io.popen(CPRE..extra_defines..extra_includes..source,"r")
         else
             pipe,err = io.open(source,"r")
         end
