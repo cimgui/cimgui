@@ -415,6 +415,10 @@ while true do
 end
 pipe:close()
 cimgui_header = cimgui_header:gsub("XXX",imgui_version)
+if INTERNAL_GENERATION then
+	cimgui_header = cimgui_header..[[//with imgui_internal.h api
+]]
+end
 print("IMGUI_VERSION",imgui_version)
 --get some defines----------------------------
 gdefines = get_defines{"IMGUI_VERSION","FLT_MAX"}
