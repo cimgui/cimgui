@@ -2679,8 +2679,9 @@
         "type": "ImDrawListFlags"
       },
       {
-        "name": "1]",
-        "type": "ImVec2 ArcFastVtx[12 *"
+        "name": "ArcFastVtx[12*1]",
+        "size": 12,
+        "type": "ImVec2"
       },
       {
         "name": "CircleSegmentCounts[64]",
@@ -4851,8 +4852,8 @@
         "type": "ImGuiStyleVar"
       },
       {
-        "name": "}",
-        "type": "union { int BackupInt[2]; float BackupFloat[2];"
+        "name": "",
+        "type": "union { int BackupInt[2]; float BackupFloat[2];}"
       }
     ],
     "ImGuiTabBar": [
