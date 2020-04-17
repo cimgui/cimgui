@@ -130,6 +130,8 @@ local function clean_spaces(cad)
     cad = strip(cad)
     cad = cad:gsub("%s+"," ") --not more than one space
     cad = cad:gsub("%s*([%(%),=:%+])%s*","%1") --not spaces with ( , ) or ( = ) or ( : ) or + 
+	--clean %d * %d (could be done above but type*name should be treated different in other places)
+	cad = cad:gsub("(%d)%s*(%*)%s*(%d)","%1%2%3")
     return cad
 end
 
@@ -1450,11 +1452,26 @@ M.location = location
 
 --[=[
 -- tests
-local line = [[void          DockBuilderCopyDockSpace(ImGuiID src_dockspace_id, ImGuiID dst_dockspace_id, ImVector<const char*>* in_window_remap_pairs);]]
+local line = [[struct ImDrawListSharedData
+{
+    ImVec2 TexUvWhitePixel;
+    ImFont* Font;
+    float FontSize;
+    float CurveTessellationTol;
+    float CircleSegmentMaxError;
+    ImVec4 ClipRectFullscreen;
+    ImDrawListFlags InitialFlags;
+    ImVec2 ArcFastVtx[12 * 1];
+    ImU8 CircleSegmentCounts[64];
+    ImDrawListSharedData();
+    void SetCircleSegmentMaxError(float max_error);
+};]]
 local parser = M.Parser()
 parser:insert(line)
 parser:do_parse()
-M.prtable(parser)
+--M.prtable(parser)
+M.prtable(parser:gen_structs_and_enums_table())
 --]=]
+--print(clean_spaces[[ImVec2 ArcFastVtx[12 * 1];]])
 
 return M
