@@ -1019,6 +1019,12 @@ function M.Parser()
 				template_type = template_type:gsub("Ptr","%*")
 			end
 			for name in rest:gmatch("([^%s,;]+)%s?[,;]") do
+				--unnamed unions
+				local union_re = "^([^;{}]-union[^;{}]-%b{}[%s%w_%(%)]*;)"
+				if line:match(union_re) and name == "}" then
+					typen = typen..name
+					name = ""
+				end
 				local namebitfield,bitfield = name:match("([^:]+):(%d+)") --take care of bitfields
 				table.insert(outtab,{type=typen,template_type=template_type,name=namebitfield or name,bitfield=bitfield})
 			end
