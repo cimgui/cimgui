@@ -13,7 +13,7 @@ Initially cimgui was developed by Stephan Dilly as hand-written code but lately 
 Notes:
 * currently this wrapper is based on version [1.76 of Dear ImGui with internal api]
 * only functions, structs and enums from imgui.h (an optionally imgui_internal.h) are wrapped.
-* if you are interested in imgui implementations you should look LuaJIT-ImGui project.
+* if you are interested in imgui implementations you should look [LuaJIT-ImGui](https://github.com/sonoro1234/LuaJIT-ImGui) project.
 * All naming is algorithmic except for those names that were coded in cimgui_overloads table (https://github.com/cimgui/cimgui/blob/master/generator/generator.lua#L60). In the official version this table is empty.
 * Current overloaded function names can be found in (https://github.com/cimgui/cimgui/blob/master/generator/output/overloads.txt)
 
@@ -87,4 +87,10 @@ Notes:
 * [imgui-rs](https://github.com/Gekkio/imgui-rs)
 * [imgui-pas](https://github.com/dpethes/imgui-pas)
 * [odin-imgui](https://github.com/ThisDrunkDane/odin-imgui)
-* [LuaJIT-imgui](https://github.com/sonoro1234/LuaJIT-ImGui)
+* [LuaJIT-ImGui](https://github.com/sonoro1234/LuaJIT-ImGui)
+
+# C examples based on cimgui
+
+* [sdl2-cimgui-demo](https://github.com/haxpor/sdl2-cimgui-demo)
+* [cimgui_c_sdl2_example](https://github.com/canoi12/cimgui_c_sdl2_example/)
+* [cimgui-c-example](https://github.com/peko/cimgui-c-example) with GLFW
