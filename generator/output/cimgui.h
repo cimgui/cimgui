@@ -15,7 +15,11 @@
     #define snprintf sprintf_s
     #endif
 #else
-    #define API
+    #ifdef __GNUC__
+        #define API  __attribute__((__visibility__("default")))
+    #else
+        #define API
+    #endif
 #endif
 
 #if defined __cplusplus
