@@ -136,7 +136,8 @@ local function clean_spaces(cad)
 end
 
 ------------------------------------
-local function parse_enum_value(value, allenums)
+local function parse_enum_value(enline, allenums)
+	local value = enline.value
 	local function clean(val)
 		if type(val)=="string" then
 			return clean_spaces(val)
@@ -156,13 +157,13 @@ local function parse_enum_value(value, allenums)
 		--must be several and operators
 		--precedence order (hope not ())
 		assert(not value:match("[%(%)]"))
-		local several,seps = strsplit(value,"([<>&|~]+)") 
-		--M.prtable(t.value,several,seps)
+		local several,seps = strsplit(value,"([<>&|~%+]+)") 
+		--M.prtable(value,several,seps)
 		assert(#seps+1==#several)
 		
 		local i = 1
 		local ik = 1
-		local sepk = {"~","<<",">>","&","^","|"}
+		local sepk = {"~","<<",">>","&","^","|","+"}
 		while(#seps>0) do
 			local sep = sepk[ik]
 			local v = seps[i]
@@ -184,6 +185,8 @@ local function parse_enum_value(value, allenums)
 					error"^ operator still not done"
 				elseif v=="|" then
 					several[i] = bit.bor(val1,val2)
+				elseif v=="+" then
+					several[i] = val1 + val2
 				else
 					error("unknown operator "..v)
 				end
@@ -199,9 +202,10 @@ local function parse_enum_value(value, allenums)
 				i = 1
 			end
 		end
-		if #seps>0 then
-			print("value",value)
+		if #seps>0 or type(several[1])~="number" then
+			M.prtable("enline",enline)
 			M.prtable(several,seps)
+			M.prtable(allenums)
 		end
 		assert(#seps==0)
 		assert(type(several[1])=="number")
@@ -1065,10 +1069,12 @@ function M.Parser()
 			end
 		end
 		--then structs and enums
+		local enumsordered = {}
 		for i,it in ipairs(itemsarr) do
 			if it.re_name == "enum_re" then
 				local enumname = it.item:match"^%s*enum%s+([^%s;{}]+)"
 				outtab.enums[enumname] = {}
+				table.insert(enumsordered,enumname)
 				self.order[enumname] = i
 				local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
 				local enumarr = str_split(inner,",")
@@ -1079,7 +1085,15 @@ function M.Parser()
 					else --increment by one
 						local name = line:match("%s*([^,]+)")
 						local enum_table = outtab.enums[enumname]
-						local value = enum_table[#enum_table] and (enum_table[#enum_table].value + 1) or 0
+						local prevvalue = enum_table[#enum_table] and enum_table[#enum_table].value
+						local value --= enum_table[#enum_table] and (enum_table[#enum_table].value + 1) or 0
+						if not prevvalue then
+							value = 0
+						elseif tonumber(prevvalue) then
+							value = prevvalue +1
+						else --should be string
+							value = prevvalue .. "+1"
+						end
 						table.insert(outtab.enums[enumname],{name=name,value=value})
 					end
 				end
@@ -1119,9 +1133,11 @@ function M.Parser()
 		--calcule size of name[16+1] [xxx_COUNT]
 		local allenums = {}
 		--first calc_value in enums
-		for enumname,enum in pairs(outtab.enums) do
+		for i,enumname in ipairs(enumsordered) do
+		--for enumname,enum in pairs(outtab.enums) do
+			local enum = outtab.enums[enumname]
 			for i,t in ipairs(enum) do
-				t.calc_value = parse_enum_value(t.value,allenums)
+				t.calc_value = parse_enum_value(t,allenums)
 				assert(t.calc_value)
 				allenums[t.name] = t.calc_value
 			end
