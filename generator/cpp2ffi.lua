@@ -1094,7 +1094,9 @@ function M.Parser()
 						else --should be string
 							value = prevvalue .. "+1"
 						end
+						if name then --avoid last , if present
 						table.insert(outtab.enums[enumname],{name=name,value=value})
+						end
 					end
 				end
 			elseif it.re_name == "struct_re" then
