@@ -107,6 +107,30 @@
       "stname": ""
     }
   ],
+  "ImGui_ImplGlfw_MonitorCallback": [
+    {
+      "args": "(GLFWmonitor* monitor,int event)",
+      "argsT": [
+        {
+          "name": "monitor",
+          "type": "GLFWmonitor*"
+        },
+        {
+          "name": "event",
+          "type": "int"
+        }
+      ],
+      "argsoriginal": "(GLFWmonitor* monitor,int event)",
+      "call_args": "(monitor,event)",
+      "cimguiname": "ImGui_ImplGlfw_MonitorCallback",
+      "defaults": [],
+      "funcname": "ImGui_ImplGlfw_MonitorCallback",
+      "ov_cimguiname": "ImGui_ImplGlfw_MonitorCallback",
+      "ret": "void",
+      "signature": "(GLFWmonitor*,int)",
+      "stname": ""
+    }
+  ],
   "ImGui_ImplGlfw_MouseButtonCallback": [
     {
       "args": "(GLFWwindow* window,int button,int action,int mods)",

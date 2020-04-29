@@ -4610,6 +4610,270 @@
       "stname": "ImGuiContext"
     }
   ],
+  "ImGuiDockNode_GetMergedFlags": [
+    {
+      "args": "(ImGuiDockNode* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiDockNode*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiDockNode_GetMergedFlags",
+      "defaults": [],
+      "funcname": "GetMergedFlags",
+      "ov_cimguiname": "ImGuiDockNode_GetMergedFlags",
+      "ret": "ImGuiDockNodeFlags",
+      "signature": "()const",
+      "stname": "ImGuiDockNode"
+    }
+  ],
+  "ImGuiDockNode_ImGuiDockNode": [
+    {
+      "args": "(ImGuiID id)",
+      "argsT": [
+        {
+          "name": "id",
+          "type": "ImGuiID"
+        }
+      ],
+      "argsoriginal": "(ImGuiID id)",
+      "call_args": "(id)",
+      "cimguiname": "ImGuiDockNode_ImGuiDockNode",
+      "constructor": true,
+      "defaults": [],
+      "funcname": "ImGuiDockNode",
+      "ov_cimguiname": "ImGuiDockNode_ImGuiDockNode",
+      "signature": "(ImGuiID)",
+      "stname": "ImGuiDockNode"
+    }
+  ],
+  "ImGuiDockNode_IsCentralNode": [
+    {
+      "args": "(ImGuiDockNode* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiDockNode*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiDockNode_IsCentralNode",
+      "defaults": [],
+      "funcname": "IsCentralNode",
+      "ov_cimguiname": "ImGuiDockNode_IsCentralNode",
+      "ret": "bool",
+      "signature": "()const",
+      "stname": "ImGuiDockNode"
+    }
+  ],
+  "ImGuiDockNode_IsDockSpace": [
+    {
+      "args": "(ImGuiDockNode* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiDockNode*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiDockNode_IsDockSpace",
+      "defaults": [],
+      "funcname": "IsDockSpace",
+      "ov_cimguiname": "ImGuiDockNode_IsDockSpace",
+      "ret": "bool",
+      "signature": "()const",
+      "stname": "ImGuiDockNode"
+    }
+  ],
+  "ImGuiDockNode_IsEmpty": [
+    {
+      "args": "(ImGuiDockNode* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiDockNode*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiDockNode_IsEmpty",
+      "defaults": [],
+      "funcname": "IsEmpty",
+      "ov_cimguiname": "ImGuiDockNode_IsEmpty",
+      "ret": "bool",
+      "signature": "()const",
+      "stname": "ImGuiDockNode"
+    }
+  ],
+  "ImGuiDockNode_IsFloatingNode": [
+    {
+      "args": "(ImGuiDockNode* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiDockNode*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiDockNode_IsFloatingNode",
+      "defaults": [],
+      "funcname": "IsFloatingNode",
+      "ov_cimguiname": "ImGuiDockNode_IsFloatingNode",
+      "ret": "bool",
+      "signature": "()const",
+      "stname": "ImGuiDockNode"
+    }
+  ],
+  "ImGuiDockNode_IsHiddenTabBar": [
+    {
+      "args": "(ImGuiDockNode* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiDockNode*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiDockNode_IsHiddenTabBar",
+      "defaults": [],
+      "funcname": "IsHiddenTabBar",
+      "ov_cimguiname": "ImGuiDockNode_IsHiddenTabBar",
+      "ret": "bool",
+      "signature": "()const",
+      "stname": "ImGuiDockNode"
+    }
+  ],
+  "ImGuiDockNode_IsLeafNode": [
+    {
+      "args": "(ImGuiDockNode* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiDockNode*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiDockNode_IsLeafNode",
+      "defaults": [],
+      "funcname": "IsLeafNode",
+      "ov_cimguiname": "ImGuiDockNode_IsLeafNode",
+      "ret": "bool",
+      "signature": "()const",
+      "stname": "ImGuiDockNode"
+    }
+  ],
+  "ImGuiDockNode_IsNoTabBar": [
+    {
+      "args": "(ImGuiDockNode* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiDockNode*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiDockNode_IsNoTabBar",
+      "defaults": [],
+      "funcname": "IsNoTabBar",
+      "ov_cimguiname": "ImGuiDockNode_IsNoTabBar",
+      "ret": "bool",
+      "signature": "()const",
+      "stname": "ImGuiDockNode"
+    }
+  ],
+  "ImGuiDockNode_IsRootNode": [
+    {
+      "args": "(ImGuiDockNode* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiDockNode*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiDockNode_IsRootNode",
+      "defaults": [],
+      "funcname": "IsRootNode",
+      "ov_cimguiname": "ImGuiDockNode_IsRootNode",
+      "ret": "bool",
+      "signature": "()const",
+      "stname": "ImGuiDockNode"
+    }
+  ],
+  "ImGuiDockNode_IsSplitNode": [
+    {
+      "args": "(ImGuiDockNode* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiDockNode*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiDockNode_IsSplitNode",
+      "defaults": [],
+      "funcname": "IsSplitNode",
+      "ov_cimguiname": "ImGuiDockNode_IsSplitNode",
+      "ret": "bool",
+      "signature": "()const",
+      "stname": "ImGuiDockNode"
+    }
+  ],
+  "ImGuiDockNode_Rect": [
+    {
+      "args": "(ImRect *pOut,ImGuiDockNode* self)",
+      "argsT": [
+        {
+          "name": "pOut",
+          "type": "ImRect*"
+        },
+        {
+          "name": "self",
+          "type": "ImGuiDockNode*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiDockNode_Rect",
+      "defaults": [],
+      "funcname": "Rect",
+      "nonUDT": 1,
+      "ov_cimguiname": "ImGuiDockNode_Rect",
+      "ret": "void",
+      "signature": "()const",
+      "stname": "ImGuiDockNode"
+    }
+  ],
+  "ImGuiDockNode_destroy": [
+    {
+      "args": "(ImGuiDockNode* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiDockNode*"
+        }
+      ],
+      "call_args": "(self)",
+      "cimguiname": "ImGuiDockNode_destroy",
+      "defaults": [],
+      "destructor": true,
+      "ov_cimguiname": "ImGuiDockNode_destroy",
+      "ret": "void",
+      "signature": "(ImGuiDockNode*)",
+      "stname": "ImGuiDockNode"
+    }
+  ],
   "ImGuiIO_AddInputCharacter": [
     {
       "args": "(ImGuiIO* self,unsigned int c)",
@@ -5714,6 +5978,74 @@
       "ret": "void",
       "signature": "(ImGuiPayload*)",
       "stname": "ImGuiPayload"
+    }
+  ],
+  "ImGuiPlatformIO_ImGuiPlatformIO": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiPlatformIO_ImGuiPlatformIO",
+      "constructor": true,
+      "defaults": [],
+      "funcname": "ImGuiPlatformIO",
+      "ov_cimguiname": "ImGuiPlatformIO_ImGuiPlatformIO",
+      "signature": "()",
+      "stname": "ImGuiPlatformIO"
+    }
+  ],
+  "ImGuiPlatformIO_destroy": [
+    {
+      "args": "(ImGuiPlatformIO* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiPlatformIO*"
+        }
+      ],
+      "call_args": "(self)",
+      "cimguiname": "ImGuiPlatformIO_destroy",
+      "defaults": [],
+      "destructor": true,
+      "ov_cimguiname": "ImGuiPlatformIO_destroy",
+      "ret": "void",
+      "signature": "(ImGuiPlatformIO*)",
+      "stname": "ImGuiPlatformIO"
+    }
+  ],
+  "ImGuiPlatformMonitor_ImGuiPlatformMonitor": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiPlatformMonitor_ImGuiPlatformMonitor",
+      "constructor": true,
+      "defaults": [],
+      "funcname": "ImGuiPlatformMonitor",
+      "ov_cimguiname": "ImGuiPlatformMonitor_ImGuiPlatformMonitor",
+      "signature": "()",
+      "stname": "ImGuiPlatformMonitor"
+    }
+  ],
+  "ImGuiPlatformMonitor_destroy": [
+    {
+      "args": "(ImGuiPlatformMonitor* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiPlatformMonitor*"
+        }
+      ],
+      "call_args": "(self)",
+      "cimguiname": "ImGuiPlatformMonitor_destroy",
+      "defaults": [],
+      "destructor": true,
+      "ov_cimguiname": "ImGuiPlatformMonitor_destroy",
+      "ret": "void",
+      "signature": "(ImGuiPlatformMonitor*)",
+      "stname": "ImGuiPlatformMonitor"
     }
   ],
   "ImGuiPopupData_ImGuiPopupData": [
@@ -7129,6 +7461,228 @@
       "ret": "void",
       "signature": "(char,ImVector_ImGuiTextRange*)const",
       "stname": "ImGuiTextRange"
+    }
+  ],
+  "ImGuiViewportP_ClearRequestFlags": [
+    {
+      "args": "(ImGuiViewportP* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiViewportP*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiViewportP_ClearRequestFlags",
+      "defaults": [],
+      "funcname": "ClearRequestFlags",
+      "ov_cimguiname": "ImGuiViewportP_ClearRequestFlags",
+      "ret": "void",
+      "signature": "()",
+      "stname": "ImGuiViewportP"
+    }
+  ],
+  "ImGuiViewportP_GetMainRect": [
+    {
+      "args": "(ImRect *pOut,ImGuiViewportP* self)",
+      "argsT": [
+        {
+          "name": "pOut",
+          "type": "ImRect*"
+        },
+        {
+          "name": "self",
+          "type": "ImGuiViewportP*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiViewportP_GetMainRect",
+      "defaults": [],
+      "funcname": "GetMainRect",
+      "nonUDT": 1,
+      "ov_cimguiname": "ImGuiViewportP_GetMainRect",
+      "ret": "void",
+      "signature": "()const",
+      "stname": "ImGuiViewportP"
+    }
+  ],
+  "ImGuiViewportP_GetWorkRect": [
+    {
+      "args": "(ImRect *pOut,ImGuiViewportP* self)",
+      "argsT": [
+        {
+          "name": "pOut",
+          "type": "ImRect*"
+        },
+        {
+          "name": "self",
+          "type": "ImGuiViewportP*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiViewportP_GetWorkRect",
+      "defaults": [],
+      "funcname": "GetWorkRect",
+      "nonUDT": 1,
+      "ov_cimguiname": "ImGuiViewportP_GetWorkRect",
+      "ret": "void",
+      "signature": "()const",
+      "stname": "ImGuiViewportP"
+    }
+  ],
+  "ImGuiViewportP_ImGuiViewportP": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiViewportP_ImGuiViewportP",
+      "constructor": true,
+      "defaults": [],
+      "funcname": "ImGuiViewportP",
+      "ov_cimguiname": "ImGuiViewportP_ImGuiViewportP",
+      "signature": "()",
+      "stname": "ImGuiViewportP"
+    }
+  ],
+  "ImGuiViewportP_destroy": [
+    {
+      "args": "(ImGuiViewportP* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiViewportP*"
+        }
+      ],
+      "call_args": "(self)",
+      "cimguiname": "ImGuiViewportP_destroy",
+      "defaults": [],
+      "destructor": true,
+      "ov_cimguiname": "ImGuiViewportP_destroy",
+      "ret": "void",
+      "signature": "(ImGuiViewportP*)",
+      "stname": "ImGuiViewportP"
+    }
+  ],
+  "ImGuiViewport_GetWorkPos": [
+    {
+      "args": "(ImVec2 *pOut,ImGuiViewport* self)",
+      "argsT": [
+        {
+          "name": "pOut",
+          "type": "ImVec2*"
+        },
+        {
+          "name": "self",
+          "type": "ImGuiViewport*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiViewport_GetWorkPos",
+      "defaults": [],
+      "funcname": "GetWorkPos",
+      "nonUDT": 1,
+      "ov_cimguiname": "ImGuiViewport_GetWorkPos",
+      "ret": "void",
+      "signature": "()",
+      "stname": "ImGuiViewport"
+    }
+  ],
+  "ImGuiViewport_GetWorkSize": [
+    {
+      "args": "(ImVec2 *pOut,ImGuiViewport* self)",
+      "argsT": [
+        {
+          "name": "pOut",
+          "type": "ImVec2*"
+        },
+        {
+          "name": "self",
+          "type": "ImGuiViewport*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiViewport_GetWorkSize",
+      "defaults": [],
+      "funcname": "GetWorkSize",
+      "nonUDT": 1,
+      "ov_cimguiname": "ImGuiViewport_GetWorkSize",
+      "ret": "void",
+      "signature": "()",
+      "stname": "ImGuiViewport"
+    }
+  ],
+  "ImGuiViewport_ImGuiViewport": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiViewport_ImGuiViewport",
+      "constructor": true,
+      "defaults": [],
+      "funcname": "ImGuiViewport",
+      "ov_cimguiname": "ImGuiViewport_ImGuiViewport",
+      "signature": "()",
+      "stname": "ImGuiViewport"
+    }
+  ],
+  "ImGuiViewport_destroy": [
+    {
+      "args": "(ImGuiViewport* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiViewport*"
+        }
+      ],
+      "call_args": "(self)",
+      "cimguiname": "ImGuiViewport_destroy",
+      "defaults": [],
+      "destructor": true,
+      "ov_cimguiname": "ImGuiViewport_destroy",
+      "ret": "void",
+      "signature": "(ImGuiViewport*)",
+      "stname": "ImGuiViewport"
+    }
+  ],
+  "ImGuiWindowClass_ImGuiWindowClass": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiWindowClass_ImGuiWindowClass",
+      "constructor": true,
+      "defaults": [],
+      "funcname": "ImGuiWindowClass",
+      "ov_cimguiname": "ImGuiWindowClass_ImGuiWindowClass",
+      "signature": "()",
+      "stname": "ImGuiWindowClass"
+    }
+  ],
+  "ImGuiWindowClass_destroy": [
+    {
+      "args": "(ImGuiWindowClass* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiWindowClass*"
+        }
+      ],
+      "call_args": "(self)",
+      "cimguiname": "ImGuiWindowClass_destroy",
+      "defaults": [],
+      "destructor": true,
+      "ov_cimguiname": "ImGuiWindowClass_destroy",
+      "ret": "void",
+      "signature": "(ImGuiWindowClass*)",
+      "stname": "ImGuiWindowClass"
     }
   ],
   "ImGuiWindowSettings_GetName": [
@@ -9896,6 +10450,73 @@
       "stname": ""
     }
   ],
+  "igBeginDockableDragDropSource": [
+    {
+      "args": "(ImGuiWindow* window)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "ImGuiWindow*"
+        }
+      ],
+      "argsoriginal": "(ImGuiWindow* window)",
+      "call_args": "(window)",
+      "cimguiname": "igBeginDockableDragDropSource",
+      "defaults": [],
+      "funcname": "BeginDockableDragDropSource",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igBeginDockableDragDropSource",
+      "ret": "void",
+      "signature": "(ImGuiWindow*)",
+      "stname": ""
+    }
+  ],
+  "igBeginDockableDragDropTarget": [
+    {
+      "args": "(ImGuiWindow* window)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "ImGuiWindow*"
+        }
+      ],
+      "argsoriginal": "(ImGuiWindow* window)",
+      "call_args": "(window)",
+      "cimguiname": "igBeginDockableDragDropTarget",
+      "defaults": [],
+      "funcname": "BeginDockableDragDropTarget",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igBeginDockableDragDropTarget",
+      "ret": "void",
+      "signature": "(ImGuiWindow*)",
+      "stname": ""
+    }
+  ],
+  "igBeginDocked": [
+    {
+      "args": "(ImGuiWindow* window,bool* p_open)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "ImGuiWindow*"
+        },
+        {
+          "name": "p_open",
+          "type": "bool*"
+        }
+      ],
+      "argsoriginal": "(ImGuiWindow* window,bool* p_open)",
+      "call_args": "(window,p_open)",
+      "cimguiname": "igBeginDocked",
+      "defaults": [],
+      "funcname": "BeginDocked",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igBeginDocked",
+      "ret": "void",
+      "signature": "(ImGuiWindow*,bool*)",
+      "stname": ""
+    }
+  ],
   "igBeginDragDropSource": [
     {
       "args": "(ImGuiDragDropFlags flags)",
@@ -10237,7 +10858,7 @@
   ],
   "igBeginTabBarEx": [
     {
-      "args": "(ImGuiTabBar* tab_bar,const ImRect bb,ImGuiTabBarFlags flags)",
+      "args": "(ImGuiTabBar* tab_bar,const ImRect bb,ImGuiTabBarFlags flags,ImGuiDockNode* dock_node)",
       "argsT": [
         {
           "name": "tab_bar",
@@ -10250,17 +10871,21 @@
         {
           "name": "flags",
           "type": "ImGuiTabBarFlags"
+        },
+        {
+          "name": "dock_node",
+          "type": "ImGuiDockNode*"
         }
       ],
-      "argsoriginal": "(ImGuiTabBar* tab_bar,const ImRect& bb,ImGuiTabBarFlags flags)",
-      "call_args": "(tab_bar,bb,flags)",
+      "argsoriginal": "(ImGuiTabBar* tab_bar,const ImRect& bb,ImGuiTabBarFlags flags,ImGuiDockNode* dock_node)",
+      "call_args": "(tab_bar,bb,flags,dock_node)",
       "cimguiname": "igBeginTabBarEx",
       "defaults": [],
       "funcname": "BeginTabBarEx",
       "namespace": "ImGui",
       "ov_cimguiname": "igBeginTabBarEx",
       "ret": "bool",
-      "signature": "(ImGuiTabBar*,const ImRect,ImGuiTabBarFlags)",
+      "signature": "(ImGuiTabBar*,const ImRect,ImGuiTabBarFlags,ImGuiDockNode*)",
       "stname": ""
     }
   ],
@@ -10999,7 +11624,7 @@
   ],
   "igCollapseButton": [
     {
-      "args": "(ImGuiID id,const ImVec2 pos)",
+      "args": "(ImGuiID id,const ImVec2 pos,ImGuiDockNode* dock_node)",
       "argsT": [
         {
           "name": "id",
@@ -11008,17 +11633,21 @@
         {
           "name": "pos",
           "type": "const ImVec2"
+        },
+        {
+          "name": "dock_node",
+          "type": "ImGuiDockNode*"
         }
       ],
-      "argsoriginal": "(ImGuiID id,const ImVec2& pos)",
-      "call_args": "(id,pos)",
+      "argsoriginal": "(ImGuiID id,const ImVec2& pos,ImGuiDockNode* dock_node)",
+      "call_args": "(id,pos,dock_node)",
       "cimguiname": "igCollapseButton",
       "defaults": [],
       "funcname": "CollapseButton",
       "namespace": "ImGui",
       "ov_cimguiname": "igCollapseButton",
       "ret": "bool",
-      "signature": "(ImGuiID,const ImVec2)",
+      "signature": "(ImGuiID,const ImVec2,ImGuiDockNode*)",
       "stname": ""
     }
   ],
@@ -11881,6 +12510,772 @@
       "ov_cimguiname": "igDestroyContext",
       "ret": "void",
       "signature": "(ImGuiContext*)",
+      "stname": ""
+    }
+  ],
+  "igDestroyPlatformWindow": [
+    {
+      "args": "(ImGuiViewportP* viewport)",
+      "argsT": [
+        {
+          "name": "viewport",
+          "type": "ImGuiViewportP*"
+        }
+      ],
+      "argsoriginal": "(ImGuiViewportP* viewport)",
+      "call_args": "(viewport)",
+      "cimguiname": "igDestroyPlatformWindow",
+      "defaults": [],
+      "funcname": "DestroyPlatformWindow",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDestroyPlatformWindow",
+      "ret": "void",
+      "signature": "(ImGuiViewportP*)",
+      "stname": ""
+    }
+  ],
+  "igDestroyPlatformWindows": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "igDestroyPlatformWindows",
+      "defaults": [],
+      "funcname": "DestroyPlatformWindows",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDestroyPlatformWindows",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "igDockBuilderAddNode": [
+    {
+      "args": "(ImGuiID node_id,ImGuiDockNodeFlags flags)",
+      "argsT": [
+        {
+          "name": "node_id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "flags",
+          "type": "ImGuiDockNodeFlags"
+        }
+      ],
+      "argsoriginal": "(ImGuiID node_id=0,ImGuiDockNodeFlags flags=0)",
+      "call_args": "(node_id,flags)",
+      "cimguiname": "igDockBuilderAddNode",
+      "defaults": {
+        "flags": "0",
+        "node_id": "0"
+      },
+      "funcname": "DockBuilderAddNode",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockBuilderAddNode",
+      "ret": "ImGuiID",
+      "signature": "(ImGuiID,ImGuiDockNodeFlags)",
+      "stname": ""
+    }
+  ],
+  "igDockBuilderCopyDockSpace": [
+    {
+      "args": "(ImGuiID src_dockspace_id,ImGuiID dst_dockspace_id,ImVector_const_charPtr* in_window_remap_pairs)",
+      "argsT": [
+        {
+          "name": "src_dockspace_id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "dst_dockspace_id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "in_window_remap_pairs",
+          "type": "ImVector_const_charPtr*"
+        }
+      ],
+      "argsoriginal": "(ImGuiID src_dockspace_id,ImGuiID dst_dockspace_id,ImVector<const char*>* in_window_remap_pairs)",
+      "call_args": "(src_dockspace_id,dst_dockspace_id,in_window_remap_pairs)",
+      "cimguiname": "igDockBuilderCopyDockSpace",
+      "defaults": [],
+      "funcname": "DockBuilderCopyDockSpace",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockBuilderCopyDockSpace",
+      "ret": "void",
+      "signature": "(ImGuiID,ImGuiID,ImVector_const_charPtr*)",
+      "stname": ""
+    }
+  ],
+  "igDockBuilderCopyNode": [
+    {
+      "args": "(ImGuiID src_node_id,ImGuiID dst_node_id,ImVector_ImGuiID* out_node_remap_pairs)",
+      "argsT": [
+        {
+          "name": "src_node_id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "dst_node_id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "out_node_remap_pairs",
+          "type": "ImVector_ImGuiID*"
+        }
+      ],
+      "argsoriginal": "(ImGuiID src_node_id,ImGuiID dst_node_id,ImVector<ImGuiID>* out_node_remap_pairs)",
+      "call_args": "(src_node_id,dst_node_id,out_node_remap_pairs)",
+      "cimguiname": "igDockBuilderCopyNode",
+      "defaults": [],
+      "funcname": "DockBuilderCopyNode",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockBuilderCopyNode",
+      "ret": "void",
+      "signature": "(ImGuiID,ImGuiID,ImVector_ImGuiID*)",
+      "stname": ""
+    }
+  ],
+  "igDockBuilderCopyWindowSettings": [
+    {
+      "args": "(const char* src_name,const char* dst_name)",
+      "argsT": [
+        {
+          "name": "src_name",
+          "type": "const char*"
+        },
+        {
+          "name": "dst_name",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const char* src_name,const char* dst_name)",
+      "call_args": "(src_name,dst_name)",
+      "cimguiname": "igDockBuilderCopyWindowSettings",
+      "defaults": [],
+      "funcname": "DockBuilderCopyWindowSettings",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockBuilderCopyWindowSettings",
+      "ret": "void",
+      "signature": "(const char*,const char*)",
+      "stname": ""
+    }
+  ],
+  "igDockBuilderDockWindow": [
+    {
+      "args": "(const char* window_name,ImGuiID node_id)",
+      "argsT": [
+        {
+          "name": "window_name",
+          "type": "const char*"
+        },
+        {
+          "name": "node_id",
+          "type": "ImGuiID"
+        }
+      ],
+      "argsoriginal": "(const char* window_name,ImGuiID node_id)",
+      "call_args": "(window_name,node_id)",
+      "cimguiname": "igDockBuilderDockWindow",
+      "defaults": [],
+      "funcname": "DockBuilderDockWindow",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockBuilderDockWindow",
+      "ret": "void",
+      "signature": "(const char*,ImGuiID)",
+      "stname": ""
+    }
+  ],
+  "igDockBuilderFinish": [
+    {
+      "args": "(ImGuiID node_id)",
+      "argsT": [
+        {
+          "name": "node_id",
+          "type": "ImGuiID"
+        }
+      ],
+      "argsoriginal": "(ImGuiID node_id)",
+      "call_args": "(node_id)",
+      "cimguiname": "igDockBuilderFinish",
+      "defaults": [],
+      "funcname": "DockBuilderFinish",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockBuilderFinish",
+      "ret": "void",
+      "signature": "(ImGuiID)",
+      "stname": ""
+    }
+  ],
+  "igDockBuilderGetCentralNode": [
+    {
+      "args": "(ImGuiID node_id)",
+      "argsT": [
+        {
+          "name": "node_id",
+          "type": "ImGuiID"
+        }
+      ],
+      "argsoriginal": "(ImGuiID node_id)",
+      "call_args": "(node_id)",
+      "cimguiname": "igDockBuilderGetCentralNode",
+      "defaults": [],
+      "funcname": "DockBuilderGetCentralNode",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockBuilderGetCentralNode",
+      "ret": "ImGuiDockNode*",
+      "signature": "(ImGuiID)",
+      "stname": ""
+    }
+  ],
+  "igDockBuilderGetNode": [
+    {
+      "args": "(ImGuiID node_id)",
+      "argsT": [
+        {
+          "name": "node_id",
+          "type": "ImGuiID"
+        }
+      ],
+      "argsoriginal": "(ImGuiID node_id)",
+      "call_args": "(node_id)",
+      "cimguiname": "igDockBuilderGetNode",
+      "defaults": [],
+      "funcname": "DockBuilderGetNode",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockBuilderGetNode",
+      "ret": "ImGuiDockNode*",
+      "signature": "(ImGuiID)",
+      "stname": ""
+    }
+  ],
+  "igDockBuilderRemoveNode": [
+    {
+      "args": "(ImGuiID node_id)",
+      "argsT": [
+        {
+          "name": "node_id",
+          "type": "ImGuiID"
+        }
+      ],
+      "argsoriginal": "(ImGuiID node_id)",
+      "call_args": "(node_id)",
+      "cimguiname": "igDockBuilderRemoveNode",
+      "defaults": [],
+      "funcname": "DockBuilderRemoveNode",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockBuilderRemoveNode",
+      "ret": "void",
+      "signature": "(ImGuiID)",
+      "stname": ""
+    }
+  ],
+  "igDockBuilderRemoveNodeChildNodes": [
+    {
+      "args": "(ImGuiID node_id)",
+      "argsT": [
+        {
+          "name": "node_id",
+          "type": "ImGuiID"
+        }
+      ],
+      "argsoriginal": "(ImGuiID node_id)",
+      "call_args": "(node_id)",
+      "cimguiname": "igDockBuilderRemoveNodeChildNodes",
+      "defaults": [],
+      "funcname": "DockBuilderRemoveNodeChildNodes",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockBuilderRemoveNodeChildNodes",
+      "ret": "void",
+      "signature": "(ImGuiID)",
+      "stname": ""
+    }
+  ],
+  "igDockBuilderRemoveNodeDockedWindows": [
+    {
+      "args": "(ImGuiID node_id,bool clear_persistent_docking_references)",
+      "argsT": [
+        {
+          "name": "node_id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "clear_persistent_docking_references",
+          "type": "bool"
+        }
+      ],
+      "argsoriginal": "(ImGuiID node_id,bool clear_persistent_docking_references=true)",
+      "call_args": "(node_id,clear_persistent_docking_references)",
+      "cimguiname": "igDockBuilderRemoveNodeDockedWindows",
+      "defaults": {
+        "clear_persistent_docking_references": "true"
+      },
+      "funcname": "DockBuilderRemoveNodeDockedWindows",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockBuilderRemoveNodeDockedWindows",
+      "ret": "void",
+      "signature": "(ImGuiID,bool)",
+      "stname": ""
+    }
+  ],
+  "igDockBuilderSetNodePos": [
+    {
+      "args": "(ImGuiID node_id,ImVec2 pos)",
+      "argsT": [
+        {
+          "name": "node_id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "pos",
+          "type": "ImVec2"
+        }
+      ],
+      "argsoriginal": "(ImGuiID node_id,ImVec2 pos)",
+      "call_args": "(node_id,pos)",
+      "cimguiname": "igDockBuilderSetNodePos",
+      "defaults": [],
+      "funcname": "DockBuilderSetNodePos",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockBuilderSetNodePos",
+      "ret": "void",
+      "signature": "(ImGuiID,ImVec2)",
+      "stname": ""
+    }
+  ],
+  "igDockBuilderSetNodeSize": [
+    {
+      "args": "(ImGuiID node_id,ImVec2 size)",
+      "argsT": [
+        {
+          "name": "node_id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "size",
+          "type": "ImVec2"
+        }
+      ],
+      "argsoriginal": "(ImGuiID node_id,ImVec2 size)",
+      "call_args": "(node_id,size)",
+      "cimguiname": "igDockBuilderSetNodeSize",
+      "defaults": [],
+      "funcname": "DockBuilderSetNodeSize",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockBuilderSetNodeSize",
+      "ret": "void",
+      "signature": "(ImGuiID,ImVec2)",
+      "stname": ""
+    }
+  ],
+  "igDockBuilderSplitNode": [
+    {
+      "args": "(ImGuiID node_id,ImGuiDir split_dir,float size_ratio_for_node_at_dir,ImGuiID* out_id_at_dir,ImGuiID* out_id_at_opposite_dir)",
+      "argsT": [
+        {
+          "name": "node_id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "split_dir",
+          "type": "ImGuiDir"
+        },
+        {
+          "name": "size_ratio_for_node_at_dir",
+          "type": "float"
+        },
+        {
+          "name": "out_id_at_dir",
+          "type": "ImGuiID*"
+        },
+        {
+          "name": "out_id_at_opposite_dir",
+          "type": "ImGuiID*"
+        }
+      ],
+      "argsoriginal": "(ImGuiID node_id,ImGuiDir split_dir,float size_ratio_for_node_at_dir,ImGuiID* out_id_at_dir,ImGuiID* out_id_at_opposite_dir)",
+      "call_args": "(node_id,split_dir,size_ratio_for_node_at_dir,out_id_at_dir,out_id_at_opposite_dir)",
+      "cimguiname": "igDockBuilderSplitNode",
+      "defaults": [],
+      "funcname": "DockBuilderSplitNode",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockBuilderSplitNode",
+      "ret": "ImGuiID",
+      "signature": "(ImGuiID,ImGuiDir,float,ImGuiID*,ImGuiID*)",
+      "stname": ""
+    }
+  ],
+  "igDockContextCalcDropPosForDocking": [
+    {
+      "args": "(ImGuiWindow* target,ImGuiDockNode* target_node,ImGuiWindow* payload,ImGuiDir split_dir,bool split_outer,ImVec2* out_pos)",
+      "argsT": [
+        {
+          "name": "target",
+          "type": "ImGuiWindow*"
+        },
+        {
+          "name": "target_node",
+          "type": "ImGuiDockNode*"
+        },
+        {
+          "name": "payload",
+          "type": "ImGuiWindow*"
+        },
+        {
+          "name": "split_dir",
+          "type": "ImGuiDir"
+        },
+        {
+          "name": "split_outer",
+          "type": "bool"
+        },
+        {
+          "name": "out_pos",
+          "type": "ImVec2*"
+        }
+      ],
+      "argsoriginal": "(ImGuiWindow* target,ImGuiDockNode* target_node,ImGuiWindow* payload,ImGuiDir split_dir,bool split_outer,ImVec2* out_pos)",
+      "call_args": "(target,target_node,payload,split_dir,split_outer,out_pos)",
+      "cimguiname": "igDockContextCalcDropPosForDocking",
+      "defaults": [],
+      "funcname": "DockContextCalcDropPosForDocking",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockContextCalcDropPosForDocking",
+      "ret": "bool",
+      "signature": "(ImGuiWindow*,ImGuiDockNode*,ImGuiWindow*,ImGuiDir,bool,ImVec2*)",
+      "stname": ""
+    }
+  ],
+  "igDockContextGenNodeID": [
+    {
+      "args": "(ImGuiContext* ctx)",
+      "argsT": [
+        {
+          "name": "ctx",
+          "type": "ImGuiContext*"
+        }
+      ],
+      "argsoriginal": "(ImGuiContext* ctx)",
+      "call_args": "(ctx)",
+      "cimguiname": "igDockContextGenNodeID",
+      "defaults": [],
+      "funcname": "DockContextGenNodeID",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockContextGenNodeID",
+      "ret": "ImGuiID",
+      "signature": "(ImGuiContext*)",
+      "stname": ""
+    }
+  ],
+  "igDockContextInitialize": [
+    {
+      "args": "(ImGuiContext* ctx)",
+      "argsT": [
+        {
+          "name": "ctx",
+          "type": "ImGuiContext*"
+        }
+      ],
+      "argsoriginal": "(ImGuiContext* ctx)",
+      "call_args": "(ctx)",
+      "cimguiname": "igDockContextInitialize",
+      "defaults": [],
+      "funcname": "DockContextInitialize",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockContextInitialize",
+      "ret": "void",
+      "signature": "(ImGuiContext*)",
+      "stname": ""
+    }
+  ],
+  "igDockContextOnLoadSettings": [
+    {
+      "args": "(ImGuiContext* ctx)",
+      "argsT": [
+        {
+          "name": "ctx",
+          "type": "ImGuiContext*"
+        }
+      ],
+      "argsoriginal": "(ImGuiContext* ctx)",
+      "call_args": "(ctx)",
+      "cimguiname": "igDockContextOnLoadSettings",
+      "defaults": [],
+      "funcname": "DockContextOnLoadSettings",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockContextOnLoadSettings",
+      "ret": "void",
+      "signature": "(ImGuiContext*)",
+      "stname": ""
+    }
+  ],
+  "igDockContextQueueDock": [
+    {
+      "args": "(ImGuiContext* ctx,ImGuiWindow* target,ImGuiDockNode* target_node,ImGuiWindow* payload,ImGuiDir split_dir,float split_ratio,bool split_outer)",
+      "argsT": [
+        {
+          "name": "ctx",
+          "type": "ImGuiContext*"
+        },
+        {
+          "name": "target",
+          "type": "ImGuiWindow*"
+        },
+        {
+          "name": "target_node",
+          "type": "ImGuiDockNode*"
+        },
+        {
+          "name": "payload",
+          "type": "ImGuiWindow*"
+        },
+        {
+          "name": "split_dir",
+          "type": "ImGuiDir"
+        },
+        {
+          "name": "split_ratio",
+          "type": "float"
+        },
+        {
+          "name": "split_outer",
+          "type": "bool"
+        }
+      ],
+      "argsoriginal": "(ImGuiContext* ctx,ImGuiWindow* target,ImGuiDockNode* target_node,ImGuiWindow* payload,ImGuiDir split_dir,float split_ratio,bool split_outer)",
+      "call_args": "(ctx,target,target_node,payload,split_dir,split_ratio,split_outer)",
+      "cimguiname": "igDockContextQueueDock",
+      "defaults": [],
+      "funcname": "DockContextQueueDock",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockContextQueueDock",
+      "ret": "void",
+      "signature": "(ImGuiContext*,ImGuiWindow*,ImGuiDockNode*,ImGuiWindow*,ImGuiDir,float,bool)",
+      "stname": ""
+    }
+  ],
+  "igDockContextQueueUndockNode": [
+    {
+      "args": "(ImGuiContext* ctx,ImGuiDockNode* node)",
+      "argsT": [
+        {
+          "name": "ctx",
+          "type": "ImGuiContext*"
+        },
+        {
+          "name": "node",
+          "type": "ImGuiDockNode*"
+        }
+      ],
+      "argsoriginal": "(ImGuiContext* ctx,ImGuiDockNode* node)",
+      "call_args": "(ctx,node)",
+      "cimguiname": "igDockContextQueueUndockNode",
+      "defaults": [],
+      "funcname": "DockContextQueueUndockNode",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockContextQueueUndockNode",
+      "ret": "void",
+      "signature": "(ImGuiContext*,ImGuiDockNode*)",
+      "stname": ""
+    }
+  ],
+  "igDockContextQueueUndockWindow": [
+    {
+      "args": "(ImGuiContext* ctx,ImGuiWindow* window)",
+      "argsT": [
+        {
+          "name": "ctx",
+          "type": "ImGuiContext*"
+        },
+        {
+          "name": "window",
+          "type": "ImGuiWindow*"
+        }
+      ],
+      "argsoriginal": "(ImGuiContext* ctx,ImGuiWindow* window)",
+      "call_args": "(ctx,window)",
+      "cimguiname": "igDockContextQueueUndockWindow",
+      "defaults": [],
+      "funcname": "DockContextQueueUndockWindow",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockContextQueueUndockWindow",
+      "ret": "void",
+      "signature": "(ImGuiContext*,ImGuiWindow*)",
+      "stname": ""
+    }
+  ],
+  "igDockContextRebuildNodes": [
+    {
+      "args": "(ImGuiContext* ctx)",
+      "argsT": [
+        {
+          "name": "ctx",
+          "type": "ImGuiContext*"
+        }
+      ],
+      "argsoriginal": "(ImGuiContext* ctx)",
+      "call_args": "(ctx)",
+      "cimguiname": "igDockContextRebuildNodes",
+      "defaults": [],
+      "funcname": "DockContextRebuildNodes",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockContextRebuildNodes",
+      "ret": "void",
+      "signature": "(ImGuiContext*)",
+      "stname": ""
+    }
+  ],
+  "igDockContextShutdown": [
+    {
+      "args": "(ImGuiContext* ctx)",
+      "argsT": [
+        {
+          "name": "ctx",
+          "type": "ImGuiContext*"
+        }
+      ],
+      "argsoriginal": "(ImGuiContext* ctx)",
+      "call_args": "(ctx)",
+      "cimguiname": "igDockContextShutdown",
+      "defaults": [],
+      "funcname": "DockContextShutdown",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockContextShutdown",
+      "ret": "void",
+      "signature": "(ImGuiContext*)",
+      "stname": ""
+    }
+  ],
+  "igDockContextUpdateDocking": [
+    {
+      "args": "(ImGuiContext* ctx)",
+      "argsT": [
+        {
+          "name": "ctx",
+          "type": "ImGuiContext*"
+        }
+      ],
+      "argsoriginal": "(ImGuiContext* ctx)",
+      "call_args": "(ctx)",
+      "cimguiname": "igDockContextUpdateDocking",
+      "defaults": [],
+      "funcname": "DockContextUpdateDocking",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockContextUpdateDocking",
+      "ret": "void",
+      "signature": "(ImGuiContext*)",
+      "stname": ""
+    }
+  ],
+  "igDockContextUpdateUndocking": [
+    {
+      "args": "(ImGuiContext* ctx)",
+      "argsT": [
+        {
+          "name": "ctx",
+          "type": "ImGuiContext*"
+        }
+      ],
+      "argsoriginal": "(ImGuiContext* ctx)",
+      "call_args": "(ctx)",
+      "cimguiname": "igDockContextUpdateUndocking",
+      "defaults": [],
+      "funcname": "DockContextUpdateUndocking",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockContextUpdateUndocking",
+      "ret": "void",
+      "signature": "(ImGuiContext*)",
+      "stname": ""
+    }
+  ],
+  "igDockNodeGetRootNode": [
+    {
+      "args": "(ImGuiDockNode* node)",
+      "argsT": [
+        {
+          "name": "node",
+          "type": "ImGuiDockNode*"
+        }
+      ],
+      "argsoriginal": "(ImGuiDockNode* node)",
+      "call_args": "(node)",
+      "cimguiname": "igDockNodeGetRootNode",
+      "defaults": [],
+      "funcname": "DockNodeGetRootNode",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockNodeGetRootNode",
+      "ret": "ImGuiDockNode*",
+      "signature": "(ImGuiDockNode*)",
+      "stname": ""
+    }
+  ],
+  "igDockSpace": [
+    {
+      "args": "(ImGuiID id,const ImVec2 size,ImGuiDockNodeFlags flags,const ImGuiWindowClass* window_class)",
+      "argsT": [
+        {
+          "name": "id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "size",
+          "type": "const ImVec2"
+        },
+        {
+          "name": "flags",
+          "type": "ImGuiDockNodeFlags"
+        },
+        {
+          "name": "window_class",
+          "type": "const ImGuiWindowClass*"
+        }
+      ],
+      "argsoriginal": "(ImGuiID id,const ImVec2& size=ImVec2(0,0),ImGuiDockNodeFlags flags=0,const ImGuiWindowClass* window_class=((void*)0))",
+      "call_args": "(id,size,flags,window_class)",
+      "cimguiname": "igDockSpace",
+      "defaults": {
+        "flags": "0",
+        "size": "ImVec2(0,0)",
+        "window_class": "((void*)0)"
+      },
+      "funcname": "DockSpace",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockSpace",
+      "ret": "void",
+      "signature": "(ImGuiID,const ImVec2,ImGuiDockNodeFlags,const ImGuiWindowClass*)",
+      "stname": ""
+    }
+  ],
+  "igDockSpaceOverViewport": [
+    {
+      "args": "(ImGuiViewport* viewport,ImGuiDockNodeFlags flags,const ImGuiWindowClass* window_class)",
+      "argsT": [
+        {
+          "name": "viewport",
+          "type": "ImGuiViewport*"
+        },
+        {
+          "name": "flags",
+          "type": "ImGuiDockNodeFlags"
+        },
+        {
+          "name": "window_class",
+          "type": "const ImGuiWindowClass*"
+        }
+      ],
+      "argsoriginal": "(ImGuiViewport* viewport=((void*)0),ImGuiDockNodeFlags flags=0,const ImGuiWindowClass* window_class=((void*)0))",
+      "call_args": "(viewport,flags,window_class)",
+      "cimguiname": "igDockSpaceOverViewport",
+      "defaults": {
+        "flags": "0",
+        "viewport": "((void*)0)",
+        "window_class": "((void*)0)"
+      },
+      "funcname": "DockSpaceOverViewport",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockSpaceOverViewport",
+      "ret": "ImGuiID",
+      "signature": "(ImGuiViewport*,ImGuiDockNodeFlags,const ImGuiWindowClass*)",
       "stname": ""
     }
   ],
@@ -12997,6 +14392,48 @@
       "stname": ""
     }
   ],
+  "igFindViewportByID": [
+    {
+      "args": "(ImGuiID id)",
+      "argsT": [
+        {
+          "name": "id",
+          "type": "ImGuiID"
+        }
+      ],
+      "argsoriginal": "(ImGuiID id)",
+      "call_args": "(id)",
+      "cimguiname": "igFindViewportByID",
+      "defaults": [],
+      "funcname": "FindViewportByID",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igFindViewportByID",
+      "ret": "ImGuiViewport*",
+      "signature": "(ImGuiID)",
+      "stname": ""
+    }
+  ],
+  "igFindViewportByPlatformHandle": [
+    {
+      "args": "(void* platform_handle)",
+      "argsT": [
+        {
+          "name": "platform_handle",
+          "type": "void*"
+        }
+      ],
+      "argsoriginal": "(void* platform_handle)",
+      "call_args": "(platform_handle)",
+      "cimguiname": "igFindViewportByPlatformHandle",
+      "defaults": [],
+      "funcname": "FindViewportByPlatformHandle",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igFindViewportByPlatformHandle",
+      "ret": "ImGuiViewport*",
+      "signature": "(void*)",
+      "stname": ""
+    }
+  ],
   "igFindWindowByID": [
     {
       "args": "(ImGuiID id)",
@@ -13220,9 +14657,28 @@
       "defaults": [],
       "funcname": "GetBackgroundDrawList",
       "namespace": "ImGui",
-      "ov_cimguiname": "igGetBackgroundDrawList",
+      "ov_cimguiname": "igGetBackgroundDrawListNil",
       "ret": "ImDrawList*",
       "signature": "()",
+      "stname": ""
+    },
+    {
+      "args": "(ImGuiViewport* viewport)",
+      "argsT": [
+        {
+          "name": "viewport",
+          "type": "ImGuiViewport*"
+        }
+      ],
+      "argsoriginal": "(ImGuiViewport* viewport)",
+      "call_args": "(viewport)",
+      "cimguiname": "igGetBackgroundDrawList",
+      "defaults": [],
+      "funcname": "GetBackgroundDrawList",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igGetBackgroundDrawListViewportPtr",
+      "ret": "ImDrawList*",
+      "signature": "(ImGuiViewport*)",
       "stname": ""
     }
   ],
@@ -13838,6 +15294,25 @@
       "stname": ""
     },
     {
+      "args": "(ImGuiViewport* viewport)",
+      "argsT": [
+        {
+          "name": "viewport",
+          "type": "ImGuiViewport*"
+        }
+      ],
+      "argsoriginal": "(ImGuiViewport* viewport)",
+      "call_args": "(viewport)",
+      "cimguiname": "igGetForegroundDrawList",
+      "defaults": [],
+      "funcname": "GetForegroundDrawList",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igGetForegroundDrawListViewportPtr",
+      "ret": "ImDrawList*",
+      "signature": "(ImGuiViewport*)",
+      "stname": ""
+    },
+    {
       "args": "(ImGuiWindow* window)",
       "argsT": [
         {
@@ -14170,6 +15645,22 @@
       "stname": ""
     }
   ],
+  "igGetMainViewport": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "igGetMainViewport",
+      "defaults": [],
+      "funcname": "GetMainViewport",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igGetMainViewport",
+      "ret": "ImGuiViewport*",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
   "igGetMergedKeyModFlags": [
     {
       "args": "()",
@@ -14342,6 +15833,23 @@
       "ov_cimguiname": "igGetNavInputAmount2d",
       "ret": "void",
       "signature": "(ImGuiNavDirSourceFlags,ImGuiInputReadMode,float,float)",
+      "stname": ""
+    }
+  ],
+  "igGetPlatformIO": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "igGetPlatformIO",
+      "defaults": [],
+      "funcname": "GetPlatformIO",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igGetPlatformIO",
+      "ret": "ImGuiPlatformIO*",
+      "retref": "&",
+      "signature": "()",
       "stname": ""
     }
   ],
@@ -14607,6 +16115,27 @@
       "stname": ""
     }
   ],
+  "igGetWindowAlwaysWantOwnTabBar": [
+    {
+      "args": "(ImGuiWindow* window)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "ImGuiWindow*"
+        }
+      ],
+      "argsoriginal": "(ImGuiWindow* window)",
+      "call_args": "(window)",
+      "cimguiname": "igGetWindowAlwaysWantOwnTabBar",
+      "defaults": [],
+      "funcname": "GetWindowAlwaysWantOwnTabBar",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igGetWindowAlwaysWantOwnTabBar",
+      "ret": "bool",
+      "signature": "(ImGuiWindow*)",
+      "stname": ""
+    }
+  ],
   "igGetWindowContentRegionMax": [
     {
       "args": "(ImVec2 *pOut)",
@@ -14662,6 +16191,54 @@
       "funcname": "GetWindowContentRegionWidth",
       "namespace": "ImGui",
       "ov_cimguiname": "igGetWindowContentRegionWidth",
+      "ret": "float",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "igGetWindowDockID": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "igGetWindowDockID",
+      "defaults": [],
+      "funcname": "GetWindowDockID",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igGetWindowDockID",
+      "ret": "ImGuiID",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "igGetWindowDockNode": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "igGetWindowDockNode",
+      "defaults": [],
+      "funcname": "GetWindowDockNode",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igGetWindowDockNode",
+      "ret": "ImGuiDockNode*",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "igGetWindowDpiScale": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "igGetWindowDpiScale",
+      "defaults": [],
+      "funcname": "GetWindowDpiScale",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igGetWindowDpiScale",
       "ret": "float",
       "signature": "()",
       "stname": ""
@@ -14819,6 +16396,22 @@
       "nonUDT": 1,
       "ov_cimguiname": "igGetWindowSize",
       "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "igGetWindowViewport": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "igGetWindowViewport",
+      "defaults": [],
+      "funcname": "GetWindowViewport",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igGetWindowViewport",
+      "ret": "ImGuiViewport*",
       "signature": "()",
       "stname": ""
     }
@@ -18545,6 +20138,22 @@
       "stname": ""
     }
   ],
+  "igIsWindowDocked": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "igIsWindowDocked",
+      "defaults": [],
+      "funcname": "IsWindowDocked",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igIsWindowDocked",
+      "ret": "bool",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
   "igIsWindowFocused": [
     {
       "args": "(ImGuiFocusedFlags flags)",
@@ -20700,6 +22309,39 @@
       "stname": ""
     }
   ],
+  "igRenderArrowDockMenu": [
+    {
+      "args": "(ImDrawList* draw_list,ImVec2 p_min,float sz,ImU32 col)",
+      "argsT": [
+        {
+          "name": "draw_list",
+          "type": "ImDrawList*"
+        },
+        {
+          "name": "p_min",
+          "type": "ImVec2"
+        },
+        {
+          "name": "sz",
+          "type": "float"
+        },
+        {
+          "name": "col",
+          "type": "ImU32"
+        }
+      ],
+      "argsoriginal": "(ImDrawList* draw_list,ImVec2 p_min,float sz,ImU32 col)",
+      "call_args": "(draw_list,p_min,sz,col)",
+      "cimguiname": "igRenderArrowDockMenu",
+      "defaults": [],
+      "funcname": "RenderArrowDockMenu",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igRenderArrowDockMenu",
+      "ret": "void",
+      "signature": "(ImDrawList*,ImVec2,float,ImU32)",
+      "stname": ""
+    }
+  ],
   "igRenderArrowPointingAt": [
     {
       "args": "(ImDrawList* draw_list,ImVec2 pos,ImVec2 half_sz,ImGuiDir direction,ImU32 col)",
@@ -20997,6 +22639,34 @@
       "stname": ""
     }
   ],
+  "igRenderPlatformWindowsDefault": [
+    {
+      "args": "(void* platform_render_arg,void* renderer_render_arg)",
+      "argsT": [
+        {
+          "name": "platform_render_arg",
+          "type": "void*"
+        },
+        {
+          "name": "renderer_render_arg",
+          "type": "void*"
+        }
+      ],
+      "argsoriginal": "(void* platform_render_arg=((void*)0),void* renderer_render_arg=((void*)0))",
+      "call_args": "(platform_render_arg,renderer_render_arg)",
+      "cimguiname": "igRenderPlatformWindowsDefault",
+      "defaults": {
+        "platform_render_arg": "((void*)0)",
+        "renderer_render_arg": "((void*)0)"
+      },
+      "funcname": "RenderPlatformWindowsDefault",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igRenderPlatformWindowsDefault",
+      "ret": "void",
+      "signature": "(void*,void*)",
+      "stname": ""
+    }
+  ],
   "igRenderRectFilledRangeH": [
     {
       "args": "(ImDrawList* draw_list,const ImRect rect,ImU32 col,float x_start_norm,float x_end_norm,float rounding)",
@@ -21035,6 +22705,43 @@
       "ov_cimguiname": "igRenderRectFilledRangeH",
       "ret": "void",
       "signature": "(ImDrawList*,const ImRect,ImU32,float,float,float)",
+      "stname": ""
+    }
+  ],
+  "igRenderRectFilledWithHole": [
+    {
+      "args": "(ImDrawList* draw_list,ImRect outer,ImRect inner,ImU32 col,float rounding)",
+      "argsT": [
+        {
+          "name": "draw_list",
+          "type": "ImDrawList*"
+        },
+        {
+          "name": "outer",
+          "type": "ImRect"
+        },
+        {
+          "name": "inner",
+          "type": "ImRect"
+        },
+        {
+          "name": "col",
+          "type": "ImU32"
+        },
+        {
+          "name": "rounding",
+          "type": "float"
+        }
+      ],
+      "argsoriginal": "(ImDrawList* draw_list,ImRect outer,ImRect inner,ImU32 col,float rounding)",
+      "call_args": "(draw_list,outer,inner,col,rounding)",
+      "cimguiname": "igRenderRectFilledWithHole",
+      "defaults": [],
+      "funcname": "RenderRectFilledWithHole",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igRenderRectFilledWithHole",
+      "ret": "void",
+      "signature": "(ImDrawList*,ImRect,ImRect,ImU32,float)",
       "stname": ""
     }
   ],
@@ -21348,6 +23055,31 @@
       "ov_cimguiname": "igSaveIniSettingsToMemory",
       "ret": "const char*",
       "signature": "(size_t*)",
+      "stname": ""
+    }
+  ],
+  "igScaleWindowsInViewport": [
+    {
+      "args": "(ImGuiViewportP* viewport,float scale)",
+      "argsT": [
+        {
+          "name": "viewport",
+          "type": "ImGuiViewportP*"
+        },
+        {
+          "name": "scale",
+          "type": "float"
+        }
+      ],
+      "argsoriginal": "(ImGuiViewportP* viewport,float scale)",
+      "call_args": "(viewport,scale)",
+      "cimguiname": "igScaleWindowsInViewport",
+      "defaults": [],
+      "funcname": "ScaleWindowsInViewport",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igScaleWindowsInViewport",
+      "ret": "void",
+      "signature": "(ImGuiViewportP*,float)",
       "stname": ""
     }
   ],
@@ -22121,6 +23853,27 @@
       "stname": ""
     }
   ],
+  "igSetNextWindowClass": [
+    {
+      "args": "(const ImGuiWindowClass* window_class)",
+      "argsT": [
+        {
+          "name": "window_class",
+          "type": "const ImGuiWindowClass*"
+        }
+      ],
+      "argsoriginal": "(const ImGuiWindowClass* window_class)",
+      "call_args": "(window_class)",
+      "cimguiname": "igSetNextWindowClass",
+      "defaults": [],
+      "funcname": "SetNextWindowClass",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igSetNextWindowClass",
+      "ret": "void",
+      "signature": "(const ImGuiWindowClass*)",
+      "stname": ""
+    }
+  ],
   "igSetNextWindowCollapsed": [
     {
       "args": "(bool collapsed,ImGuiCond cond)",
@@ -22169,6 +23922,33 @@
       "stname": ""
     }
   ],
+  "igSetNextWindowDockID": [
+    {
+      "args": "(ImGuiID dock_id,ImGuiCond cond)",
+      "argsT": [
+        {
+          "name": "dock_id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "cond",
+          "type": "ImGuiCond"
+        }
+      ],
+      "argsoriginal": "(ImGuiID dock_id,ImGuiCond cond=0)",
+      "call_args": "(dock_id,cond)",
+      "cimguiname": "igSetNextWindowDockID",
+      "defaults": {
+        "cond": "0"
+      },
+      "funcname": "SetNextWindowDockID",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igSetNextWindowDockID",
+      "ret": "void",
+      "signature": "(ImGuiID,ImGuiCond)",
+      "stname": ""
+    }
+  ],
   "igSetNextWindowFocus": [
     {
       "args": "()",
@@ -22214,6 +23994,27 @@
       "ov_cimguiname": "igSetNextWindowPos",
       "ret": "void",
       "signature": "(const ImVec2,ImGuiCond,const ImVec2)",
+      "stname": ""
+    }
+  ],
+  "igSetNextWindowScroll": [
+    {
+      "args": "(const ImVec2 scroll)",
+      "argsT": [
+        {
+          "name": "scroll",
+          "type": "const ImVec2"
+        }
+      ],
+      "argsoriginal": "(const ImVec2& scroll)",
+      "call_args": "(scroll)",
+      "cimguiname": "igSetNextWindowScroll",
+      "defaults": [],
+      "funcname": "SetNextWindowScroll",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igSetNextWindowScroll",
+      "ret": "void",
+      "signature": "(const ImVec2)",
       "stname": ""
     }
   ],
@@ -22277,6 +24078,27 @@
       "ov_cimguiname": "igSetNextWindowSizeConstraints",
       "ret": "void",
       "signature": "(const ImVec2,const ImVec2,ImGuiSizeCallback,void*)",
+      "stname": ""
+    }
+  ],
+  "igSetNextWindowViewport": [
+    {
+      "args": "(ImGuiID viewport_id)",
+      "argsT": [
+        {
+          "name": "viewport_id",
+          "type": "ImGuiID"
+        }
+      ],
+      "argsoriginal": "(ImGuiID viewport_id)",
+      "call_args": "(viewport_id)",
+      "cimguiname": "igSetNextWindowViewport",
+      "defaults": [],
+      "funcname": "SetNextWindowViewport",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igSetNextWindowViewport",
+      "ret": "void",
+      "signature": "(ImGuiID)",
       "stname": ""
     }
   ],
@@ -22701,6 +24523,35 @@
       "ov_cimguiname": "igSetWindowCollapsedWindowPtr",
       "ret": "void",
       "signature": "(ImGuiWindow*,bool,ImGuiCond)",
+      "stname": ""
+    }
+  ],
+  "igSetWindowDock": [
+    {
+      "args": "(ImGuiWindow* window,ImGuiID dock_id,ImGuiCond cond)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "ImGuiWindow*"
+        },
+        {
+          "name": "dock_id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "cond",
+          "type": "ImGuiCond"
+        }
+      ],
+      "argsoriginal": "(ImGuiWindow* window,ImGuiID dock_id,ImGuiCond cond)",
+      "call_args": "(window,dock_id,cond)",
+      "cimguiname": "igSetWindowDock",
+      "defaults": [],
+      "funcname": "SetWindowDock",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igSetWindowDock",
+      "ret": "void",
+      "signature": "(ImGuiWindow*,ImGuiID,ImGuiCond)",
       "stname": ""
     }
   ],
@@ -23169,6 +25020,22 @@
       "funcname": "ShowUserGuide",
       "namespace": "ImGui",
       "ov_cimguiname": "igShowUserGuide",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "igShowViewportThumbnails": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "igShowViewportThumbnails",
+      "defaults": [],
+      "funcname": "ShowViewportThumbnails",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igShowViewportThumbnails",
       "ret": "void",
       "signature": "()",
       "stname": ""
@@ -23868,6 +25735,35 @@
       "stname": ""
     }
   ],
+  "igStartMouseMovingWindowOrNode": [
+    {
+      "args": "(ImGuiWindow* window,ImGuiDockNode* node,bool undock_floating_node)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "ImGuiWindow*"
+        },
+        {
+          "name": "node",
+          "type": "ImGuiDockNode*"
+        },
+        {
+          "name": "undock_floating_node",
+          "type": "bool"
+        }
+      ],
+      "argsoriginal": "(ImGuiWindow* window,ImGuiDockNode* node,bool undock_floating_node)",
+      "call_args": "(window,node,undock_floating_node)",
+      "cimguiname": "igStartMouseMovingWindowOrNode",
+      "defaults": [],
+      "funcname": "StartMouseMovingWindowOrNode",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igStartMouseMovingWindowOrNode",
+      "ret": "void",
+      "signature": "(ImGuiWindow*,ImGuiDockNode*,bool)",
+      "stname": ""
+    }
+  ],
   "igStyleColorsClassic": [
     {
       "args": "(ImGuiStyle* dst)",
@@ -23937,6 +25833,35 @@
       "stname": ""
     }
   ],
+  "igTabBarAddTab": [
+    {
+      "args": "(ImGuiTabBar* tab_bar,ImGuiTabItemFlags tab_flags,ImGuiWindow* window)",
+      "argsT": [
+        {
+          "name": "tab_bar",
+          "type": "ImGuiTabBar*"
+        },
+        {
+          "name": "tab_flags",
+          "type": "ImGuiTabItemFlags"
+        },
+        {
+          "name": "window",
+          "type": "ImGuiWindow*"
+        }
+      ],
+      "argsoriginal": "(ImGuiTabBar* tab_bar,ImGuiTabItemFlags tab_flags,ImGuiWindow* window)",
+      "call_args": "(tab_bar,tab_flags,window)",
+      "cimguiname": "igTabBarAddTab",
+      "defaults": [],
+      "funcname": "TabBarAddTab",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igTabBarAddTab",
+      "ret": "void",
+      "signature": "(ImGuiTabBar*,ImGuiTabItemFlags,ImGuiWindow*)",
+      "stname": ""
+    }
+  ],
   "igTabBarCloseTab": [
     {
       "args": "(ImGuiTabBar* tab_bar,ImGuiTabItem* tab)",
@@ -23959,6 +25884,27 @@
       "ov_cimguiname": "igTabBarCloseTab",
       "ret": "void",
       "signature": "(ImGuiTabBar*,ImGuiTabItem*)",
+      "stname": ""
+    }
+  ],
+  "igTabBarFindMostRecentlySelectedTabForActiveWindow": [
+    {
+      "args": "(ImGuiTabBar* tab_bar)",
+      "argsT": [
+        {
+          "name": "tab_bar",
+          "type": "ImGuiTabBar*"
+        }
+      ],
+      "argsoriginal": "(ImGuiTabBar* tab_bar)",
+      "call_args": "(tab_bar)",
+      "cimguiname": "igTabBarFindMostRecentlySelectedTabForActiveWindow",
+      "defaults": [],
+      "funcname": "TabBarFindMostRecentlySelectedTabForActiveWindow",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igTabBarFindMostRecentlySelectedTabForActiveWindow",
+      "ret": "ImGuiTabItem*",
+      "signature": "(ImGuiTabBar*)",
       "stname": ""
     }
   ],
@@ -24106,7 +26052,7 @@
   ],
   "igTabItemEx": [
     {
-      "args": "(ImGuiTabBar* tab_bar,const char* label,bool* p_open,ImGuiTabItemFlags flags)",
+      "args": "(ImGuiTabBar* tab_bar,const char* label,bool* p_open,ImGuiTabItemFlags flags,ImGuiWindow* docked_window)",
       "argsT": [
         {
           "name": "tab_bar",
@@ -24123,17 +26069,21 @@
         {
           "name": "flags",
           "type": "ImGuiTabItemFlags"
+        },
+        {
+          "name": "docked_window",
+          "type": "ImGuiWindow*"
         }
       ],
-      "argsoriginal": "(ImGuiTabBar* tab_bar,const char* label,bool* p_open,ImGuiTabItemFlags flags)",
-      "call_args": "(tab_bar,label,p_open,flags)",
+      "argsoriginal": "(ImGuiTabBar* tab_bar,const char* label,bool* p_open,ImGuiTabItemFlags flags,ImGuiWindow* docked_window)",
+      "call_args": "(tab_bar,label,p_open,flags,docked_window)",
       "cimguiname": "igTabItemEx",
       "defaults": [],
       "funcname": "TabItemEx",
       "namespace": "ImGui",
       "ov_cimguiname": "igTabItemEx",
       "ret": "bool",
-      "signature": "(ImGuiTabBar*,const char*,bool*,ImGuiTabItemFlags)",
+      "signature": "(ImGuiTabBar*,const char*,bool*,ImGuiTabItemFlags,ImGuiWindow*)",
       "stname": ""
     }
   ],
@@ -24553,6 +26503,35 @@
       "ov_cimguiname": "igTextWrappedV",
       "ret": "void",
       "signature": "(const char*,va_list)",
+      "stname": ""
+    }
+  ],
+  "igTranslateWindowsInViewport": [
+    {
+      "args": "(ImGuiViewportP* viewport,const ImVec2 old_pos,const ImVec2 new_pos)",
+      "argsT": [
+        {
+          "name": "viewport",
+          "type": "ImGuiViewportP*"
+        },
+        {
+          "name": "old_pos",
+          "type": "const ImVec2"
+        },
+        {
+          "name": "new_pos",
+          "type": "const ImVec2"
+        }
+      ],
+      "argsoriginal": "(ImGuiViewportP* viewport,const ImVec2& old_pos,const ImVec2& new_pos)",
+      "call_args": "(viewport,old_pos,new_pos)",
+      "cimguiname": "igTranslateWindowsInViewport",
+      "defaults": [],
+      "funcname": "TranslateWindowsInViewport",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igTranslateWindowsInViewport",
+      "ret": "void",
+      "signature": "(ImGuiViewportP*,const ImVec2,const ImVec2)",
       "stname": ""
     }
   ],
@@ -25051,6 +27030,22 @@
       "funcname": "UpdateMouseMovingWindowNewFrame",
       "namespace": "ImGui",
       "ov_cimguiname": "igUpdateMouseMovingWindowNewFrame",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "igUpdatePlatformWindows": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "igUpdatePlatformWindows",
+      "defaults": [],
+      "funcname": "UpdatePlatformWindows",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igUpdatePlatformWindows",
       "ret": "void",
       "signature": "()",
       "stname": ""
