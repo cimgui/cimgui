@@ -428,8 +428,8 @@ gdefines = get_defines{"IMGUI_VERSION","FLT_MAX"}
 local function parseImGuiHeader(header,names)
 	--prepare parser
 	local parser = cpp2ffi.Parser()
-	parser.getCname = function(stname,funcname)
-		local pre = (stname == "") and "ig" or stname.."_"
+	parser.getCname = function(stname,funcname,namespace)
+		local pre = (stname == "") and (namespace and (namespace=="ImGui" and "ig" or namespace.."_") or "ig") or stname.."_"
 		return pre..funcname
 	end
 	parser.cname_overloads = cimgui_overloads
