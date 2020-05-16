@@ -67,12 +67,12 @@ igGetForegroundDrawList	3
 1	ImDrawList*	igGetForegroundDrawListNil ()
 2	ImDrawList*	igGetForegroundDrawListViewportPtr (ImGuiViewport*)
 3	ImDrawList*	igGetForegroundDrawListWindowPtr (ImGuiWindow*)
-ImVector_resize	2
-1	void	ImVector_resizeNil (int)
-2	void	ImVector_resizeT (int,const T)
 igGetBackgroundDrawList	2
 1	ImDrawList*	igGetBackgroundDrawListNil ()
 2	ImDrawList*	igGetBackgroundDrawListViewportPtr (ImGuiViewport*)
+ImVector_resize	2
+1	void	ImVector_resizeNil (int)
+2	void	ImVector_resizeT (int,const T)
 igImLengthSqr	2
 1	float	igImLengthSqrVec2 (const ImVec2)
 2	float	igImLengthSqrVec4 (const ImVec4)
@@ -97,12 +97,12 @@ igCombo	3
 igSetScrollY	2
 1	void	igSetScrollYFloat (float)
 2	void	igSetScrollYWindowPtr (ImGuiWindow*,float)
-ImVector_erase	2
-1	T*	ImVector_eraseNil (const T*)
-2	T*	ImVector_eraseTPtr (const T*,const T*)
 igMarkIniSettingsDirty	2
 1	void	igMarkIniSettingsDirtyNil ()
 2	void	igMarkIniSettingsDirtyWindowPtr (ImGuiWindow*)
+ImVector_erase	2
+1	T*	ImVector_eraseNil (const T*)
+2	T*	ImVector_eraseTPtr (const T*,const T*)
 ImDrawList_AddText	2
 1	void	ImDrawList_AddTextVec2 (const ImVec2,ImU32,const char*,const char*)
 2	void	ImDrawList_AddTextFontPtr (const ImFont*,float,const ImVec2,ImU32,const char*,const char*,float,const ImVec4*)
@@ -144,9 +144,10 @@ igSetWindowCollapsed	3
 igPlotLines	2
 1	void	igPlotLinesFloatPtr (const char*,const float*,int,int,const char*,float,float,ImVec2,int)
 2	void	igPlotLinesFnPtr (const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)
-ImVector_find	2
-1	T*	ImVector_findNil (const T)
-2	const T*	ImVector_find_const (const T)const
+ImGuiStyleMod_ImGuiStyleMod	3
+1	nil	ImGuiStyleMod_ImGuiStyleModInt (ImGuiStyleVar,int)
+2	nil	ImGuiStyleMod_ImGuiStyleModFloat (ImGuiStyleVar,float)
+3	nil	ImGuiStyleMod_ImGuiStyleModVec2 (ImGuiStyleVar,ImVec2)
 igTreeNodeExV	2
 1	bool	igTreeNodeExVStr (const char*,ImGuiTreeNodeFlags,const char*,va_list)
 2	bool	igTreeNodeExVPtr (const void*,ImGuiTreeNodeFlags,const char*,va_list)
@@ -154,16 +155,15 @@ ImVec2ih_ImVec2ih	3
 1	nil	ImVec2ih_ImVec2ihNil ()
 2	nil	ImVec2ih_ImVec2ihshort (short,short)
 3	explicit	ImVec2ih_ImVec2ihVec2 (const ImVec2)
-ImGuiStyleMod_ImGuiStyleMod	3
-1	nil	ImGuiStyleMod_ImGuiStyleModInt (ImGuiStyleVar,int)
-2	nil	ImGuiStyleMod_ImGuiStyleModFloat (ImGuiStyleVar,float)
-3	nil	ImGuiStyleMod_ImGuiStyleModVec2 (ImGuiStyleVar,ImVec2)
-ImRect_Expand	2
-1	void	ImRect_ExpandFloat (const float)
-2	void	ImRect_ExpandVec2 (const ImVec2)
+ImVector_find	2
+1	T*	ImVector_findNil (const T)
+2	const T*	ImVector_find_const (const T)const
 ImPool_Remove	2
 1	void	ImPool_RemoveTPtr (ImGuiID,const T*)
 2	void	ImPool_RemovePoolIdx (ImGuiID,ImPoolIdx)
+ImRect_Expand	2
+1	void	ImRect_ExpandFloat (const float)
+2	void	ImRect_ExpandVec2 (const ImVec2)
 igSetScrollX	2
 1	void	igSetScrollXFloat (float)
 2	void	igSetScrollXWindowPtr (ImGuiWindow*,float)

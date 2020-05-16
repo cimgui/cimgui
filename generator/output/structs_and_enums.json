@@ -3160,10 +3160,6 @@
     ],
     "ImFontAtlasCustomRect": [
       {
-        "name": "ID",
-        "type": "unsigned int"
-      },
-      {
         "name": "Width",
         "type": "unsigned short"
       },
@@ -3178,6 +3174,10 @@
       {
         "name": "Y",
         "type": "unsigned short"
+      },
+      {
+        "name": "GlyphID",
+        "type": "unsigned int"
       },
       {
         "name": "GlyphAdvanceX",
@@ -3885,6 +3885,14 @@
         "type": "ImGuiNavMoveResult"
       },
       {
+        "name": "NavWrapRequestWindow",
+        "type": "ImGuiWindow*"
+      },
+      {
+        "name": "NavWrapRequestFlags",
+        "type": "ImGuiNavMoveFlags"
+      },
+      {
         "name": "NavWindowingTarget",
         "type": "ImGuiWindow*"
       },
@@ -3893,7 +3901,7 @@
         "type": "ImGuiWindow*"
       },
       {
-        "name": "NavWindowingList",
+        "name": "NavWindowingListWindow",
         "type": "ImGuiWindow*"
       },
       {
@@ -4114,7 +4122,7 @@
       },
       {
         "name": "DockContext",
-        "type": "ImGuiDockContext*"
+        "type": "ImGuiDockContext"
       },
       {
         "name": "SettingsLoaded",
@@ -4225,6 +4233,33 @@
       {
         "name": "ScanFmt",
         "type": "const char*"
+      }
+    ],
+    "ImGuiDataTypeTempStorage": [
+      {
+        "name": "Data[8]",
+        "size": 8,
+        "type": "ImU8"
+      }
+    ],
+    "ImGuiDockContext": [
+      {
+        "name": "Nodes",
+        "type": "ImGuiStorage"
+      },
+      {
+        "name": "Requests",
+        "template_type": "ImGuiDockRequest",
+        "type": "ImVector_ImGuiDockRequest"
+      },
+      {
+        "name": "NodesSettings",
+        "template_type": "ImGuiDockNodeSettings",
+        "type": "ImVector_ImGuiDockNodeSettings"
+      },
+      {
+        "name": "WantFullRebuild",
+        "type": "bool"
       }
     ],
     "ImGuiDockNode": [
@@ -5343,12 +5378,24 @@
         "type": "ImGuiID"
       },
       {
+        "name": "ClearAllFn",
+        "type": "void(*)(ImGuiContext* ctx,ImGuiSettingsHandler* handler)"
+      },
+      {
+        "name": "ReadInitFn",
+        "type": "void(*)(ImGuiContext* ctx,ImGuiSettingsHandler* handler)"
+      },
+      {
         "name": "ReadOpenFn",
         "type": "void*(*)(ImGuiContext* ctx,ImGuiSettingsHandler* handler,const char* name)"
       },
       {
         "name": "ReadLineFn",
         "type": "void(*)(ImGuiContext* ctx,ImGuiSettingsHandler* handler,void* entry,const char* line)"
+      },
+      {
+        "name": "ApplyAllFn",
+        "type": "void(*)(ImGuiContext* ctx,ImGuiSettingsHandler* handler)"
       },
       {
         "name": "WriteAllFn",
@@ -5503,6 +5550,10 @@
       },
       {
         "name": "TabBorderSize",
+        "type": "float"
+      },
+      {
+        "name": "TabMinWidthForUnselectedCloseButton",
         "type": "float"
       },
       {
@@ -6347,6 +6398,10 @@
       },
       {
         "name": "Collapsed",
+        "type": "bool"
+      },
+      {
+        "name": "WantApply",
         "type": "bool"
       }
     ],

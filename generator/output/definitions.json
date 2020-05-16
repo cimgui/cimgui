@@ -2920,15 +2920,11 @@
   ],
   "ImFontAtlas_AddCustomRectRegular": [
     {
-      "args": "(ImFontAtlas* self,unsigned int id,int width,int height)",
+      "args": "(ImFontAtlas* self,int width,int height)",
       "argsT": [
         {
           "name": "self",
           "type": "ImFontAtlas*"
-        },
-        {
-          "name": "id",
-          "type": "unsigned int"
         },
         {
           "name": "width",
@@ -2939,14 +2935,14 @@
           "type": "int"
         }
       ],
-      "argsoriginal": "(unsigned int id,int width,int height)",
-      "call_args": "(id,width,height)",
+      "argsoriginal": "(int width,int height)",
+      "call_args": "(width,height)",
       "cimguiname": "ImFontAtlas_AddCustomRectRegular",
       "defaults": [],
       "funcname": "AddCustomRectRegular",
       "ov_cimguiname": "ImFontAtlas_AddCustomRectRegular",
       "ret": "int",
-      "signature": "(unsigned int,int,int)",
+      "signature": "(int,int)",
       "stname": "ImFontAtlas"
     }
   ],
@@ -4608,6 +4604,40 @@
       "ret": "void",
       "signature": "(ImGuiContext*)",
       "stname": "ImGuiContext"
+    }
+  ],
+  "ImGuiDockContext_ImGuiDockContext": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiDockContext_ImGuiDockContext",
+      "constructor": true,
+      "defaults": [],
+      "funcname": "ImGuiDockContext",
+      "ov_cimguiname": "ImGuiDockContext_ImGuiDockContext",
+      "signature": "()",
+      "stname": "ImGuiDockContext"
+    }
+  ],
+  "ImGuiDockContext_destroy": [
+    {
+      "args": "(ImGuiDockContext* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiDockContext*"
+        }
+      ],
+      "call_args": "(self)",
+      "cimguiname": "ImGuiDockContext_destroy",
+      "defaults": [],
+      "destructor": true,
+      "ov_cimguiname": "ImGuiDockContext_destroy",
+      "ret": "void",
+      "signature": "(ImGuiDockContext*)",
+      "stname": "ImGuiDockContext"
     }
   ],
   "ImGuiDockNode_GetMergedFlags": [
@@ -11531,6 +11561,22 @@
       "stname": ""
     }
   ],
+  "igClearIniSettings": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "igClearIniSettings",
+      "defaults": [],
+      "funcname": "ClearIniSettings",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igClearIniSettings",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
   "igCloseButton": [
     {
       "args": "(ImGuiID id,const ImVec2 pos)",
@@ -12348,6 +12394,39 @@
       "stname": ""
     }
   ],
+  "igDataTypeClamp": [
+    {
+      "args": "(ImGuiDataType data_type,void* p_data,const void* p_min,const void* p_max)",
+      "argsT": [
+        {
+          "name": "data_type",
+          "type": "ImGuiDataType"
+        },
+        {
+          "name": "p_data",
+          "type": "void*"
+        },
+        {
+          "name": "p_min",
+          "type": "const void*"
+        },
+        {
+          "name": "p_max",
+          "type": "const void*"
+        }
+      ],
+      "argsoriginal": "(ImGuiDataType data_type,void* p_data,const void* p_min,const void* p_max)",
+      "call_args": "(data_type,p_data,p_min,p_max)",
+      "cimguiname": "igDataTypeClamp",
+      "defaults": [],
+      "funcname": "DataTypeClamp",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDataTypeClamp",
+      "ret": "bool",
+      "signature": "(ImGuiDataType,void*,const void*,const void*)",
+      "stname": ""
+    }
+  ],
   "igDataTypeFormatString": [
     {
       "args": "(char* buf,int buf_size,ImGuiDataType data_type,const void* p_data,const char* format)",
@@ -12793,22 +12872,22 @@
   ],
   "igDockBuilderRemoveNodeDockedWindows": [
     {
-      "args": "(ImGuiID node_id,bool clear_persistent_docking_references)",
+      "args": "(ImGuiID node_id,bool clear_settings_refs)",
       "argsT": [
         {
           "name": "node_id",
           "type": "ImGuiID"
         },
         {
-          "name": "clear_persistent_docking_references",
+          "name": "clear_settings_refs",
           "type": "bool"
         }
       ],
-      "argsoriginal": "(ImGuiID node_id,bool clear_persistent_docking_references=true)",
-      "call_args": "(node_id,clear_persistent_docking_references)",
+      "argsoriginal": "(ImGuiID node_id,bool clear_settings_refs=true)",
+      "call_args": "(node_id,clear_settings_refs)",
       "cimguiname": "igDockBuilderRemoveNodeDockedWindows",
       "defaults": {
-        "clear_persistent_docking_references": "true"
+        "clear_settings_refs": "true"
       },
       "funcname": "DockBuilderRemoveNodeDockedWindows",
       "namespace": "ImGui",
@@ -12946,6 +13025,35 @@
       "stname": ""
     }
   ],
+  "igDockContextClearNodes": [
+    {
+      "args": "(ImGuiContext* ctx,ImGuiID root_id,bool clear_settings_refs)",
+      "argsT": [
+        {
+          "name": "ctx",
+          "type": "ImGuiContext*"
+        },
+        {
+          "name": "root_id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "clear_settings_refs",
+          "type": "bool"
+        }
+      ],
+      "argsoriginal": "(ImGuiContext* ctx,ImGuiID root_id,bool clear_settings_refs)",
+      "call_args": "(ctx,root_id,clear_settings_refs)",
+      "cimguiname": "igDockContextClearNodes",
+      "defaults": [],
+      "funcname": "DockContextClearNodes",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockContextClearNodes",
+      "ret": "void",
+      "signature": "(ImGuiContext*,ImGuiID,bool)",
+      "stname": ""
+    }
+  ],
   "igDockContextGenNodeID": [
     {
       "args": "(ImGuiContext* ctx)",
@@ -12983,27 +13091,6 @@
       "funcname": "DockContextInitialize",
       "namespace": "ImGui",
       "ov_cimguiname": "igDockContextInitialize",
-      "ret": "void",
-      "signature": "(ImGuiContext*)",
-      "stname": ""
-    }
-  ],
-  "igDockContextOnLoadSettings": [
-    {
-      "args": "(ImGuiContext* ctx)",
-      "argsT": [
-        {
-          "name": "ctx",
-          "type": "ImGuiContext*"
-        }
-      ],
-      "argsoriginal": "(ImGuiContext* ctx)",
-      "call_args": "(ctx)",
-      "cimguiname": "igDockContextOnLoadSettings",
-      "defaults": [],
-      "funcname": "DockContextOnLoadSettings",
-      "namespace": "ImGui",
-      "ov_cimguiname": "igDockContextOnLoadSettings",
       "ret": "void",
       "signature": "(ImGuiContext*)",
       "stname": ""
@@ -13185,6 +13272,27 @@
       "ov_cimguiname": "igDockContextUpdateUndocking",
       "ret": "void",
       "signature": "(ImGuiContext*)",
+      "stname": ""
+    }
+  ],
+  "igDockNodeGetDepth": [
+    {
+      "args": "(const ImGuiDockNode* node)",
+      "argsT": [
+        {
+          "name": "node",
+          "type": "const ImGuiDockNode*"
+        }
+      ],
+      "argsoriginal": "(const ImGuiDockNode* node)",
+      "call_args": "(node)",
+      "cimguiname": "igDockNodeGetDepth",
+      "defaults": [],
+      "funcname": "DockNodeGetDepth",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDockNodeGetDepth",
+      "ret": "int",
+      "signature": "(const ImGuiDockNode*)",
       "stname": ""
     }
   ],
@@ -24611,6 +24719,35 @@
       "stname": ""
     }
   ],
+  "igSetWindowHitTestHole": [
+    {
+      "args": "(ImGuiWindow* window,const ImVec2 pos,const ImVec2 size)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "ImGuiWindow*"
+        },
+        {
+          "name": "pos",
+          "type": "const ImVec2"
+        },
+        {
+          "name": "size",
+          "type": "const ImVec2"
+        }
+      ],
+      "argsoriginal": "(ImGuiWindow* window,const ImVec2& pos,const ImVec2& size)",
+      "call_args": "(window,pos,size)",
+      "cimguiname": "igSetWindowHitTestHole",
+      "defaults": [],
+      "funcname": "SetWindowHitTestHole",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igSetWindowHitTestHole",
+      "ret": "void",
+      "signature": "(ImGuiWindow*,const ImVec2,const ImVec2)",
+      "stname": ""
+    }
+  ],
   "igSetWindowPos": [
     {
       "args": "(const ImVec2 pos,ImGuiCond cond)",
@@ -26089,7 +26226,7 @@
   ],
   "igTabItemLabelAndCloseButton": [
     {
-      "args": "(ImDrawList* draw_list,const ImRect bb,ImGuiTabItemFlags flags,ImVec2 frame_padding,const char* label,ImGuiID tab_id,ImGuiID close_button_id)",
+      "args": "(ImDrawList* draw_list,const ImRect bb,ImGuiTabItemFlags flags,ImVec2 frame_padding,const char* label,ImGuiID tab_id,ImGuiID close_button_id,bool is_contents_visible)",
       "argsT": [
         {
           "name": "draw_list",
@@ -26118,17 +26255,21 @@
         {
           "name": "close_button_id",
           "type": "ImGuiID"
+        },
+        {
+          "name": "is_contents_visible",
+          "type": "bool"
         }
       ],
-      "argsoriginal": "(ImDrawList* draw_list,const ImRect& bb,ImGuiTabItemFlags flags,ImVec2 frame_padding,const char* label,ImGuiID tab_id,ImGuiID close_button_id)",
-      "call_args": "(draw_list,bb,flags,frame_padding,label,tab_id,close_button_id)",
+      "argsoriginal": "(ImDrawList* draw_list,const ImRect& bb,ImGuiTabItemFlags flags,ImVec2 frame_padding,const char* label,ImGuiID tab_id,ImGuiID close_button_id,bool is_contents_visible)",
+      "call_args": "(draw_list,bb,flags,frame_padding,label,tab_id,close_button_id,is_contents_visible)",
       "cimguiname": "igTabItemLabelAndCloseButton",
       "defaults": [],
       "funcname": "TabItemLabelAndCloseButton",
       "namespace": "ImGui",
       "ov_cimguiname": "igTabItemLabelAndCloseButton",
       "ret": "bool",
-      "signature": "(ImDrawList*,const ImRect,ImGuiTabItemFlags,ImVec2,const char*,ImGuiID,ImGuiID)",
+      "signature": "(ImDrawList*,const ImRect,ImGuiTabItemFlags,ImVec2,const char*,ImGuiID,ImGuiID,bool)",
       "stname": ""
     }
   ],
@@ -26155,7 +26296,7 @@
   ],
   "igTempInputScalar": [
     {
-      "args": "(const ImRect bb,ImGuiID id,const char* label,ImGuiDataType data_type,void* p_data,const char* format)",
+      "args": "(const ImRect bb,ImGuiID id,const char* label,ImGuiDataType data_type,void* p_data,const char* format,const void* p_clamp_min,const void* p_clamp_max)",
       "argsT": [
         {
           "name": "bb",
@@ -26180,17 +26321,28 @@
         {
           "name": "format",
           "type": "const char*"
+        },
+        {
+          "name": "p_clamp_min",
+          "type": "const void*"
+        },
+        {
+          "name": "p_clamp_max",
+          "type": "const void*"
         }
       ],
-      "argsoriginal": "(const ImRect& bb,ImGuiID id,const char* label,ImGuiDataType data_type,void* p_data,const char* format)",
-      "call_args": "(bb,id,label,data_type,p_data,format)",
+      "argsoriginal": "(const ImRect& bb,ImGuiID id,const char* label,ImGuiDataType data_type,void* p_data,const char* format,const void* p_clamp_min=((void*)0),const void* p_clamp_max=((void*)0))",
+      "call_args": "(bb,id,label,data_type,p_data,format,p_clamp_min,p_clamp_max)",
       "cimguiname": "igTempInputScalar",
-      "defaults": [],
+      "defaults": {
+        "p_clamp_max": "((void*)0)",
+        "p_clamp_min": "((void*)0)"
+      },
       "funcname": "TempInputScalar",
       "namespace": "ImGui",
       "ov_cimguiname": "igTempInputScalar",
       "ret": "bool",
-      "signature": "(const ImRect,ImGuiID,const char*,ImGuiDataType,void*,const char*)",
+      "signature": "(const ImRect,ImGuiID,const char*,ImGuiDataType,void*,const char*,const void*,const void*)",
       "stname": ""
     }
   ],
