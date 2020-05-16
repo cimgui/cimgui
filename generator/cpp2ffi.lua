@@ -520,7 +520,7 @@ local function parseFunction(self,stname,lineorig,namespace)
         table.insert(argsArr,{type=type,name=name,ret=retf,signature=sigf})
         if arg:match("&") and not arg:match("const") then
             --only post error if not manual
-            local cname = self.getCname(stname,funcname) --cimguiname
+            local cname = self.getCname(stname,funcname, namespace) --cimguiname
             if not self.manuals[cname] then
                 print("reference to no const arg in",funcname,argscsinpars,arg)
             end
@@ -547,7 +547,7 @@ local function parseFunction(self,stname,lineorig,namespace)
         end
     end
     
-    local cimguiname = self.getCname(stname,funcname)
+    local cimguiname = self.getCname(stname,funcname, namespace)
     table.insert(self.funcdefs,{stname=stname,funcname=funcname,args=args,argsc=argscsinpars,signature=signature,cimguiname=cimguiname,call_args=call_args,ret =ret})
 	local defsT = self.defsT
 	            defsT[cimguiname] = defsT[cimguiname] or {}
@@ -770,13 +770,13 @@ function M.Parser()
 	function par:insert(line)
 		table.insert(cdefs,line)
 	end
-	function par.getCname(stname,funcname)
+	function par.getCname(stname,funcname, namespace)
 		if #stname == 0 then return funcname end --top level
 		local pre = stname.."_"
 		return pre..funcname
 	end
-	function par.getCname_overload(stname,funcname,signature)
-		local cname = par.getCname(stname,funcname)
+	function par.getCname_overload(stname,funcname,signature, namespace)
+		local cname = par.getCname(stname,funcname, namespace)
 		local ov_cname = par.cname_overloads[cname] and par.cname_overloads[cname][signature] --or cname
 		return ov_cname
 	end
@@ -1193,7 +1193,7 @@ function M.Parser()
                 local typesc,post = name_overloadsAlgo(v)
                 for i,t in ipairs(v) do
                     --take overloaded name from manual table or algorythm
-                    t.ov_cimguiname = self.getCname_overload(t.stname,t.funcname,t.signature) or k..typetoStr(post[i])
+                    t.ov_cimguiname = self.getCname_overload(t.stname,t.funcname,t.signature,t.namespace) or k..typetoStr(post[i])
                     table.insert(strt,string.format("%d\t%s\t%s %s",i,t.ret,t.ov_cimguiname,t.signature))
                     --M.prtable(typesc[i],post)
                 end
