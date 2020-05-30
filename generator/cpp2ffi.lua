@@ -392,8 +392,10 @@ local function name_overloadsAlgo(v)
     return aa,bb
 end
 local function typetoStr(typ)
+	--print("typetoStr",typ)
     --typ = typ:gsub("[^%(%)]+%(%*?(.+)%).+","%1") -- funcs
-    typ = typ:gsub("[^%(%)]+%(%*?(.+)%).+","FnPtr")
+    --typ = typ:gsub("[^%(%)]+%(%*?(.+)%).+","FnPtr")
+    typ = typ:gsub("([^%(%)]+)%(%*?(.+)%).+","Fn%1Ptr")
     typ = typ:gsub("[%w_]+%[(%d*)%]","arr%1")
     typ = typ:gsub("%*","Ptr")
     typ = typ:gsub("void","")
@@ -1199,7 +1201,7 @@ function M.Parser()
                 end
                 --check not two names are equal (produced by bad cimguiname_overload)
                 for i=1,#v-1 do 
-                    for j=i+1,#v-1 do
+                    for j=i+1,#v do
                         if v[i].ov_cimguiname == v[j].ov_cimguiname then
                           local t,tj = v[i],v[j]
                           print("Error caused by Bad overloading "..t.ov_cimguiname.." of function ",t.funcname,t.signature,"conflicts with ",tj.funcname,tj.signature)
