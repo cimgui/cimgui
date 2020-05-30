@@ -11595,7 +11595,7 @@
       },
       "funcname": "Combo",
       "namespace": "ImGui",
-      "ov_cimguiname": "igComboFnPtr",
+      "ov_cimguiname": "igComboFnBoolPtr",
       "ret": "bool",
       "signature": "(const char*,int*,bool(*)(void*,int,const char**),void*,int,int)",
       "stname": ""
@@ -18876,7 +18876,7 @@
       },
       "funcname": "ListBox",
       "namespace": "ImGui",
-      "ov_cimguiname": "igListBoxFnPtr",
+      "ov_cimguiname": "igListBoxFnBoolPtr",
       "ret": "bool",
       "signature": "(const char*,int*,bool(*)(void*,int,const char**),void*,int,int)",
       "stname": ""
@@ -19787,7 +19787,7 @@
       },
       "funcname": "PlotHistogram",
       "namespace": "ImGui",
-      "ov_cimguiname": "igPlotHistogramFnPtr",
+      "ov_cimguiname": "igPlotHistogramFnFloatPtr",
       "ret": "void",
       "signature": "(const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)",
       "stname": ""
@@ -19906,7 +19906,7 @@
       },
       "funcname": "PlotLines",
       "namespace": "ImGui",
-      "ov_cimguiname": "igPlotLinesFnPtr",
+      "ov_cimguiname": "igPlotLinesFnFloatPtr",
       "ret": "void",
       "signature": "(const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)",
       "stname": ""

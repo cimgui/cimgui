@@ -30,7 +30,7 @@ ImVector_back	2
 2	const T*	ImVector_back_const ()const
 igPlotHistogram	2
 1	void	igPlotHistogramFloatPtr (const char*,const float*,int,int,const char*,float,float,ImVec2,int)
-2	void	igPlotHistogramFnPtr (const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)
+2	void	igPlotHistogramFnFloatPtr (const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)
 igGetID	3
 1	ImGuiID	igGetIDStr (const char*)
 2	ImGuiID	igGetIDStrStr (const char*,const char*)
@@ -89,7 +89,7 @@ igItemSize	2
 igCombo	3
 1	bool	igComboStr_arr (const char*,int*,const char* const[],int,int)
 2	bool	igComboStr (const char*,int*,const char*,int)
-3	bool	igComboFnPtr (const char*,int*,bool(*)(void*,int,const char**),void*,int,int)
+3	bool	igComboFnBoolPtr (const char*,int*,bool(*)(void*,int,const char**),void*,int,int)
 igSetScrollY	2
 1	void	igSetScrollYFloat (float)
 2	void	igSetScrollYWindowPtr (ImGuiWindow*,float)
@@ -131,7 +131,7 @@ igSetWindowCollapsed	3
 3	void	igSetWindowCollapsedWindowPtr (ImGuiWindow*,bool,ImGuiCond)
 igPlotLines	2
 1	void	igPlotLinesFloatPtr (const char*,const float*,int,int,const char*,float,float,ImVec2,int)
-2	void	igPlotLinesFnPtr (const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)
+2	void	igPlotLinesFnFloatPtr (const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)
 igPushStyleColor	2
 1	void	igPushStyleColorU32 (ImGuiCol,ImU32)
 2	void	igPushStyleColorVec4 (ImGuiCol,const ImVec4)
@@ -162,7 +162,7 @@ ImPool_Remove	2
 2	void	ImPool_RemovePoolIdx (ImGuiID,ImPoolIdx)
 igListBox	2
 1	bool	igListBoxStr_arr (const char*,int*,const char* const[],int,int)
-2	bool	igListBoxFnPtr (const char*,int*,bool(*)(void*,int,const char**),void*,int,int)
+2	bool	igListBoxFnBoolPtr (const char*,int*,bool(*)(void*,int,const char**),void*,int,int)
 ImGuiPtrOrIndex_ImGuiPtrOrIndex	2
 1	nil	ImGuiPtrOrIndex_ImGuiPtrOrIndexPtr (void*)
 2	nil	ImGuiPtrOrIndex_ImGuiPtrOrIndexInt (int)
