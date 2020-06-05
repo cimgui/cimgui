@@ -428,6 +428,20 @@ gdefines = get_defines{"IMGUI_VERSION","FLT_MAX"}
 local function parseImGuiHeader(header,names)
 	--prepare parser
 	local parser = cpp2ffi.Parser()
+	
+	parser.separate_locations = function(self,cdefs)
+		local imguicdefs = {}
+		local othercdefs = {}
+		for i,cdef in ipairs(cdefs) do
+			if cdef[2]=="imgui" then
+				table.insert(imguicdefs,cdef[1])
+			else
+				table.insert(othercdefs,cdef[1])
+			end
+		end
+		return {{"imgui",imguicdefs},{"internal",othercdefs}}
+	end
+	
 	parser.getCname = function(stname,funcname,namespace)
 		local pre = (stname == "") and (namespace and (namespace=="ImGui" and "ig" or namespace.."_") or "ig") or stname.."_"
 		return pre..funcname
