@@ -552,6 +552,20 @@ if #implementations > 0 then
         end
         pipe:close()
     end
+	
+	parser2.separate_locations = function(self, cdefs)
+		local sepcdefs = {}
+		for i,impl in ipairs(implementations) do
+			sepcdefs[i] = {[[imgui_impl_]].. impl,{}}
+			for j,cdef in ipairs(cdefs) do
+				if cdef[2]==sepcdefs[i][1] then
+					table.insert(sepcdefs[i][2],cdef[1])
+				end
+			end
+		end
+		return sepcdefs
+	end
+	
     parser2:do_parse()
 
     -- save ./cimgui_impl.h

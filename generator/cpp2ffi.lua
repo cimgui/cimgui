@@ -281,7 +281,7 @@ end
 M.getRE = getRE
 --takes preprocesed file in table cdefsor and returns items
 local function parseItems(txt,dumpit,loca)
-
+	--assert(loca)
 	--dumpit = true
 	local res,resN = getRE()
 	
@@ -891,7 +891,8 @@ function M.Parser()
 		--require"anima"
 		--prtable(self.defsT)
 	end
-	function par:clean_struct(stru)
+	function par:clean_struct(stru, locat)
+		--assert(locat)
 		local outtab = {}
 		local iner = strip_end(stru:match("%b{}"):sub(2,-2))
 		local inistruct = clean_spaces(stru:match("(.-)%b{}"))
@@ -917,7 +918,7 @@ function M.Parser()
 		if derived then
 			table.insert(outtab,"\n    "..derived.." _"..derived..";")
 		end
-		local itlist,itemsin = parseItems(iner)
+		local itlist,itemsin = parseItems(iner, false,locat)
 		if #itlist == 0 then return "" end --here we avoid empty structs
 		for j,it in ipairs(itlist) do
 			if it.re_name == "vardef_re" or it.re_name == "functype_re" or it.re_name == "union_re" then
@@ -972,7 +973,7 @@ function M.Parser()
 			if it.re_name == "namespace_re" then
 				local nsp = it.item:match("%b{}"):sub(2,-2)
 				local namespace = it.item:match("namespace%s+(%S+)")
-				local nspparr,itemsnsp = parseItems(nsp)
+				local nspparr,itemsnsp = parseItems(nsp, nil, it.locat )
 				for insp,itnsp in ipairs(nspparr) do
 					if itnsp.re_name == "struct_re"  or itnsp.re_name == "typedef_st_re" then
 						--print("in mamespace",itnsp.item,namespace)
@@ -988,7 +989,7 @@ function M.Parser()
 				--print("enum is:",enumname, enumbody)
 				table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
 			elseif it.re_name == "struct_re" then
-				local cleanst,structname = self:clean_struct(it.item)
+				local cleanst,structname = self:clean_struct(it.item, it.locat)
 				
 				--if not structname then print("NO NAME",cleanst,it.item) end
 				
@@ -1002,7 +1003,7 @@ function M.Parser()
 		end
 		--inner_structs
 		for i,it in ipairs(self.inerstructs) do
-			local cleanst,structname = self:clean_struct(it.item)
+			local cleanst,structname = self:clean_struct(it.item, it.locat)
 			if structname then
 			table.insert(outtab,cleanst)
 			table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
@@ -1123,7 +1124,7 @@ function M.Parser()
 					end
 				end
 			elseif it.re_name == "struct_re" then
-				local cleanst,structname,strtab = self:clean_struct(it.item)
+				local cleanst,structname,strtab = self:clean_struct(it.item, it.locat)
 				--if not void stname or templated
 				--M.prtable(cleanst,structname,strtab)
 				if structname and not self.typenames[structname] then
@@ -1138,7 +1139,7 @@ function M.Parser()
 		--inner_structs
 
 		for i,it in ipairs(self.inerstructs) do
-			local cleanst,structname,strtab = self:clean_struct(it.item)
+			local cleanst,structname,strtab = self:clean_struct(it.item, it.locat)
 			if structname then --not empty struc
 				outtab.structs[structname] = {}
 				for j=3,#strtab-1 do
