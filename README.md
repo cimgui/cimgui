@@ -50,7 +50,7 @@ Notes:
   * cimguiname : the name without overloading (this should be used if there is not ov_cimguiname)
   * ret : the return type
   * retref : is set if original return type is a reference. (will be a pointer in cimgui)
-  * argsT : an array of collections (each one with type: argument type and name: the argument name)
+  * argsT : an array of collections (each one with type: argument type and name: the argument name, when the argument is a function pointer also ret: return type and signature: the function signature)
   * args : a string of argsT concatenated and separated by commas
   * call_args : a string with the argument names separated by commas for calling imgui function
   * defaults : a collection in which key is argument name and value is the default value.
