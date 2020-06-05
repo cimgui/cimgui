@@ -280,7 +280,8 @@ local function getRE()
 end
 M.getRE = getRE
 --takes preprocesed file in table cdefsor and returns items
-local function parseItems(txt,dumpit)
+local function parseItems(txt,dumpit,loca)
+
 	--dumpit = true
 	local res,resN = getRE()
 	
@@ -297,7 +298,7 @@ local function parseItems(txt,dumpit)
 				item = txt:sub(i,e)
 				--if re~=functionD_re then --skip defined functions
 					item = item:gsub("extern __attribute__%(%(dllexport%)%) ","")
-					table.insert(itemarr,{re_name=re_name,item=item})
+					table.insert(itemarr,{re_name=re_name,item=item,locat=loca})
 				--end
 				items[re_name] = items[re_name] or {}
 				table.insert(items[re_name],item)
@@ -412,7 +413,8 @@ local function typetoStr(typ)
     typ = typ:gsub("[<>]","")
     return typ
 end
-local function parseFunction(self,stname,lineorig,namespace)
+local function parseFunction(self,stname,lineorig,namespace,locat)
+
 	line = clean_spaces(lineorig)
 	--move *
 	line = line:gsub("%s*%*","%*")
@@ -769,8 +771,8 @@ function M.Parser()
 	par.manuals = {}
 	par.UDTs = {}
 
-	function par:insert(line)
-		table.insert(cdefs,line)
+	function par:insert(line,loca)
+		table.insert(cdefs,{line,loca})
 	end
 	function par.getCname(stname,funcname, namespace)
 		if #stname == 0 then return funcname end --top level
@@ -795,7 +797,8 @@ function M.Parser()
 	end
 	function par:parseItems()
 		--typedefs dictionary
-		for i,line in ipairs(cdefs) do
+		for i,cdef in ipairs(cdefs) do
+			local line = cdef[1]
 			if line:match("typedef") then
 				line = clean_spaces(line)
 				local value,key = line:match("typedef%s+(.+)%s+([%w_]+);")
@@ -815,8 +818,26 @@ function M.Parser()
 				end
 			end
 		end
-		local txt = table.concat(cdefs,"\n")
-		itemsarr,items = parseItems(txt)
+		
+		itemsarr = {}
+		if self.separate_locations then
+			local located_cdefs = self:separate_locations(cdefs)
+			for i,lcdef in ipairs(located_cdefs) do
+				local txt = table.concat(lcdef[2],"\n")
+				local itemsarrT,itemsT = parseItems(txt,false,lcdef[1])
+				for i,it in ipairs(itemsarrT) do
+					table.insert(itemsarr,it)
+				end
+			end
+		else
+			local cdefs2 = {}
+			for i,cdef in ipairs(cdefs) do
+				table.insert(cdefs2,cdef[1])
+			end
+			local txt = table.concat(cdefs2,"\n")
+			itemsarr,items = parseItems(txt,false)
+		end
+		
 		self.itemsarr , self.items = itemsarr,items
 	end
 	function par:printItems()
@@ -828,14 +849,14 @@ function M.Parser()
 	function par:parseFunctions()
 		for i,it in ipairs(itemsarr) do
 			if it.re_name == "function_re" or it.re_name == "functionD_re" then
-				self:parseFunction("",it.item)
+				self:parseFunction("",it.item,nil,it.locat)
 			elseif it.re_name == "namespace_re" then
 				local nsp = it.item:match("%b{}"):sub(2,-2)
 				local namespace = it.item:match("namespace%s+(%S+)")
-				local nspparr,itemsnsp = parseItems(nsp)
+				local nspparr,itemsnsp = parseItems(nsp,false,it.locat)
 				for insp,itnsp in ipairs(nspparr) do
 					if itnsp.re_name == "function_re" or itnsp.re_name == "functionD_re" then
-						self:parseFunction("",itnsp.item,namespace)
+						self:parseFunction("",itnsp.item,namespace,itnsp.locat)
 					end
 				end
 			elseif it.re_name == "struct_re" then
@@ -847,20 +868,20 @@ function M.Parser()
 					self.typenames = self.typenames or {}
 					self.typenames[stname] = typename
 				end
-				local nspparr,itemsnsp = parseItems(nsp)
+				local nspparr,itemsnsp = parseItems(nsp,false,it.locat)
 				for insp,itnsp in ipairs(nspparr) do
 					if itnsp.re_name == "function_re" or itnsp.re_name == "functionD_re" then
-						self:parseFunction(stname,itnsp.item)
+						self:parseFunction(stname,itnsp.item,nil,itnsp.locat)
 					elseif itnsp.re_name == "struct_re" then
 						--get embeded_structs
 						local embededst = itnsp.item:match("struct%s+(%S+)")
 						self.embeded_structs[embededst] = stname.."::"..embededst
 						local nsp2 = strip_end(itnsp.item:match("%b{}"):sub(2,-2))
-						local itemsemarr,itemsem = parseItems(nsp2)
+						local itemsemarr,itemsem = parseItems(nsp2,false,itnsp.locat)
 						assert(not itemsem.struct_re,"two level embed struct")
 						for iemb,itemb in ipairs(itemsemarr) do
 							if itemb.re_name == "function_re" or itemb.re_name == "functionD_re" then
-								self:parseFunction(embededst,itemb.item)
+								self:parseFunction(embededst,itemb.item,nil,itemb.locat)
 							end
 						end
 					end
