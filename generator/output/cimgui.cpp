@@ -1325,6 +1325,14 @@ CIMGUI_API ImU32 igColorConvertFloat4ToU32(const ImVec4 in)
 {
     return ImGui::ColorConvertFloat4ToU32(in);
 }
+CIMGUI_API void igColorConvertRGBtoHSV(float r,float g,float b,float* out_h,float* out_s,float* out_v)
+{
+    return ImGui::ColorConvertRGBtoHSV(r,g,b,*out_h,*out_s,*out_v);
+}
+CIMGUI_API void igColorConvertHSVtoRGB(float h,float s,float v,float* out_r,float* out_g,float* out_b)
+{
+    return ImGui::ColorConvertHSVtoRGB(h,s,v,*out_r,*out_g,*out_b);
+}
 CIMGUI_API int igGetKeyIndex(ImGuiKey imgui_key)
 {
     return ImGui::GetKeyIndex(imgui_key);
@@ -2541,9 +2549,9 @@ CIMGUI_API void igImTriangleClosestPoint(ImVec2 *pOut,const ImVec2 a,const ImVec
 {
     *pOut = ImTriangleClosestPoint(a,b,c,p);
 }
-CIMGUI_API void igImTriangleBarycentricCoords(const ImVec2 a,const ImVec2 b,const ImVec2 c,const ImVec2 p,float out_u,float out_v,float out_w)
+CIMGUI_API void igImTriangleBarycentricCoords(const ImVec2 a,const ImVec2 b,const ImVec2 c,const ImVec2 p,float* out_u,float* out_v,float* out_w)
 {
-    return ImTriangleBarycentricCoords(a,b,c,p,out_u,out_v,out_w);
+    return ImTriangleBarycentricCoords(a,b,c,p,*out_u,*out_v,*out_w);
 }
 CIMGUI_API float igImTriangleArea(const ImVec2 a,const ImVec2 b,const ImVec2 c)
 {
@@ -3791,14 +3799,7 @@ CIMGUI_API float igGET_FLT_MAX()
 {
     return FLT_MAX;
 }
-CIMGUI_API void igColorConvertRGBtoHSV(float r,float g,float b,float *out_h,float *out_s,float *out_v)
-{
-    ImGui::ColorConvertRGBtoHSV(r,g,b,*out_h,*out_s,*out_v);
-}
-CIMGUI_API void igColorConvertHSVtoRGB(float h,float s,float v,float *out_r,float *out_g,float *out_b)
-{
-    ImGui::ColorConvertHSVtoRGB(h,s,v,*out_r,*out_g,*out_b);
-}
+
 
 CIMGUI_API ImVector_ImWchar* ImVector_ImWchar_create()
 {
