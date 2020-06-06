@@ -10469,7 +10469,7 @@
   ],
   "ImVector_swap": [
     {
-      "args": "(ImVector* self,ImVector rhs)",
+      "args": "(ImVector* self,ImVector* rhs)",
       "argsT": [
         {
           "name": "self",
@@ -10477,11 +10477,12 @@
         },
         {
           "name": "rhs",
-          "type": "ImVector&"
+          "reftoptr": true,
+          "type": "ImVector*"
         }
       ],
       "argsoriginal": "(ImVector<T>& rhs)",
-      "call_args": "(rhs)",
+      "call_args": "(*rhs)",
       "cimguiname": "ImVector_swap",
       "defaults": [],
       "funcname": "swap",
@@ -12248,7 +12249,7 @@
   ],
   "igColorConvertHSVtoRGB": [
     {
-      "args": "(float h,float s,float v,float out_r,float out_g,float out_b)",
+      "args": "(float h,float s,float v,float* out_r,float* out_g,float* out_b)",
       "argsT": [
         {
           "name": "h",
@@ -12264,24 +12265,26 @@
         },
         {
           "name": "out_r",
-          "type": "float&"
+          "reftoptr": true,
+          "type": "float*"
         },
         {
           "name": "out_g",
-          "type": "float&"
+          "reftoptr": true,
+          "type": "float*"
         },
         {
           "name": "out_b",
-          "type": "float&"
+          "reftoptr": true,
+          "type": "float*"
         }
       ],
       "argsoriginal": "(float h,float s,float v,float& out_r,float& out_g,float& out_b)",
-      "call_args": "(h,s,v,out_r,out_g,out_b)",
+      "call_args": "(h,s,v,*out_r,*out_g,*out_b)",
       "cimguiname": "igColorConvertHSVtoRGB",
       "defaults": [],
       "funcname": "ColorConvertHSVtoRGB",
       "location": "imgui",
-      "manual": true,
       "namespace": "ImGui",
       "ov_cimguiname": "igColorConvertHSVtoRGB",
       "ret": "void",
@@ -12291,7 +12294,7 @@
   ],
   "igColorConvertRGBtoHSV": [
     {
-      "args": "(float r,float g,float b,float out_h,float out_s,float out_v)",
+      "args": "(float r,float g,float b,float* out_h,float* out_s,float* out_v)",
       "argsT": [
         {
           "name": "r",
@@ -12307,24 +12310,26 @@
         },
         {
           "name": "out_h",
-          "type": "float&"
+          "reftoptr": true,
+          "type": "float*"
         },
         {
           "name": "out_s",
-          "type": "float&"
+          "reftoptr": true,
+          "type": "float*"
         },
         {
           "name": "out_v",
-          "type": "float&"
+          "reftoptr": true,
+          "type": "float*"
         }
       ],
       "argsoriginal": "(float r,float g,float b,float& out_h,float& out_s,float& out_v)",
-      "call_args": "(r,g,b,out_h,out_s,out_v)",
+      "call_args": "(r,g,b,*out_h,*out_s,*out_v)",
       "cimguiname": "igColorConvertRGBtoHSV",
       "defaults": [],
       "funcname": "ColorConvertRGBtoHSV",
       "location": "imgui",
-      "manual": true,
       "namespace": "ImGui",
       "ov_cimguiname": "igColorConvertRGBtoHSV",
       "ret": "void",
@@ -19176,7 +19181,7 @@
   ],
   "igImTriangleBarycentricCoords": [
     {
-      "args": "(const ImVec2 a,const ImVec2 b,const ImVec2 c,const ImVec2 p,float out_u,float out_v,float out_w)",
+      "args": "(const ImVec2 a,const ImVec2 b,const ImVec2 c,const ImVec2 p,float* out_u,float* out_v,float* out_w)",
       "argsT": [
         {
           "name": "a",
@@ -19196,19 +19201,22 @@
         },
         {
           "name": "out_u",
-          "type": "float&"
+          "reftoptr": true,
+          "type": "float*"
         },
         {
           "name": "out_v",
-          "type": "float&"
+          "reftoptr": true,
+          "type": "float*"
         },
         {
           "name": "out_w",
-          "type": "float&"
+          "reftoptr": true,
+          "type": "float*"
         }
       ],
       "argsoriginal": "(const ImVec2& a,const ImVec2& b,const ImVec2& c,const ImVec2& p,float& out_u,float& out_v,float& out_w)",
-      "call_args": "(a,b,c,p,out_u,out_v,out_w)",
+      "call_args": "(a,b,c,p,*out_u,*out_v,*out_w)",
       "cimguiname": "igImTriangleBarycentricCoords",
       "defaults": [],
       "funcname": "ImTriangleBarycentricCoords",

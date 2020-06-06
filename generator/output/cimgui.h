@@ -2402,6 +2402,8 @@ CIMGUI_API void igEndChildFrame(void);
 CIMGUI_API void igCalcTextSize(ImVec2 *pOut,const char* text,const char* text_end,bool hide_text_after_double_hash,float wrap_width);
 CIMGUI_API void igColorConvertU32ToFloat4(ImVec4 *pOut,ImU32 in);
 CIMGUI_API ImU32 igColorConvertFloat4ToU32(const ImVec4 in);
+CIMGUI_API void igColorConvertRGBtoHSV(float r,float g,float b,float* out_h,float* out_s,float* out_v);
+CIMGUI_API void igColorConvertHSVtoRGB(float h,float s,float v,float* out_r,float* out_g,float* out_b);
 CIMGUI_API int igGetKeyIndex(ImGuiKey imgui_key);
 CIMGUI_API bool igIsKeyDown(int user_key_index);
 CIMGUI_API bool igIsKeyPressed(int user_key_index,bool repeat);
@@ -2722,7 +2724,7 @@ CIMGUI_API void igImBezierClosestPointCasteljau(ImVec2 *pOut,const ImVec2 p1,con
 CIMGUI_API void igImLineClosestPoint(ImVec2 *pOut,const ImVec2 a,const ImVec2 b,const ImVec2 p);
 CIMGUI_API bool igImTriangleContainsPoint(const ImVec2 a,const ImVec2 b,const ImVec2 c,const ImVec2 p);
 CIMGUI_API void igImTriangleClosestPoint(ImVec2 *pOut,const ImVec2 a,const ImVec2 b,const ImVec2 c,const ImVec2 p);
-CIMGUI_API void igImTriangleBarycentricCoords(const ImVec2 a,const ImVec2 b,const ImVec2 c,const ImVec2 p,float out_u,float out_v,float out_w);
+CIMGUI_API void igImTriangleBarycentricCoords(const ImVec2 a,const ImVec2 b,const ImVec2 c,const ImVec2 p,float* out_u,float* out_v,float* out_w);
 CIMGUI_API float igImTriangleArea(const ImVec2 a,const ImVec2 b,const ImVec2 c);
 CIMGUI_API ImGuiDir igImGetDirQuadrantFromDelta(float dx,float dy);
 CIMGUI_API ImVec1* ImVec1_ImVec1Nil(void);
@@ -3103,9 +3105,6 @@ CIMGUI_API void igLogText(CONST char *fmt, ...);
 CIMGUI_API void ImGuiTextBuffer_appendf(struct ImGuiTextBuffer *buffer, const char *fmt, ...);
 //for getting FLT_MAX in bindings
 CIMGUI_API float igGET_FLT_MAX();
-//not const args from & to *
-CIMGUI_API void igColorConvertRGBtoHSV(float r,float g,float b,float *out_h,float *out_s,float *out_v);
-CIMGUI_API void igColorConvertHSVtoRGB(float h,float s,float v,float *out_r,float *out_g,float *out_b);
 
 
 CIMGUI_API ImVector_ImWchar* ImVector_ImWchar_create();
