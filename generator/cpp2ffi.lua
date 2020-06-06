@@ -482,16 +482,18 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
     local functype_arg_rest = "^(%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)),*(.*)"
     local rest = argscsinpars:sub(2,-2) --strip ()
     
+	
     while true do
     --local tt = strsplit(rest,",")
     --for ii,arg in ipairs(tt) do
     --for arg in argscsinpars:gmatch("[%(,]*([^,%(%)]+)[%),]") do
+		local reftoptr
 		if rest == "void" then break end
         local type,name,retf,sigf
         local arg,restt = rest:match(functype_arg_rest)
-        if arg then
+        if arg then -- if is function pointer
             local t1,namef,t2 = arg:match(functype_reex)
-            type=t1.."(*)"..t2;name=namef
+            type = t1.."(*)"..t2;name=namef
             retf = t1
             sigf = t2
             rest = restt
@@ -499,8 +501,13 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
             arg,restt = rest:match(",*([^,%(%)]+),*(.*)")
             if not arg then break end
             rest = restt
-            if arg:match("&") and arg:match("const") then
-                arg = arg:gsub("&","")
+            if arg:match("&") then
+				if arg:match("const") then
+					arg = arg:gsub("&","")
+				else
+					arg = arg:gsub("&","*")
+					reftoptr = true
+				end
             end
             if arg:match("%.%.%.") then 
                 type="...";name="..."
@@ -510,7 +517,6 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
 
             if not type or not name then 
                 print("failure arg detection",funcname,type,name,argscsinpars,arg)
-
             else
 				if name:match"%*" then print("**",funcname) end
                 --float name[2] to float[2] name
@@ -521,7 +527,7 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
                 end
             end
         end
-        table.insert(argsArr,{type=type,name=name,ret=retf,signature=sigf})
+        table.insert(argsArr,{type=type,name=name,ret=retf,signature=sigf,reftoptr=reftoptr})
         if arg:match("&") and not arg:match("const") then
             --only post error if not manual
             local cname = self.getCname(stname,funcname, namespace) --cimguiname
@@ -531,7 +537,7 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
         end
     end
     argscsinpars = argscsinpars:gsub("&","")
-    
+
     local signature = argscsinpars:gsub("([%w%s%*_]+)%s[%w_]+%s*([,%)])","%1%2")
     signature = signature:gsub("%s*([,%)])","%1") --space before , and )
     signature = signature:gsub(",%s*",",")--space after ,
@@ -542,6 +548,43 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
     local call_args = argscsinpars:gsub("([%w_]+%s[%w_]+)%[%d*%]","%1") --float[2]
     call_args = call_args:gsub("%(%*([%w_]+)%)%([^%(%)]*%)"," %1") --func type
     call_args = call_args:gsub("[^%(].-([%w_]+)%s*([,%)])","%1%2")
+	
+	--recreate argscsinpars from argsArr
+	local asp, caar
+	if #argsArr > 0 then
+		asp = "("
+		caar = "("
+		for i,v in ipairs(argsArr) do
+			if v.ret then --function pointer
+				asp = asp .. v.ret .. "(*" .. v.name .. ")" .. v.signature .. ","
+				caar = caar .. v.name .. ","
+			else
+				local siz = v.type:match("(%[%d*%])") or ""
+				local type = v.type:gsub("(%[%d*%])","")
+				asp = asp .. type .. (v.name~="..." and " "..v.name or "") .. siz .. ","
+				local callname = v.reftoptr and "*"..v.name or v.name 
+				caar = caar .. callname .. ","
+			end
+		end
+		asp = asp:sub(1,-2)..")"
+		caar = caar:sub(1,-2)..")"
+	else
+		asp = "()"
+		caar = "()"
+	end
+	--[[
+	if asp~=argscsinpars then
+		print("bad recontruction",funcname)
+		print(argscsinpars)
+		print(asp)
+	end
+	if caar~=call_args then
+		print("bad call_args",funcname)
+		print(call_args)
+		print(caar)
+	end
+	--]]
+    ------------------------------
     
     if not ret and stname then --must be constructors
         if not (stname == funcname or "~"..stname==funcname) then --break end
@@ -569,9 +612,9 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
     defT.stname = stname
     defT.funcname = funcname
     defT.argsoriginal = args
-    defT.args=argscsinpars
+    defT.args= asp --argscsinpars
     defT.signature = signature
-    defT.call_args = call_args
+    defT.call_args = caar --call_args
     defT.isvararg = signature:match("%.%.%.%)$")
     defT.location = locat
     --defT.comment = "" --comment

@@ -50,8 +50,8 @@ for i=3,#script_args do table.insert(implementations,script_args[i]) end
 local cimgui_manuals = {
     igLogText = true,
     ImGuiTextBuffer_appendf = true,
-    igColorConvertRGBtoHSV = true,
-    igColorConvertHSVtoRGB = true
+    --igColorConvertRGBtoHSV = true,
+    --igColorConvertHSVtoRGB = true
 }
 --------------------------------------------------------------------------
 --this table is a dictionary to force a naming of function overloading (instead of algorythmic generated)
