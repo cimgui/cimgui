@@ -78,6 +78,7 @@
   "ImGuiPlatformIO": "struct ImGuiPlatformIO",
   "ImGuiPlatformMonitor": "struct ImGuiPlatformMonitor",
   "ImGuiPopupData": "struct ImGuiPopupData",
+  "ImGuiPopupFlags": "int",
   "ImGuiPtrOrIndex": "struct ImGuiPtrOrIndex",
   "ImGuiSelectableFlags": "int",
   "ImGuiSeparatorFlags": "int",

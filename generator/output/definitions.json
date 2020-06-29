@@ -2021,48 +2021,6 @@
       "stname": "ImDrawList"
     }
   ],
-  "ImDrawList_Clear": [
-    {
-      "args": "(ImDrawList* self)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "ImDrawList*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "ImDrawList_Clear",
-      "defaults": [],
-      "funcname": "Clear",
-      "location": "imgui",
-      "ov_cimguiname": "ImDrawList_Clear",
-      "ret": "void",
-      "signature": "()",
-      "stname": "ImDrawList"
-    }
-  ],
-  "ImDrawList_ClearFreeMemory": [
-    {
-      "args": "(ImDrawList* self)",
-      "argsT": [
-        {
-          "name": "self",
-          "type": "ImDrawList*"
-        }
-      ],
-      "argsoriginal": "()",
-      "call_args": "()",
-      "cimguiname": "ImDrawList_ClearFreeMemory",
-      "defaults": [],
-      "funcname": "ClearFreeMemory",
-      "location": "imgui",
-      "ov_cimguiname": "ImDrawList_ClearFreeMemory",
-      "ret": "void",
-      "signature": "()",
-      "stname": "ImDrawList"
-    }
-  ],
   "ImDrawList_CloneOutput": [
     {
       "args": "(ImDrawList* self)",
@@ -2850,7 +2808,7 @@
       "stname": "ImDrawList"
     }
   ],
-  "ImDrawList_UpdateClipRect": [
+  "ImDrawList__ClearFreeMemory": [
     {
       "args": "(ImDrawList* self)",
       "argsT": [
@@ -2861,17 +2819,17 @@
       ],
       "argsoriginal": "()",
       "call_args": "()",
-      "cimguiname": "ImDrawList_UpdateClipRect",
+      "cimguiname": "ImDrawList__ClearFreeMemory",
       "defaults": [],
-      "funcname": "UpdateClipRect",
+      "funcname": "_ClearFreeMemory",
       "location": "imgui",
-      "ov_cimguiname": "ImDrawList_UpdateClipRect",
+      "ov_cimguiname": "ImDrawList__ClearFreeMemory",
       "ret": "void",
       "signature": "()",
       "stname": "ImDrawList"
     }
   ],
-  "ImDrawList_UpdateTextureID": [
+  "ImDrawList__OnChangedClipRect": [
     {
       "args": "(ImDrawList* self)",
       "argsT": [
@@ -2882,11 +2840,95 @@
       ],
       "argsoriginal": "()",
       "call_args": "()",
-      "cimguiname": "ImDrawList_UpdateTextureID",
+      "cimguiname": "ImDrawList__OnChangedClipRect",
       "defaults": [],
-      "funcname": "UpdateTextureID",
+      "funcname": "_OnChangedClipRect",
       "location": "imgui",
-      "ov_cimguiname": "ImDrawList_UpdateTextureID",
+      "ov_cimguiname": "ImDrawList__OnChangedClipRect",
+      "ret": "void",
+      "signature": "()",
+      "stname": "ImDrawList"
+    }
+  ],
+  "ImDrawList__OnChangedTextureID": [
+    {
+      "args": "(ImDrawList* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImDrawList*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImDrawList__OnChangedTextureID",
+      "defaults": [],
+      "funcname": "_OnChangedTextureID",
+      "location": "imgui",
+      "ov_cimguiname": "ImDrawList__OnChangedTextureID",
+      "ret": "void",
+      "signature": "()",
+      "stname": "ImDrawList"
+    }
+  ],
+  "ImDrawList__OnChangedVtxOffset": [
+    {
+      "args": "(ImDrawList* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImDrawList*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImDrawList__OnChangedVtxOffset",
+      "defaults": [],
+      "funcname": "_OnChangedVtxOffset",
+      "location": "imgui",
+      "ov_cimguiname": "ImDrawList__OnChangedVtxOffset",
+      "ret": "void",
+      "signature": "()",
+      "stname": "ImDrawList"
+    }
+  ],
+  "ImDrawList__PopUnusedDrawCmd": [
+    {
+      "args": "(ImDrawList* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImDrawList*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImDrawList__PopUnusedDrawCmd",
+      "defaults": [],
+      "funcname": "_PopUnusedDrawCmd",
+      "location": "imgui",
+      "ov_cimguiname": "ImDrawList__PopUnusedDrawCmd",
+      "ret": "void",
+      "signature": "()",
+      "stname": "ImDrawList"
+    }
+  ],
+  "ImDrawList__ResetForNewFrame": [
+    {
+      "args": "(ImDrawList* self)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImDrawList*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImDrawList__ResetForNewFrame",
+      "defaults": [],
+      "funcname": "_ResetForNewFrame",
+      "location": "imgui",
+      "ov_cimguiname": "ImDrawList__ResetForNewFrame",
       "ret": "void",
       "signature": "()",
       "stname": "ImDrawList"
@@ -7866,6 +7908,32 @@
       "stname": "ImGuiViewportP"
     }
   ],
+  "ImGuiViewport_GetCenter": [
+    {
+      "args": "(ImVec2 *pOut,ImGuiViewport* self)",
+      "argsT": [
+        {
+          "name": "pOut",
+          "type": "ImVec2*"
+        },
+        {
+          "name": "self",
+          "type": "ImGuiViewport*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGuiViewport_GetCenter",
+      "defaults": [],
+      "funcname": "GetCenter",
+      "location": "imgui",
+      "nonUDT": 1,
+      "ov_cimguiname": "ImGuiViewport_GetCenter",
+      "ret": "void",
+      "signature": "()",
+      "stname": "ImGuiViewport"
+    }
+  ],
   "ImGuiViewport_GetWorkPos": [
     {
       "args": "(ImVec2 *pOut,ImGuiViewport* self)",
@@ -9305,6 +9373,32 @@
       "ov_cimguiname": "ImRect_Overlaps",
       "ret": "bool",
       "signature": "(const ImRect)const",
+      "stname": "ImRect"
+    }
+  ],
+  "ImRect_ToVec4": [
+    {
+      "args": "(ImVec4 *pOut,ImRect* self)",
+      "argsT": [
+        {
+          "name": "pOut",
+          "type": "ImVec4*"
+        },
+        {
+          "name": "self",
+          "type": "ImRect*"
+        }
+      ],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImRect_ToVec4",
+      "defaults": [],
+      "funcname": "ToVec4",
+      "location": "internal",
+      "nonUDT": 1,
+      "ov_cimguiname": "ImRect_ToVec4",
+      "ret": "void",
+      "signature": "()const",
       "stname": "ImRect"
     }
   ],
@@ -11110,22 +11204,22 @@
   ],
   "igBeginPopupContextItem": [
     {
-      "args": "(const char* str_id,ImGuiMouseButton mouse_button)",
+      "args": "(const char* str_id,ImGuiPopupFlags popup_flags)",
       "argsT": [
         {
           "name": "str_id",
           "type": "const char*"
         },
         {
-          "name": "mouse_button",
-          "type": "ImGuiMouseButton"
+          "name": "popup_flags",
+          "type": "ImGuiPopupFlags"
         }
       ],
-      "argsoriginal": "(const char* str_id=((void*)0),ImGuiMouseButton mouse_button=1)",
-      "call_args": "(str_id,mouse_button)",
+      "argsoriginal": "(const char* str_id=((void*)0),ImGuiPopupFlags popup_flags=1)",
+      "call_args": "(str_id,popup_flags)",
       "cimguiname": "igBeginPopupContextItem",
       "defaults": {
-        "mouse_button": "1",
+        "popup_flags": "1",
         "str_id": "((void*)0)"
       },
       "funcname": "BeginPopupContextItem",
@@ -11133,28 +11227,28 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igBeginPopupContextItem",
       "ret": "bool",
-      "signature": "(const char*,ImGuiMouseButton)",
+      "signature": "(const char*,ImGuiPopupFlags)",
       "stname": ""
     }
   ],
   "igBeginPopupContextVoid": [
     {
-      "args": "(const char* str_id,ImGuiMouseButton mouse_button)",
+      "args": "(const char* str_id,ImGuiPopupFlags popup_flags)",
       "argsT": [
         {
           "name": "str_id",
           "type": "const char*"
         },
         {
-          "name": "mouse_button",
-          "type": "ImGuiMouseButton"
+          "name": "popup_flags",
+          "type": "ImGuiPopupFlags"
         }
       ],
-      "argsoriginal": "(const char* str_id=((void*)0),ImGuiMouseButton mouse_button=1)",
-      "call_args": "(str_id,mouse_button)",
+      "argsoriginal": "(const char* str_id=((void*)0),ImGuiPopupFlags popup_flags=1)",
+      "call_args": "(str_id,popup_flags)",
       "cimguiname": "igBeginPopupContextVoid",
       "defaults": {
-        "mouse_button": "1",
+        "popup_flags": "1",
         "str_id": "((void*)0)"
       },
       "funcname": "BeginPopupContextVoid",
@@ -11162,33 +11256,28 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igBeginPopupContextVoid",
       "ret": "bool",
-      "signature": "(const char*,ImGuiMouseButton)",
+      "signature": "(const char*,ImGuiPopupFlags)",
       "stname": ""
     }
   ],
   "igBeginPopupContextWindow": [
     {
-      "args": "(const char* str_id,ImGuiMouseButton mouse_button,bool also_over_items)",
+      "args": "(const char* str_id,ImGuiPopupFlags popup_flags)",
       "argsT": [
         {
           "name": "str_id",
           "type": "const char*"
         },
         {
-          "name": "mouse_button",
-          "type": "ImGuiMouseButton"
-        },
-        {
-          "name": "also_over_items",
-          "type": "bool"
+          "name": "popup_flags",
+          "type": "ImGuiPopupFlags"
         }
       ],
-      "argsoriginal": "(const char* str_id=((void*)0),ImGuiMouseButton mouse_button=1,bool also_over_items=true)",
-      "call_args": "(str_id,mouse_button,also_over_items)",
+      "argsoriginal": "(const char* str_id=((void*)0),ImGuiPopupFlags popup_flags=1)",
+      "call_args": "(str_id,popup_flags)",
       "cimguiname": "igBeginPopupContextWindow",
       "defaults": {
-        "also_over_items": "true",
-        "mouse_button": "1",
+        "popup_flags": "1",
         "str_id": "((void*)0)"
       },
       "funcname": "BeginPopupContextWindow",
@@ -11196,7 +11285,7 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igBeginPopupContextWindow",
       "ret": "bool",
-      "signature": "(const char*,ImGuiMouseButton,bool)",
+      "signature": "(const char*,ImGuiPopupFlags)",
       "stname": ""
     }
   ],
@@ -19418,6 +19507,56 @@
       "stname": ""
     }
   ],
+  "igImageButtonEx": [
+    {
+      "args": "(ImGuiID id,ImTextureID texture_id,const ImVec2 size,const ImVec2 uv0,const ImVec2 uv1,const ImVec2 padding,const ImVec4 bg_col,const ImVec4 tint_col)",
+      "argsT": [
+        {
+          "name": "id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "texture_id",
+          "type": "ImTextureID"
+        },
+        {
+          "name": "size",
+          "type": "const ImVec2"
+        },
+        {
+          "name": "uv0",
+          "type": "const ImVec2"
+        },
+        {
+          "name": "uv1",
+          "type": "const ImVec2"
+        },
+        {
+          "name": "padding",
+          "type": "const ImVec2"
+        },
+        {
+          "name": "bg_col",
+          "type": "const ImVec4"
+        },
+        {
+          "name": "tint_col",
+          "type": "const ImVec4"
+        }
+      ],
+      "argsoriginal": "(ImGuiID id,ImTextureID texture_id,const ImVec2& size,const ImVec2& uv0,const ImVec2& uv1,const ImVec2& padding,const ImVec4& bg_col,const ImVec4& tint_col)",
+      "call_args": "(id,texture_id,size,uv0,uv1,padding,bg_col,tint_col)",
+      "cimguiname": "igImageButtonEx",
+      "defaults": [],
+      "funcname": "ImageButtonEx",
+      "location": "internal",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igImageButtonEx",
+      "ret": "bool",
+      "signature": "(ImGuiID,ImTextureID,const ImVec2,const ImVec2,const ImVec2,const ImVec2,const ImVec4,const ImVec4)",
+      "stname": ""
+    }
+  ],
   "igIndent": [
     {
       "args": "(float indent_w)",
@@ -20877,35 +21016,45 @@
   ],
   "igIsPopupOpen": [
     {
-      "args": "(const char* str_id)",
+      "args": "(const char* str_id,ImGuiPopupFlags flags)",
       "argsT": [
         {
           "name": "str_id",
           "type": "const char*"
+        },
+        {
+          "name": "flags",
+          "type": "ImGuiPopupFlags"
         }
       ],
-      "argsoriginal": "(const char* str_id)",
-      "call_args": "(str_id)",
+      "argsoriginal": "(const char* str_id,ImGuiPopupFlags flags=0)",
+      "call_args": "(str_id,flags)",
       "cimguiname": "igIsPopupOpen",
-      "defaults": [],
+      "defaults": {
+        "flags": "0"
+      },
       "funcname": "IsPopupOpen",
       "location": "imgui",
       "namespace": "ImGui",
       "ov_cimguiname": "igIsPopupOpenStr",
       "ret": "bool",
-      "signature": "(const char*)",
+      "signature": "(const char*,ImGuiPopupFlags)",
       "stname": ""
     },
     {
-      "args": "(ImGuiID id)",
+      "args": "(ImGuiID id,ImGuiPopupFlags popup_flags)",
       "argsT": [
         {
           "name": "id",
           "type": "ImGuiID"
+        },
+        {
+          "name": "popup_flags",
+          "type": "ImGuiPopupFlags"
         }
       ],
-      "argsoriginal": "(ImGuiID id)",
-      "call_args": "(id)",
+      "argsoriginal": "(ImGuiID id,ImGuiPopupFlags popup_flags)",
+      "call_args": "(id,popup_flags)",
       "cimguiname": "igIsPopupOpen",
       "defaults": [],
       "funcname": "IsPopupOpen",
@@ -20913,7 +21062,7 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igIsPopupOpenID",
       "ret": "bool",
-      "signature": "(ImGuiID)",
+      "signature": "(ImGuiID,ImGuiPopupFlags)",
       "stname": ""
     }
   ],
@@ -22083,74 +22232,86 @@
   ],
   "igOpenPopup": [
     {
-      "args": "(const char* str_id)",
-      "argsT": [
-        {
-          "name": "str_id",
-          "type": "const char*"
-        }
-      ],
-      "argsoriginal": "(const char* str_id)",
-      "call_args": "(str_id)",
-      "cimguiname": "igOpenPopup",
-      "defaults": [],
-      "funcname": "OpenPopup",
-      "location": "imgui",
-      "namespace": "ImGui",
-      "ov_cimguiname": "igOpenPopup",
-      "ret": "void",
-      "signature": "(const char*)",
-      "stname": ""
-    }
-  ],
-  "igOpenPopupEx": [
-    {
-      "args": "(ImGuiID id)",
-      "argsT": [
-        {
-          "name": "id",
-          "type": "ImGuiID"
-        }
-      ],
-      "argsoriginal": "(ImGuiID id)",
-      "call_args": "(id)",
-      "cimguiname": "igOpenPopupEx",
-      "defaults": [],
-      "funcname": "OpenPopupEx",
-      "location": "internal",
-      "namespace": "ImGui",
-      "ov_cimguiname": "igOpenPopupEx",
-      "ret": "void",
-      "signature": "(ImGuiID)",
-      "stname": ""
-    }
-  ],
-  "igOpenPopupOnItemClick": [
-    {
-      "args": "(const char* str_id,ImGuiMouseButton mouse_button)",
+      "args": "(const char* str_id,ImGuiPopupFlags popup_flags)",
       "argsT": [
         {
           "name": "str_id",
           "type": "const char*"
         },
         {
-          "name": "mouse_button",
-          "type": "ImGuiMouseButton"
+          "name": "popup_flags",
+          "type": "ImGuiPopupFlags"
         }
       ],
-      "argsoriginal": "(const char* str_id=((void*)0),ImGuiMouseButton mouse_button=1)",
-      "call_args": "(str_id,mouse_button)",
-      "cimguiname": "igOpenPopupOnItemClick",
+      "argsoriginal": "(const char* str_id,ImGuiPopupFlags popup_flags=0)",
+      "call_args": "(str_id,popup_flags)",
+      "cimguiname": "igOpenPopup",
       "defaults": {
-        "mouse_button": "1",
-        "str_id": "((void*)0)"
+        "popup_flags": "0"
       },
-      "funcname": "OpenPopupOnItemClick",
+      "funcname": "OpenPopup",
       "location": "imgui",
       "namespace": "ImGui",
-      "ov_cimguiname": "igOpenPopupOnItemClick",
+      "ov_cimguiname": "igOpenPopup",
+      "ret": "void",
+      "signature": "(const char*,ImGuiPopupFlags)",
+      "stname": ""
+    }
+  ],
+  "igOpenPopupContextItem": [
+    {
+      "args": "(const char* str_id,ImGuiPopupFlags popup_flags)",
+      "argsT": [
+        {
+          "name": "str_id",
+          "type": "const char*"
+        },
+        {
+          "name": "popup_flags",
+          "type": "ImGuiPopupFlags"
+        }
+      ],
+      "argsoriginal": "(const char* str_id=((void*)0),ImGuiPopupFlags popup_flags=1)",
+      "call_args": "(str_id,popup_flags)",
+      "cimguiname": "igOpenPopupContextItem",
+      "defaults": {
+        "popup_flags": "1",
+        "str_id": "((void*)0)"
+      },
+      "funcname": "OpenPopupContextItem",
+      "location": "imgui",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igOpenPopupContextItem",
       "ret": "bool",
-      "signature": "(const char*,ImGuiMouseButton)",
+      "signature": "(const char*,ImGuiPopupFlags)",
+      "stname": ""
+    }
+  ],
+  "igOpenPopupEx": [
+    {
+      "args": "(ImGuiID id,ImGuiPopupFlags popup_flags)",
+      "argsT": [
+        {
+          "name": "id",
+          "type": "ImGuiID"
+        },
+        {
+          "name": "popup_flags",
+          "type": "ImGuiPopupFlags"
+        }
+      ],
+      "argsoriginal": "(ImGuiID id,ImGuiPopupFlags popup_flags=ImGuiPopupFlags_None)",
+      "call_args": "(id,popup_flags)",
+      "cimguiname": "igOpenPopupEx",
+      "defaults": {
+        "popup_flags": "ImGuiPopupFlags_None"
+      },
+      "funcname": "OpenPopupEx",
+      "location": "internal",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igOpenPopupEx",
+      "ret": "void",
+      "signature": "(ImGuiID,ImGuiPopupFlags)",
       "stname": ""
     }
   ],
@@ -25487,6 +25648,32 @@
       "ov_cimguiname": "igSetTooltipV",
       "ret": "void",
       "signature": "(const char*,va_list)",
+      "stname": ""
+    }
+  ],
+  "igSetWindowClipRectBeforeSetChannel": [
+    {
+      "args": "(ImGuiWindow* window,const ImRect clip_rect)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "ImGuiWindow*"
+        },
+        {
+          "name": "clip_rect",
+          "type": "const ImRect"
+        }
+      ],
+      "argsoriginal": "(ImGuiWindow* window,const ImRect& clip_rect)",
+      "call_args": "(window,clip_rect)",
+      "cimguiname": "igSetWindowClipRectBeforeSetChannel",
+      "defaults": [],
+      "funcname": "SetWindowClipRectBeforeSetChannel",
+      "location": "internal",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igSetWindowClipRectBeforeSetChannel",
+      "ret": "void",
+      "signature": "(ImGuiWindow*,const ImRect)",
       "stname": ""
     }
   ],

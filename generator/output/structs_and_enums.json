@@ -762,6 +762,11 @@
     ],
     "ImGuiCond_": [
       {
+        "calc_value": 0,
+        "name": "ImGuiCond_None",
+        "value": "0"
+      },
+      {
         "calc_value": 1,
         "name": "ImGuiCond_Always",
         "value": "1 << 0"
@@ -2096,6 +2101,63 @@
         "value": 1
       }
     ],
+    "ImGuiPopupFlags_": [
+      {
+        "calc_value": 0,
+        "name": "ImGuiPopupFlags_None",
+        "value": "0"
+      },
+      {
+        "calc_value": 0,
+        "name": "ImGuiPopupFlags_MouseButtonLeft",
+        "value": "0"
+      },
+      {
+        "calc_value": 1,
+        "name": "ImGuiPopupFlags_MouseButtonRight",
+        "value": "1"
+      },
+      {
+        "calc_value": 2,
+        "name": "ImGuiPopupFlags_MouseButtonMiddle",
+        "value": "2"
+      },
+      {
+        "calc_value": 31,
+        "name": "ImGuiPopupFlags_MouseButtonMask_",
+        "value": "0x1F"
+      },
+      {
+        "calc_value": 1,
+        "name": "ImGuiPopupFlags_MouseButtonDefault_",
+        "value": "1"
+      },
+      {
+        "calc_value": 32,
+        "name": "ImGuiPopupFlags_NoOpenOverExistingPopup",
+        "value": "1 << 5"
+      },
+      {
+        "calc_value": 64,
+        "name": "ImGuiPopupFlags_NoOpenOverItems",
+        "value": "1 << 6"
+      },
+      {
+        "calc_value": 128,
+        "name": "ImGuiPopupFlags_AnyPopupId",
+        "value": "1 << 7"
+      },
+      {
+        "calc_value": 256,
+        "name": "ImGuiPopupFlags_AnyPopupLevel",
+        "value": "1 << 8"
+      },
+      {
+        "calc_value": 384,
+        "name": "ImGuiPopupFlags_AnyPopup",
+        "value": "ImGuiPopupFlags_AnyPopupId | ImGuiPopupFlags_AnyPopupLevel"
+      }
+    ],
     "ImGuiPopupPositionPolicy": [
       {
         "calc_value": 0,
@@ -2444,6 +2506,11 @@
         "calc_value": 8,
         "name": "ImGuiTabItemFlags_NoPushId",
         "value": "1 << 3"
+      },
+      {
+        "calc_value": 16,
+        "name": "ImGuiTabItemFlags_NoTooltip",
+        "value": "1 << 4"
       }
     ],
     "ImGuiTextFlags_": [
@@ -2807,10 +2874,6 @@
     ],
     "ImDrawCmd": [
       {
-        "name": "ElemCount",
-        "type": "unsigned int"
-      },
-      {
         "name": "ClipRect",
         "type": "ImVec4"
       },
@@ -2824,6 +2887,10 @@
       },
       {
         "name": "IdxOffset",
+        "type": "unsigned int"
+      },
+      {
+        "name": "ElemCount",
         "type": "unsigned int"
       },
       {
@@ -2910,10 +2977,6 @@
         "type": "const char*"
       },
       {
-        "name": "_VtxCurrentOffset",
-        "type": "unsigned int"
-      },
-      {
         "name": "_VtxCurrentIdx",
         "type": "unsigned int"
       },
@@ -2939,6 +3002,10 @@
         "name": "_Path",
         "template_type": "ImVec2",
         "type": "ImVector_ImVec2"
+      },
+      {
+        "name": "_CmdHeader",
+        "type": "ImDrawCmd"
       },
       {
         "name": "_Splitter",
@@ -3404,7 +3471,11 @@
         "type": "float"
       },
       {
-        "name": "HostClipRect",
+        "name": "HostInitialClipRect",
+        "type": "ImRect"
+      },
+      {
+        "name": "HostBackupClipRect",
         "type": "ImRect"
       },
       {
@@ -4820,6 +4891,10 @@
       {
         "name": "NavInputsDownDurationPrev[ImGuiNavInput_COUNT]",
         "size": 21,
+        "type": "float"
+      },
+      {
+        "name": "PenPressure",
         "type": "float"
       },
       {
