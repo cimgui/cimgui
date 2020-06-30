@@ -3797,7 +3797,7 @@
       },
       {
         "name": "CurrentTabBarStack",
-        "template_type": "ImGui*OrIndex",
+        "template_type": "ImGuiPtrOrIndex",
         "type": "ImVector_ImGuiPtrOrIndex"
       },
       {

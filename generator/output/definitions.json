@@ -9025,7 +9025,6 @@
       "funcname": "ImVec2ih",
       "location": "internal",
       "ov_cimguiname": "ImVec2ih_ImVec2ihVec2",
-      "ret": "explicit",
       "signature": "(const ImVec2)",
       "stname": "ImVec2ih"
     }
