@@ -157,7 +157,7 @@ ImGuiStyleMod_ImGuiStyleMod	3
 ImVec2ih_ImVec2ih	3
 1	nil	ImVec2ih_ImVec2ihNil ()
 2	nil	ImVec2ih_ImVec2ihshort (short,short)
-3	explicit	ImVec2ih_ImVec2ihVec2 (const ImVec2)
+3	nil	ImVec2ih_ImVec2ihVec2 (const ImVec2)
 ImPool_Remove	2
 1	void	ImPool_RemoveTPtr (ImGuiID,const T*)
 2	void	ImPool_RemovePoolIdx (ImGuiID,ImPoolIdx)

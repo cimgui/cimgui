@@ -8130,7 +8130,6 @@ defs["ImVec2ih_ImVec2ih"][3]["defaults"] = {}
 defs["ImVec2ih_ImVec2ih"][3]["funcname"] = "ImVec2ih"
 defs["ImVec2ih_ImVec2ih"][3]["location"] = "internal"
 defs["ImVec2ih_ImVec2ih"][3]["ov_cimguiname"] = "ImVec2ih_ImVec2ihVec2"
-defs["ImVec2ih_ImVec2ih"][3]["ret"] = "explicit"
 defs["ImVec2ih_ImVec2ih"][3]["signature"] = "(const ImVec2)"
 defs["ImVec2ih_ImVec2ih"][3]["stname"] = "ImVec2ih"
 defs["ImVec2ih_ImVec2ih"]["()"] = defs["ImVec2ih_ImVec2ih"][1]
