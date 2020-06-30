@@ -430,6 +430,7 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
     line = line:gsub("static","")
 	line = line:gsub("inline","")
 	line = line:gsub("mutable","")
+	line = line:gsub("explicit","")
 	--skip operator
 	if line:match("operator") then return end
 	--skip template
@@ -1075,19 +1076,22 @@ function M.Parser()
 		else
 			--split type name1,name2; in several lines
 			local typen,rest = line:match("%s*([^,]+)%s(%S+[,;])")
-			--local template_type = typen:match("/%*<(.+)>%*/")
-			--if template_type then typen = typen:match("(.+)/%*") end
             if not typen then -- Lets try Type*name
                 typen,rest = line:match("([^,]+%*)(%S+[,;])")
             end
 			local template_type 
 			for k,v in pairs(self.templates) do
-				template_type = typen:match(k.."_(.+)")
-				if template_type then break end
-			end
-			if template_type then 
-				template_type = template_type:gsub("_"," ")
-				template_type = template_type:gsub("Ptr","%*")
+				local template_type2 = typen:match(k.."_(.+)")
+				if template_type2 then 
+					for k1,k2 in pairs(v) do
+						if template_type2==k2 then
+							template_type=k1
+							break
+						end
+					end
+					assert(template_type)
+					break 
+				end
 			end
 			for name in rest:gmatch("([^%s,;]+)%s?[,;]") do
 				--unnamed unions
