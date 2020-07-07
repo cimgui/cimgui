@@ -1106,7 +1106,7 @@ function M.Parser()
 		end
 	end
 	function par:gen_structs_and_enums_table()
-		local outtab = {enums={},structs={}}
+		local outtab = {enums={},structs={},locations={}}
 		self.typedefs_table = {}
 		self.vardefs = {}
 
@@ -1153,6 +1153,7 @@ function M.Parser()
 					local name,value = line:match("%s*([%w_]+)%s*=%s*([^,]+)")
 					if value then
 						table.insert(outtab.enums[enumname],{name=name,value=value})
+						outtab.locations[enumname] = it.locat
 					else --increment by one
 						local name = line:match("%s*([^,]+)")
 						local enum_table = outtab.enums[enumname]
@@ -1167,6 +1168,7 @@ function M.Parser()
 						end
 						if name then --avoid last , if present
 						table.insert(outtab.enums[enumname],{name=name,value=value})
+						outtab.locations[enumname] = it.locat
 						end
 					end
 				end
@@ -1176,6 +1178,7 @@ function M.Parser()
 				--M.prtable(cleanst,structname,strtab)
 				if structname and not self.typenames[structname] then
 					outtab.structs[structname] = {}
+					outtab.locations[structname] = it.locat
 					self.order[structname]=i
 					for j=3,#strtab-1 do
 						self:parse_struct_line(strtab[j],outtab.structs[structname])
@@ -1189,6 +1192,7 @@ function M.Parser()
 			local cleanst,structname,strtab = self:clean_struct(it.item, it.locat)
 			if structname then --not empty struc
 				outtab.structs[structname] = {}
+				outtab.locations[structname] = it.locat
 				for j=3,#strtab-1 do
 					self:parse_struct_line(strtab[j],outtab.structs[structname])
 				end
