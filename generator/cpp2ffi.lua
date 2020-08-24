@@ -951,6 +951,11 @@ function M.Parser()
 
 		if derived then print(stname,"derived from",derived) end
 		
+		--try to get name from typedef structs
+		if not stname and stru:match("typedef struct") then
+			stname = stru:match("%b{}%s*(%S+)%s*;")
+		end
+		
 		if not stname then
 			print(stru)
 			error"could not get stname"
@@ -1182,6 +1187,28 @@ function M.Parser()
 					self.order[structname]=i
 					for j=3,#strtab-1 do
 						self:parse_struct_line(strtab[j],outtab.structs[structname])
+					end
+				end
+			end
+		end
+		
+		--get structs in namespace
+		for i,it in ipairs(itemsarr) do
+			if it.re_name == "namespace_re" then
+				local nsp = it.item:match("%b{}"):sub(2,-2)
+				local namespace = it.item:match("namespace%s+(%S+)")
+				local nspparr,itemsnsp = parseItems(nsp, nil, it.locat )
+				for insp,itnsp in ipairs(nspparr) do
+					if itnsp.re_name == "struct_re"  or itnsp.re_name == "typedef_st_re" then
+						local cleanst,structname,strtab = self:clean_struct(itnsp.item, itnsp.locat)
+						if structname and not self.typenames[structname] then
+							outtab.structs[structname] = {}
+							outtab.locations[structname] = itnsp.locat
+							self.order[structname]=i
+							for j=3,#strtab-1 do
+								self:parse_struct_line(strtab[j],outtab.structs[structname])
+							end
+						end
 					end
 				end
 			end
