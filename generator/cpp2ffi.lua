@@ -262,7 +262,7 @@ local function getRE()
 	namespace_re = "^([^;{}]-namespace[^;{}]-%b{})",
 	class_re = "^([^;{}]-class[^;{}]-%b{}%s*;)",
 	typedef_re = "^\n*(typedef[^;]+;)",
-	typedef_st_re = "^\n*(typedef%s+struct%s*%b{}.+;)",
+	typedef_st_re = "^\n*(typedef%s+struct%s*%b{}.-;)",
 	functypedef_re = "^\n*%s*(typedef[%w%s%*_]+%(%s*%*%s*[%w_]+%s*%)%s*%b()%s*;)",
 	functypedef_re = "^\n*%s*(typedef[%w%s%*_]+%([^*]*%*%s*[%w_]+%s*%)%s*%b()%s*;)",
 	--vardef_re = "^\n*([^;{}%(%)]+;)",
