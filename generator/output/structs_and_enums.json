@@ -6034,9 +6034,9 @@
     ],
     "StbUndoState": [
       {
-        "name": "[99]",
+        "name": "undo_rec[99]",
         "size": 99,
-        "type": "StbUndoRecord undo_rec"
+        "type": "StbUndoRecord"
       },
       {
         "name": "undo_char[999]",
