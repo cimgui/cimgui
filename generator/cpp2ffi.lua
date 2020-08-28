@@ -271,7 +271,7 @@ local function getRE()
 	--change for things as
 	--[[ImU8 Used4kPagesMap[((sizeof(ImWchar16) == 2 ? 0xFFFF : 0x10FFFF)+1)/4096/8];]]
 	vardef_re = "^\n*([^;{}]+;)",
-	functionD_re = "^([^;{}]-%b()[\n%s%w]*%b{})",
+	functionD_re = "^([^;{}]-%b()[\n%s%w]*%b{}%s-;*)",
 	--functionD_re = "^([^;{}]-%b()[^{}%(%)]*%b{})",
 	functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)%s*;"
 	}
