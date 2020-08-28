@@ -1019,7 +1019,7 @@ function M.Parser()
 				end
 			end
 		end
-		--get structs in namespace
+		--get structs and enums in namespace
 		for i,it in ipairs(itemsarr) do
 			if it.re_name == "namespace_re" then
 				local nsp = it.item:match("%b{}"):sub(2,-2)
@@ -1029,6 +1029,9 @@ function M.Parser()
 					if itnsp.re_name == "struct_re"  or itnsp.re_name == "typedef_st_re" then
 						--print("in mamespace",itnsp.item,namespace)
 						table.insert(outtab,itnsp.item)
+					elseif itnsp.re_name == "enum_re" then
+						local enumname, enumbody = itnsp.item:match"^%s*enum%s+([^%s;{}]+)[%s\n\r]*(%b{})"
+						table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
 					end
 				end
 			end
@@ -1112,6 +1115,38 @@ function M.Parser()
 			end
 		end
 	end
+	
+	local function enums_for_table(it, outtab, enumsordered)
+		local enumname = it.item:match"^%s*enum%s+([^%s;{}]+)"
+		outtab.enums[enumname] = {}
+		table.insert(enumsordered,enumname)
+		--self.order[enumname] = i
+		local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
+		local enumarr = str_split(inner,",")
+		for j,line in ipairs(enumarr) do
+			local name,value = line:match("%s*([%w_]+)%s*=%s*([^,]+)")
+			if value then
+				table.insert(outtab.enums[enumname],{name=name,value=value})
+				outtab.locations[enumname] = it.locat
+			else --increment by one
+				local name = line:match("%s*([^,]+)")
+				local enum_table = outtab.enums[enumname]
+				local prevvalue = enum_table[#enum_table] and enum_table[#enum_table].value
+				local value --= enum_table[#enum_table] and (enum_table[#enum_table].value + 1) or 0
+				if not prevvalue then
+					value = 0
+				elseif tonumber(prevvalue) then
+					value = prevvalue +1
+				else --should be string
+					value = prevvalue .. "+1"
+				end
+				if name then --avoid last , if present
+				table.insert(outtab.enums[enumname],{name=name,value=value})
+				outtab.locations[enumname] = it.locat
+				end
+			end
+		end
+	end
 	function par:gen_structs_and_enums_table()
 		local outtab = {enums={},structs={},locations={}}
 		self.typedefs_table = {}
@@ -1150,35 +1185,7 @@ function M.Parser()
 		local enumsordered = {}
 		for i,it in ipairs(itemsarr) do
 			if it.re_name == "enum_re" then
-				local enumname = it.item:match"^%s*enum%s+([^%s;{}]+)"
-				outtab.enums[enumname] = {}
-				table.insert(enumsordered,enumname)
-				self.order[enumname] = i
-				local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
-				local enumarr = str_split(inner,",")
-				for j,line in ipairs(enumarr) do
-					local name,value = line:match("%s*([%w_]+)%s*=%s*([^,]+)")
-					if value then
-						table.insert(outtab.enums[enumname],{name=name,value=value})
-						outtab.locations[enumname] = it.locat
-					else --increment by one
-						local name = line:match("%s*([^,]+)")
-						local enum_table = outtab.enums[enumname]
-						local prevvalue = enum_table[#enum_table] and enum_table[#enum_table].value
-						local value --= enum_table[#enum_table] and (enum_table[#enum_table].value + 1) or 0
-						if not prevvalue then
-							value = 0
-						elseif tonumber(prevvalue) then
-							value = prevvalue +1
-						else --should be string
-							value = prevvalue .. "+1"
-						end
-						if name then --avoid last , if present
-						table.insert(outtab.enums[enumname],{name=name,value=value})
-						outtab.locations[enumname] = it.locat
-						end
-					end
-				end
+				enums_for_table(it, outtab, enumsordered)
 			elseif it.re_name == "struct_re" then
 				local cleanst,structname,strtab = self:clean_struct(it.item, it.locat)
 				--if not void stname or templated
@@ -1194,7 +1201,7 @@ function M.Parser()
 			end
 		end
 		
-		--get structs in namespace
+		--get structs and enums in namespace
 		for i,it in ipairs(itemsarr) do
 			if it.re_name == "namespace_re" then
 				local nsp = it.item:match("%b{}"):sub(2,-2)
@@ -1211,6 +1218,8 @@ function M.Parser()
 								self:parse_struct_line(strtab[j],outtab.structs[structname])
 							end
 						end
+					elseif itnsp.re_name == "enum_re" then
+						enums_for_table(itnsp, outtab, enumsordered)
 					end
 				end
 			end
