@@ -130,6 +130,8 @@ local function clean_spaces(cad)
     cad = strip(cad)
     cad = cad:gsub("%s+"," ") --not more than one space
     cad = cad:gsub("%s*([%(%),=:%+])%s*","%1") --not spaces with ( , ) or ( = ) or ( : ) or + 
+	--name [] to name[]
+	cad = cad:gsub("(%S)%s(%[)","%1%2")
 	--clean %d * %d (could be done above but type*name should be treated different in other places)
 	cad = cad:gsub("(%d)%s*(%*)%s*(%d)","%1%2%3")
     return cad
