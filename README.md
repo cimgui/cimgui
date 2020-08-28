@@ -84,13 +84,15 @@ Notes:
 
 # example bindings based on cimgui
 
-* [DerelictImgui](https://github.com/Extrawurst/DerelictImgui)
+* [LuaJIT-ImGui](https://github.com/sonoro1234/LuaJIT-ImGui)
 * [ImGui.NET](https://github.com/mellinoe/ImGui.NET)
-* [ImGuiCS](https://github.com/conatuscreative/ImGuiCS)
+* [nimgl/imgui](https://github.com/nimgl/imgui)
+* [CImGui.jl](https://github.com/Gnimuc/CImGui.jl)
+* [odin-imgui](https://github.com/ThisDrunkDane/odin-imgui)
+* [DerelictImgui](https://github.com/Extrawurst/DerelictImgui)
 * [imgui-rs](https://github.com/Gekkio/imgui-rs)
 * [imgui-pas](https://github.com/dpethes/imgui-pas)
-* [odin-imgui](https://github.com/ThisDrunkDane/odin-imgui)
-* [LuaJIT-ImGui](https://github.com/sonoro1234/LuaJIT-ImGui)
+
 
 # C examples based on cimgui
 
