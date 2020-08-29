@@ -226,7 +226,7 @@ local function cimgui_generation(parser)
 	--------------------------------------------------
     local hstrfile = read_data"./cimgui_template.h"
 
-	local outpre,outpost = parser:gen_structs_and_enums()
+	local outpre,outpost = parser.structs_and_enums[1],parser.structs_and_enums[2]
 	parser.templates.ImVector.T = nil
 	cpp2ffi.prtable(parser.templates)
 	cpp2ffi.prtable(parser.typenames)
@@ -426,7 +426,7 @@ if #implementations > 0 then
 
     -- save ./cimgui_impl.h
     local cfuncsstr = func_header_impl_generate(parser2) 
-    local cstructstr1,cstructstr2 = parser2:gen_structs_and_enums()
+	local cstructstr1,cstructstr2 = parser2.structs_and_enums[1], parser2.structs_and_enums[2]
     save_data("./output/cimgui_impl.h",cstructstr1,cstructstr2,cfuncsstr)
 
     ----------save fundefs in impl_definitions.lua for using in bindings
