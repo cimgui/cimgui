@@ -1006,6 +1006,7 @@ function M.Parser()
 		local outtabpre = {}
 		local typedefs_table = {}
 		self.inerstructs = {}
+		self.embeded_enums = {}
 		
 		--first typedefs
 		for i,it in ipairs(itemsarr) do
@@ -1031,6 +1032,7 @@ function M.Parser()
 						table.insert(outtab,itnsp.item)
 					elseif itnsp.re_name == "enum_re" then
 						local enumname, enumbody = itnsp.item:match"^%s*enum%s+([^%s;{}]+)[%s\n\r]*(%b{})"
+						self.embeded_enums[enumname] = namespace.."::"..enumname
 						table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
 					end
 				end
@@ -1073,7 +1075,9 @@ function M.Parser()
 		end
 		--check arg detection failure if no name in function declaration
 		check_arg_detection(self.defsT,self.typedefs_dict)
-		return table.concat(outtabpre,""),table.concat(outtab,"")
+		local outtabprest, outtabst = table.concat(outtabpre,""),table.concat(outtab,"")
+		self.structs_and_enums = {outtabprest, outtabst}
+		return outtabprest, outtabst
 	end
 	-----------
 	function par:parse_struct_line(line,outtab)
@@ -1689,7 +1693,11 @@ local function func_header_generate(FP)
     for k,v in pairs(FP.embeded_structs) do
         table.insert(outtab,"typedef "..v.." "..k..";\n")
     end
-
+	
+	for k,v in pairs(FP.embeded_enums) do
+        table.insert(outtab,"typedef "..v.." "..k..";\n")
+    end
+	
     for ttype,v in pairs(FP.templates) do
 		for ttypein,_ in pairs(v) do
 			local te = ttypein:gsub("%s","_")
