@@ -996,7 +996,7 @@ function M.Parser()
 				end
 			elseif it.re_name == "struct_re" then
 				table.insert(self.inerstructs,it)
-			else
+			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
 				print(it.re_name,"not processed")
 				M.prtable(it)
 			end
