@@ -256,7 +256,7 @@ M.copyfile = copyfile
 local function getRE()
 	local res = {
 	function_re = "^([^;{}]+%b()[\n%s]*;)%s*",
-	function_re = "^([^;{}]+%b()[\n%s%w]*;)", --const at the end
+	function_re = "^([^;{}=]+%b()[\n%s%w]*;)", --const at the end
 	struct_re = "^([^;{}]-struct[^;{}]-%b{}[%s%w_%(%)]*;)",
 	enum_re = "^([^;{}]-enum[^;{}]-%b{}[%s%w_%(%)]*;)",
 	union_re = "^([^;{}]-union[^;{}]-%b{}[%s%w_%(%)]*;)",
@@ -463,7 +463,8 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
 	--for _,ttype in ipairs(self.templatedTypes) do
     --local template = argscsinpars:match(ttype.."%s*<(.+)>")
 	--TODO several diferent templates
-	local ttype,template = argscsinpars:match("([^%s,%(%)]+)%s*<(.+)>")
+	local ttype,template = argscsinpars:match("([^%s,%(%)]+)%s*<(.-)>")
+	--print("ttype,template",ttype,template)
 	local te=""
 	if template then
 		if self.typenames[stname] ~= template then --rule out template typename
@@ -995,6 +996,9 @@ function M.Parser()
 				end
 			elseif it.re_name == "struct_re" then
 				table.insert(self.inerstructs,it)
+			else
+				print(it.re_name,"not processed")
+				M.prtable(it)
 			end
 		end
 		--final
