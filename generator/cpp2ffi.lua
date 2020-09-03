@@ -894,6 +894,14 @@ function M.Parser()
 				for j,child in ipairs(it.childs) do
 					child.parent = it
 				end
+				if it.re_name == "struct_re" then
+					local typename = it.item:match("%s*template%s*<%s*typename%s*(%S+)%s*>")
+					local stname = it.item:match("struct%s+(%S+)")
+					if typename then -- it is a struct template
+						self.typenames = self.typenames or {}
+						self.typenames[stname] = typename
+					end
+				end
 			end
 		end
 		return itsarr
@@ -936,9 +944,7 @@ function M.Parser()
 			if it.re_name == "function_re" or it.re_name == "functionD_re" then
 				self:parseFunction("",it.item,nil,it.locat)
 			elseif it.re_name == "namespace_re" then
-				--local nsp = it.item:match("%b{}"):sub(2,-2)
 				local namespace = it.item:match("namespace%s+(%S+)")
-				--local nspparr,itemsnsp = parseItems(nsp,false,it.locat)
 				local nspparr = it.childs
 				for insp,itnsp in ipairs(nspparr) do
 					if itnsp.re_name == "function_re" or itnsp.re_name == "functionD_re" then
@@ -946,15 +952,7 @@ function M.Parser()
 					end
 				end
 			elseif it.re_name == "struct_re" then
-				--check template struct
-				local typename = it.item:match("%s*template%s*<%s*typename%s*(%S+)%s*>")
-				--local nsp = it.item:match("%b{}"):sub(2,-2)
 				local stname = it.item:match("struct%s+(%S+)")
-				if typename then -- it is a struct template
-					self.typenames = self.typenames or {}
-					self.typenames[stname] = typename
-				end
-				--local nspparr,itemsnsp = parseItems(nsp,false,it.locat)
 				local nspparr = it.childs
 				for insp,itnsp in ipairs(nspparr) do
 					if itnsp.re_name == "function_re" or itnsp.re_name == "functionD_re" then
@@ -964,8 +962,6 @@ function M.Parser()
 						local embededst = itnsp.item:match("struct%s+(%S+)")
 						self.embeded_structs[embededst] = stname.."::"..embededst
 						print("embeded_structs",embededst)
-						--local nsp2 = strip_end(itnsp.item:match("%b{}"):sub(2,-2))
-						--local itemsemarr,itemsem = parseItems(nsp2,false,itnsp.locat)
 						local itemsemarr = itnsp.childs
 						--assert(not itemsem.struct_re,"two level embed struct")
 						for iemb,itemb in ipairs(itemsemarr) do
