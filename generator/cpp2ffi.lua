@@ -1048,85 +1048,7 @@ function M.Parser()
 		table.insert(outtab,"\n};")
 		return table.concat(outtab,""),stname,outtab
 	end
-	function par:clean_struct(itst, locat)
-		local stru = itst.item
-		local outtab = {}
-		--local iner = strip_end(stru:match("%b{}"):sub(2,-2))
-		local inistruct = clean_spaces(stru:match("(.-)%b{}"))
-		--local stname = stru:match("struct%s*(%S+)%s*%b{}")
-		local stname, derived
-		if inistruct:match":" then
-			stname,derived = inistruct:match"struct%s*([^%s:]+):(.+)"
-			derived = derived:match"(%S+)$"
-		else
-			stname = inistruct:match"struct%s(%S+)"
-		end
 
-		if derived then print(stname,"derived from",derived) end
-		
-		--try to get name from typedef structs
-		if not stname and stru:match("typedef struct") then
-			stname = stru:match("%b{}%s*(%S+)%s*;")
-		end
-		
-		if not stname then
-			print(stru)
-			error"could not get stname"
-		end
-		--initial
-		--table.insert(outtab,stru:match("(.-)%b{}"))
-		table.insert(outtab,"\nstruct "..stname.."\n")
-		table.insert(outtab,"{")
-		if derived then
-			table.insert(outtab,"\n    "..derived.." _"..derived..";")
-		end
-		--local itlist,itemsin = parseItems(iner, false,locat)
-		local itlist = itst.childs
-		if #itlist == 0 then 
-			print("clean_struct with empty struc",stname);
-			-- M.prtable(itst)
-			-- if stname=="StbUndoRecord" then error"dddd" end
-			return "" 
-		end --here we avoid empty structs
-		for j,it in ipairs(itlist) do
-			if it.re_name == "vardef_re" or it.re_name == "functype_re" or it.re_name == "union_re" then
-				local it2 = it.item --:gsub("<([%w_]+)>","_%1") --templates
-				--local ttype,template = it.item:match("([^%s,%(%)]+)%s*<(.+)>")
-				local ttype,template =    it.item:match"([^%s,%(%)]+)%s*<(.+)>"
-				if template then
-					--if template=="T" then print("T found in---------");print(stru) end
-					local te = template:gsub("%s","_")
-					te = te:gsub("%*","Ptr")
-					self.templates[ttype] = self.templates[ttype] or {}
-					self.templates[ttype][template] = te
-					it2 = it2:gsub("(<[%w_%*%s]+>)([^%s])","%1 %2") --add if not present space after <>
-					it2 = it2:gsub("<([%w_%*%s]+)>","_"..te)
-				end
-				--clean mutable
-				it2 = it2:gsub("mutable","")
-				--clean namespaces
-				it2 = it2:gsub("%w+::","")
-				--skip static variables
-				if not (it.re_name == "vardef_re" and it2:match"static") then
-					table.insert(outtab,it2)
-				end
-			elseif it.re_name == "struct_re" then
-				print("inerstructs",it.item)
-				table.insert(self.inerstructs,it)
-			--elseif it.re_name == "enum_re" then
-				--local enumname, enumbody = it.item:match"^%s*enum%s+([^%s;{}]+)[%s\n\r]*(%b{})"
-				--self.embeded_enums[enumname] = stname.."::"..enumname
-				--table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
-				--self.enums_for_table(it,outtab,{})
-			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
-				print(it.re_name,"not processed")
-				M.prtable(it)
-			end
-		end
-		--final
-		table.insert(outtab,"\n};")
-		return table.concat(outtab,""),stname,outtab
-	end
 	function par:gen_structs_and_enums()
 		local outtab = {} 
 		local outtabpre = {}
@@ -1148,6 +1070,12 @@ function M.Parser()
 			elseif it.re_name == "enum_re" then
 				local enumname, enumbody = it.item:match"^%s*enum%s+([^%s;{}]+)[%s\n\r]*(%b{})"
 				table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
+				if it.parent then
+					if it.parent.re_name == "namespace_re" then
+						local namespace = it.parent.item:match("namespace%s+(%S+)")
+						self.embeded_enums[enumname] = namespace.."::"..enumname
+					end
+				end
 			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" then
 				local cleanst,structname = self:clean_structR1(it, it.locat)
 				if not structname then print("NO NAME",cleanst,it.item) end
