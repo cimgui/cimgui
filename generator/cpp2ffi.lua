@@ -280,6 +280,9 @@ local function getRE()
 	
 	return res,resN
 end
+local function isLeaf(re)
+	return (re ~= "typedef_st_re" and re ~= "struct_re" and re~="namespace_re" and re~="class_re")
+end
 M.getRE = getRE
 --takes preprocesed file in table cdefsor and returns items
 local function parseItems(txt,dumpit,loca)
@@ -842,7 +845,7 @@ function M.Parser()
 		--self:compute_templated()
 		ADDdestructors(self)
 	end
-	function par:parseItems()
+	function par:initTypedefsDict()
 		--typedefs dictionary
 		for i,cdef in ipairs(cdefs) do
 			local line = cdef[1]
@@ -865,28 +868,57 @@ function M.Parser()
 				end
 			end
 		end
-		
-		itemsarr = {}
+	end
+	
+	function par:Listing(arr,ff)
+		for i,it in ipairs(arr) do
+			ff(it)
+			if not isLeaf(it.re_name) then
+				par:Listing(it.childs,ff)
+			end
+		end
+	end
+	--recursive item parsing
+	function par:parseItemsR2(txt,doprint,locat)
+		local itsarr,its = parseItems(txt,false,locat)
+		for i,it in ipairs(itsarr) do
+			if not isLeaf(it.re_name) then
+				local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
+				it.childs = par:parseItemsR2(inner,doprint,locat)
+				for j,child in ipairs(it.childs) do
+					child.parent = it
+				end
+			end
+		end
+		return itsarr
+	end
+	function par:parseItems()
+		self:initTypedefsDict()
 		if self.separate_locations then
+			local all_itemsarr = {}
 			local located_cdefs = self:separate_locations(cdefs)
 			for i,lcdef in ipairs(located_cdefs) do
 				local txt = table.concat(lcdef[2],"\n")
-				local itemsarrT,itemsT = parseItems(txt,false,lcdef[1])
+				local itemsarrT,itemsT = par:parseItemsR2(txt,false,lcdef[1])
 				for i,it in ipairs(itemsarrT) do
-					table.insert(itemsarr,it)
+					table.insert(all_itemsarr,it)
 				end
 			end
+			
+			self.itemsarr = all_itemsarr
+			itemsarr = self.itemsarr
 		else
 			local cdefs2 = {}
 			for i,cdef in ipairs(cdefs) do
 				table.insert(cdefs2,cdef[1])
 			end
 			local txt = table.concat(cdefs2,"\n")
-			itemsarr,items = parseItems(txt,false)
+			
+			self.itemsarr = par:parseItemsR2(txt)
+			itemsarr = self.itemsarr
 		end
-		
-		self.itemsarr , self.items = itemsarr,items
 	end
+	
 	function par:printItems()
 		printItems(items)
 	end
@@ -898,9 +930,10 @@ function M.Parser()
 			if it.re_name == "function_re" or it.re_name == "functionD_re" then
 				self:parseFunction("",it.item,nil,it.locat)
 			elseif it.re_name == "namespace_re" then
-				local nsp = it.item:match("%b{}"):sub(2,-2)
+				--local nsp = it.item:match("%b{}"):sub(2,-2)
 				local namespace = it.item:match("namespace%s+(%S+)")
-				local nspparr,itemsnsp = parseItems(nsp,false,it.locat)
+				--local nspparr,itemsnsp = parseItems(nsp,false,it.locat)
+				local nspparr = it.childs
 				for insp,itnsp in ipairs(nspparr) do
 					if itnsp.re_name == "function_re" or itnsp.re_name == "functionD_re" then
 						self:parseFunction("",itnsp.item,namespace,itnsp.locat)
@@ -909,13 +942,14 @@ function M.Parser()
 			elseif it.re_name == "struct_re" then
 				--check template struct
 				local typename = it.item:match("%s*template%s*<%s*typename%s*(%S+)%s*>")
-				local nsp = it.item:match("%b{}"):sub(2,-2)
+				--local nsp = it.item:match("%b{}"):sub(2,-2)
 				local stname = it.item:match("struct%s+(%S+)")
 				if typename then -- it is a struct template
 					self.typenames = self.typenames or {}
 					self.typenames[stname] = typename
 				end
-				local nspparr,itemsnsp = parseItems(nsp,false,it.locat)
+				--local nspparr,itemsnsp = parseItems(nsp,false,it.locat)
+				local nspparr = it.childs
 				for insp,itnsp in ipairs(nspparr) do
 					if itnsp.re_name == "function_re" or itnsp.re_name == "functionD_re" then
 						self:parseFunction(stname,itnsp.item,nil,itnsp.locat)
@@ -923,9 +957,11 @@ function M.Parser()
 						--get embeded_structs
 						local embededst = itnsp.item:match("struct%s+(%S+)")
 						self.embeded_structs[embededst] = stname.."::"..embededst
-						local nsp2 = strip_end(itnsp.item:match("%b{}"):sub(2,-2))
-						local itemsemarr,itemsem = parseItems(nsp2,false,itnsp.locat)
-						assert(not itemsem.struct_re,"two level embed struct")
+						print("embeded_structs",embededst)
+						--local nsp2 = strip_end(itnsp.item:match("%b{}"):sub(2,-2))
+						--local itemsemarr,itemsem = parseItems(nsp2,false,itnsp.locat)
+						local itemsemarr = itnsp.childs
+						--assert(not itemsem.struct_re,"two level embed struct")
 						for iemb,itemb in ipairs(itemsemarr) do
 							if itemb.re_name == "function_re" or itemb.re_name == "functionD_re" then
 								self:parseFunction(embededst,itemb.item,nil,itemb.locat)
@@ -938,10 +974,10 @@ function M.Parser()
 		--require"anima"
 		--prtable(self.defsT)
 	end
-	function par:clean_struct(stru, locat)
-		--assert(locat)
+	function par:clean_structR1(itst)
+		local stru = itst.item
 		local outtab = {}
-		local iner = strip_end(stru:match("%b{}"):sub(2,-2))
+		--local iner = strip_end(stru:match("%b{}"):sub(2,-2))
 		local inistruct = clean_spaces(stru:match("(.-)%b{}"))
 		--local stname = stru:match("struct%s*(%S+)%s*%b{}")
 		local stname, derived
@@ -970,8 +1006,14 @@ function M.Parser()
 		if derived then
 			table.insert(outtab,"\n    "..derived.." _"..derived..";")
 		end
-		local itlist,itemsin = parseItems(iner, false,locat)
-		if #itlist == 0 then return "" end --here we avoid empty structs
+		--local itlist,itemsin = parseItems(iner, false,locat)
+		local itlist = itst.childs
+		if #itlist == 0 then 
+			print("clean_struct with empty struc",stname);
+			-- M.prtable(itst)
+			-- if stname=="StbUndoRecord" then error"dddd" end
+			return "" 
+		end --here we avoid empty structs
 		for j,it in ipairs(itlist) do
 			if it.re_name == "vardef_re" or it.re_name == "functype_re" or it.re_name == "union_re" then
 				local it2 = it.item --:gsub("<([%w_]+)>","_%1") --templates
@@ -995,7 +1037,87 @@ function M.Parser()
 					table.insert(outtab,it2)
 				end
 			elseif it.re_name == "struct_re" then
+				--print("inerstructs",it.item)
+				--table.insert(self.inerstructs,it)
+			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
+				print(it.re_name,"not processed")
+				M.prtable(it)
+			end
+		end
+		--final
+		table.insert(outtab,"\n};")
+		return table.concat(outtab,""),stname,outtab
+	end
+	function par:clean_struct(itst, locat)
+		local stru = itst.item
+		local outtab = {}
+		--local iner = strip_end(stru:match("%b{}"):sub(2,-2))
+		local inistruct = clean_spaces(stru:match("(.-)%b{}"))
+		--local stname = stru:match("struct%s*(%S+)%s*%b{}")
+		local stname, derived
+		if inistruct:match":" then
+			stname,derived = inistruct:match"struct%s*([^%s:]+):(.+)"
+			derived = derived:match"(%S+)$"
+		else
+			stname = inistruct:match"struct%s(%S+)"
+		end
+
+		if derived then print(stname,"derived from",derived) end
+		
+		--try to get name from typedef structs
+		if not stname and stru:match("typedef struct") then
+			stname = stru:match("%b{}%s*(%S+)%s*;")
+		end
+		
+		if not stname then
+			print(stru)
+			error"could not get stname"
+		end
+		--initial
+		--table.insert(outtab,stru:match("(.-)%b{}"))
+		table.insert(outtab,"\nstruct "..stname.."\n")
+		table.insert(outtab,"{")
+		if derived then
+			table.insert(outtab,"\n    "..derived.." _"..derived..";")
+		end
+		--local itlist,itemsin = parseItems(iner, false,locat)
+		local itlist = itst.childs
+		if #itlist == 0 then 
+			print("clean_struct with empty struc",stname);
+			-- M.prtable(itst)
+			-- if stname=="StbUndoRecord" then error"dddd" end
+			return "" 
+		end --here we avoid empty structs
+		for j,it in ipairs(itlist) do
+			if it.re_name == "vardef_re" or it.re_name == "functype_re" or it.re_name == "union_re" then
+				local it2 = it.item --:gsub("<([%w_]+)>","_%1") --templates
+				--local ttype,template = it.item:match("([^%s,%(%)]+)%s*<(.+)>")
+				local ttype,template =    it.item:match"([^%s,%(%)]+)%s*<(.+)>"
+				if template then
+					--if template=="T" then print("T found in---------");print(stru) end
+					local te = template:gsub("%s","_")
+					te = te:gsub("%*","Ptr")
+					self.templates[ttype] = self.templates[ttype] or {}
+					self.templates[ttype][template] = te
+					it2 = it2:gsub("(<[%w_%*%s]+>)([^%s])","%1 %2") --add if not present space after <>
+					it2 = it2:gsub("<([%w_%*%s]+)>","_"..te)
+				end
+				--clean mutable
+				it2 = it2:gsub("mutable","")
+				--clean namespaces
+				it2 = it2:gsub("%w+::","")
+				--skip static variables
+				if not (it.re_name == "vardef_re" and it2:match"static") then
+					table.insert(outtab,it2)
+				end
+			elseif it.re_name == "struct_re" then
+				print("inerstructs",it.item)
 				table.insert(self.inerstructs,it)
+			--elseif it.re_name == "enum_re" then
+				--local enumname, enumbody = it.item:match"^%s*enum%s+([^%s;{}]+)[%s\n\r]*(%b{})"
+				--self.embeded_enums[enumname] = stname.."::"..enumname
+				--table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
+				--self.enums_for_table(it,outtab,{})
 			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
 				print(it.re_name,"not processed")
 				M.prtable(it)
@@ -1009,67 +1131,41 @@ function M.Parser()
 		local outtab = {} 
 		local outtabpre = {}
 		local typedefs_table = {}
-		self.inerstructs = {}
+		--self.inerstructs = {}
 		self.embeded_enums = {}
 		
-		--first typedefs
-		for i,it in ipairs(itemsarr) do
+		local processer = function(it)
 			if it.re_name == "typedef_re" or it.re_name == "functypedef_re" or it.re_name == "vardef_re" then
-				table.insert(outtabpre,it.item)
-				-- add typedef after struct name
-				if it.re_name == "vardef_re" and it.item:match"struct" then
-					local stname = it.item:match("struct%s*(%S+)%s*;")
-					table.insert(typedefs_table,"typedef struct "..stname.." "..stname..";\n")
-					self.typedefs_dict[stname]="struct "..stname
-				end
-			end
-		end
-		--get structs and enums in namespace
-		for i,it in ipairs(itemsarr) do
-			if it.re_name == "namespace_re" then
-				local nsp = it.item:match("%b{}"):sub(2,-2)
-				local namespace = it.item:match("namespace%s+(%S+)")
-				local nspparr,itemsnsp = parseItems(nsp, nil, it.locat )
-				for insp,itnsp in ipairs(nspparr) do
-					if itnsp.re_name == "struct_re"  or itnsp.re_name == "typedef_st_re" then
-						--print("in mamespace",itnsp.item,namespace)
-						table.insert(outtab,itnsp.item)
-					elseif itnsp.re_name == "enum_re" then
-						local enumname, enumbody = itnsp.item:match"^%s*enum%s+([^%s;{}]+)[%s\n\r]*(%b{})"
-						self.embeded_enums[enumname] = namespace.."::"..enumname
-						table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
+				if not it.parent then
+					table.insert(outtabpre,it.item)
+					-- add typedef after struct name
+					if it.re_name == "vardef_re" and it.item:match"struct" then
+						local stname = it.item:match("struct%s*(%S+)%s*;")
+						table.insert(typedefs_table,"typedef struct "..stname.." "..stname..";\n")
+						self.typedefs_dict[stname]="struct "..stname
 					end
 				end
-			end
-		end
-		--then structs and enums
-		for i,it in ipairs(itemsarr) do
-			if it.re_name == "enum_re" then
+			elseif it.re_name == "enum_re" then
 				local enumname, enumbody = it.item:match"^%s*enum%s+([^%s;{}]+)[%s\n\r]*(%b{})"
-				--print("enum is:",enumname, enumbody)
 				table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
-			elseif it.re_name == "struct_re" then
-				local cleanst,structname = self:clean_struct(it.item, it.locat)
-				
-				--if not structname then print("NO NAME",cleanst,it.item) end
-				
+			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" then
+				local cleanst,structname = self:clean_structR1(it, it.locat)
+				if not structname then print("NO NAME",cleanst,it.item) end
 				--if not void stname or templated
 				if structname and not self.typenames[structname] then
 				table.insert(outtab,cleanst)
 				table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
 				self.typedefs_dict[structname]="struct "..structname
 				end
+			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
+				--nop
+			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
+				print("not processed",it.re_name,it.item)
 			end
 		end
-		--inner_structs
-		for i,it in ipairs(self.inerstructs) do
-			local cleanst,structname = self:clean_struct(it.item, it.locat)
-			if structname then
-			table.insert(outtab,cleanst)
-			table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
-			self.typedefs_dict[structname]="struct "..structname
-			end
-		end
+		
+		self:Listing(itemsarr,processer)
+		
 		local uniques = {}
 		for i,l in ipairs(typedefs_table) do
 			if not uniques[l] then
@@ -1080,7 +1176,7 @@ function M.Parser()
 		--check arg detection failure if no name in function declaration
 		check_arg_detection(self.defsT,self.typedefs_dict)
 		local outtabprest, outtabst = table.concat(outtabpre,""),table.concat(outtab,"")
-		self.structs_and_enums = {outtabprest, outtabst}
+		self.structs_and_enums = {outtabprest, outtabst or ""}
 		return outtabprest, outtabst
 	end
 	-----------
@@ -1128,7 +1224,6 @@ function M.Parser()
 		local enumname = it.item:match"^%s*enum%s+([^%s;{}]+)"
 		outtab.enums[enumname] = {}
 		table.insert(enumsordered,enumname)
-		--self.order[enumname] = i
 		local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
 		local enumarr = str_split(inner,",")
 		for j,line in ipairs(enumarr) do
@@ -1155,104 +1250,44 @@ function M.Parser()
 			end
 		end
 	end
+	par.enums_for_table = enums_for_table
 	function par:gen_structs_and_enums_table()
 		local outtab = {enums={},structs={},locations={}}
 		self.typedefs_table = {}
-		self.vardefs = {}
+		--self.vardefs = {}
 
-		self.inerstructs = {}
-		self.order = {}
-		
-		--first typedefs
-		for i,it in ipairs(itemsarr) do
-			if it.re_name == "typedef_re" then --or it.re_name == "functypedef_re" or it.re_name == "vardef_re" then
-				local typedefdef,typedefname = it.item:match"typedef(.+)%s([^%s;]+);$"
-				typedefname = strip(typedefname)
-				self.typedefs_table[typedefname] = strip(typedefdef)
-				self.order[typedefname] = i
-				-- add typedef after struct name
-				-- if it.re_name == "vardef_re" and it.item:match"struct" then
-					-- local stname = it.item:match("struct%s*(%S+)%s*;")
-					-- table.insert(typedefs_table,"typedef struct "..stname.." "..stname..";\n")
-					-- self.typedefs_dict[stname]="struct "..stname
-				-- end
-			end
-		end
-		--vardefs
-		for i,it in ipairs(itemsarr) do
-			if it.re_name == "vardef_re" then 
-				local stname = it.item:match"struct%s(%S+)$"
-				if stname then
-					stname = strip(stname)
-					self.vardefs[stname] = true
-					self.order[stname] = i
-				end
-			end
-		end
-		--then structs and enums
+		--self.inerstructs = {}
 		local enumsordered = {}
-		for i,it in ipairs(itemsarr) do
-			if it.re_name == "enum_re" then
+		
+		local processer = function(it)
+			if it.re_name == "typedef_re" or it.re_name == "functypedef_re" or it.re_name == "vardef_re" then
+				if it.re_name == "typedef_re" and not it.parent then
+					local typedefdef,typedefname = it.item:match"typedef(.+)%s([^%s;]+);$"
+					typedefname = strip(typedefname)
+					self.typedefs_table[typedefname] = strip(typedefdef)
+				end
+			elseif it.re_name == "enum_re" then
 				enums_for_table(it, outtab, enumsordered)
-			elseif it.re_name == "struct_re" then
-				local cleanst,structname,strtab = self:clean_struct(it.item, it.locat)
+			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" then
+				local cleanst,structname,strtab = self:clean_structR1(it, it.locat)
 				--if not void stname or templated
-				--M.prtable(cleanst,structname,strtab)
+				if not structname then print("NO NAME",cleanst,it.item) end
 				if structname and not self.typenames[structname] then
 					outtab.structs[structname] = {}
 					outtab.locations[structname] = it.locat
-					self.order[structname]=i
 					for j=3,#strtab-1 do
 						self:parse_struct_line(strtab[j],outtab.structs[structname])
 					end
 				end
+			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
+				--nop
+			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
+				print("not processed gen table",it.re_name)
 			end
 		end
 		
-		--get structs and enums in namespace
-		for i,it in ipairs(itemsarr) do
-			if it.re_name == "namespace_re" then
-				local nsp = it.item:match("%b{}"):sub(2,-2)
-				local namespace = it.item:match("namespace%s+(%S+)")
-				local nspparr,itemsnsp = parseItems(nsp, nil, it.locat )
-				for insp,itnsp in ipairs(nspparr) do
-					if itnsp.re_name == "struct_re"  or itnsp.re_name == "typedef_st_re" then
-						local cleanst,structname,strtab = self:clean_struct(itnsp.item, itnsp.locat)
-						if structname and not self.typenames[structname] then
-							outtab.structs[structname] = {}
-							outtab.locations[structname] = itnsp.locat
-							self.order[structname]=i
-							for j=3,#strtab-1 do
-								self:parse_struct_line(strtab[j],outtab.structs[structname])
-							end
-						end
-					elseif itnsp.re_name == "enum_re" then
-						enums_for_table(itnsp, outtab, enumsordered)
-					end
-				end
-			end
-		end
-		--inner_structs
-
-		for i,it in ipairs(self.inerstructs) do
-			local cleanst,structname,strtab = self:clean_struct(it.item, it.locat)
-			if structname then --not empty struc
-				outtab.structs[structname] = {}
-				outtab.locations[structname] = it.locat
-				for j=3,#strtab-1 do
-					self:parse_struct_line(strtab[j],outtab.structs[structname])
-				end
-			end
-		end
-		--[[
-		local uniques = {}
-		for i,l in ipairs(typedefs_table) do
-			if not uniques[l] then
-				uniques[l] = true
-				table.insert(outtabpre,1,l)
-			end
-		end
-		--]]
+		self:Listing(itemsarr,processer)
+		
 		--calcule size of name[16+1] [xxx_COUNT]
 		local allenums = {}
 		--first calc_value in enums
