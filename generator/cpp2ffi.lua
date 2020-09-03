@@ -432,6 +432,11 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
     --clean attribute
     line = line:gsub("%s*__attribute__%b()","")
     --clean static and inline and mutable
+	local is_static_function
+	if line:match("static") and stname~="" then
+		print("parseFuncion static",line)
+		is_static_function = true
+	end
     line = line:gsub("static","")
 	line = line:gsub("inline","")
 	line = line:gsub("mutable","")
@@ -617,6 +622,7 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
 	defT.namespace = namespace
     defT.cimguiname = cimguiname
     defT.stname = stname
+    defT.is_static_function = is_static_function
     defT.funcname = funcname
     defT.argsoriginal = args
     defT.args= asp --argscsinpars
@@ -649,8 +655,8 @@ end
 
 local function AdjustArguments(FP)
     for fun,defs in pairs(FP.defsT) do
-        --struct function but no constructors
-        if defs[1].stname~="" and defs[1].ret then
+        --struct function but no constructors or static functions
+        if defs[1].stname~="" and defs[1].ret and not defs[1].is_static_function then
             --print("adjusting",fun)
             for i,def in ipairs(defs) do
                 local empty = def.args:match("^%(%)") --no args
@@ -1036,12 +1042,11 @@ function M.Parser()
 				if not (it.re_name == "vardef_re" and it2:match"static") then
 					table.insert(outtab,it2)
 				end
-			elseif it.re_name == "struct_re" then
-				--print("inerstructs",it.item)
-				--table.insert(self.inerstructs,it)
+			elseif it.re_name == "struct_re"  or it.re_name == "enum_re" then
+				--nop
 			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
-				print(it.re_name,"not processed")
-				M.prtable(it)
+				print(it.re_name,"not processed clean_struct",it.item:sub(1,12))
+				--M.prtable(it)
 			end
 		end
 		--final
@@ -1088,7 +1093,7 @@ function M.Parser()
 			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
 				--nop
 			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
-				print("not processed",it.re_name,it.item)
+				print("not processed",it.re_name,it.item:sub(1,20))
 			end
 		end
 		
@@ -1563,6 +1568,7 @@ local function ImGui_f_implementation(outtab,def)
     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname..def.args.."\n")
     table.insert(outtab,"{\n")
 	local namespace = def.namespace and def.namespace.."::" or ""
+	namespace = def.is_static_function and namespace..def.stname.."::" or namespace
     if def.isvararg then
         local call_args = def.call_args:gsub("%.%.%.","args")
         table.insert(outtab,"    va_list args;\n")
@@ -1640,7 +1646,7 @@ local function func_implementation(FP)
                 table.insert(outtab,"{\n")
                 table.insert(outtab,"    IM_DELETE(self);\n")
                 table.insert(outtab,"}\n")
-            elseif def.stname == "" then
+            elseif def.stname == "" or def.is_static_function then
                 ImGui_f_implementation(outtab,def)
             else -- stname
                 struct_f_implementation(outtab,def)
@@ -1692,7 +1698,7 @@ local function func_header_generate(FP)
                 table.insert(outtab,"CIMGUI_API void "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
             else --not constructor
 
-                if def.stname == "" then --ImGui namespace or top level
+                if def.stname == "" or def.is_static_function then --ImGui namespace or top level
                     table.insert(outtab,"CIMGUI_API "..def.ret.." ".. def.ov_cimguiname ..(empty and "(void)" or def.args)..";"..addcoment.."\n")
                 else
                     table.insert(outtab,"CIMGUI_API "..def.ret.." "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
