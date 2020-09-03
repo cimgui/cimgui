@@ -958,10 +958,7 @@ function M.Parser()
 					if itnsp.re_name == "function_re" or itnsp.re_name == "functionD_re" then
 						self:parseFunction(stname,itnsp.item,nil,itnsp.locat)
 					elseif itnsp.re_name == "struct_re" then
-						--get embeded_structs
 						local embededst = itnsp.item:match("struct%s+(%S+)")
-						self.embeded_structs[embededst] = stname.."::"..embededst
-						print("embeded_structs",embededst)
 						local itemsemarr = itnsp.childs
 						--assert(not itemsem.struct_re,"two level embed struct")
 						for iemb,itemb in ipairs(itemsemarr) do
@@ -1082,9 +1079,15 @@ function M.Parser()
 				if not structname then print("NO NAME",cleanst,it.item) end
 				--if not void stname or templated
 				if structname and not self.typenames[structname] then
-				table.insert(outtab,cleanst)
-				table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
-				self.typedefs_dict[structname]="struct "..structname
+					table.insert(outtab,cleanst)
+					table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
+					self.typedefs_dict[structname]="struct "..structname
+				end
+				if it.parent and it.parent.re_name == "struct_re" then
+					--TODO nesting more levels and namespace
+					local stname = it.parent.item:match("struct%s+(%S+)")
+					local embededst = it.item:match("struct%s+(%S+)")
+					self.embeded_structs[embededst] = stname.."::"..embededst
 				end
 			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
 				--nop
