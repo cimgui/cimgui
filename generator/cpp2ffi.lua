@@ -434,7 +434,7 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
     --clean static and inline and mutable
 	local is_static_function
 	if line:match("static") and stname~="" then
-		print("parseFuncion static",line)
+		--print("parseFuncion static",line)
 		is_static_function = true
 	end
     line = line:gsub("static","")
@@ -845,9 +845,8 @@ function M.Parser()
 	end
 	function par:do_parse()
 		self:parseItems()
-		self:parseFunctions()
-		self:compute_overloads()
 		self:gen_structs_and_enums()
+		self:compute_overloads()
 		--self:compute_templated()
 		ADDdestructors(self)
 	end
@@ -941,41 +940,6 @@ function M.Parser()
 	end
 	par.parseFunction = parseFunction
 	
-	--get all function definitions and template structs
-	function par:parseFunctions()
-		for i,it in ipairs(itemsarr) do
-			if it.re_name == "function_re" or it.re_name == "functionD_re" then
-				self:parseFunction("",it.item,nil,it.locat)
-			elseif it.re_name == "namespace_re" then
-				local namespace = it.item:match("namespace%s+(%S+)")
-				local nspparr = it.childs
-				for insp,itnsp in ipairs(nspparr) do
-					if itnsp.re_name == "function_re" or itnsp.re_name == "functionD_re" then
-						self:parseFunction("",itnsp.item,namespace,itnsp.locat)
-					end
-				end
-			elseif it.re_name == "struct_re" then
-				local stname = it.item:match("struct%s+(%S+)")
-				local nspparr = it.childs
-				for insp,itnsp in ipairs(nspparr) do
-					if itnsp.re_name == "function_re" or itnsp.re_name == "functionD_re" then
-						self:parseFunction(stname,itnsp.item,nil,itnsp.locat)
-					elseif itnsp.re_name == "struct_re" then
-						local embededst = itnsp.item:match("struct%s+(%S+)")
-						local itemsemarr = itnsp.childs
-						--assert(not itemsem.struct_re,"two level embed struct")
-						for iemb,itemb in ipairs(itemsemarr) do
-							if itemb.re_name == "function_re" or itemb.re_name == "functionD_re" then
-								self:parseFunction(embededst,itemb.item,nil,itemb.locat)
-							end
-						end
-					end
-				end
-			end
-		end
-		--require"anima"
-		--prtable(self.defsT)
-	end
 	function par:clean_structR1(itst)
 		local stru = itst.item
 		local outtab = {}
@@ -1102,7 +1066,18 @@ function M.Parser()
 				end
 			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
 				--nop
-			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
+			elseif it.re_name == "functionD_re" or it.re_name == "function_re" then
+				local stname = ""
+				local namespace
+				if it.parent then
+					if it.parent.re_name == "struct_re" or it.parent.re_name == "typedef_st_re" then
+						stname = it.parent.name
+					elseif it.parent.re_name == "namespace_re" then
+						namespace = it.parent.name
+					end
+				end
+				self:parseFunction(stname,it.item,namespace,it.locat)
+			else
 				print("not processed",it.re_name,it.item:sub(1,20))
 			end
 		end
