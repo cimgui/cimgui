@@ -444,7 +444,10 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
 	--skip operator
 	if line:match("operator") then return end
 	--skip template
-	if line:match("template") then return end
+	if line:match("template") then 
+		--print("template",lineorig)
+		return 
+	end
     
     local ret = line:match("([^%(%):,]+[%*%s])%s?~?[_%w]+%b()")
     --local funcname, args = line:match("(~?[_%w]+)%s*(%b())")
@@ -475,7 +478,9 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
 	--print("ttype,template",ttype,template)
 	local te=""
 	if template then
+		--print("--",stname,self.typenames[stname] , ttype,template)
 		if self.typenames[stname] ~= template then --rule out template typename
+		--print("--in")
 		te = template:gsub("%s","_")
         te = te:gsub("%*","Ptr")
 
@@ -985,13 +990,14 @@ function M.Parser()
 				--local ttype,template = it.item:match("([^%s,%(%)]+)%s*<(.+)>")
 				local ttype,template =    it.item:match"([^%s,%(%)]+)%s*<(.+)>"
 				if template then
-					--if template=="T" then print("T found in---------");print(stru) end
+					if self.typenames[ttype] ~= template then --rule out T (template typename)
 					local te = template:gsub("%s","_")
 					te = te:gsub("%*","Ptr")
 					self.templates[ttype] = self.templates[ttype] or {}
 					self.templates[ttype][template] = te
 					it2 = it2:gsub("(<[%w_%*%s]+>)([^%s])","%1 %2") --add if not present space after <>
 					it2 = it2:gsub("<([%w_%*%s]+)>","_"..te)
+					end
 				end
 				--clean mutable
 				it2 = it2:gsub("mutable","")
@@ -1656,10 +1662,17 @@ local function func_header_generate(FP)
     end
 	
     for ttype,v in pairs(FP.templates) do
+		--output sorted
+		local sorted = {}
 		for ttypein,_ in pairs(v) do
+			table.insert(sorted,ttypein)
+		end
+		table.sort(sorted)
+		--for ttypein,_ in pairs(v) do
+		for ii,ttypein in ipairs(sorted) do
 			local te = ttypein:gsub("%s","_")
 			te = te:gsub("%*","Ptr")
-        table.insert(outtab,"typedef "..ttype.."<"..ttypein.."> "..ttype.."_"..te..";\n")
+			table.insert(outtab,"typedef "..ttype.."<"..ttypein.."> "..ttype.."_"..te..";\n")
 		end
     end
 
