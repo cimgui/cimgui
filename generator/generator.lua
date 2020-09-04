@@ -177,27 +177,34 @@ local function DefsByStruct(FP)
 end  
 
 ----------custom ImVector templates
+local table_do_sorted = cpp2ffi.table_do_sorted
 local function generate_templates(code,codeimpool,templates)
     table.insert(code,"\n"..[[typedef struct ImVector{int Size;int Capacity;void* Data;} ImVector;]].."\n")
     for ttype,v in pairs(templates) do
-        --local te = k:gsub("%s","_")
-        --te = te:gsub("%*","Ptr")
+	--table_do_sorted(templates , function (ttype, v)
 		if ttype == "ImVector" then
 			for te,newte in pairs(v) do
+			--table_do_sorted(v, function(te,newte)
 				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
+			--end)
 			end
 		elseif ttype == "ImPool" then
 			--declare ImGuiStorage
 			for te,newte in pairs(v) do
+			--table_do_sorted(v, function(te, newte)
 				table.insert(codeimpool,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
 				table.insert(codeimpool,"typedef struct ImPool_"..newte.." {ImVector_"..te.." Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_"..newte..";\n")
+			--end)
 			end
 		elseif ttype == "ImChunkStream" then
 			for te,newte in pairs(v) do
+			--table_do_sorted(v, function(te,newte)
 				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
 				table.insert(code,"typedef struct ImChunkStream_"..newte.." {ImVector_"..te.." Buf;} ImChunkStream_"..newte..";\n")
+			--end)
 			end
 		end
+	--end)
     end
 end
 --generate cimgui.cpp cimgui.h 
