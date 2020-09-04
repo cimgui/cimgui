@@ -1761,9 +1761,9 @@ CIMGUI_API void ImColor_SetHSV(ImColor* self,float h,float s,float v,float a)
 {
     return self->SetHSV(h,s,v,a);
 }
-CIMGUI_API void ImColor_HSV(ImColor *pOut,ImColor* self,float h,float s,float v,float a)
+CIMGUI_API void ImColor_HSV(ImColor *pOut,float h,float s,float v,float a)
 {
-    *pOut = self->HSV(h,s,v,a);
+    *pOut = ImColor::HSV(h,s,v,a);
 }
 CIMGUI_API ImDrawCmd* ImDrawCmd_ImDrawCmd(void)
 {

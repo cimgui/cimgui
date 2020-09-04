@@ -42,16 +42,15 @@ typedef unsigned __int64 ImU64;
 
 
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
-typedef struct ImGuiStoragePair ImGuiStoragePair;
-typedef struct ImGuiTextRange ImGuiTextRange;
 typedef struct ImGuiPtrOrIndex ImGuiPtrOrIndex;
 typedef struct ImGuiShrinkWidthItem ImGuiShrinkWidthItem;
 typedef struct ImGuiDataTypeTempStorage ImGuiDataTypeTempStorage;
 typedef struct ImVec2ih ImVec2ih;
 typedef struct ImVec1 ImVec1;
-typedef struct ImFontAtlasCustomRect ImFontAtlasCustomRect;
-typedef struct ImVec4 ImVec4;
-typedef struct ImVec2 ImVec2;
+typedef struct StbTexteditRow StbTexteditRow;
+typedef struct STB_TexteditState STB_TexteditState;
+typedef struct StbUndoState StbUndoState;
+typedef struct StbUndoRecord StbUndoRecord;
 typedef struct ImGuiWindowSettings ImGuiWindowSettings;
 typedef struct ImGuiWindowTempData ImGuiWindowTempData;
 typedef struct ImGuiWindow ImGuiWindow;
@@ -74,6 +73,11 @@ typedef struct ImGuiColorMod ImGuiColorMod;
 typedef struct ImDrawDataBuilder ImDrawDataBuilder;
 typedef struct ImRect ImRect;
 typedef struct ImBitVector ImBitVector;
+typedef struct ImFontAtlasCustomRect ImFontAtlasCustomRect;
+typedef struct ImGuiStoragePair ImGuiStoragePair;
+typedef struct ImGuiTextRange ImGuiTextRange;
+typedef struct ImVec4 ImVec4;
+typedef struct ImVec2 ImVec2;
 typedef struct ImGuiTextFilter ImGuiTextFilter;
 typedef struct ImGuiTextBuffer ImGuiTextBuffer;
 typedef struct ImGuiStyle ImGuiStyle;
@@ -244,41 +248,6 @@ typedef struct ImVector_char {int Size;int Capacity;char* Data;} ImVector_char;
 typedef struct ImVector_ImGuiWindowSettings {int Size;int Capacity;ImGuiWindowSettings* Data;} ImVector_ImGuiWindowSettings;
 typedef struct ImChunkStream_ImGuiWindowSettings {ImVector_ImGuiWindowSettings Buf;} ImChunkStream_ImGuiWindowSettings;
 
-typedef struct
-{
-   int where;
-   int insert_length;
-   int delete_length;
-   int char_storage;
-} StbUndoRecord;
-typedef struct
-{
-   StbUndoRecord undo_rec [99];
-   ImWchar undo_char[999];
-   short undo_point, redo_point;
-   int undo_char_point, redo_char_point;
-} StbUndoState;
-typedef struct
-{
-   int cursor;
-   int select_start;
-   int select_end;
-   unsigned char insert_mode;
-   unsigned char cursor_at_end_of_line;
-   unsigned char initialized;
-   unsigned char has_preferred_x;
-   unsigned char single_line;
-   unsigned char padding1, padding2, padding3;
-   float preferred_x;
-   StbUndoState undostate;
-} STB_TexteditState;
-typedef struct
-{
-   float x0,x1;
-   float baseline_y_delta;
-   float ymin,ymax;
-   int num_chars;
-} StbTexteditRow;
 struct ImVec2
 {
     float x, y;
@@ -860,6 +829,11 @@ struct ImGuiTextFilter
     ImVector_ImGuiTextRange Filters;
     int CountGrep;
 };
+struct ImGuiTextRange
+{
+        const char* b;
+        const char* e;
+};
 struct ImGuiTextBuffer
 {
     ImVector_char Buf;
@@ -870,6 +844,11 @@ struct ImGuiStorage
 };
 typedef struct ImVector_ImGuiTabBar {int Size;int Capacity;ImGuiTabBar* Data;} ImVector_ImGuiTabBar;
 typedef struct ImPool_ImGuiTabBar {ImVector_ImGuiTabBar Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_ImGuiTabBar;
+struct ImGuiStoragePair
+{
+        ImGuiID key;
+        union { int val_i; float val_f; void* val_p; };
+};
 struct ImGuiListClipper
 {
     int DisplayStart, DisplayEnd;
@@ -1044,6 +1023,41 @@ struct ImFont
     float Ascent, Descent;
     int MetricsTotalSurface;
     ImU8 Used4kPagesMap[(0xFFFF +1)/4096/8];
+};
+struct StbUndoRecord
+{
+   int where;
+   int insert_length;
+   int delete_length;
+   int char_storage;
+};
+struct StbUndoState
+{
+   StbUndoRecord undo_rec [99];
+   ImWchar undo_char[999];
+   short undo_point, redo_point;
+   int undo_char_point, redo_char_point;
+};
+struct STB_TexteditState
+{
+   int cursor;
+   int select_start;
+   int select_end;
+   unsigned char insert_mode;
+   unsigned char cursor_at_end_of_line;
+   unsigned char initialized;
+   unsigned char has_preferred_x;
+   unsigned char single_line;
+   unsigned char padding1, padding2, padding3;
+   float preferred_x;
+   StbUndoState undostate;
+};
+struct StbTexteditRow
+{
+   float x0,x1;
+   float baseline_y_delta;
+   float ymin,ymax;
+   int num_chars;
 };
 struct ImVec1
 {
@@ -1778,16 +1792,6 @@ struct ImGuiTabBar
     ImVec2 FramePadding;
     ImGuiTextBuffer TabsNames;
 };
-struct ImGuiTextRange
-{
-        const char* b;
-        const char* e;
-};
-struct ImGuiStoragePair
-{
-        ImGuiID key;
-        union { int val_i; float val_f; void* val_p; };
-};
 #else
 struct GLFWwindow;
 struct SDL_Window;
@@ -1796,7 +1800,11 @@ typedef union SDL_Event SDL_Event;
 
 #ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 typedef ImGuiStorage::ImGuiStoragePair ImGuiStoragePair;
+typedef ImStb::StbUndoState StbUndoState;
+typedef ImStb::StbUndoRecord StbUndoRecord;
 typedef ImGuiTextFilter::ImGuiTextRange ImGuiTextRange;
+typedef ImStb::STB_TexteditState STB_TexteditState;
+typedef ImStb::StbTexteditRow StbTexteditRow;
 typedef ImVector<float> ImVector_float;
 typedef ImVector<ImWchar> ImVector_ImWchar;
 typedef ImVector<ImDrawVert> ImVector_ImDrawVert;
@@ -2261,7 +2269,7 @@ CIMGUI_API ImColor* ImColor_ImColorU32(ImU32 rgba);
 CIMGUI_API ImColor* ImColor_ImColorFloat(float r,float g,float b,float a);
 CIMGUI_API ImColor* ImColor_ImColorVec4(const ImVec4 col);
 CIMGUI_API void ImColor_SetHSV(ImColor* self,float h,float s,float v,float a);
-CIMGUI_API void ImColor_HSV(ImColor *pOut,ImColor* self,float h,float s,float v,float a);
+CIMGUI_API void ImColor_HSV(ImColor *pOut,float h,float s,float v,float a);
 CIMGUI_API ImDrawCmd* ImDrawCmd_ImDrawCmd(void);
 CIMGUI_API void ImDrawCmd_destroy(ImDrawCmd* self);
 CIMGUI_API ImDrawListSplitter* ImDrawListSplitter_ImDrawListSplitter(void);

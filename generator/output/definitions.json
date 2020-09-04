@@ -362,14 +362,10 @@
   ],
   "ImColor_HSV": [
     {
-      "args": "(ImColor *pOut,ImColor* self,float h,float s,float v,float a)",
+      "args": "(ImColor *pOut,float h,float s,float v,float a)",
       "argsT": [
         {
           "name": "pOut",
-          "type": "ImColor*"
-        },
-        {
-          "name": "self",
           "type": "ImColor*"
         },
         {
@@ -396,6 +392,7 @@
         "a": "1.0f"
       },
       "funcname": "HSV",
+      "is_static_function": true,
       "location": "imgui",
       "nonUDT": 1,
       "ov_cimguiname": "ImColor_HSV",
