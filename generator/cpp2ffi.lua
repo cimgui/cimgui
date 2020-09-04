@@ -897,10 +897,13 @@ function M.Parser()
 				if it.re_name == "struct_re" then
 					local typename = it.item:match("%s*template%s*<%s*typename%s*(%S+)%s*>")
 					local stname = it.item:match("struct%s+(%S+)")
+					it.name = stname
 					if typename then -- it is a struct template
 						self.typenames = self.typenames or {}
 						self.typenames[stname] = typename
 					end
+				elseif it.re_name == "namespace_re" then
+					it.name = it.item:match("namespace%s+(%S+)")
 				end
 			end
 		end
@@ -1046,7 +1049,15 @@ function M.Parser()
 		table.insert(outtab,"\n};")
 		return table.concat(outtab,""),stname,outtab
 	end
-
+	local function get_parents_name(it)
+		local parnam = ""
+		while it.parent do
+			print("get_parents_name", it.parent.name)
+			parnam = it.parent.name.."::"..parnam
+			it = it.parent
+		end
+		return parnam
+	end
 	function par:gen_structs_and_enums()
 		local outtab = {} 
 		local outtabpre = {}
@@ -1083,11 +1094,12 @@ function M.Parser()
 					table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
 					self.typedefs_dict[structname]="struct "..structname
 				end
-				if it.parent and it.parent.re_name == "struct_re" then
-					--TODO nesting more levels and namespace
-					local stname = it.parent.item:match("struct%s+(%S+)")
-					local embededst = it.item:match("struct%s+(%S+)")
-					self.embeded_structs[embededst] = stname.."::"..embededst
+				if it.parent  then --and (it.parent.re_name == "struct_re" or it.parent.re_name == "typedef_st_re" then
+					local embededst = (it.re_name == "struct_re" and it.item:match("struct%s+(%S+)")) 
+					or (it.re_name == "typedef_st_re" and it.item:match("%b{}%s*(%S+)%s*;"))
+					--TODO nesting namespace and class
+					local parname = get_parents_name(it)
+					self.embeded_structs[embededst] = parname..embededst
 				end
 			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
 				--nop
