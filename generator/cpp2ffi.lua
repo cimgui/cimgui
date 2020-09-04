@@ -1648,33 +1648,31 @@ local function func_implementation(FP)
 end
 
 M.func_implementation = func_implementation
-
+local function table_do_sorted(t,f)
+	local sorted = {}
+	for k,v in pairs(t) do
+		table.insert(sorted,k)
+	end
+	table.sort(sorted)
+	for ii,k in ipairs(sorted) do
+		f(k,t[k])
+	end
+end
+M.table_do_sorted = table_do_sorted
 local function func_header_generate(FP)
 
     local outtab = {}
     table.insert(outtab,"#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
-    for k,v in pairs(FP.embeded_structs) do
-        table.insert(outtab,"typedef "..v.." "..k..";\n")
-    end
+
+	table_do_sorted(FP.embeded_structs,function(k,v) table.insert(outtab,"typedef "..v.." "..k..";\n") end)
 	
-	for k,v in pairs(FP.embeded_enums) do
-        table.insert(outtab,"typedef "..v.." "..k..";\n")
-    end
+	table_do_sorted(FP.embeded_enums,function(k,v) table.insert(outtab,"typedef "..v.." "..k..";\n") end)
 	
-    for ttype,v in pairs(FP.templates) do
-		--output sorted
-		local sorted = {}
-		for ttypein,_ in pairs(v) do
-			table.insert(sorted,ttypein)
-		end
-		table.sort(sorted)
-		--for ttypein,_ in pairs(v) do
-		for ii,ttypein in ipairs(sorted) do
-			local te = ttypein:gsub("%s","_")
-			te = te:gsub("%*","Ptr")
+	table_do_sorted(FP.templates,function(ttype,v)
+		table_do_sorted(v,function(ttypein,te)
 			table.insert(outtab,"typedef "..ttype.."<"..ttypein.."> "..ttype.."_"..te..";\n")
-		end
-    end
+		end)
+	end)
 
     table.insert(outtab,"#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
     for _,t in ipairs(FP.funcdefs) do
