@@ -819,7 +819,6 @@ function M.Parser()
 	par.defsT = {}
 	par.funcdefs = {}
 	par.embeded_structs = {}
-	par.inerstructs = {}
 	par.templates = {}
 	par.typenames = {}
 	par.typedefs_dict = {}
@@ -998,6 +997,10 @@ function M.Parser()
 				it2 = it2:gsub("mutable","")
 				--clean namespaces
 				it2 = it2:gsub("%w+::","")
+				--clean initializations
+				if it.re_name == "vardef_re" then
+					it2 = it2:gsub("%s*=.+;",";")
+				end
 				--skip static variables
 				if not (it.re_name == "vardef_re" and it2:match"static") then
 					table.insert(outtab,it2)
@@ -1025,7 +1028,6 @@ function M.Parser()
 		local outtab = {} 
 		local outtabpre = {}
 		local typedefs_table = {}
-		--self.inerstructs = {}
 		self.embeded_enums = {}
 		
 		local processer = function(it)
@@ -1172,9 +1174,6 @@ function M.Parser()
 	function par:gen_structs_and_enums_table()
 		local outtab = {enums={},structs={},locations={}}
 		self.typedefs_table = {}
-		--self.vardefs = {}
-
-		--self.inerstructs = {}
 		local enumsordered = {}
 		
 		local processer = function(it)
