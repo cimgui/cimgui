@@ -227,7 +227,6 @@ local function cimgui_generation(parser)
     local hstrfile = read_data"./cimgui_template.h"
 
 	local outpre,outpost = parser.structs_and_enums[1],parser.structs_and_enums[2]
-	parser.templates.ImVector.T = nil
 	cpp2ffi.prtable(parser.templates)
 	cpp2ffi.prtable(parser.typenames)
 	
