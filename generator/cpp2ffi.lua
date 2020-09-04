@@ -1052,7 +1052,6 @@ function M.Parser()
 	local function get_parents_name(it)
 		local parnam = ""
 		while it.parent do
-			print("get_parents_name", it.parent.name)
 			parnam = it.parent.name.."::"..parnam
 			it = it.parent
 		end
