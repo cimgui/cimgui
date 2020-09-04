@@ -62,6 +62,7 @@ Notes:
   * templatedgen: is set if the function belongs to a struct generated from template (ImVector_ImWchar)
   * nonUDT : if present the original function was returning a user defined type so that signature has been changed to accept a pointer to the UDT as first argument.
   * location : name of the header file this function comes from. (imgui, internal, imgui_impl_xxx)
+  * is_static_function : is setted when it is an struct static function.
 ### structs_and_enums description
 * Is is a collection with three items:
   * under key enums we get the enums collection in which each key is the enum tagname and the value is an array of the ordered values represented as a collection with keys
