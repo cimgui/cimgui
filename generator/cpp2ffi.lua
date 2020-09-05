@@ -985,7 +985,8 @@ function M.Parser()
 			return "" 
 		end --here we avoid empty structs
 		for j,it in ipairs(itlist) do
-			if it.re_name == "vardef_re" or it.re_name == "functype_re" or it.re_name == "union_re" then
+			if (it.re_name == "vardef_re" or it.re_name == "functype_re" or it.re_name == "union_re") then
+			if  not (it.re_name == "vardef_re" and it.item:match"static") then --skip static variables
 				local it2 = it.item --:gsub("<([%w_]+)>","_%1") --templates
 				--local ttype,template = it.item:match("([^%s,%(%)]+)%s*<(.+)>")
 				local ttype,template =    it.item:match"([^%s,%(%)]+)%s*<(.+)>"
@@ -1007,9 +1008,7 @@ function M.Parser()
 				if it.re_name == "vardef_re" then
 					it2 = it2:gsub("%s*=.+;",";")
 				end
-				--skip static variables
-				if not (it.re_name == "vardef_re" and it2:match"static") then
-					table.insert(outtab,it2)
+				table.insert(outtab,it2)
 				end
 			elseif it.re_name == "struct_re"  or it.re_name == "enum_re" then
 				--nop
