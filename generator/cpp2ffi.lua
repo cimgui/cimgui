@@ -138,8 +138,7 @@ local function clean_spaces(cad)
 end
 
 ------------------------------------
-local function parse_enum_value(enline, allenums)
-	local value = enline.value
+local function parse_enum_value(value, allenums)
 	local function clean(val)
 		if type(val)=="string" then
 			return clean_spaces(val)
@@ -205,7 +204,7 @@ local function parse_enum_value(enline, allenums)
 			end
 		end
 		if #seps>0 or type(several[1])~="number" then
-			M.prtable("enline",enline)
+			--M.prtable("enline",enline)
 			M.prtable(several,seps)
 			M.prtable(allenums)
 		end
@@ -214,6 +213,7 @@ local function parse_enum_value(enline, allenums)
 		return several[1]
 	end
 end
+M.parse_enum_value = parse_enum_value
 --------------------------------------------------------------------------
 local function save_data(filename,...)
     local file,err = io.open(filename,"w")
@@ -1217,7 +1217,7 @@ function M.Parser()
 		--for enumname,enum in pairs(outtab.enums) do
 			local enum = outtab.enums[enumname]
 			for i,t in ipairs(enum) do
-				t.calc_value = parse_enum_value(t,allenums)
+				t.calc_value = parse_enum_value(t.value,allenums)
 				assert(t.calc_value)
 				allenums[t.name] = t.calc_value
 			end
