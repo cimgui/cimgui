@@ -1658,10 +1658,10 @@ local function table_do_sorted(t,f)
 	end
 end
 M.table_do_sorted = table_do_sorted
-local function func_header_generate(FP)
+
+local function func_header_generate_structs(FP)
 
     local outtab = {}
-    table.insert(outtab,"#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
 
 	table_do_sorted(FP.embeded_structs,function(k,v) table.insert(outtab,"typedef "..v.." "..k..";\n") end)
 	
@@ -1672,8 +1672,14 @@ local function func_header_generate(FP)
 			table.insert(outtab,"typedef "..ttype.."<"..ttypein.."> "..ttype.."_"..te..";\n")
 		end)
 	end)
+	return outtab
+end
+M.func_header_generate_structs = func_header_generate_structs
 
-    table.insert(outtab,"#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
+local function func_header_generate_funcs(FP)
+
+    local outtab = {}
+   
     for _,t in ipairs(FP.funcdefs) do
 
         if t.cimguiname then
@@ -1704,7 +1710,19 @@ local function func_header_generate(FP)
         end
     end
 
-    local cfuncsstr = table.concat(outtab)
+    return outtab
+end
+M.func_header_generate_funcs = func_header_generate_funcs
+
+local function func_header_generate(FP)
+
+    local outtab = func_header_generate_structs(FP)
+    table.insert(outtab, 1, "#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
+    table.insert(outtab,"#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
+    
+    local outtabf = func_header_generate_funcs(FP)
+    
+    local cfuncsstr = table.concat(outtab)..table.concat(outtabf)
     cfuncsstr = cfuncsstr:gsub("\n+","\n") --several empty lines to one empty line
     return cfuncsstr
 end
