@@ -1083,7 +1083,17 @@ function M.Parser()
 						namespace = it.parent.name
 					end
 				end
-				self:parseFunction(stname,it.item,namespace,it.locat)
+				if it.item:match"^%s*template%s+<" then
+					local ttype,fun = it.item:match"^%s*template%s+<%s*typename%s+([^>]+)%s*>%s*(.+)$"
+					if self.ftemplate_list then
+						for iT,vT in ipairs(self.ftemplate_list[ttype]) do
+							local funT = fun:gsub(ttype,vT)
+							self:parseFunction(stname,funT,namespace,it.locat)
+						end
+					end
+				else
+					self:parseFunction(stname,it.item,namespace,it.locat)
+				end
 			else
 				print("not processed",it.re_name,it.item:sub(1,20))
 			end
