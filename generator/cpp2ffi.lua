@@ -418,6 +418,37 @@ local function typetoStr(typ)
     typ = typ:gsub("[<>]","")
     return typ
 end
+--used to clean signature in function ptr argument
+local function clean_names_from_signature(self,signat)
+	local rest = signat:sub(2,-2)
+	local arg,restt,typ,name
+	local result = "("
+	while true do
+		arg,restt = rest:match(",*([^,%(%)]+),*(.*)")
+        if not arg then break end
+        rest = restt
+		if arg:match("%.%.%.") then 
+           typ="...";name="..."
+        else
+           typ,name = arg:match("(.+)%s([^%s]+)")
+        end
+		if not typ or not name or name:match"%*" or M.c_types[name]  or self.typedefs_dict[name] then
+            print("clean_names_from_signature bad argument name",funcname,typ,name,argscsinpars,arg)
+			typ = arg
+			name = ""
+        end
+
+        --float name[2] to float[2] name
+        local siz = name:match("(%[%d*%])")
+        if siz then
+            typ = typ..siz
+            name = name:gsub("(%[%d*%])","")
+        end
+		result = result .. typ .. ","
+	end
+	result = result:sub(1,-2) .. ")"
+	return result
+end
 local function parseFunction(self,stname,lineorig,namespace,locat)
 
 	line = clean_spaces(lineorig)
@@ -510,7 +541,8 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
         local arg,restt = rest:match(functype_arg_rest)
         if arg then -- if is function pointer
             local t1,namef,t2 = arg:match(functype_reex)
-            type = t1.."(*)"..t2;name=namef
+            type = t1.."(*)"..t2
+			name=namef
             retf = t1
             sigf = t2
             rest = restt
@@ -569,28 +601,33 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
     call_args = call_args:gsub("%(%*([%w_]+)%)%([^%(%)]*%)"," %1") --func type
     call_args = call_args:gsub("[^%(].-([%w_]+)%s*([,%)])","%1%2")
 	
-	--recreate argscsinpars from argsArr
-	local asp, caar
+	--recreate argscsinpars, call_args and signature from argsArr
+	local asp, caar,signat
 	if #argsArr > 0 then
 		asp = "("
 		caar = "("
+		signat = "("
 		for i,v in ipairs(argsArr) do
 			if v.ret then --function pointer
 				asp = asp .. v.ret .. "(*" .. v.name .. ")" .. v.signature .. ","
 				caar = caar .. v.name .. ","
+				signat = signat .. v.ret .. "(*)" .. clean_names_from_signature(self,v.signature) .. ","
 			else
 				local siz = v.type:match("(%[%d*%])") or ""
-				local type = v.type:gsub("(%[%d*%])","")
-				asp = asp .. type .. (v.name~="..." and " "..v.name or "") .. siz .. ","
+				local typ = v.type:gsub("(%[%d*%])","")
+				asp = asp .. typ .. (v.name~="..." and " "..v.name or "") .. siz .. ","
 				local callname = v.reftoptr and "*"..v.name or v.name 
 				caar = caar .. callname .. ","
+				signat = signat .. typ .. siz .. ","
 			end
 		end
 		asp = asp:sub(1,-2)..")"
 		caar = caar:sub(1,-2)..")"
+		signat = signat:sub(1,-2)..")" .. (extraconst or "")
 	else
 		asp = "()"
 		caar = "()"
+		signat = "()" .. (extraconst or "")
 	end
 	--[[
 	if asp~=argscsinpars then
@@ -602,6 +639,11 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
 		print("bad call_args",funcname)
 		print(call_args)
 		print(caar)
+	end
+	if signat~=signature then
+		print("bad signature",funcname,args)
+		print(signature)
+		print(signat)
 	end
 	--]]
     ------------------------------
@@ -634,7 +676,7 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
     defT.funcname = funcname
     defT.argsoriginal = args
     defT.args= asp --argscsinpars
-    defT.signature = signature
+    defT.signature = signat --signature
     defT.call_args = caar --call_args
     defT.isvararg = signature:match("%.%.%.%)$")
     defT.location = locat
