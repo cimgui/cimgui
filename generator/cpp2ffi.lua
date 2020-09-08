@@ -499,7 +499,7 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
     local functype_arg_rest = "^(%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)),*(.*)"
     local rest = argscsinpars:sub(2,-2) --strip ()
     
-	
+	local noname_counter = 0
     while true do
     --local tt = strsplit(rest,",")
     --for ii,arg in ipairs(tt) do
@@ -531,17 +531,20 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
             else
                 type,name = arg:match("(.+)%s([^%s]+)")
             end
+			
+			--or M.c_types[name:gsub("%*","")]
+			if not type or not name or name:match"%*" or M.c_types[name]  or self.typedefs_dict[name] then
+                print("bad argument name",funcname,type,name,argscsinpars,arg)
+				type = arg
+				noname_counter = noname_counter + 1
+				name = "noname"..noname_counter
+            end
 
-            if not type or not name then 
-                print("failure arg detection",funcname,type,name,argscsinpars,arg)
-            else
-				if name:match"%*" then print("**",funcname) end
-                --float name[2] to float[2] name
-                local siz = name:match("(%[%d*%])")
-                if siz then
-                    type = type..siz
-                    name = name:gsub("(%[%d*%])","")
-                end
+            --float name[2] to float[2] name
+            local siz = name:match("(%[%d*%])")
+            if siz then
+                type = type..siz
+                name = name:gsub("(%[%d*%])","")
             end
         end
         table.insert(argsArr,{type=type,name=name,ret=retf,signature=sigf,reftoptr=reftoptr})
@@ -1048,12 +1051,16 @@ function M.Parser()
 				end
 			elseif it.re_name == "enum_re" then
 				local enumname, enumbody = it.item:match"^%s*enum%s+([^%s;{}]+)[%s\n\r]*(%b{})"
-				table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
-				if it.parent then
-					if it.parent.re_name == "namespace_re" then
-						local namespace = it.parent.item:match("namespace%s+(%S+)")
-						self.embeded_enums[enumname] = namespace.."::"..enumname
+				if enumname then
+					table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
+					if it.parent then
+						if it.parent.re_name == "namespace_re" then
+							local namespace = it.parent.item:match("namespace%s+(%S+)")
+							self.embeded_enums[enumname] = namespace.."::"..enumname
+						end
 					end
+				else --unamed enum just repeat declaration
+					table.insert(outtab,it.item)
 				end
 			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" then
 				local cleanst,structname = self:clean_structR1(it, it.locat)
@@ -1154,9 +1161,14 @@ function M.Parser()
 			end
 		end
 	end
-	
+	local unnamed_enum_counter = 0
 	local function enums_for_table(it, outtab, enumsordered)
 		local enumname = it.item:match"^%s*enum%s+([^%s;{}]+)"
+		if not enumname then
+			unnamed_enum_counter = unnamed_enum_counter + 1
+			enumname = "unnamed"..unnamed_enum_counter
+			print("unamed enum",enumname,it.parent and ("parent:"..it.parent.name) or "no parent")
+		end
 		outtab.enums[enumname] = {}
 		table.insert(enumsordered,enumname)
 		local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
@@ -1190,6 +1202,7 @@ function M.Parser()
 		local outtab = {enums={},structs={},locations={}}
 		self.typedefs_table = {}
 		local enumsordered = {}
+		unnamed_enum_counter = 0
 		
 		local processer = function(it)
 			if it.re_name == "typedef_re" or it.re_name == "functypedef_re" or it.re_name == "vardef_re" then
