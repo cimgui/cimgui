@@ -9946,7 +9946,7 @@
       "location": "imgui",
       "ov_cimguiname": "ImVector_swap",
       "ret": "void",
-      "signature": "(ImVector)",
+      "signature": "(ImVector*)",
       "stname": "ImVector",
       "templated": true
     }
@@ -11662,7 +11662,7 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igColorConvertHSVtoRGB",
       "ret": "void",
-      "signature": "(float,float,float,float,float,float)",
+      "signature": "(float,float,float,float*,float*,float*)",
       "stname": ""
     }
   ],
@@ -11707,7 +11707,7 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igColorConvertRGBtoHSV",
       "ret": "void",
-      "signature": "(float,float,float,float,float,float)",
+      "signature": "(float,float,float,float*,float*,float*)",
       "stname": ""
     }
   ],
@@ -17752,7 +17752,7 @@
       "location": "internal",
       "ov_cimguiname": "igImTriangleBarycentricCoords",
       "ret": "void",
-      "signature": "(const ImVec2,const ImVec2,const ImVec2,const ImVec2,float,float,float)",
+      "signature": "(const ImVec2,const ImVec2,const ImVec2,const ImVec2,float*,float*,float*)",
       "stname": ""
     }
   ],
@@ -22014,7 +22014,8 @@
       "call_args": "(draw_list,p_min,p_max,fill_col,grid_step,grid_off,rounding,rounding_corners_flags)",
       "cimguiname": "igRenderColorRectWithAlphaCheckerboard",
       "defaults": {
-        "rounding": "0.0f"
+        "rounding": "0.0f",
+        "rounding_corners_flags": "~0"
       },
       "funcname": "RenderColorRectWithAlphaCheckerboard",
       "location": "internal",
