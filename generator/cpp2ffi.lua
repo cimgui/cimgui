@@ -138,7 +138,7 @@ local function clean_spaces(cad)
 end
 
 ------------------------------------
-local function parse_enum_value(value, allenums)
+local function parse_enum_value(value, allenums,dontpost)
 	local function clean(val)
 		if type(val)=="string" then
 			return clean_spaces(val)
@@ -203,10 +203,11 @@ local function parse_enum_value(value, allenums)
 				i = 1
 			end
 		end
-		if #seps>0 or type(several[1])~="number" then
+		if #seps>0 or type(several[1])~="number" and not dontpost then
 			--M.prtable("enline",enline)
-			M.prtable(several,seps)
-			M.prtable(allenums)
+			print("parse_enum_value WARNING",value)
+			--M.prtable(several,seps)
+			--M.prtable("allenums",allenums)
 		end
 		assert(#seps==0)
 		assert(type(several[1])=="number")
@@ -433,17 +434,18 @@ local function clean_names_from_signature(self,signat)
            typ,name = arg:match("(.+)%s([^%s]+)")
         end
 		if not typ or not name or name:match"%*" or M.c_types[name]  or self.typedefs_dict[name] then
-            print("clean_names_from_signature bad argument name",funcname,typ,name,argscsinpars,arg)
+            print("clean_names_from_signature bad argument name",funcname,typ,name,arg)
 			typ = arg
 			name = ""
         end
-
         --float name[2] to float[2] name
+		--[[
         local siz = name:match("(%[%d*%])")
         if siz then
             typ = typ..siz
             name = name:gsub("(%[%d*%])","")
         end
+		--]]
 		result = result .. typ .. ","
 	end
 	result = result:sub(1,-2) .. ")"
@@ -486,121 +488,103 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
 	extraconst = extraconst:match("const")
 
 	if not args then
-		print"not gettint args in"
+		print"not getting args in"
 		print(line,lineorig)
 		print(funcname,"args",args)
+		error"parseFunction not getting args"
     end
 	
-    local argscsinpars = args:gsub("(=[^,%(%)]*)(%b())","%1")
-    argscsinpars = argscsinpars:gsub("(=[^,%(%)]*)([,%)])","%2")
-    -- if argscsinpars:match("&") then 
-        -- for arg in argscsinpars:gmatch("[%(,]*([^,%(%)]+)[%),]") do
-            -- if arg:match("&") and not arg:match("const") then
-                -- print(funcname,argscsinpars)
-            -- end
-        -- end
-    -- end
-    --argscsinpars = argscsinpars:gsub("&","")
-
-	--for _,ttype in ipairs(self.templatedTypes) do
-    --local template = argscsinpars:match(ttype.."%s*<(.+)>")
-	--TODO several diferent templates
-	local ttype,template = argscsinpars:match("([^%s,%(%)]+)%s*<(.-)>")
-	--print("ttype,template",ttype,template)
-	local te=""
-	if template then
-		--print("--",stname,self.typenames[stname] , ttype,template)
-		if self.typenames[stname] ~= template then --rule out template typename
-		--print("--in")
-		te = template:gsub("%s","_")
-        te = te:gsub("%*","Ptr")
-
-		self.templates[ttype] = self.templates[ttype] or {}
-		self.templates[ttype][template] = te
-		te = "_"..te
+	
+	local argsp = args:sub(2,-2)..","
+	local argsTa = {}
+	for tynam in argsp:gmatch("([^,]+),") do
+		if tynam:match("%)") and not tynam:match("%b()") then
+			--patenthesis not closed are merged in previous (happens in some defaults)
+			argsTa[#argsTa] = argsTa[#argsTa]..","..tynam
+			while argsTa[#argsTa]:match("%)") and not argsTa[#argsTa]:match("%b()") do
+				argsTa[#argsTa-1] = argsTa[#argsTa-1] .. "," .. argsTa[#argsTa]
+				argsTa[#argsTa] = nil
+			end
+		else
+			argsTa[#argsTa+1] = tynam
 		end
 	end
-	--end
+	--- templates in args
+	for i,ar in ipairs(argsTa) do
+		--TODO several diferent templates
+		local ttype,template = ar:match("([^%s,%(%)]+)%s*<(.-)>")
 
-	argscsinpars = argscsinpars:gsub("<([%w_%*%s]+)>",te) --ImVector
-
-    local argsArr = {}
-    local functype_re =       "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
+		local te=""
+		if template then
+			if self.typenames[stname] ~= template then --rule out template typename
+			te = template:gsub("%s","_")
+			te = te:gsub("%*","Ptr")
+	
+			self.templates[ttype] = self.templates[ttype] or {}
+			self.templates[ttype][template] = te
+			te = "_"..te
+			end
+		end
+	    argsTa[i] = ar:gsub("<([%w_%*%s]+)>",te) --ImVector
+	end
+	
+	--get typ, name and defaults
+	local functype_re =        "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
     local functype_reex =     "^(%s*[%w%s%*]+)%(%*([%w_]+)%)(%([^%(%)]*%))"
     local functype_arg_rest = "^(%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)),*(.*)"
-    local rest = argscsinpars:sub(2,-2) --strip ()
-    
+	local argsTa2 = {}
 	local noname_counter = 0
-    while true do
-    --local tt = strsplit(rest,",")
-    --for ii,arg in ipairs(tt) do
-    --for arg in argscsinpars:gmatch("[%(,]*([^,%(%)]+)[%),]") do
-		local reftoptr
-		if rest == "void" then break end
-        local type,name,retf,sigf
-        local arg,restt = rest:match(functype_arg_rest)
-        if arg then -- if is function pointer
-            local t1,namef,t2 = arg:match(functype_reex)
-            type = t1.."(*)"..t2
-			name=namef
+	for i,ar in ipairs(argsTa) do
+		local typ,name,retf,sigf,reftoptr,defa,ar1
+		if ar:match(functype_re) then
+			local t1,namef,t2 = ar:match(functype_reex)
+            typ, name = t1.."(*)"..t2, namef
             retf = t1
             sigf = t2
-            rest = restt
-        else
-            arg,restt = rest:match(",*([^,%(%)]+),*(.*)")
-            if not arg then break end
-            rest = restt
-            if arg:match("&") then
-				if arg:match("const") then
-					arg = arg:gsub("&","")
+		else
+			reftoptr = nil
+			if ar:match("&") then
+				if ar:match("const") then
+					ar = ar:gsub("&","")
 				else
-					arg = arg:gsub("&","*")
+					ar = ar:gsub("&","*")
 					reftoptr = true
 				end
             end
-            if arg:match("%.%.%.") then 
-                type="...";name="..."
-            else
-                type,name = arg:match("(.+)%s([^%s]+)")
-            end
-			
-			--or M.c_types[name:gsub("%*","")]
-			if not type or not name or name:match"%*" or M.c_types[name]  or self.typedefs_dict[name] then
-                print("bad argument name",funcname,type,name,argscsinpars,arg)
-				type = arg
+			if ar:match("%.%.%.") then 
+				typ, name = "...", "..."
+			else
+				ar1,defa = ar:match"([^=]+)=([^=]+)"
+				ar1 = ar1 or ar
+				typ,name = ar1:match("(.+)%s([^%s]+)")
+			end
+			if not typ or not name or name:match"%*" or M.c_types[name]  or self.typedefs_dict[name] then
+				print("bad argument name",funcname,typ,name,ar)
+				ar1,defa = ar:match"([^=]+)=([^=]+)"
+				ar1 = ar1 or ar
+				typ = ar1
 				noname_counter = noname_counter + 1
 				name = "noname"..noname_counter
-            end
-
-            --float name[2] to float[2] name
+			end
+			--float name[2] to float[2] name
             local siz = name:match("(%[%d*%])")
             if siz then
-                type = type..siz
+                typ = typ..siz
                 name = name:gsub("(%[%d*%])","")
             end
-        end
-        table.insert(argsArr,{type=type,name=name,ret=retf,signature=sigf,reftoptr=reftoptr})
-        if arg:match("&") and not arg:match("const") then
+		end
+		argsTa2[i] = {type=typ,name=name,default=defa,reftoptr=reftoptr,ret=retf,signature=sigf}
+		if ar:match("&") and not ar:match("const") then
             --only post error if not manual
             local cname = self.getCname(stname,funcname, namespace) --cimguiname
             if not self.manuals[cname] then
-                print("reference to no const arg in",funcname,argscsinpars,arg)
+                print("reference to no const arg in",funcname,argscsinpars,ar)
             end
         end
-    end
-    argscsinpars = argscsinpars:gsub("&","")
-
-    local signature = argscsinpars:gsub("([%w%s%*_]+)%s[%w_]+%s*([,%)])","%1%2")
-    signature = signature:gsub("%s*([,%)])","%1") --space before , and )
-    signature = signature:gsub(",%s*",",")--space after ,
-    signature = signature:gsub("([%w_]+)%s[%w_]+(%[%d*%])","%1%2") -- float[2]
-    signature = signature:gsub("(%(%*)[%w_]+(%)%([^%(%)]*%))","%1%2") --func defs
-	signature = signature .. (extraconst or "")
-    
-    local call_args = argscsinpars:gsub("([%w_]+%s[%w_]+)%[%d*%]","%1") --float[2]
-    call_args = call_args:gsub("%(%*([%w_]+)%)%([^%(%)]*%)"," %1") --func type
-    call_args = call_args:gsub("[^%(].-([%w_]+)%s*([,%)])","%1%2")
+	end
 	
+	local argsArr = argsTa2
+
 	--recreate argscsinpars, call_args and signature from argsArr
 	local asp, caar,signat
 	if #argsArr > 0 then
@@ -629,23 +613,7 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
 		caar = "()"
 		signat = "()" .. (extraconst or "")
 	end
-	--[[
-	if asp~=argscsinpars then
-		print("bad recontruction",funcname)
-		print(argscsinpars)
-		print(asp)
-	end
-	if caar~=call_args then
-		print("bad call_args",funcname)
-		print(call_args)
-		print(caar)
-	end
-	if signat~=signature then
-		print("bad signature",funcname,args)
-		print(signature)
-		print(signat)
-	end
-	--]]
+
     ------------------------------
     
     if not ret and stname then --must be constructors
@@ -657,17 +625,18 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
     end
     
     local cimguiname = self.getCname(stname,funcname, namespace)
-    table.insert(self.funcdefs,{stname=stname,funcname=funcname,args=args,argsc=argscsinpars,signature=signature,cimguiname=cimguiname,call_args=call_args,ret =ret})
+    table.insert(self.funcdefs,{stname=stname,funcname=funcname,args=args,signature=signat,cimguiname=cimguiname,call_args=caar,ret =ret})
 	local defsT = self.defsT
 	            defsT[cimguiname] = defsT[cimguiname] or {}
                 table.insert(defsT[cimguiname],{})
                 local defT = defsT[cimguiname][#defsT[cimguiname]] 
     defT.defaults = {}
-    --for k,def in args:gmatch("([%w%s%*_]+)=([%w_%(%)%s,%*]+)[,%)]") do
-    --for k,def in args:gmatch("([%w_]+)=([%w_%(%)%s,%*%.%-]+)[,%)]") do
-    for k,def in args:gmatch('([%w_]+)=([|<%w_%(%)%s,%*%.%-%+%%:"]+)[,%)]') do
-        defT.defaults[k]=def
-    end
+	for i,ar in ipairs(argsArr) do
+		if ar.default then
+			defT.defaults[ar.name] = ar.default
+			ar.default = nil
+		end
+	end
 	defT.templated = self.typenames[stname] and true
 	defT.namespace = namespace
     defT.cimguiname = cimguiname
@@ -675,10 +644,10 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
     defT.is_static_function = is_static_function
     defT.funcname = funcname
     defT.argsoriginal = args
-    defT.args= asp --argscsinpars
+    defT.args= asp 
     defT.signature = signat --signature
     defT.call_args = caar --call_args
-    defT.isvararg = signature:match("%.%.%.%)$")
+    defT.isvararg = signat:match("%.%.%.%)$")
     defT.location = locat
     --defT.comment = "" --comment
     defT.argsT = argsArr
@@ -692,7 +661,7 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
             -- defT.ret = defT.ret.."_Simple"
         -- end
     end
-	defsT[cimguiname][signature] = defT
+	defsT[cimguiname][signat] = defT
 end
 local function itemsCount(items)
 	print"------------items"
@@ -757,7 +726,7 @@ local function ADDnonUDT(FP)
 			--replace
 			cimf[index] = defT2
 			cimf[t.signature] = defT2
-			FP.funcdefs[numcdef] = {stname=t.stname,funcname=t.funcname,args=args,argsc=argscsinpars,signature=t.signature,cimguiname=t.cimguiname,call_args=call_args,ret =t.ret}
+			FP.funcdefs[numcdef] = {stname=t.stname,funcname=t.funcname,args=args,signature=t.signature,cimguiname=t.cimguiname,ret =t.ret}
 			
             -- defsT[t.cimguiname][#defsT[t.cimguiname] + 1] = defT2
             -- defsT[t.cimguiname][t.signature.."nonUDT"] = defT2
@@ -1327,7 +1296,7 @@ function M.Parser()
         self.alltypes = {}
         table.insert(strt,"----------------overloadings---------------------------")
         --require"anima.utils" 
-        for k,v in pairs(self.defsT) do
+		M.table_do_sorted(self.defsT, function(k,v)
             get_types(v)
             if #v > 1 then
                 numoverloaded = numoverloaded + #v
@@ -1353,7 +1322,7 @@ function M.Parser()
 			else
 				v[1].ov_cimguiname = v[1].cimguiname
             end
-        end
+		end)
         --print(numoverloaded, "overloaded")
         table.insert(strt,string.format("%d overloaded",numoverloaded))
 		AdjustArguments(self)
