@@ -6,7 +6,8 @@ assert(_VERSION=='Lua 5.1',"Must use LuaJIT")
 assert(bit,"Must use LuaJIT")
 local script_args = {...}
 local COMPILER = script_args[1]
-local INTERNAL_GENERATION = script_args[2]=="true" 
+local INTERNAL_GENERATION = script_args[2]:match("internal") and true or false
+local FREETYPE_GENERATION = script_args[2]:match("freetype") and true or false
 local CPRE,CTEST
 if COMPILER == "gcc" or COMPILER == "clang" then
     CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]
@@ -40,6 +41,7 @@ assert(HAVE_COMPILER,"gcc, clang or cl needed to run script")
 
 print("HAVE_COMPILER",HAVE_COMPILER)
 print("INTERNAL_GENERATION",INTERNAL_GENERATION)
+print("FREETYPE_GENERATION",FREETYPE_GENERATION)
 --get implementations
 local implementations = {}
 for i=3,#script_args do table.insert(implementations,script_args[i]) end
@@ -273,6 +275,10 @@ if INTERNAL_GENERATION then
 	cimgui_header = cimgui_header..[[//with imgui_internal.h api
 ]]
 end
+if FREETYPE_GENERATION then
+	cimgui_header = cimgui_header..[[//with imgui_freetype.h api
+]]
+end
 print("IMGUI_VERSION",imgui_version)
 --get some defines----------------------------
 gdefines = get_defines{"IMGUI_VERSION","FLT_MAX"}
@@ -333,14 +339,26 @@ end
 --generation
 print("------------------generation with "..COMPILER.."------------------------")
 local parser1
+local headers = [[#include "../imgui/imgui.h" 
+]]
+local headersT = {[[imgui]]}
 if INTERNAL_GENERATION then
-	save_data("headers.h",[[#include "../imgui/imgui.h" 
-	#include "../imgui/imgui_internal.h"]])
-	parser1 = parseImGuiHeader([[headers.h]],{[[imgui]],[[imgui_internal]],[[imstb_textedit]]})
-	os.remove("headers.h")
-else
-	parser1 = parseImGuiHeader([[../imgui/imgui.h]],{[[imgui]]})
+	headers = headers .. [[#include "../imgui/imgui_internal.h"
+	]]
+	headersT[#headersT + 1] = [[imgui_internal]]
+	headersT[#headersT + 1] = [[imstb_textedit]]
 end
+if FREETYPE_GENERATION then
+	headers = headers .. [[
+	#include "../imgui/misc/freetype/imgui_freetype.h"
+	]]
+	headersT[#headersT + 1] = [[imgui_freetype]]
+end
+save_data("headers.h",headers)
+local include_cmd = COMPILER=="cl" and [[ /I ]] or [[ -I ]]
+local extra_includes = include_cmd.." ../imgui "
+local parser1 = parseImGuiHeader(extra_includes .. [[headers.h]],headersT)
+os.remove("headers.h")
 parser1:do_parse()
 
 save_data("./output/overloads.txt",parser1.overloadstxt)

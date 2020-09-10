@@ -12,6 +12,15 @@ file(GLOB IMGUI_SOURCES
 )
 
 set(IMGUI_STATIC "no" CACHE STRING "Build as a static library")
+set(IMGUI_FREETYPE "no" CACHE STRING "Build with freetype library")
+set(IMGUI_LIBRARIES )
+
+if(IMGUI_FREETYPE)
+	FIND_PACKAGE(freetype REQUIRED PATHS ${FREETYPE_PATH})
+	list(APPEND IMGUI_LIBRARIES freetype)
+	list(APPEND IMGUI_SOURCES imgui/misc/freetype/imgui_freetype.cpp)
+	add_definitions("-DCIMGUI_FREETYPE=1")
+endif(IMGUI_FREETYPE)
 
 #add library and link
 if (IMGUI_STATIC)
@@ -30,6 +39,7 @@ endif (WIN32)
 target_include_directories(cimgui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(cimgui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
 set_target_properties(cimgui PROPERTIES PREFIX "")
+target_link_libraries(cimgui ${IMGUI_LIBRARIES})
 
 #install
 install(TARGETS cimgui
