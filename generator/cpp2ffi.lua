@@ -1054,7 +1054,7 @@ function M.Parser()
 				if not it.parent then
 					table.insert(outtabpre,it.item)
 					-- add typedef after struct name
-					if it.re_name == "vardef_re" and it.item:match"struct" then
+					if it.re_name == "vardef_re" and it.item:match"^%s*struct" then
 						local stname = it.item:match("struct%s*(%S+)%s*;")
 						table.insert(typedefs_table,"typedef struct "..stname.." "..stname..";\n")
 						self.typedefs_dict[stname]="struct "..stname
@@ -1504,7 +1504,7 @@ M.serializeTableF = function(t)
 end
 --iterates lines from a gcc/clang -E in a specific location
 local function location(file,locpathT,defines,COMPILER)
-	local define_re = "^#define%s+([^%s]+)%s+([^%s]+)$"
+	local define_re = "^#define%s+([^%s]+)%s+(.+)$"
 	local number_re = "^-?[0-9]+u*$"
 	local hex_re = "0x[0-9a-fA-F]+u*$"
     local location_re 
