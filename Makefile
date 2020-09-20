@@ -12,6 +12,8 @@ CXXFLAGS=-O2 -fno-exceptions -fno-rtti
 
 UNAME_S := $(shell uname -s)
 
+AR := ar -rc
+
 ifeq ($(UNAME_S), Linux) #LINUX
 	ECHO_MESSAGE = "Linux"
 
@@ -49,6 +51,9 @@ endif
 all:$(OUTPUTNAME)
 	@echo Build complete for $(ECHO_MESSAGE)
 
+static:$(OBJS)
+	$(AR) libcimgui.a $(OBJS)
+
 $(OUTPUTNAME):$(OBJS)
 	$(CXX) -o $(OUTPUTNAME) $(OBJS) $(CXXFLAGS) $(LINKFLAGS)
 
@@ -60,4 +65,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re static
