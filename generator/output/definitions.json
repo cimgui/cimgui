@@ -441,7 +441,7 @@
       "cimguiname": "ImColor_ImColor",
       "constructor": true,
       "defaults": {
-        "a": "255"
+        "a": 255
       },
       "funcname": "ImColor",
       "location": "imgui",
@@ -1045,7 +1045,7 @@
       "call_args": "(p1,p2,p3,p4,col,thickness,num_segments)",
       "cimguiname": "ImDrawList_AddBezierCurve",
       "defaults": {
-        "num_segments": "0"
+        "num_segments": 0
       },
       "funcname": "AddBezierCurve",
       "location": "imgui",
@@ -1118,7 +1118,7 @@
       "call_args": "(center,radius,col,num_segments,thickness)",
       "cimguiname": "ImDrawList_AddCircle",
       "defaults": {
-        "num_segments": "0",
+        "num_segments": 0,
         "thickness": "1.0f"
       },
       "funcname": "AddCircle",
@@ -1158,7 +1158,7 @@
       "call_args": "(center,radius,col,num_segments)",
       "cimguiname": "ImDrawList_AddCircleFilled",
       "defaults": {
-        "num_segments": "0"
+        "num_segments": 0
       },
       "funcname": "AddCircleFilled",
       "location": "imgui",
@@ -1261,7 +1261,7 @@
       "call_args": "(user_texture_id,p_min,p_max,uv_min,uv_max,col)",
       "cimguiname": "ImDrawList_AddImage",
       "defaults": {
-        "col": "(((ImU32)(255)<<24)|((ImU32)(255)<<16)|((ImU32)(255)<<8)|((ImU32)(255)<<0))",
+        "col": 4294967295,
         "uv_max": "ImVec2(1,1)",
         "uv_min": "ImVec2(0,0)"
       },
@@ -1326,7 +1326,7 @@
       "call_args": "(user_texture_id,p1,p2,p3,p4,uv1,uv2,uv3,uv4,col)",
       "cimguiname": "ImDrawList_AddImageQuad",
       "defaults": {
-        "col": "(((ImU32)(255)<<24)|((ImU32)(255)<<16)|((ImU32)(255)<<8)|((ImU32)(255)<<0))",
+        "col": 4294967295,
         "uv1": "ImVec2(0,0)",
         "uv2": "ImVec2(1,0)",
         "uv3": "ImVec2(1,1)",
@@ -1385,7 +1385,7 @@
       "call_args": "(user_texture_id,p_min,p_max,uv_min,uv_max,col,rounding,rounding_corners)",
       "cimguiname": "ImDrawList_AddImageRounded",
       "defaults": {
-        "rounding_corners": "ImDrawCornerFlags_All"
+        "rounding_corners": 15
       },
       "funcname": "AddImageRounded",
       "location": "imgui",
@@ -1682,7 +1682,7 @@
       "comment": " // a: upper-left, b: lower-right (== upper-left + size), rounding_corners_flags: 4 bits corresponding to which corner to round",
       "defaults": {
         "rounding": "0.0f",
-        "rounding_corners": "ImDrawCornerFlags_All",
+        "rounding_corners": 15,
         "thickness": "1.0f"
       },
       "funcname": "AddRect",
@@ -1728,7 +1728,7 @@
       "comment": " // a: upper-left, b: lower-right (== upper-left + size)",
       "defaults": {
         "rounding": "0.0f",
-        "rounding_corners": "ImDrawCornerFlags_All"
+        "rounding_corners": 15
       },
       "funcname": "AddRectFilled",
       "location": "imgui",
@@ -1812,7 +1812,7 @@
       "call_args": "(pos,col,text_begin,text_end)",
       "cimguiname": "ImDrawList_AddText",
       "defaults": {
-        "text_end": "((void*)0)"
+        "text_end": "NULL"
       },
       "funcname": "AddText",
       "location": "imgui",
@@ -1865,8 +1865,8 @@
       "call_args": "(font,font_size,pos,col,text_begin,text_end,wrap_width,cpu_fine_clip_rect)",
       "cimguiname": "ImDrawList_AddText",
       "defaults": {
-        "cpu_fine_clip_rect": "((void*)0)",
-        "text_end": "((void*)0)",
+        "cpu_fine_clip_rect": "NULL",
+        "text_end": "NULL",
         "wrap_width": "0.0f"
       },
       "funcname": "AddText",
@@ -2156,7 +2156,7 @@
       "call_args": "(center,radius,a_min,a_max,num_segments)",
       "cimguiname": "ImDrawList_PathArcTo",
       "defaults": {
-        "num_segments": "10"
+        "num_segments": 10
       },
       "funcname": "PathArcTo",
       "location": "imgui",
@@ -2233,7 +2233,7 @@
       "call_args": "(p2,p3,p4,num_segments)",
       "cimguiname": "ImDrawList_PathBezierCurveTo",
       "defaults": {
-        "num_segments": "0"
+        "num_segments": 0
       },
       "funcname": "PathBezierCurveTo",
       "location": "imgui",
@@ -2370,7 +2370,7 @@
       "cimguiname": "ImDrawList_PathRect",
       "defaults": {
         "rounding": "0.0f",
-        "rounding_corners": "ImDrawCornerFlags_All"
+        "rounding_corners": 15
       },
       "funcname": "PathRect",
       "location": "imgui",
@@ -3140,7 +3140,7 @@
       "call_args": "(font_cfg)",
       "cimguiname": "ImFontAtlas_AddFontDefault",
       "defaults": {
-        "font_cfg": "((void*)0)"
+        "font_cfg": "NULL"
       },
       "funcname": "AddFontDefault",
       "location": "imgui",
@@ -3179,8 +3179,8 @@
       "call_args": "(filename,size_pixels,font_cfg,glyph_ranges)",
       "cimguiname": "ImFontAtlas_AddFontFromFileTTF",
       "defaults": {
-        "font_cfg": "((void*)0)",
-        "glyph_ranges": "((void*)0)"
+        "font_cfg": "NULL",
+        "glyph_ranges": "NULL"
       },
       "funcname": "AddFontFromFileTTF",
       "location": "imgui",
@@ -3220,8 +3220,8 @@
       "cimguiname": "ImFontAtlas_AddFontFromMemoryCompressedBase85TTF",
       "comment": " // 'compressed_font_data_base85' still owned by caller. Compress with binary_to_compressed_c.cpp with -base85 parameter.",
       "defaults": {
-        "font_cfg": "((void*)0)",
-        "glyph_ranges": "((void*)0)"
+        "font_cfg": "NULL",
+        "glyph_ranges": "NULL"
       },
       "funcname": "AddFontFromMemoryCompressedBase85TTF",
       "location": "imgui",
@@ -3265,8 +3265,8 @@
       "cimguiname": "ImFontAtlas_AddFontFromMemoryCompressedTTF",
       "comment": " // 'compressed_font_data' still owned by caller. Compress with binary_to_compressed_c.cpp.",
       "defaults": {
-        "font_cfg": "((void*)0)",
-        "glyph_ranges": "((void*)0)"
+        "font_cfg": "NULL",
+        "glyph_ranges": "NULL"
       },
       "funcname": "AddFontFromMemoryCompressedTTF",
       "location": "imgui",
@@ -3310,8 +3310,8 @@
       "cimguiname": "ImFontAtlas_AddFontFromMemoryTTF",
       "comment": " // Note: Transfer ownership of 'ttf_data' to ImFontAtlas! Will be deleted after destruction of the atlas. Set font_cfg->FontDataOwnedByAtlas=false to keep ownership of your data and it won't be freed.",
       "defaults": {
-        "font_cfg": "((void*)0)",
-        "glyph_ranges": "((void*)0)"
+        "font_cfg": "NULL",
+        "glyph_ranges": "NULL"
       },
       "funcname": "AddFontFromMemoryTTF",
       "location": "imgui",
@@ -3736,7 +3736,7 @@
       "cimguiname": "ImFontAtlas_GetTexDataAsAlpha8",
       "comment": " // 1 byte per-pixel",
       "defaults": {
-        "out_bytes_per_pixel": "((void*)0)"
+        "out_bytes_per_pixel": "NULL"
       },
       "funcname": "GetTexDataAsAlpha8",
       "location": "imgui",
@@ -3776,7 +3776,7 @@
       "cimguiname": "ImFontAtlas_GetTexDataAsRGBA32",
       "comment": " // 4 bytes-per-pixel",
       "defaults": {
-        "out_bytes_per_pixel": "((void*)0)"
+        "out_bytes_per_pixel": "NULL"
       },
       "funcname": "GetTexDataAsRGBA32",
       "location": "imgui",
@@ -3976,7 +3976,7 @@
       "cimguiname": "ImFontGlyphRangesBuilder_AddText",
       "comment": " // Add string (each character of the UTF-8 string are added)",
       "defaults": {
-        "text_end": "((void*)0)"
+        "text_end": "NULL"
       },
       "funcname": "AddText",
       "location": "imgui",
@@ -4284,8 +4284,8 @@
       "cimguiname": "ImFont_CalcTextSizeA",
       "comment": " // utf8",
       "defaults": {
-        "remaining": "((void*)0)",
-        "text_end": "((void*)0)"
+        "remaining": "NULL",
+        "text_end": "NULL"
       },
       "funcname": "CalcTextSizeA",
       "location": "imgui",
@@ -5385,7 +5385,7 @@
       "call_args": "(pos,text,text_end)",
       "cimguiname": "ImGuiInputTextCallbackData_InsertChars",
       "defaults": {
-        "text_end": "((void*)0)"
+        "text_end": "NULL"
       },
       "funcname": "InsertChars",
       "location": "imgui",
@@ -5815,7 +5815,7 @@
       "comment": " // NB: Begin() initialize every fields (as we allow user to call Begin/End multiple times on a same instance if they want).",
       "constructor": true,
       "defaults": {
-        "items_count": "-1",
+        "items_count": -1,
         "items_height": "-1.0f"
       },
       "funcname": "ImGuiListClipper",
@@ -6796,7 +6796,7 @@
       "call_args": "(key,default_val)",
       "cimguiname": "ImGuiStorage_GetInt",
       "defaults": {
-        "default_val": "0"
+        "default_val": 0
       },
       "funcname": "GetInt",
       "location": "imgui",
@@ -6827,7 +6827,7 @@
       "call_args": "(key,default_val)",
       "cimguiname": "ImGuiStorage_GetIntRef",
       "defaults": {
-        "default_val": "0"
+        "default_val": 0
       },
       "funcname": "GetIntRef",
       "location": "imgui",
@@ -6884,7 +6884,7 @@
       "call_args": "(key,default_val)",
       "cimguiname": "ImGuiStorage_GetVoidPtrRef",
       "defaults": {
-        "default_val": "((void*)0)"
+        "default_val": "NULL"
       },
       "funcname": "GetVoidPtrRef",
       "location": "imgui",
@@ -7342,7 +7342,7 @@
       "call_args": "(str,str_end)",
       "cimguiname": "ImGuiTextBuffer_append",
       "defaults": {
-        "str_end": "((void*)0)"
+        "str_end": "NULL"
       },
       "funcname": "append",
       "location": "imgui",
@@ -7723,7 +7723,7 @@
       "call_args": "(text,text_end)",
       "cimguiname": "ImGuiTextFilter_PassFilter",
       "defaults": {
-        "text_end": "((void*)0)"
+        "text_end": "NULL"
       },
       "funcname": "PassFilter",
       "location": "imgui",
@@ -8250,7 +8250,7 @@
       "call_args": "(str,str_end)",
       "cimguiname": "ImGuiWindow_GetID",
       "defaults": {
-        "str_end": "((void*)0)"
+        "str_end": "NULL"
       },
       "funcname": "GetID",
       "location": "internal",
@@ -8352,7 +8352,7 @@
       "call_args": "(str,str_end)",
       "cimguiname": "ImGuiWindow_GetIDNoKeepAlive",
       "defaults": {
-        "str_end": "((void*)0)"
+        "str_end": "NULL"
       },
       "funcname": "GetIDNoKeepAlive",
       "location": "internal",
@@ -10673,7 +10673,7 @@
       "cimguiname": "igAcceptDragDropPayload",
       "comment": " // accept contents of a given type. If ImGuiDragDropFlags_AcceptBeforeDelivery is set you can peek into the payload before the mouse button is released.",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "AcceptDragDropPayload",
       "location": "imgui",
@@ -10777,7 +10777,7 @@
       "call_args": "(str_id,dir,size_arg,flags)",
       "cimguiname": "igArrowButtonEx",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "ArrowButtonEx",
       "location": "internal",
@@ -10809,8 +10809,8 @@
       "call_args": "(name,p_open,flags)",
       "cimguiname": "igBegin",
       "defaults": {
-        "flags": "0",
-        "p_open": "((void*)0)"
+        "flags": 0,
+        "p_open": "NULL"
       },
       "funcname": "Begin",
       "location": "imgui",
@@ -10847,7 +10847,7 @@
       "cimguiname": "igBeginChild",
       "defaults": {
         "border": "false",
-        "flags": "0",
+        "flags": 0,
         "size": "ImVec2(0,0)"
       },
       "funcname": "BeginChild",
@@ -10883,7 +10883,7 @@
       "cimguiname": "igBeginChild",
       "defaults": {
         "border": "false",
-        "flags": "0",
+        "flags": 0,
         "size": "ImVec2(0,0)"
       },
       "funcname": "BeginChild",
@@ -10955,7 +10955,7 @@
       "cimguiname": "igBeginChildFrame",
       "comment": " // helper to create a child window / scrolling region that looks like a normal widget frame",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "BeginChildFrame",
       "location": "imgui",
@@ -10988,7 +10988,7 @@
       "cimguiname": "igBeginColumns",
       "comment": " // setup number of columns. use an identifier to distinguish multiple column sets. close with EndColumns().",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "BeginColumns",
       "location": "internal",
@@ -11020,7 +11020,7 @@
       "call_args": "(label,preview_value,flags)",
       "cimguiname": "igBeginCombo",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "BeginCombo",
       "location": "imgui",
@@ -11115,7 +11115,7 @@
       "cimguiname": "igBeginDragDropSource",
       "comment": " // call when the current item is active. If this return true, you can call SetDragDropPayload() + EndDragDropSource()",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "BeginDragDropSource",
       "location": "imgui",
@@ -11271,7 +11271,7 @@
       "cimguiname": "igBeginPopup",
       "comment": " // return true if the popup is open, and you can start outputting to it.",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "BeginPopup",
       "location": "imgui",
@@ -11300,8 +11300,8 @@
       "cimguiname": "igBeginPopupContextItem",
       "comment": " // open+begin popup when clicked on last item. if you can pass a NULL str_id only if the previous item had an id. If you want to use that on a non-interactive item such as Text() you need to pass in an explicit ID here. read comments in .cpp!",
       "defaults": {
-        "popup_flags": "1",
-        "str_id": "((void*)0)"
+        "popup_flags": 1,
+        "str_id": "NULL"
       },
       "funcname": "BeginPopupContextItem",
       "location": "imgui",
@@ -11330,8 +11330,8 @@
       "cimguiname": "igBeginPopupContextVoid",
       "comment": " // open+begin popup when clicked in void (where there are no windows).",
       "defaults": {
-        "popup_flags": "1",
-        "str_id": "((void*)0)"
+        "popup_flags": 1,
+        "str_id": "NULL"
       },
       "funcname": "BeginPopupContextVoid",
       "location": "imgui",
@@ -11360,8 +11360,8 @@
       "cimguiname": "igBeginPopupContextWindow",
       "comment": "// open+begin popup when clicked on current window.",
       "defaults": {
-        "popup_flags": "1",
-        "str_id": "((void*)0)"
+        "popup_flags": 1,
+        "str_id": "NULL"
       },
       "funcname": "BeginPopupContextWindow",
       "location": "imgui",
@@ -11420,8 +11420,8 @@
       "cimguiname": "igBeginPopupModal",
       "comment": " // return true if the modal is open, and you can start outputting to it.",
       "defaults": {
-        "flags": "0",
-        "p_open": "((void*)0)"
+        "flags": 0,
+        "p_open": "NULL"
       },
       "funcname": "BeginPopupModal",
       "location": "imgui",
@@ -11450,7 +11450,7 @@
       "cimguiname": "igBeginTabBar",
       "comment": " // create and append into a TabBar",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "BeginTabBar",
       "location": "imgui",
@@ -11517,8 +11517,8 @@
       "cimguiname": "igBeginTabItem",
       "comment": "// create a Tab. Returns true if the Tab is selected.",
       "defaults": {
-        "flags": "0",
-        "p_open": "((void*)0)"
+        "flags": 0,
+        "p_open": "NULL"
       },
       "funcname": "BeginTabItem",
       "location": "imgui",
@@ -11769,7 +11769,7 @@
       "call_args": "(bb,id,out_hovered,out_held,flags)",
       "cimguiname": "igButtonBehavior",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "ButtonBehavior",
       "location": "internal",
@@ -11801,7 +11801,7 @@
       "call_args": "(label,size_arg,flags)",
       "cimguiname": "igButtonEx",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "size_arg": "ImVec2(0,0)"
       },
       "funcname": "ButtonEx",
@@ -11931,7 +11931,7 @@
       "cimguiname": "igCalcTextSize",
       "defaults": {
         "hide_text_after_double_hash": "false",
-        "text_end": "((void*)0)",
+        "text_end": "NULL",
         "wrap_width": "-1.0f"
       },
       "funcname": "CalcTextSize",
@@ -12332,7 +12332,7 @@
       "cimguiname": "igCollapsingHeader",
       "comment": " // if returning 'true' the header is open. doesn't indent nor push on ID stack. user doesn't have to call TreePop().",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "CollapsingHeader",
       "location": "imgui",
@@ -12363,7 +12363,7 @@
       "cimguiname": "igCollapsingHeader",
       "comment": " // when 'p_open' isn't NULL, display an additional small close button on upper right of the header",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "CollapsingHeader",
       "location": "imgui",
@@ -12400,7 +12400,7 @@
       "cimguiname": "igColorButton",
       "comment": " // display a colored square/button, hover for details, return true when pressed.",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "size": "ImVec2(0,0)"
       },
       "funcname": "ColorButton",
@@ -12572,7 +12572,7 @@
       "call_args": "(label,col,flags)",
       "cimguiname": "igColorEdit3",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "ColorEdit3",
       "location": "imgui",
@@ -12604,7 +12604,7 @@
       "call_args": "(label,col,flags)",
       "cimguiname": "igColorEdit4",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "ColorEdit4",
       "location": "imgui",
@@ -12662,7 +12662,7 @@
       "call_args": "(label,col,flags)",
       "cimguiname": "igColorPicker3",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "ColorPicker3",
       "location": "imgui",
@@ -12698,8 +12698,8 @@
       "call_args": "(label,col,flags,ref_col)",
       "cimguiname": "igColorPicker4",
       "defaults": {
-        "flags": "0",
-        "ref_col": "((void*)0)"
+        "flags": 0,
+        "ref_col": "NULL"
       },
       "funcname": "ColorPicker4",
       "location": "imgui",
@@ -12788,8 +12788,8 @@
       "cimguiname": "igColumns",
       "defaults": {
         "border": "true",
-        "count": "1",
-        "id": "((void*)0)"
+        "count": 1,
+        "id": "NULL"
       },
       "funcname": "Columns",
       "location": "imgui",
@@ -12829,7 +12829,7 @@
       "call_args": "(label,current_item,items,items_count,popup_max_height_in_items)",
       "cimguiname": "igCombo",
       "defaults": {
-        "popup_max_height_in_items": "-1"
+        "popup_max_height_in_items": -1
       },
       "funcname": "Combo",
       "location": "imgui",
@@ -12864,7 +12864,7 @@
       "cimguiname": "igCombo",
       "comment": " // Separate items with \\0 within a string, end item-list with \\0\\0. e.g. \"One\\0Two\\0Three\\0\"",
       "defaults": {
-        "popup_max_height_in_items": "-1"
+        "popup_max_height_in_items": -1
       },
       "funcname": "Combo",
       "location": "imgui",
@@ -12908,7 +12908,7 @@
       "call_args": "(label,current_item,items_getter,data,items_count,popup_max_height_in_items)",
       "cimguiname": "igCombo",
       "defaults": {
-        "popup_max_height_in_items": "-1"
+        "popup_max_height_in_items": -1
       },
       "funcname": "Combo",
       "location": "imgui",
@@ -12932,7 +12932,7 @@
       "call_args": "(shared_font_atlas)",
       "cimguiname": "igCreateContext",
       "defaults": {
-        "shared_font_atlas": "((void*)0)"
+        "shared_font_atlas": "NULL"
       },
       "funcname": "CreateContext",
       "location": "imgui",
@@ -13195,7 +13195,7 @@
       "call_args": "(col)",
       "cimguiname": "igDebugDrawItemRect",
       "defaults": {
-        "col": "(((ImU32)(255)<<24)|((ImU32)(0)<<16)|((ImU32)(0)<<8)|((ImU32)(255)<<0))"
+        "col": 4278190335
       },
       "funcname": "DebugDrawItemRect",
       "location": "internal",
@@ -13237,7 +13237,7 @@
       "cimguiname": "igDestroyContext",
       "comment": " // NULL = destroy current context",
       "defaults": {
-        "ctx": "((void*)0)"
+        "ctx": "NULL"
       },
       "funcname": "DestroyContext",
       "location": "imgui",
@@ -13305,8 +13305,8 @@
       "call_args": "(node_id,flags)",
       "cimguiname": "igDockBuilderAddNode",
       "defaults": {
-        "flags": "0",
-        "node_id": "0"
+        "flags": 0,
+        "node_id": 0
       },
       "funcname": "DockBuilderAddNode",
       "location": "internal",
@@ -14032,9 +14032,9 @@
       "call_args": "(id,size,flags,window_class)",
       "cimguiname": "igDockSpace",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "size": "ImVec2(0,0)",
-        "window_class": "((void*)0)"
+        "window_class": "NULL"
       },
       "funcname": "DockSpace",
       "location": "imgui",
@@ -14066,9 +14066,9 @@
       "call_args": "(viewport,flags,window_class)",
       "cimguiname": "igDockSpaceOverViewport",
       "defaults": {
-        "flags": "0",
-        "viewport": "((void*)0)",
-        "window_class": "((void*)0)"
+        "flags": 0,
+        "viewport": "NULL",
+        "window_class": "NULL"
       },
       "funcname": "DockSpaceOverViewport",
       "location": "imgui",
@@ -14167,7 +14167,7 @@
       "cimguiname": "igDragFloat",
       "comment": " // If v_min >= v_max we have no bound",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.3f\"",
         "v_max": "0.0f",
         "v_min": "0.0f",
@@ -14219,7 +14219,7 @@
       "call_args": "(label,v,v_speed,v_min,v_max,format,flags)",
       "cimguiname": "igDragFloat2",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.3f\"",
         "v_max": "0.0f",
         "v_min": "0.0f",
@@ -14271,7 +14271,7 @@
       "call_args": "(label,v,v_speed,v_min,v_max,format,flags)",
       "cimguiname": "igDragFloat3",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.3f\"",
         "v_max": "0.0f",
         "v_min": "0.0f",
@@ -14323,7 +14323,7 @@
       "call_args": "(label,v,v_speed,v_min,v_max,format,flags)",
       "cimguiname": "igDragFloat4",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.3f\"",
         "v_max": "0.0f",
         "v_min": "0.0f",
@@ -14383,9 +14383,9 @@
       "call_args": "(label,v_current_min,v_current_max,v_speed,v_min,v_max,format,format_max,flags)",
       "cimguiname": "igDragFloatRange2",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.3f\"",
-        "format_max": "((void*)0)",
+        "format_max": "NULL",
         "v_max": "0.0f",
         "v_min": "0.0f",
         "v_speed": "1.0f"
@@ -14437,10 +14437,10 @@
       "cimguiname": "igDragInt",
       "comment": " // If v_min >= v_max we have no bound",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%d\"",
-        "v_max": "0",
-        "v_min": "0",
+        "v_max": 0,
+        "v_min": 0,
         "v_speed": "1.0f"
       },
       "funcname": "DragInt",
@@ -14489,10 +14489,10 @@
       "call_args": "(label,v,v_speed,v_min,v_max,format,flags)",
       "cimguiname": "igDragInt2",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%d\"",
-        "v_max": "0",
-        "v_min": "0",
+        "v_max": 0,
+        "v_min": 0,
         "v_speed": "1.0f"
       },
       "funcname": "DragInt2",
@@ -14541,10 +14541,10 @@
       "call_args": "(label,v,v_speed,v_min,v_max,format,flags)",
       "cimguiname": "igDragInt3",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%d\"",
-        "v_max": "0",
-        "v_min": "0",
+        "v_max": 0,
+        "v_min": 0,
         "v_speed": "1.0f"
       },
       "funcname": "DragInt3",
@@ -14593,10 +14593,10 @@
       "call_args": "(label,v,v_speed,v_min,v_max,format,flags)",
       "cimguiname": "igDragInt4",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%d\"",
-        "v_max": "0",
-        "v_min": "0",
+        "v_max": 0,
+        "v_min": 0,
         "v_speed": "1.0f"
       },
       "funcname": "DragInt4",
@@ -14653,11 +14653,11 @@
       "call_args": "(label,v_current_min,v_current_max,v_speed,v_min,v_max,format,format_max,flags)",
       "cimguiname": "igDragIntRange2",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%d\"",
-        "format_max": "((void*)0)",
-        "v_max": "0",
-        "v_min": "0",
+        "format_max": "NULL",
+        "v_max": 0,
+        "v_min": 0,
         "v_speed": "1.0f"
       },
       "funcname": "DragIntRange2",
@@ -14710,10 +14710,10 @@
       "call_args": "(label,data_type,p_data,v_speed,p_min,p_max,format,flags)",
       "cimguiname": "igDragScalar",
       "defaults": {
-        "flags": "0",
-        "format": "((void*)0)",
-        "p_max": "((void*)0)",
-        "p_min": "((void*)0)"
+        "flags": 0,
+        "format": "NULL",
+        "p_max": "NULL",
+        "p_min": "NULL"
       },
       "funcname": "DragScalar",
       "location": "imgui",
@@ -14769,10 +14769,10 @@
       "call_args": "(label,data_type,p_data,components,v_speed,p_min,p_max,format,flags)",
       "cimguiname": "igDragScalarN",
       "defaults": {
-        "flags": "0",
-        "format": "((void*)0)",
-        "p_max": "((void*)0)",
-        "p_min": "((void*)0)"
+        "flags": 0,
+        "format": "NULL",
+        "p_max": "NULL",
+        "p_min": "NULL"
       },
       "funcname": "DragScalarN",
       "location": "imgui",
@@ -15155,7 +15155,7 @@
       "call_args": "(ref_pos,size,last_dir,r_outer,r_avoid,policy)",
       "cimguiname": "igFindBestWindowPosForPopupEx",
       "defaults": {
-        "policy": "ImGuiPopupPositionPolicy_Default"
+        "policy": 0
       },
       "funcname": "FindBestWindowPosForPopupEx",
       "location": "internal",
@@ -15233,7 +15233,7 @@
       "cimguiname": "igFindRenderedTextEnd",
       "comment": " // Find the optional ## from which we stop displaying text.",
       "defaults": {
-        "text_end": "((void*)0)"
+        "text_end": "NULL"
       },
       "funcname": "FindRenderedTextEnd",
       "location": "internal",
@@ -15721,7 +15721,7 @@
       "cimguiname": "igGetColumnOffset",
       "comment": " // get position of column line (in pixels, from the left side of the contents region). pass -1 to use current column, otherwise 0..GetColumnsCount() inclusive. column 0 is typically 0.0f",
       "defaults": {
-        "column_index": "-1"
+        "column_index": -1
       },
       "funcname": "GetColumnOffset",
       "location": "imgui",
@@ -15772,7 +15772,7 @@
       "cimguiname": "igGetColumnWidth",
       "comment": " // get column width (in pixels). pass -1 to use current column",
       "defaults": {
-        "column_index": "-1"
+        "column_index": -1
       },
       "funcname": "GetColumnWidth",
       "location": "imgui",
@@ -16696,7 +16696,7 @@
       "cimguiname": "igGetMouseDragDelta",
       "comment": " // return the delta from the initial clicking position while the mouse button is pressed or was just released. This is locked and return 0.0f until the mouse moves past a distance threshold at least once (if lock_threshold < -1.0f, uses io.MouseDraggingThreshold)",
       "defaults": {
-        "button": "0",
+        "button": 0,
         "lock_threshold": "-1.0f"
       },
       "funcname": "GetMouseDragDelta",
@@ -17951,8 +17951,8 @@
       "call_args": "(filename,mode,out_file_size,padding_bytes)",
       "cimguiname": "igImFileLoadToMemory",
       "defaults": {
-        "out_file_size": "((void*)0)",
-        "padding_bytes": "0"
+        "out_file_size": "NULL",
+        "padding_bytes": 0
       },
       "funcname": "ImFileLoadToMemory",
       "location": "internal",
@@ -18455,7 +18455,7 @@
       "call_args": "(data,data_size,seed)",
       "cimguiname": "igImHashData",
       "defaults": {
-        "seed": "0"
+        "seed": 0
       },
       "funcname": "ImHashData",
       "location": "internal",
@@ -18486,8 +18486,8 @@
       "call_args": "(data,data_size,seed)",
       "cimguiname": "igImHashStr",
       "defaults": {
-        "data_size": "0",
-        "seed": "0"
+        "data_size": 0,
+        "seed": 0
       },
       "funcname": "ImHashStr",
       "location": "internal",
@@ -19589,7 +19589,7 @@
       "cimguiname": "igImTextStrFromUtf8",
       "comment": " // return input UTF-8 bytes count",
       "defaults": {
-        "in_remaining": "((void*)0)"
+        "in_remaining": "NULL"
       },
       "funcname": "ImTextStrFromUtf8",
       "location": "internal",
@@ -19888,7 +19888,7 @@
       "comment": " // <0 frame_padding uses default frame padding settings. 0 for no padding",
       "defaults": {
         "bg_col": "ImVec4(0,0,0,0)",
-        "frame_padding": "-1",
+        "frame_padding": -1,
         "tint_col": "ImVec4(1,1,1,1)",
         "uv0": "ImVec2(0,0)",
         "uv1": "ImVec2(1,1)"
@@ -20032,10 +20032,10 @@
       "call_args": "(label,v,step,step_fast,format,flags)",
       "cimguiname": "igInputDouble",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.6f\"",
-        "step": "0.0",
-        "step_fast": "0.0"
+        "step": 0,
+        "step_fast": 0
       },
       "funcname": "InputDouble",
       "location": "imgui",
@@ -20079,7 +20079,7 @@
       "call_args": "(label,v,step,step_fast,format,flags)",
       "cimguiname": "igInputFloat",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.3f\"",
         "step": "0.0f",
         "step_fast": "0.0f"
@@ -20118,7 +20118,7 @@
       "call_args": "(label,v,format,flags)",
       "cimguiname": "igInputFloat2",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.3f\""
       },
       "funcname": "InputFloat2",
@@ -20155,7 +20155,7 @@
       "call_args": "(label,v,format,flags)",
       "cimguiname": "igInputFloat3",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.3f\""
       },
       "funcname": "InputFloat3",
@@ -20192,7 +20192,7 @@
       "call_args": "(label,v,format,flags)",
       "cimguiname": "igInputFloat4",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.3f\""
       },
       "funcname": "InputFloat4",
@@ -20233,9 +20233,9 @@
       "call_args": "(label,v,step,step_fast,flags)",
       "cimguiname": "igInputInt",
       "defaults": {
-        "flags": "0",
-        "step": "1",
-        "step_fast": "100"
+        "flags": 0,
+        "step": 1,
+        "step_fast": 100
       },
       "funcname": "InputInt",
       "location": "imgui",
@@ -20267,7 +20267,7 @@
       "call_args": "(label,v,flags)",
       "cimguiname": "igInputInt2",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "InputInt2",
       "location": "imgui",
@@ -20299,7 +20299,7 @@
       "call_args": "(label,v,flags)",
       "cimguiname": "igInputInt3",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "InputInt3",
       "location": "imgui",
@@ -20331,7 +20331,7 @@
       "call_args": "(label,v,flags)",
       "cimguiname": "igInputInt4",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "InputInt4",
       "location": "imgui",
@@ -20379,10 +20379,10 @@
       "call_args": "(label,data_type,p_data,p_step,p_step_fast,format,flags)",
       "cimguiname": "igInputScalar",
       "defaults": {
-        "flags": "0",
-        "format": "((void*)0)",
-        "p_step": "((void*)0)",
-        "p_step_fast": "((void*)0)"
+        "flags": 0,
+        "format": "NULL",
+        "p_step": "NULL",
+        "p_step_fast": "NULL"
       },
       "funcname": "InputScalar",
       "location": "imgui",
@@ -20434,10 +20434,10 @@
       "call_args": "(label,data_type,p_data,components,p_step,p_step_fast,format,flags)",
       "cimguiname": "igInputScalarN",
       "defaults": {
-        "flags": "0",
-        "format": "((void*)0)",
-        "p_step": "((void*)0)",
-        "p_step_fast": "((void*)0)"
+        "flags": 0,
+        "format": "NULL",
+        "p_step": "NULL",
+        "p_step_fast": "NULL"
       },
       "funcname": "InputScalarN",
       "location": "imgui",
@@ -20481,9 +20481,9 @@
       "call_args": "(label,buf,buf_size,flags,callback,user_data)",
       "cimguiname": "igInputText",
       "defaults": {
-        "callback": "((void*)0)",
-        "flags": "0",
-        "user_data": "((void*)0)"
+        "callback": "NULL",
+        "flags": 0,
+        "user_data": "NULL"
       },
       "funcname": "InputText",
       "location": "imgui",
@@ -20535,8 +20535,8 @@
       "call_args": "(label,hint,buf,buf_size,size_arg,flags,callback,user_data)",
       "cimguiname": "igInputTextEx",
       "defaults": {
-        "callback": "((void*)0)",
-        "user_data": "((void*)0)"
+        "callback": "NULL",
+        "user_data": "NULL"
       },
       "funcname": "InputTextEx",
       "location": "internal",
@@ -20584,10 +20584,10 @@
       "call_args": "(label,buf,buf_size,size,flags,callback,user_data)",
       "cimguiname": "igInputTextMultiline",
       "defaults": {
-        "callback": "((void*)0)",
-        "flags": "0",
+        "callback": "NULL",
+        "flags": 0,
         "size": "ImVec2(0,0)",
-        "user_data": "((void*)0)"
+        "user_data": "NULL"
       },
       "funcname": "InputTextMultiline",
       "location": "imgui",
@@ -20635,9 +20635,9 @@
       "call_args": "(label,hint,buf,buf_size,flags,callback,user_data)",
       "cimguiname": "igInputTextWithHint",
       "defaults": {
-        "callback": "((void*)0)",
-        "flags": "0",
-        "user_data": "((void*)0)"
+        "callback": "NULL",
+        "flags": 0,
+        "user_data": "NULL"
       },
       "funcname": "InputTextWithHint",
       "location": "imgui",
@@ -20670,7 +20670,7 @@
       "cimguiname": "igInvisibleButton",
       "comment": " // flexible button behavior without the visuals, frequently useful to build custom behaviors using the public api (along with IsItemActive, IsItemHovered, etc.)",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "InvisibleButton",
       "location": "imgui",
@@ -20916,7 +20916,7 @@
       "cimguiname": "igIsItemClicked",
       "comment": " // is the last item clicked? (e.g. button/node just clicked on) == IsMouseClicked(mouse_button) && IsItemHovered()",
       "defaults": {
-        "mouse_button": "0"
+        "mouse_button": 0
       },
       "funcname": "IsItemClicked",
       "location": "imgui",
@@ -21013,7 +21013,7 @@
       "cimguiname": "igIsItemHovered",
       "comment": " // is the last item hovered? (and usable, aka not blocked by a popup, etc.). See ImGuiHoveredFlags for more options.",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "IsItemHovered",
       "location": "imgui",
@@ -21360,7 +21360,7 @@
       "cimguiname": "igIsMousePosValid",
       "comment": " // by convention we use (-FLT_MAX,-FLT_MAX) to denote that there is no mouse available",
       "defaults": {
-        "mouse_pos": "((void*)0)"
+        "mouse_pos": "NULL"
       },
       "funcname": "IsMousePosValid",
       "location": "imgui",
@@ -21460,7 +21460,7 @@
       "cimguiname": "igIsPopupOpen",
       "comment": " // return true if the popup is open.",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "IsPopupOpen",
       "location": "imgui",
@@ -21635,7 +21635,7 @@
       "cimguiname": "igIsWindowFocused",
       "comment": " // is current window focused? or its root/child, depending on flags. see flags for options.",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "IsWindowFocused",
       "location": "imgui",
@@ -21660,7 +21660,7 @@
       "cimguiname": "igIsWindowHovered",
       "comment": " // is current window hovered (and typically: not blocked by a popup/modal)? see flags for options. NB: If you are trying to check whether your mouse should be dispatched to imgui or to your app, you should use the 'io.WantCaptureMouse' boolean for that! Please read the FAQ!",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "IsWindowHovered",
       "location": "imgui",
@@ -21714,7 +21714,7 @@
       "call_args": "(bb,id,nav_bb)",
       "cimguiname": "igItemAdd",
       "defaults": {
-        "nav_bb": "((void*)0)"
+        "nav_bb": "NULL"
       },
       "funcname": "ItemAdd",
       "location": "internal",
@@ -21918,7 +21918,7 @@
       "call_args": "(label,current_item,items,items_count,height_in_items)",
       "cimguiname": "igListBox",
       "defaults": {
-        "height_in_items": "-1"
+        "height_in_items": -1
       },
       "funcname": "ListBox",
       "location": "imgui",
@@ -21962,7 +21962,7 @@
       "call_args": "(label,current_item,items_getter,data,items_count,height_in_items)",
       "cimguiname": "igListBox",
       "defaults": {
-        "height_in_items": "-1"
+        "height_in_items": -1
       },
       "funcname": "ListBox",
       "location": "imgui",
@@ -22040,7 +22040,7 @@
       "cimguiname": "igListBoxHeader",
       "comment": " // \"",
       "defaults": {
-        "height_in_items": "-1"
+        "height_in_items": -1
       },
       "funcname": "ListBoxHeader",
       "location": "imgui",
@@ -22092,7 +22092,7 @@
       "cimguiname": "igLoadIniSettingsFromMemory",
       "comment": " // call after CreateContext() and before the first call to NewFrame() to provide .ini data from your own data source.",
       "defaults": {
-        "ini_size": "0"
+        "ini_size": 0
       },
       "funcname": "LoadIniSettingsFromMemory",
       "location": "imgui",
@@ -22187,7 +22187,7 @@
       "call_args": "(ref_pos,text,text_end)",
       "cimguiname": "igLogRenderedText",
       "defaults": {
-        "text_end": "((void*)0)"
+        "text_end": "NULL"
       },
       "funcname": "LogRenderedText",
       "location": "internal",
@@ -22241,7 +22241,7 @@
       "cimguiname": "igLogToBuffer",
       "comment": " // Start logging/capturing to internal buffer",
       "defaults": {
-        "auto_open_depth": "-1"
+        "auto_open_depth": -1
       },
       "funcname": "LogToBuffer",
       "location": "internal",
@@ -22266,7 +22266,7 @@
       "cimguiname": "igLogToClipboard",
       "comment": " // start logging to OS clipboard",
       "defaults": {
-        "auto_open_depth": "-1"
+        "auto_open_depth": -1
       },
       "funcname": "LogToClipboard",
       "location": "imgui",
@@ -22295,8 +22295,8 @@
       "cimguiname": "igLogToFile",
       "comment": " // start logging to file",
       "defaults": {
-        "auto_open_depth": "-1",
-        "filename": "((void*)0)"
+        "auto_open_depth": -1,
+        "filename": "NULL"
       },
       "funcname": "LogToFile",
       "location": "imgui",
@@ -22321,7 +22321,7 @@
       "cimguiname": "igLogToTTY",
       "comment": " // start logging to tty (stdout)",
       "defaults": {
-        "auto_open_depth": "-1"
+        "auto_open_depth": -1
       },
       "funcname": "LogToTTY",
       "location": "imgui",
@@ -22464,7 +22464,7 @@
       "defaults": {
         "enabled": "true",
         "selected": "false",
-        "shortcut": "((void*)0)"
+        "shortcut": "NULL"
       },
       "funcname": "MenuItem",
       "location": "imgui",
@@ -22702,7 +22702,7 @@
       "cimguiname": "igOpenPopup",
       "comment": " // call to mark popup as open (don't call every frame!).",
       "defaults": {
-        "popup_flags": "0"
+        "popup_flags": 0
       },
       "funcname": "OpenPopup",
       "location": "imgui",
@@ -22731,8 +22731,8 @@
       "cimguiname": "igOpenPopupContextItem",
       "comment": " // helper to open popup when clicked on last item. return true when just opened. (note: actually triggers on the mouse _released_ event to be consistent with popup behaviors)",
       "defaults": {
-        "popup_flags": "1",
-        "str_id": "((void*)0)"
+        "popup_flags": 1,
+        "str_id": "NULL"
       },
       "funcname": "OpenPopupContextItem",
       "location": "imgui",
@@ -22760,7 +22760,7 @@
       "call_args": "(id,popup_flags)",
       "cimguiname": "igOpenPopupEx",
       "defaults": {
-        "popup_flags": "ImGuiPopupFlags_None"
+        "popup_flags": 0
       },
       "funcname": "OpenPopupEx",
       "location": "internal",
@@ -22877,11 +22877,11 @@
       "cimguiname": "igPlotHistogram",
       "defaults": {
         "graph_size": "ImVec2(0,0)",
-        "overlay_text": "((void*)0)",
+        "overlay_text": "NULL",
         "scale_max": "FLT_MAX",
         "scale_min": "FLT_MAX",
         "stride": "sizeof(float)",
-        "values_offset": "0"
+        "values_offset": 0
       },
       "funcname": "PlotHistogram",
       "location": "imgui",
@@ -22938,10 +22938,10 @@
       "cimguiname": "igPlotHistogram",
       "defaults": {
         "graph_size": "ImVec2(0,0)",
-        "overlay_text": "((void*)0)",
+        "overlay_text": "NULL",
         "scale_max": "FLT_MAX",
         "scale_min": "FLT_MAX",
-        "values_offset": "0"
+        "values_offset": 0
       },
       "funcname": "PlotHistogram",
       "location": "imgui",
@@ -22998,11 +22998,11 @@
       "cimguiname": "igPlotLines",
       "defaults": {
         "graph_size": "ImVec2(0,0)",
-        "overlay_text": "((void*)0)",
+        "overlay_text": "NULL",
         "scale_max": "FLT_MAX",
         "scale_min": "FLT_MAX",
         "stride": "sizeof(float)",
-        "values_offset": "0"
+        "values_offset": 0
       },
       "funcname": "PlotLines",
       "location": "imgui",
@@ -23059,10 +23059,10 @@
       "cimguiname": "igPlotLines",
       "defaults": {
         "graph_size": "ImVec2(0,0)",
-        "overlay_text": "((void*)0)",
+        "overlay_text": "NULL",
         "scale_max": "FLT_MAX",
         "scale_min": "FLT_MAX",
-        "values_offset": "0"
+        "values_offset": 0
       },
       "funcname": "PlotLines",
       "location": "imgui",
@@ -23240,7 +23240,7 @@
       "call_args": "(count)",
       "cimguiname": "igPopStyleColor",
       "defaults": {
-        "count": "1"
+        "count": 1
       },
       "funcname": "PopStyleColor",
       "location": "imgui",
@@ -23264,7 +23264,7 @@
       "call_args": "(count)",
       "cimguiname": "igPopStyleVar",
       "defaults": {
-        "count": "1"
+        "count": 1
       },
       "funcname": "PopStyleVar",
       "location": "imgui",
@@ -23313,7 +23313,7 @@
       "call_args": "(fraction,size_arg,overlay)",
       "cimguiname": "igProgressBar",
       "defaults": {
-        "overlay": "((void*)0)",
+        "overlay": "NULL",
         "size_arg": "ImVec2(-1,0)"
       },
       "funcname": "ProgressBar",
@@ -24090,7 +24090,7 @@
       "cimguiname": "igRenderColorRectWithAlphaCheckerboard",
       "defaults": {
         "rounding": "0.0f",
-        "rounding_corners_flags": "~0"
+        "rounding_corners_flags": -1
       },
       "funcname": "RenderColorRectWithAlphaCheckerboard",
       "location": "internal",
@@ -24242,7 +24242,7 @@
       "cimguiname": "igRenderNavHighlight",
       "comment": " // Navigation highlight",
       "defaults": {
-        "flags": "ImGuiNavHighlightFlags_TypeDefault"
+        "flags": 1
       },
       "funcname": "RenderNavHighlight",
       "location": "internal",
@@ -24271,8 +24271,8 @@
       "cimguiname": "igRenderPlatformWindowsDefault",
       "comment": " // call in main loop. will call RenderWindow/SwapBuffers platform functions for each secondary viewport which doesn't have the ImGuiViewportFlags_Minimized flag set. May be reimplemented by user for custom rendering needs.",
       "defaults": {
-        "platform_render_arg": "((void*)0)",
-        "renderer_render_arg": "((void*)0)"
+        "platform_render_arg": "NULL",
+        "renderer_render_arg": "NULL"
       },
       "funcname": "RenderPlatformWindowsDefault",
       "location": "imgui",
@@ -24389,7 +24389,7 @@
       "cimguiname": "igRenderText",
       "defaults": {
         "hide_text_after_hash": "true",
-        "text_end": "((void*)0)"
+        "text_end": "NULL"
       },
       "funcname": "RenderText",
       "location": "internal",
@@ -24438,7 +24438,7 @@
       "cimguiname": "igRenderTextClipped",
       "defaults": {
         "align": "ImVec2(0,0)",
-        "clip_rect": "((void*)0)"
+        "clip_rect": "NULL"
       },
       "funcname": "RenderTextClipped",
       "location": "internal",
@@ -24491,7 +24491,7 @@
       "cimguiname": "igRenderTextClippedEx",
       "defaults": {
         "align": "ImVec2(0,0)",
-        "clip_rect": "((void*)0)"
+        "clip_rect": "NULL"
       },
       "funcname": "RenderTextClippedEx",
       "location": "internal",
@@ -24600,7 +24600,7 @@
       "cimguiname": "igResetMouseDragDelta",
       "comment": " //",
       "defaults": {
-        "button": "0"
+        "button": 0
       },
       "funcname": "ResetMouseDragDelta",
       "location": "imgui",
@@ -24678,7 +24678,7 @@
       "cimguiname": "igSaveIniSettingsToMemory",
       "comment": " // return a zero-terminated string with the .ini data which you can save by your own mean. call when io.WantSaveIniSettings is set, then save data by your own mean and clear io.WantSaveIniSettings.",
       "defaults": {
-        "out_ini_size": "((void*)0)"
+        "out_ini_size": "NULL"
       },
       "funcname": "SaveIniSettingsToMemory",
       "location": "imgui",
@@ -24840,7 +24840,7 @@
       "cimguiname": "igSelectable",
       "comment": " // \"bool selected\" carry the selection state (read-only). Selectable() is clicked is returns true so you can modify your selection state. size.x==0.0: use remaining width, size.x>0.0: specify width. size.y==0.0: use label height, size.y>0.0: specify height",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "selected": "false",
         "size": "ImVec2(0,0)"
       },
@@ -24877,7 +24877,7 @@
       "cimguiname": "igSelectable",
       "comment": " // \"bool* p_selected\" point to the selection state (read-write), as a convenient helper.",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "size": "ImVec2(0,0)"
       },
       "funcname": "Selectable",
@@ -24980,7 +24980,7 @@
       "call_args": "(alloc_func,free_func,user_data)",
       "cimguiname": "igSetAllocatorFunctions",
       "defaults": {
-        "user_data": "((void*)0)"
+        "user_data": "NULL"
       },
       "funcname": "SetAllocatorFunctions",
       "location": "imgui",
@@ -25252,7 +25252,7 @@
       "cimguiname": "igSetDragDropPayload",
       "comment": " // type is a user defined string of maximum 32 characters. Strings starting with '_' are reserved for dear imgui internal types. Data is copied and held by imgui.",
       "defaults": {
-        "cond": "0"
+        "cond": 0
       },
       "funcname": "SetDragDropPayload",
       "location": "imgui",
@@ -25361,7 +25361,7 @@
       "cimguiname": "igSetKeyboardFocusHere",
       "comment": " // focus keyboard on the next widget. Use positive 'offset' to access sub components of a multiple component widget. Use -1 to access previous widget.",
       "defaults": {
-        "offset": "0"
+        "offset": 0
       },
       "funcname": "SetKeyboardFocusHere",
       "location": "imgui",
@@ -25511,7 +25511,7 @@
       "cimguiname": "igSetNextItemOpen",
       "comment": " // set next TreeNode/CollapsingHeader open state.",
       "defaults": {
-        "cond": "0"
+        "cond": 0
       },
       "funcname": "SetNextItemOpen",
       "location": "imgui",
@@ -25609,7 +25609,7 @@
       "cimguiname": "igSetNextWindowCollapsed",
       "comment": " // set next window collapsed state. call before Begin()",
       "defaults": {
-        "cond": "0"
+        "cond": 0
       },
       "funcname": "SetNextWindowCollapsed",
       "location": "imgui",
@@ -25661,7 +25661,7 @@
       "cimguiname": "igSetNextWindowDockID",
       "comment": " // set next window dock id (FIXME-DOCK)",
       "defaults": {
-        "cond": "0"
+        "cond": 0
       },
       "funcname": "SetNextWindowDockID",
       "location": "imgui",
@@ -25712,7 +25712,7 @@
       "cimguiname": "igSetNextWindowPos",
       "comment": " // set next window position. call before Begin(). use pivot=(0.5f,0.5f) to center on given point, etc.",
       "defaults": {
-        "cond": "0",
+        "cond": 0,
         "pivot": "ImVec2(0,0)"
       },
       "funcname": "SetNextWindowPos",
@@ -25765,7 +25765,7 @@
       "cimguiname": "igSetNextWindowSize",
       "comment": " // set next window size. set axis to 0.0f to force an auto-fit on this axis. call before Begin()",
       "defaults": {
-        "cond": "0"
+        "cond": 0
       },
       "funcname": "SetNextWindowSize",
       "location": "imgui",
@@ -25802,8 +25802,8 @@
       "cimguiname": "igSetNextWindowSizeConstraints",
       "comment": " // set next window size limits. use -1,-1 on either X/Y axis to preserve the current size. Sizes will be rounded down. Use callback to apply non-trivial programmatic constraints.",
       "defaults": {
-        "custom_callback": "((void*)0)",
-        "custom_callback_data": "((void*)0)"
+        "custom_callback": "NULL",
+        "custom_callback_data": "NULL"
       },
       "funcname": "SetNextWindowSizeConstraints",
       "location": "imgui",
@@ -26243,7 +26243,7 @@
       "cimguiname": "igSetWindowCollapsed",
       "comment": " // (not recommended) set current window collapsed state. prefer using SetNextWindowCollapsed().",
       "defaults": {
-        "cond": "0"
+        "cond": 0
       },
       "funcname": "SetWindowCollapsed",
       "location": "imgui",
@@ -26274,7 +26274,7 @@
       "cimguiname": "igSetWindowCollapsed",
       "comment": " // set named window collapsed state",
       "defaults": {
-        "cond": "0"
+        "cond": 0
       },
       "funcname": "SetWindowCollapsed",
       "location": "imgui",
@@ -26304,7 +26304,7 @@
       "call_args": "(window,collapsed,cond)",
       "cimguiname": "igSetWindowCollapsed",
       "defaults": {
-        "cond": "0"
+        "cond": 0
       },
       "funcname": "SetWindowCollapsed",
       "location": "internal",
@@ -26455,7 +26455,7 @@
       "cimguiname": "igSetWindowPos",
       "comment": " // (not recommended) set current window position - call within Begin()/End(). prefer using SetNextWindowPos(), as this may incur tearing and side-effects.",
       "defaults": {
-        "cond": "0"
+        "cond": 0
       },
       "funcname": "SetWindowPos",
       "location": "imgui",
@@ -26486,7 +26486,7 @@
       "cimguiname": "igSetWindowPos",
       "comment": " // set named window position.",
       "defaults": {
-        "cond": "0"
+        "cond": 0
       },
       "funcname": "SetWindowPos",
       "location": "imgui",
@@ -26516,7 +26516,7 @@
       "call_args": "(window,pos,cond)",
       "cimguiname": "igSetWindowPos",
       "defaults": {
-        "cond": "0"
+        "cond": 0
       },
       "funcname": "SetWindowPos",
       "location": "internal",
@@ -26545,7 +26545,7 @@
       "cimguiname": "igSetWindowSize",
       "comment": " // (not recommended) set current window size - call within Begin()/End(). set to ImVec2(0, 0) to force an auto-fit. prefer using SetNextWindowSize(), as this may incur tearing and minor side-effects.",
       "defaults": {
-        "cond": "0"
+        "cond": 0
       },
       "funcname": "SetWindowSize",
       "location": "imgui",
@@ -26576,7 +26576,7 @@
       "cimguiname": "igSetWindowSize",
       "comment": " // set named window size. set axis to 0.0f to force an auto-fit on this axis.",
       "defaults": {
-        "cond": "0"
+        "cond": 0
       },
       "funcname": "SetWindowSize",
       "location": "imgui",
@@ -26606,7 +26606,7 @@
       "call_args": "(window,size,cond)",
       "cimguiname": "igSetWindowSize",
       "defaults": {
-        "cond": "0"
+        "cond": 0
       },
       "funcname": "SetWindowSize",
       "location": "internal",
@@ -26727,7 +26727,7 @@
       "cimguiname": "igShowAboutWindow",
       "comment": " // create About window. display Dear ImGui version, credits and build/system information.",
       "defaults": {
-        "p_open": "((void*)0)"
+        "p_open": "NULL"
       },
       "funcname": "ShowAboutWindow",
       "location": "imgui",
@@ -26752,7 +26752,7 @@
       "cimguiname": "igShowDemoWindow",
       "comment": " // create Demo window (previously called ShowTestWindow). demonstrate most ImGui features. call this to learn about the library! try to make it always available in your application!",
       "defaults": {
-        "p_open": "((void*)0)"
+        "p_open": "NULL"
       },
       "funcname": "ShowDemoWindow",
       "location": "imgui",
@@ -26800,7 +26800,7 @@
       "cimguiname": "igShowMetricsWindow",
       "comment": " // create Debug/Metrics window. display Dear ImGui internals: draw commands (with individual draw calls and vertices), window list, basic internal state, etc.",
       "defaults": {
-        "p_open": "((void*)0)"
+        "p_open": "NULL"
       },
       "funcname": "ShowMetricsWindow",
       "location": "imgui",
@@ -26825,7 +26825,7 @@
       "cimguiname": "igShowStyleEditor",
       "comment": " // add style editor block (not a window). you can pass in a reference ImGuiStyle structure to compare to, revert to and save to (else it uses the default style)",
       "defaults": {
-        "ref": "((void*)0)"
+        "ref": "NULL"
       },
       "funcname": "ShowStyleEditor",
       "location": "imgui",
@@ -26980,7 +26980,7 @@
       "call_args": "(label,v_rad,v_degrees_min,v_degrees_max,format,flags)",
       "cimguiname": "igSliderAngle",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.0f deg\"",
         "v_degrees_max": "+360.0f",
         "v_degrees_min": "-360.0f"
@@ -27082,7 +27082,7 @@
       "cimguiname": "igSliderFloat",
       "comment": " // adjust format to decorate the value with a prefix or a suffix for in-slider labels or unit display.",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.3f\""
       },
       "funcname": "SliderFloat",
@@ -27127,7 +27127,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderFloat2",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.3f\""
       },
       "funcname": "SliderFloat2",
@@ -27172,7 +27172,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderFloat3",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.3f\""
       },
       "funcname": "SliderFloat3",
@@ -27217,7 +27217,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderFloat4",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.3f\""
       },
       "funcname": "SliderFloat4",
@@ -27262,7 +27262,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderInt",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%d\""
       },
       "funcname": "SliderInt",
@@ -27307,7 +27307,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderInt2",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%d\""
       },
       "funcname": "SliderInt2",
@@ -27352,7 +27352,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderInt3",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%d\""
       },
       "funcname": "SliderInt3",
@@ -27397,7 +27397,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderInt4",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%d\""
       },
       "funcname": "SliderInt4",
@@ -27446,8 +27446,8 @@
       "call_args": "(label,data_type,p_data,p_min,p_max,format,flags)",
       "cimguiname": "igSliderScalar",
       "defaults": {
-        "flags": "0",
-        "format": "((void*)0)"
+        "flags": 0,
+        "format": "NULL"
       },
       "funcname": "SliderScalar",
       "location": "imgui",
@@ -27499,8 +27499,8 @@
       "call_args": "(label,data_type,p_data,components,p_min,p_max,format,flags)",
       "cimguiname": "igSliderScalarN",
       "defaults": {
-        "flags": "0",
-        "format": "((void*)0)"
+        "flags": 0,
+        "format": "NULL"
       },
       "funcname": "SliderScalarN",
       "location": "imgui",
@@ -27675,7 +27675,7 @@
       "cimguiname": "igStyleColorsClassic",
       "comment": " // classic imgui style",
       "defaults": {
-        "dst": "((void*)0)"
+        "dst": "NULL"
       },
       "funcname": "StyleColorsClassic",
       "location": "imgui",
@@ -27700,7 +27700,7 @@
       "cimguiname": "igStyleColorsDark",
       "comment": " // new, recommended style (default)",
       "defaults": {
-        "dst": "((void*)0)"
+        "dst": "NULL"
       },
       "funcname": "StyleColorsDark",
       "location": "imgui",
@@ -27725,7 +27725,7 @@
       "cimguiname": "igStyleColorsLight",
       "comment": " // best used with borders and a custom, thicker font",
       "defaults": {
-        "dst": "((void*)0)"
+        "dst": "NULL"
       },
       "funcname": "StyleColorsLight",
       "location": "imgui",
@@ -28112,8 +28112,8 @@
       "call_args": "(bb,id,label,data_type,p_data,format,p_clamp_min,p_clamp_max)",
       "cimguiname": "igTempInputScalar",
       "defaults": {
-        "p_clamp_max": "((void*)0)",
-        "p_clamp_min": "((void*)0)"
+        "p_clamp_max": "NULL",
+        "p_clamp_min": "NULL"
       },
       "funcname": "TempInputScalar",
       "location": "internal",
@@ -28331,8 +28331,8 @@
       "call_args": "(text,text_end,flags)",
       "cimguiname": "igTextEx",
       "defaults": {
-        "flags": "0",
-        "text_end": "((void*)0)"
+        "flags": 0,
+        "text_end": "NULL"
       },
       "funcname": "TextEx",
       "location": "internal",
@@ -28361,7 +28361,7 @@
       "cimguiname": "igTextUnformatted",
       "comment": " // raw text without formatting. Roughly equivalent to Text(\"%s\", text) but: A) doesn't require null terminated string if 'text_end' is specified, B) it's faster, no memory copy is done, no buffer size limits, recommended for long chunks of text.",
       "defaults": {
-        "text_end": "((void*)0)"
+        "text_end": "NULL"
       },
       "funcname": "TextUnformatted",
       "location": "imgui",
@@ -28589,7 +28589,7 @@
       "call_args": "(id,flags,label,label_end)",
       "cimguiname": "igTreeNodeBehavior",
       "defaults": {
-        "label_end": "((void*)0)"
+        "label_end": "NULL"
       },
       "funcname": "TreeNodeBehavior",
       "location": "internal",
@@ -28618,7 +28618,7 @@
       "cimguiname": "igTreeNodeBehaviorIsOpen",
       "comment": " // Consume previous SetNextItemOpen() data, if any. May return true when logging",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "TreeNodeBehaviorIsOpen",
       "location": "internal",
@@ -28646,7 +28646,7 @@
       "call_args": "(label,flags)",
       "cimguiname": "igTreeNodeEx",
       "defaults": {
-        "flags": "0"
+        "flags": 0
       },
       "funcname": "TreeNodeEx",
       "location": "imgui",
@@ -28900,7 +28900,7 @@
       "cimguiname": "igTreePush",
       "comment": " // \"",
       "defaults": {
-        "ptr_id": "((void*)0)"
+        "ptr_id": "NULL"
       },
       "funcname": "TreePush",
       "location": "imgui",
@@ -29094,7 +29094,7 @@
       "call_args": "(label,size,v,v_min,v_max,format,flags)",
       "cimguiname": "igVSliderFloat",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%.3f\""
       },
       "funcname": "VSliderFloat",
@@ -29143,7 +29143,7 @@
       "call_args": "(label,size,v,v_min,v_max,format,flags)",
       "cimguiname": "igVSliderInt",
       "defaults": {
-        "flags": "0",
+        "flags": 0,
         "format": "\"%d\""
       },
       "funcname": "VSliderInt",
@@ -29196,8 +29196,8 @@
       "call_args": "(label,size,data_type,p_data,p_min,p_max,format,flags)",
       "cimguiname": "igVSliderScalar",
       "defaults": {
-        "flags": "0",
-        "format": "((void*)0)"
+        "flags": 0,
+        "format": "NULL"
       },
       "funcname": "VSliderScalar",
       "location": "imgui",
@@ -29301,7 +29301,7 @@
       "call_args": "(prefix,v,float_format)",
       "cimguiname": "igValue",
       "defaults": {
-        "float_format": "((void*)0)"
+        "float_format": "NULL"
       },
       "funcname": "Value",
       "location": "imgui",
