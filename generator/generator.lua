@@ -360,7 +360,7 @@ local function parseImGuiHeader(header,names)
 	--prepare parser
 	local parser = cpp2ffi.Parser()
 	
-	parser.separate_locations = function(self,cdefs)
+	parser.separate_locationsNO = function(self,cdefs)
 		local imguicdefs = {}
 		local othercdefs = {}
 		for i,cdef in ipairs(cdefs) do
@@ -399,7 +399,7 @@ local function parseImGuiHeader(header,names)
 	cpp2ffi.save_data("cdefs1.lua",table.concat(tableo,"\n"))
 	--]]
 	for line,loca,loca2 in iterator(pipe,names,{},COMPILER) do
-		parser:insert(line, loca)
+		parser:insert(line, tostring(loca)..":"..tostring(loca2))
 		--table.insert(tableo,line)
 		--print(loca,loca2)
 	end

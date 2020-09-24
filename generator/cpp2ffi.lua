@@ -297,7 +297,7 @@ local function isLeaf(re)
 end
 M.getRE = getRE
 --takes preprocesed file in table cdefsor and returns items
-local function parseItems(txt,dumpit,loca)
+local function parseItems(txt,dumpit,loca,linenumdict)
 	--assert(loca)
 	--dumpit = true
 	local res,resN = getRE()
@@ -349,6 +349,10 @@ local function parseItems(txt,dumpit,loca)
 					local comments = table.concat(outercomms,"\n") --..inercoms
 					if comments=="" then comments=nil end
 					outercomms = {}
+					if linenumdict then
+						local itemfirstline = item:match("[^\n]+")
+						loca = linenumdict[itemfirstline]
+					end
 					table.insert(itemarr,{re_name=re_name,item=item,locat=loca})--,comments=comments})
 					items[re_name] = items[re_name] or {}
 					table.insert(items[re_name],item)
@@ -951,12 +955,12 @@ function M.Parser()
 		end
 	end
 	--recursive item parsing
-	function par:parseItemsR2(txt,doprint,locat)
-		local itsarr,its = parseItems(txt,false,locat)
+	function par:parseItemsR2(txt,doprint,locat,linenumdict)
+		local itsarr,its = parseItems(txt,false,locat,linenumdict)
 		for i,it in ipairs(itsarr) do
 			if not isLeaf(it.re_name) then
 				local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
-				it.childs = par:parseItemsR2(inner,doprint,locat)
+				it.childs = par:parseItemsR2(inner,doprint,locat,linenumdict)
 				for j,child in ipairs(it.childs) do
 					child.parent = it
 				end
@@ -991,14 +995,17 @@ function M.Parser()
 			self.itemsarr = all_itemsarr
 			itemsarr = self.itemsarr
 		else
+			self.linenumdict = {}
 			local cdefs2 = {}
 			for i,cdef in ipairs(cdefs) do
+				self.linenumdict[cdef[1]]=cdef[2]
 				table.insert(cdefs2,cdef[1])
 			end
 			local txt = table.concat(cdefs2,"\n")
 			
-			self.itemsarr = par:parseItemsR2(txt)
+			self.itemsarr = par:parseItemsR2(txt,false,nil,self.linenumdict)
 			itemsarr = self.itemsarr
+			
 		end
 	end
 	
@@ -1609,9 +1616,8 @@ local function location(file,locpathT,defines,COMPILER)
                     return nil
                 end
             end
-            if #line==0 then --nothing on emptyline
-            elseif not line:match("%S") then --nothing if only spaces
-            elseif line:sub(1,1) == "#" then
+
+            if line:sub(1,1) == "#" then
 			--elseif line:match"^%s*#" then
                 -- Is this a location pragma?
                 local loc_num_t,location_match = line:match(location_re)
@@ -1641,6 +1647,7 @@ local function location(file,locpathT,defines,COMPILER)
                 local loc_num_real = loc_num + loc_num_incr
                 loc_num_incr = loc_num_incr + 1
 				--if doprint then print(which_locationold,which_location) end
+				if line:match("%S") then --nothing on emptyline
                 if (which_locationold~=which_location) or (loc_num_realold and loc_num_realold < loc_num_real) then
                     --old line complete
 					--doprint = false
@@ -1652,6 +1659,7 @@ local function location(file,locpathT,defines,COMPILER)
                     which_locationold,loc_num_realold = which_location,loc_num_real
                 --return line,loc_num_real, which_location
                 end
+				end
             end
         until false --forever
     end
