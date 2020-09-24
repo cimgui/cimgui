@@ -111,6 +111,7 @@ typedef struct ImDrawList ImDrawList;
 typedef struct ImDrawData ImDrawData;
 typedef struct ImDrawCmd ImDrawCmd;
 typedef struct ImDrawChannel ImDrawChannel;
+
 struct ImDrawChannel;
 struct ImDrawCmd;
 struct ImDrawData;
