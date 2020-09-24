@@ -113,6 +113,7 @@ local function strsplit(str, pat)
     end
     return t,t2
 end
+M.strsplit = strsplit
 local function split_comment(line)
     local comment = line:match("(%s*//.*)") --or ""
     line = line:gsub("%s*//.*","")
