@@ -1040,6 +1040,7 @@ function M.Parser()
 		table.insert(commtab,"")
 		if derived then
 			table.insert(outtab,"\n    "..derived.." _"..derived..";")
+			table.insert(commtab,"")
 		end
 		--local itlist,itemsin = parseItems(iner, false,locat)
 		local itlist = itst.childs
@@ -1114,6 +1115,7 @@ function M.Parser()
 				end
 			elseif it.re_name == "enum_re" then
 				local enumname, enumbody = it.item:match"^%s*enum%s+([^%s;{}]+)[%s\n\r]*(%b{})"
+				enumbody = clean_comments(enumbody)
 				if enumname then
 					table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
 					if it.parent then
@@ -1783,7 +1785,7 @@ local function func_header_generate_funcs(FP)
         local manual = FP.get_manuals(def)
         if not manual and not def.templated then
 
-            local addcoment = def.comment or ""
+            local addcoment = "" --def.comment or ""
             local empty = def.args:match("^%(%)") --no args
             if def.constructor then
                 assert(def.stname ~= "","constructor without struct")
