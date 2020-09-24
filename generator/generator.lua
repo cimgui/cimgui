@@ -10,10 +10,10 @@ local INTERNAL_GENERATION = script_args[2]:match("internal") and true or false
 local FREETYPE_GENERATION = script_args[2]:match("freetype") and true or false
 local CPRE,CTEST
 if COMPILER == "gcc" or COMPILER == "clang" then
-    CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]
+    CPRE = COMPILER..[[ -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]
     CTEST = COMPILER.." --version"
 elseif COMPILER == "cl" then
-    CPRE = COMPILER..[[ /E /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_API="" /DIMGUI_IMPL_API="" ]]
+    CPRE = COMPILER..[[ /E /C /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_API="" /DIMGUI_IMPL_API="" ]]
     CTEST = COMPILER
 else
     print("Working without compiler ")
