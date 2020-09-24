@@ -1239,11 +1239,21 @@ function M.Parser()
 		outtab.enums[enumname] = {}
 		table.insert(enumsordered,enumname)
 		local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
-		--local enumarr = str_split(inner,",")
+		
+		--clean comments adding them to last item
 		local enumarrtmp = str_split(inner,"\n")
 		local enumarr = {}
-		for k,lin in ipairs(enumarrtmp) do if split_comment(lin)~="" then table.insert(enumarr,lin) end end
-				
+		for k,lin in ipairs(enumarrtmp) do
+			local lin1,comm = split_comment(lin)
+			if lin1~="" then
+				local lin1arr = str_split(lin1,",")
+				for k2,lin1s in ipairs(lin1arr) do
+					if lin1s~="" then table.insert(enumarr,lin1s) end
+				end
+				enumarr[#enumarr] = enumarr[#enumarr] .. (comm or "")
+			end 
+		end
+		
 		for j,line in ipairs(enumarr) do
 			local comment
 			line, comment = split_comment(line)
