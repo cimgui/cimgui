@@ -1116,8 +1116,8 @@ function M.Parser()
 				end
 			elseif it.re_name == "enum_re" then
 				local enumname, enumbody = it.item:match"^%s*enum%s+([^%s;{}]+)[%s\n\r]*(%b{})"
-				enumbody = clean_comments(enumbody)
 				if enumname then
+					enumbody = clean_comments(enumbody)
 					table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
 					if it.parent then
 						if it.parent.re_name == "namespace_re" then
