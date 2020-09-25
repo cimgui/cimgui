@@ -936,6 +936,18 @@ function M.Parser()
 	function par.get_manuals(def)
 		return par.manuals[def.ov_cimguiname] or par.manuals[def.cimguiname]
 	end
+	function par:take_lines(cmd_line,names,compiler)
+		local pipe,err = io.popen(cmd_line,"r")
+		if not pipe then
+			error("could not execute COMPILER "..err)
+		end
+		local defines = {}
+		for line,loca,loca2 in M.location(pipe,names,defines,compiler) do
+			self:insert(line, tostring(loca)..":"..tostring(loca2))
+		end
+		pipe:close()
+		return defines
+	end
 	function par:do_parse()
 		self:parseItems()
 		self:gen_structs_and_enums()

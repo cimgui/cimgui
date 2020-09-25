@@ -367,30 +367,8 @@ local function parseImGuiHeader(header,names)
 	parser.manuals = cimgui_manuals
 	parser.UDTs = {"ImVec2","ImVec4","ImColor","ImRect"}
 	
-	local pipe,err = io.popen(CPRE..header,"r")
+	local defines = parser:take_lines(CPRE..header,names,COMPILER)
 	
-	if not pipe then
-		error("could not execute COMPILER "..err)
-	end
-	
-	local iterator = cpp2ffi.location
-	
-	--[[
-	local tableo = {}
-	local line
-	repeat 
-		line =pipe:read"*l"
-		table.insert(tableo,line)
-	until not line
-	cpp2ffi.save_data("cdefs1.lua",table.concat(tableo,"\n"))
-	--]]
-	for line,loca,loca2 in iterator(pipe,names,{},COMPILER) do
-		parser:insert(line, tostring(loca)..":"..tostring(loca2))
-		--table.insert(tableo,line)
-		--print(loca,loca2)
-	end
-	--cpp2ffi.save_data("cdefs1.lua",table.concat(tableo))
-	pipe:close()
 	return parser
 end
 --generation
@@ -464,20 +442,9 @@ if #implementations > 0 then
 				extra_includes = extra_includes .. include_cmd .. inc .. " "
 			end
 		end
+		
+		local defines = parser2:take_lines(CPRE..extra_defines..extra_includes..source, {locati}, COMPILER)
 
-        local pipe,err = io.popen(CPRE..extra_defines..extra_includes..source,"r")
-
-        if not pipe then
-            error("could not get file: "..err)
-        end
-        
-        local iterator = cpp2ffi.location
-        
-        for line,locat,linenum in iterator(pipe,{locati},{},COMPILER) do
-            --local line, comment = split_comment(line)
-			parser2:insert(line,tostring(locat)..":"..tostring(linenum))
-        end
-        pipe:close()
     end
 	
     parser2:do_parse()
