@@ -1654,6 +1654,7 @@ local function location(file,locpathT,defines,COMPILER)
                         end
                     end
 				elseif in_location then
+					loc_num_incr = loc_num_incr + 1
 					local name,val = line:match(define_re)
 					if name and val then
 						--while defines[val] do val = defines[val] end
