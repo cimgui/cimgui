@@ -57,12 +57,13 @@ Notes:
   * defaults : a collection in which key is argument name and value is the default value.
   * manual : will be true if this function is hand-written (not generated)
   * isvararg : is set if some argument is a vararg
-  * constructor : is set if the function is a constructor for a class
-  * destructor : is set if the function is a destructor for a class
+  * constructor : is set if the function is a constructor for a class.
+  * destructor : is set if the function is a destructor for a class but not just a default destructor.
+  * realdestructor : is set if the function is a destructor for a class
   * templated : is set if the function belongs to a templated class (ImVector)
   * templatedgen: is set if the function belongs to a struct generated from template (ImVector_ImWchar)
   * nonUDT : if present the original function was returning a user defined type so that signature has been changed to accept a pointer to the UDT as first argument.
-  * location : name of the header file this function comes from. (imgui, internal, imgui_impl_xxx)
+  * location : name of the header file and linenumber this function comes from. (imgui:000, internal:123, imgui_impl_xxx:123)
   * is_static_function : is setted when it is an struct static function.
 ### structs_and_enums description
 * Is is a collection with three items:
@@ -76,7 +77,7 @@ Notes:
     * name : the name of the struct member
     * size : the number of array elements (when it is an array)
     * bitfield : the bitfield width (in case it is a bitfield)
-  * under key locations we get the locations collection in which each key is the enum tagname or the struct name and the value is the name of the header file this comes from.
+  * under key locations we get the locations collection in which each key is the enum tagname or the struct name and the value is the name of the header file and line number this comes from.
 # usage
 
 * use whatever method is in ImGui c++ namespace in the original [imgui.h](https://github.com/ocornut/imgui/blob/master/imgui.h) by prepending `ig`
