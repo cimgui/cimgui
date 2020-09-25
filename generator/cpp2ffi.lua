@@ -297,7 +297,7 @@ local function isLeaf(re)
 end
 M.getRE = getRE
 --takes preprocesed file in table cdefsor and returns items
-local function parseItems(txt,dumpit,loca,linenumdict)
+local function parseItems(txt,linenumdict,dumpit)
 	--assert(loca)
 	--dumpit = true
 	local res,resN = getRE()
@@ -350,6 +350,7 @@ local function parseItems(txt,dumpit,loca,linenumdict)
 					local comments = table.concat(outercomms,"\n") --..inercoms
 					if comments=="" then comments=nil end
 					outercomms = {}
+					local loca
 					if linenumdict then
 						local itemfirstline = itemold:match("[^\n]+")
 						loca = linenumdict[itemfirstline]
@@ -977,12 +978,12 @@ function M.Parser()
 		end
 	end
 	--recursive item parsing
-	function par:parseItemsR2(txt,doprint,locat,linenumdict)
-		local itsarr,its = parseItems(txt,false,locat,linenumdict)
+	function par:parseItemsR2(txt)
+		local itsarr,its = parseItems(txt,self.linenumdict)
 		for i,it in ipairs(itsarr) do
 			if not isLeaf(it.re_name) then
 				local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
-				it.childs = par:parseItemsR2(inner,doprint,locat,linenumdict)
+				it.childs = par:parseItemsR2(inner)
 				for j,child in ipairs(it.childs) do
 					child.parent = it
 				end
@@ -1003,32 +1004,17 @@ function M.Parser()
 	end
 	function par:parseItems()
 		self:initTypedefsDict()
-		if self.separate_locations then
-			local all_itemsarr = {}
-			local located_cdefs = self:separate_locations(cdefs)
-			for i,lcdef in ipairs(located_cdefs) do
-				local txt = table.concat(lcdef[2],"\n")
-				local itemsarrT,itemsT = par:parseItemsR2(txt,false,lcdef[1])
-				for i,it in ipairs(itemsarrT) do
-					table.insert(all_itemsarr,it)
-				end
-			end
-			
-			self.itemsarr = all_itemsarr
-			itemsarr = self.itemsarr
-		else
-			self.linenumdict = {}
-			local cdefs2 = {}
-			for i,cdef in ipairs(cdefs) do
-				self.linenumdict[cdef[1]]=cdef[2]
-				table.insert(cdefs2,cdef[1])
-			end
-			local txt = table.concat(cdefs2,"\n")
-			
-			self.itemsarr = par:parseItemsR2(txt,false,nil,self.linenumdict)
-			itemsarr = self.itemsarr
-			
+		
+		self.linenumdict = {}
+		local cdefs2 = {}
+		for i,cdef in ipairs(cdefs) do
+			self.linenumdict[cdef[1]]=cdef[2]
+			table.insert(cdefs2,cdef[1])
 		end
+		local txt = table.concat(cdefs2,"\n")
+		
+		self.itemsarr = par:parseItemsR2(txt)
+		itemsarr = self.itemsarr
 	end
 	
 	function par:printItems()

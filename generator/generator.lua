@@ -359,19 +359,6 @@ local function parseImGuiHeader(header,names)
 	--prepare parser
 	local parser = cpp2ffi.Parser()
 	
-	parser.separate_locationsNO = function(self,cdefs)
-		local imguicdefs = {}
-		local othercdefs = {}
-		for i,cdef in ipairs(cdefs) do
-			if cdef[2]=="imgui" then
-				table.insert(imguicdefs,cdef[1])
-			else
-				table.insert(othercdefs,cdef[1])
-			end
-		end
-		return {{"imgui",imguicdefs},{"internal",othercdefs}}
-	end
-	
 	parser.getCname = function(stname,funcname,namespace)
 		local pre = (stname == "") and (namespace and (namespace=="ImGui" and "ig" or namespace.."_") or "ig") or stname.."_"
 		return pre..funcname
@@ -486,25 +473,12 @@ if #implementations > 0 then
         
         local iterator = cpp2ffi.location
         
-        for line,locat in iterator(pipe,{locati},{},COMPILER) do
+        for line,locat,linenum in iterator(pipe,{locati},{},COMPILER) do
             --local line, comment = split_comment(line)
-			parser2:insert(line,locat)
+			parser2:insert(line,tostring(locat)..":"..tostring(linenum))
         end
         pipe:close()
     end
-	
-	parser2.separate_locationsNO = function(self, cdefs)
-		local sepcdefs = {}
-		for i,impl in ipairs(implementations) do
-			sepcdefs[i] = {[[imgui_impl_]].. impl,{}}
-			for j,cdef in ipairs(cdefs) do
-				if cdef[2]==sepcdefs[i][1] then
-					table.insert(sepcdefs[i][2],cdef[1])
-				end
-			end
-		end
-		return sepcdefs
-	end
 	
     parser2:do_parse()
 
