@@ -441,7 +441,7 @@
       "cimguiname": "ImColor_ImColor",
       "constructor": true,
       "defaults": {
-        "a": 255
+        "a": "255"
       },
       "funcname": "ImColor",
       "location": "imgui:2036",
@@ -1044,7 +1044,7 @@
       "call_args": "(p1,p2,p3,p4,col,thickness,num_segments)",
       "cimguiname": "ImDrawList_AddBezierCurve",
       "defaults": {
-        "num_segments": 0
+        "num_segments": "0"
       },
       "funcname": "AddBezierCurve",
       "location": "imgui:2227",
@@ -1116,7 +1116,7 @@
       "call_args": "(center,radius,col,num_segments,thickness)",
       "cimguiname": "ImDrawList_AddCircle",
       "defaults": {
-        "num_segments": 0,
+        "num_segments": "0",
         "thickness": "1.0f"
       },
       "funcname": "AddCircle",
@@ -1156,7 +1156,7 @@
       "call_args": "(center,radius,col,num_segments)",
       "cimguiname": "ImDrawList_AddCircleFilled",
       "defaults": {
-        "num_segments": 0
+        "num_segments": "0"
       },
       "funcname": "AddCircleFilled",
       "location": "imgui:2220",
@@ -1257,7 +1257,7 @@
       "call_args": "(user_texture_id,p_min,p_max,uv_min,uv_max,col)",
       "cimguiname": "ImDrawList_AddImage",
       "defaults": {
-        "col": 4294967295,
+        "col": "4294967295",
         "uv_max": "ImVec2(1,1)",
         "uv_min": "ImVec2(0,0)"
       },
@@ -1322,7 +1322,7 @@
       "call_args": "(user_texture_id,p1,p2,p3,p4,uv1,uv2,uv3,uv4,col)",
       "cimguiname": "ImDrawList_AddImageQuad",
       "defaults": {
-        "col": 4294967295,
+        "col": "4294967295",
         "uv1": "ImVec2(0,0)",
         "uv2": "ImVec2(1,0)",
         "uv3": "ImVec2(1,1)",
@@ -1381,7 +1381,7 @@
       "call_args": "(user_texture_id,p_min,p_max,uv_min,uv_max,col,rounding,rounding_corners)",
       "cimguiname": "ImDrawList_AddImageRounded",
       "defaults": {
-        "rounding_corners": 15
+        "rounding_corners": "15"
       },
       "funcname": "AddImageRounded",
       "location": "imgui:2235",
@@ -1677,7 +1677,7 @@
       "cimguiname": "ImDrawList_AddRect",
       "defaults": {
         "rounding": "0.0f",
-        "rounding_corners": 15,
+        "rounding_corners": "15",
         "thickness": "1.0f"
       },
       "funcname": "AddRect",
@@ -1722,7 +1722,7 @@
       "cimguiname": "ImDrawList_AddRectFilled",
       "defaults": {
         "rounding": "0.0f",
-        "rounding_corners": 15
+        "rounding_corners": "15"
       },
       "funcname": "AddRectFilled",
       "location": "imgui:2213",
@@ -2149,7 +2149,7 @@
       "call_args": "(center,radius,a_min,a_max,num_segments)",
       "cimguiname": "ImDrawList_PathArcTo",
       "defaults": {
-        "num_segments": 10
+        "num_segments": "10"
       },
       "funcname": "PathArcTo",
       "location": "imgui:2243",
@@ -2225,7 +2225,7 @@
       "call_args": "(p2,p3,p4,num_segments)",
       "cimguiname": "ImDrawList_PathBezierCurveTo",
       "defaults": {
-        "num_segments": 0
+        "num_segments": "0"
       },
       "funcname": "PathBezierCurveTo",
       "location": "imgui:2245",
@@ -2361,7 +2361,7 @@
       "cimguiname": "ImDrawList_PathRect",
       "defaults": {
         "rounding": "0.0f",
-        "rounding_corners": 15
+        "rounding_corners": "15"
       },
       "funcname": "PathRect",
       "location": "imgui:2246",
@@ -5774,7 +5774,7 @@
       "cimguiname": "ImGuiListClipper_ImGuiListClipper",
       "constructor": true,
       "defaults": {
-        "items_count": -1,
+        "items_count": "-1",
         "items_height": "-1.0f"
       },
       "funcname": "ImGuiListClipper",
@@ -6754,7 +6754,7 @@
       "call_args": "(key,default_val)",
       "cimguiname": "ImGuiStorage_GetInt",
       "defaults": {
-        "default_val": 0
+        "default_val": "0"
       },
       "funcname": "GetInt",
       "location": "imgui:1949",
@@ -6785,7 +6785,7 @@
       "call_args": "(key,default_val)",
       "cimguiname": "ImGuiStorage_GetIntRef",
       "defaults": {
-        "default_val": 0
+        "default_val": "0"
       },
       "funcname": "GetIntRef",
       "location": "imgui:1962",
@@ -10629,7 +10629,7 @@
       "call_args": "(type,flags)",
       "cimguiname": "igAcceptDragDropPayload",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "AcceptDragDropPayload",
       "location": "imgui:704",
@@ -10730,7 +10730,7 @@
       "call_args": "(str_id,dir,size_arg,flags)",
       "cimguiname": "igArrowButtonEx",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "ArrowButtonEx",
       "location": "imgui_internal:2236",
@@ -10762,7 +10762,7 @@
       "call_args": "(name,p_open,flags)",
       "cimguiname": "igBegin",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "p_open": "NULL"
       },
       "funcname": "Begin",
@@ -10800,7 +10800,7 @@
       "cimguiname": "igBeginChild",
       "defaults": {
         "border": "false",
-        "flags": 0,
+        "flags": "0",
         "size": "ImVec2(0,0)"
       },
       "funcname": "BeginChild",
@@ -10836,7 +10836,7 @@
       "cimguiname": "igBeginChild",
       "defaults": {
         "border": "false",
-        "flags": 0,
+        "flags": "0",
         "size": "ImVec2(0,0)"
       },
       "funcname": "BeginChild",
@@ -10907,7 +10907,7 @@
       "call_args": "(id,size,flags)",
       "cimguiname": "igBeginChildFrame",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "BeginChildFrame",
       "location": "imgui:752",
@@ -10939,7 +10939,7 @@
       "call_args": "(str_id,count,flags)",
       "cimguiname": "igBeginColumns",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "BeginColumns",
       "location": "imgui_internal:2177",
@@ -10971,7 +10971,7 @@
       "call_args": "(label,preview_value,flags)",
       "cimguiname": "igBeginCombo",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "BeginCombo",
       "location": "imgui:468",
@@ -11065,7 +11065,7 @@
       "call_args": "(flags)",
       "cimguiname": "igBeginDragDropSource",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "BeginDragDropSource",
       "location": "imgui:700",
@@ -11215,7 +11215,7 @@
       "call_args": "(str_id,flags)",
       "cimguiname": "igBeginPopup",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "BeginPopup",
       "location": "imgui:625",
@@ -11243,7 +11243,7 @@
       "call_args": "(str_id,popup_flags)",
       "cimguiname": "igBeginPopupContextItem",
       "defaults": {
-        "popup_flags": 1,
+        "popup_flags": "1",
         "str_id": "NULL"
       },
       "funcname": "BeginPopupContextItem",
@@ -11272,7 +11272,7 @@
       "call_args": "(str_id,popup_flags)",
       "cimguiname": "igBeginPopupContextVoid",
       "defaults": {
-        "popup_flags": 1,
+        "popup_flags": "1",
         "str_id": "NULL"
       },
       "funcname": "BeginPopupContextVoid",
@@ -11301,7 +11301,7 @@
       "call_args": "(str_id,popup_flags)",
       "cimguiname": "igBeginPopupContextWindow",
       "defaults": {
-        "popup_flags": 1,
+        "popup_flags": "1",
         "str_id": "NULL"
       },
       "funcname": "BeginPopupContextWindow",
@@ -11360,7 +11360,7 @@
       "call_args": "(name,p_open,flags)",
       "cimguiname": "igBeginPopupModal",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "p_open": "NULL"
       },
       "funcname": "BeginPopupModal",
@@ -11389,7 +11389,7 @@
       "call_args": "(str_id,flags)",
       "cimguiname": "igBeginTabBar",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "BeginTabBar",
       "location": "imgui:667",
@@ -11455,7 +11455,7 @@
       "call_args": "(label,p_open,flags)",
       "cimguiname": "igBeginTabItem",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "p_open": "NULL"
       },
       "funcname": "BeginTabItem",
@@ -11703,7 +11703,7 @@
       "call_args": "(bb,id,out_hovered,out_held,flags)",
       "cimguiname": "igButtonBehavior",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "ButtonBehavior",
       "location": "imgui_internal:2246",
@@ -11735,7 +11735,7 @@
       "call_args": "(label,size_arg,flags)",
       "cimguiname": "igButtonEx",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "size_arg": "ImVec2(0,0)"
       },
       "funcname": "ButtonEx",
@@ -12260,7 +12260,7 @@
       "call_args": "(label,flags)",
       "cimguiname": "igCollapsingHeader",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "CollapsingHeader",
       "location": "imgui:563",
@@ -12290,7 +12290,7 @@
       "call_args": "(label,p_open,flags)",
       "cimguiname": "igCollapsingHeader",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "CollapsingHeader",
       "location": "imgui:564",
@@ -12326,7 +12326,7 @@
       "call_args": "(desc_id,col,flags,size)",
       "cimguiname": "igColorButton",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "size": "ImVec2(0,0)"
       },
       "funcname": "ColorButton",
@@ -12498,7 +12498,7 @@
       "call_args": "(label,col,flags)",
       "cimguiname": "igColorEdit3",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "ColorEdit3",
       "location": "imgui:540",
@@ -12530,7 +12530,7 @@
       "call_args": "(label,col,flags)",
       "cimguiname": "igColorEdit4",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "ColorEdit4",
       "location": "imgui:541",
@@ -12588,7 +12588,7 @@
       "call_args": "(label,col,flags)",
       "cimguiname": "igColorPicker3",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "ColorPicker3",
       "location": "imgui:542",
@@ -12624,7 +12624,7 @@
       "call_args": "(label,col,flags,ref_col)",
       "cimguiname": "igColorPicker4",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "ref_col": "NULL"
       },
       "funcname": "ColorPicker4",
@@ -12714,7 +12714,7 @@
       "cimguiname": "igColumns",
       "defaults": {
         "border": "true",
-        "count": 1,
+        "count": "1",
         "id": "NULL"
       },
       "funcname": "Columns",
@@ -12755,7 +12755,7 @@
       "call_args": "(label,current_item,items,items_count,popup_max_height_in_items)",
       "cimguiname": "igCombo",
       "defaults": {
-        "popup_max_height_in_items": -1
+        "popup_max_height_in_items": "-1"
       },
       "funcname": "Combo",
       "location": "imgui:470",
@@ -12789,7 +12789,7 @@
       "call_args": "(label,current_item,items_separated_by_zeros,popup_max_height_in_items)",
       "cimguiname": "igCombo",
       "defaults": {
-        "popup_max_height_in_items": -1
+        "popup_max_height_in_items": "-1"
       },
       "funcname": "Combo",
       "location": "imgui:471",
@@ -12833,7 +12833,7 @@
       "call_args": "(label,current_item,items_getter,data,items_count,popup_max_height_in_items)",
       "cimguiname": "igCombo",
       "defaults": {
-        "popup_max_height_in_items": -1
+        "popup_max_height_in_items": "-1"
       },
       "funcname": "Combo",
       "location": "imgui:472",
@@ -13119,7 +13119,7 @@
       "call_args": "(col)",
       "cimguiname": "igDebugDrawItemRect",
       "defaults": {
-        "col": 4278190335
+        "col": "4278190335"
       },
       "funcname": "DebugDrawItemRect",
       "location": "imgui_internal:2294",
@@ -13227,8 +13227,8 @@
       "call_args": "(node_id,flags)",
       "cimguiname": "igDockBuilderAddNode",
       "defaults": {
-        "flags": 0,
-        "node_id": 0
+        "flags": "0",
+        "node_id": "0"
       },
       "funcname": "DockBuilderAddNode",
       "location": "imgui_internal:2158",
@@ -13950,7 +13950,7 @@
       "call_args": "(id,size,flags,window_class)",
       "cimguiname": "igDockSpace",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "size": "ImVec2(0,0)",
         "window_class": "NULL"
       },
@@ -13984,7 +13984,7 @@
       "call_args": "(viewport,flags,window_class)",
       "cimguiname": "igDockSpaceOverViewport",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "viewport": "NULL",
         "window_class": "NULL"
       },
@@ -14084,7 +14084,7 @@
       "call_args": "(label,v,v_speed,v_min,v_max,format,flags)",
       "cimguiname": "igDragFloat",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.3f\"",
         "v_max": "0.0f",
         "v_min": "0.0f",
@@ -14136,7 +14136,7 @@
       "call_args": "(label,v,v_speed,v_min,v_max,format,flags)",
       "cimguiname": "igDragFloat2",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.3f\"",
         "v_max": "0.0f",
         "v_min": "0.0f",
@@ -14188,7 +14188,7 @@
       "call_args": "(label,v,v_speed,v_min,v_max,format,flags)",
       "cimguiname": "igDragFloat3",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.3f\"",
         "v_max": "0.0f",
         "v_min": "0.0f",
@@ -14240,7 +14240,7 @@
       "call_args": "(label,v,v_speed,v_min,v_max,format,flags)",
       "cimguiname": "igDragFloat4",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.3f\"",
         "v_max": "0.0f",
         "v_min": "0.0f",
@@ -14300,7 +14300,7 @@
       "call_args": "(label,v_current_min,v_current_max,v_speed,v_min,v_max,format,format_max,flags)",
       "cimguiname": "igDragFloatRange2",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.3f\"",
         "format_max": "NULL",
         "v_max": "0.0f",
@@ -14353,10 +14353,10 @@
       "call_args": "(label,v,v_speed,v_min,v_max,format,flags)",
       "cimguiname": "igDragInt",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%d\"",
-        "v_max": 0,
-        "v_min": 0,
+        "v_max": "0",
+        "v_min": "0",
         "v_speed": "1.0f"
       },
       "funcname": "DragInt",
@@ -14405,10 +14405,10 @@
       "call_args": "(label,v,v_speed,v_min,v_max,format,flags)",
       "cimguiname": "igDragInt2",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%d\"",
-        "v_max": 0,
-        "v_min": 0,
+        "v_max": "0",
+        "v_min": "0",
         "v_speed": "1.0f"
       },
       "funcname": "DragInt2",
@@ -14457,10 +14457,10 @@
       "call_args": "(label,v,v_speed,v_min,v_max,format,flags)",
       "cimguiname": "igDragInt3",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%d\"",
-        "v_max": 0,
-        "v_min": 0,
+        "v_max": "0",
+        "v_min": "0",
         "v_speed": "1.0f"
       },
       "funcname": "DragInt3",
@@ -14509,10 +14509,10 @@
       "call_args": "(label,v,v_speed,v_min,v_max,format,flags)",
       "cimguiname": "igDragInt4",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%d\"",
-        "v_max": 0,
-        "v_min": 0,
+        "v_max": "0",
+        "v_min": "0",
         "v_speed": "1.0f"
       },
       "funcname": "DragInt4",
@@ -14569,11 +14569,11 @@
       "call_args": "(label,v_current_min,v_current_max,v_speed,v_min,v_max,format,format_max,flags)",
       "cimguiname": "igDragIntRange2",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%d\"",
         "format_max": "NULL",
-        "v_max": 0,
-        "v_min": 0,
+        "v_max": "0",
+        "v_min": "0",
         "v_speed": "1.0f"
       },
       "funcname": "DragIntRange2",
@@ -14626,7 +14626,7 @@
       "call_args": "(label,data_type,p_data,v_speed,p_min,p_max,format,flags)",
       "cimguiname": "igDragScalar",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "NULL",
         "p_max": "NULL",
         "p_min": "NULL"
@@ -14685,7 +14685,7 @@
       "call_args": "(label,data_type,p_data,components,v_speed,p_min,p_max,format,flags)",
       "cimguiname": "igDragScalarN",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "NULL",
         "p_max": "NULL",
         "p_min": "NULL"
@@ -15057,7 +15057,7 @@
       "call_args": "(ref_pos,size,last_dir,r_outer,r_avoid,policy)",
       "cimguiname": "igFindBestWindowPosForPopupEx",
       "defaults": {
-        "policy": 0
+        "policy": "0"
       },
       "funcname": "FindBestWindowPosForPopupEx",
       "location": "imgui_internal:2091",
@@ -15612,7 +15612,7 @@
       "call_args": "(column_index)",
       "cimguiname": "igGetColumnOffset",
       "defaults": {
-        "column_index": -1
+        "column_index": "-1"
       },
       "funcname": "GetColumnOffset",
       "location": "imgui:661",
@@ -15662,7 +15662,7 @@
       "call_args": "(column_index)",
       "cimguiname": "igGetColumnWidth",
       "defaults": {
-        "column_index": -1
+        "column_index": "-1"
       },
       "funcname": "GetColumnWidth",
       "location": "imgui:659",
@@ -16556,7 +16556,7 @@
       "call_args": "(button,lock_threshold)",
       "cimguiname": "igGetMouseDragDelta",
       "defaults": {
-        "button": 0,
+        "button": "0",
         "lock_threshold": "-1.0f"
       },
       "funcname": "GetMouseDragDelta",
@@ -17783,7 +17783,7 @@
       "cimguiname": "igImFileLoadToMemory",
       "defaults": {
         "out_file_size": "NULL",
-        "padding_bytes": 0
+        "padding_bytes": "0"
       },
       "funcname": "ImFileLoadToMemory",
       "location": "imgui_internal:344",
@@ -18286,7 +18286,7 @@
       "call_args": "(data,data_size,seed)",
       "cimguiname": "igImHashData",
       "defaults": {
-        "seed": 0
+        "seed": "0"
       },
       "funcname": "ImHashData",
       "location": "imgui_internal:257",
@@ -18317,8 +18317,8 @@
       "call_args": "(data,data_size,seed)",
       "cimguiname": "igImHashStr",
       "defaults": {
-        "data_size": 0,
-        "seed": 0
+        "data_size": "0",
+        "seed": "0"
       },
       "funcname": "ImHashStr",
       "location": "imgui_internal:258",
@@ -19707,7 +19707,7 @@
       "cimguiname": "igImageButton",
       "defaults": {
         "bg_col": "ImVec4(0,0,0,0)",
-        "frame_padding": -1,
+        "frame_padding": "-1",
         "tint_col": "ImVec4(1,1,1,1)",
         "uv0": "ImVec2(0,0)",
         "uv1": "ImVec2(1,1)"
@@ -19850,10 +19850,10 @@
       "call_args": "(label,v,step,step_fast,format,flags)",
       "cimguiname": "igInputDouble",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.6f\"",
-        "step": 0,
-        "step_fast": 0
+        "step": "0",
+        "step_fast": "0"
       },
       "funcname": "InputDouble",
       "location": "imgui:533",
@@ -19897,7 +19897,7 @@
       "call_args": "(label,v,step,step_fast,format,flags)",
       "cimguiname": "igInputFloat",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.3f\"",
         "step": "0.0f",
         "step_fast": "0.0f"
@@ -19936,7 +19936,7 @@
       "call_args": "(label,v,format,flags)",
       "cimguiname": "igInputFloat2",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.3f\""
       },
       "funcname": "InputFloat2",
@@ -19973,7 +19973,7 @@
       "call_args": "(label,v,format,flags)",
       "cimguiname": "igInputFloat3",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.3f\""
       },
       "funcname": "InputFloat3",
@@ -20010,7 +20010,7 @@
       "call_args": "(label,v,format,flags)",
       "cimguiname": "igInputFloat4",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.3f\""
       },
       "funcname": "InputFloat4",
@@ -20051,9 +20051,9 @@
       "call_args": "(label,v,step,step_fast,flags)",
       "cimguiname": "igInputInt",
       "defaults": {
-        "flags": 0,
-        "step": 1,
-        "step_fast": 100
+        "flags": "0",
+        "step": "1",
+        "step_fast": "100"
       },
       "funcname": "InputInt",
       "location": "imgui:529",
@@ -20085,7 +20085,7 @@
       "call_args": "(label,v,flags)",
       "cimguiname": "igInputInt2",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "InputInt2",
       "location": "imgui:530",
@@ -20117,7 +20117,7 @@
       "call_args": "(label,v,flags)",
       "cimguiname": "igInputInt3",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "InputInt3",
       "location": "imgui:531",
@@ -20149,7 +20149,7 @@
       "call_args": "(label,v,flags)",
       "cimguiname": "igInputInt4",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "InputInt4",
       "location": "imgui:532",
@@ -20197,7 +20197,7 @@
       "call_args": "(label,data_type,p_data,p_step,p_step_fast,format,flags)",
       "cimguiname": "igInputScalar",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "NULL",
         "p_step": "NULL",
         "p_step_fast": "NULL"
@@ -20252,7 +20252,7 @@
       "call_args": "(label,data_type,p_data,components,p_step,p_step_fast,format,flags)",
       "cimguiname": "igInputScalarN",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "NULL",
         "p_step": "NULL",
         "p_step_fast": "NULL"
@@ -20300,7 +20300,7 @@
       "cimguiname": "igInputText",
       "defaults": {
         "callback": "NULL",
-        "flags": 0,
+        "flags": "0",
         "user_data": "NULL"
       },
       "funcname": "InputText",
@@ -20403,7 +20403,7 @@
       "cimguiname": "igInputTextMultiline",
       "defaults": {
         "callback": "NULL",
-        "flags": 0,
+        "flags": "0",
         "size": "ImVec2(0,0)",
         "user_data": "NULL"
       },
@@ -20454,7 +20454,7 @@
       "cimguiname": "igInputTextWithHint",
       "defaults": {
         "callback": "NULL",
-        "flags": 0,
+        "flags": "0",
         "user_data": "NULL"
       },
       "funcname": "InputTextWithHint",
@@ -20487,7 +20487,7 @@
       "call_args": "(str_id,size,flags)",
       "cimguiname": "igInvisibleButton",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "InvisibleButton",
       "location": "imgui:454",
@@ -20726,7 +20726,7 @@
       "call_args": "(mouse_button)",
       "cimguiname": "igIsItemClicked",
       "defaults": {
-        "mouse_button": 0
+        "mouse_button": "0"
       },
       "funcname": "IsItemClicked",
       "location": "imgui:723",
@@ -20818,7 +20818,7 @@
       "call_args": "(flags)",
       "cimguiname": "igIsItemHovered",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "IsItemHovered",
       "location": "imgui:720",
@@ -21251,7 +21251,7 @@
       "call_args": "(str_id,flags)",
       "cimguiname": "igIsPopupOpen",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "IsPopupOpen",
       "location": "imgui:649",
@@ -21422,7 +21422,7 @@
       "call_args": "(flags)",
       "cimguiname": "igIsWindowFocused",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "IsWindowFocused",
       "location": "imgui:309",
@@ -21446,7 +21446,7 @@
       "call_args": "(flags)",
       "cimguiname": "igIsWindowHovered",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "IsWindowHovered",
       "location": "imgui:310",
@@ -21703,7 +21703,7 @@
       "call_args": "(label,current_item,items,items_count,height_in_items)",
       "cimguiname": "igListBox",
       "defaults": {
-        "height_in_items": -1
+        "height_in_items": "-1"
       },
       "funcname": "ListBox",
       "location": "imgui:575",
@@ -21747,7 +21747,7 @@
       "call_args": "(label,current_item,items_getter,data,items_count,height_in_items)",
       "cimguiname": "igListBox",
       "defaults": {
-        "height_in_items": -1
+        "height_in_items": "-1"
       },
       "funcname": "ListBox",
       "location": "imgui:576",
@@ -21822,7 +21822,7 @@
       "call_args": "(label,items_count,height_in_items)",
       "cimguiname": "igListBoxHeader",
       "defaults": {
-        "height_in_items": -1
+        "height_in_items": "-1"
       },
       "funcname": "ListBoxHeader",
       "location": "imgui:578",
@@ -21872,7 +21872,7 @@
       "call_args": "(ini_data,ini_size)",
       "cimguiname": "igLoadIniSettingsFromMemory",
       "defaults": {
-        "ini_size": 0
+        "ini_size": "0"
       },
       "funcname": "LoadIniSettingsFromMemory",
       "location": "imgui:803",
@@ -22016,7 +22016,7 @@
       "call_args": "(auto_open_depth)",
       "cimguiname": "igLogToBuffer",
       "defaults": {
-        "auto_open_depth": -1
+        "auto_open_depth": "-1"
       },
       "funcname": "LogToBuffer",
       "location": "imgui_internal:2079",
@@ -22040,7 +22040,7 @@
       "call_args": "(auto_open_depth)",
       "cimguiname": "igLogToClipboard",
       "defaults": {
-        "auto_open_depth": -1
+        "auto_open_depth": "-1"
       },
       "funcname": "LogToClipboard",
       "location": "imgui:692",
@@ -22068,7 +22068,7 @@
       "call_args": "(auto_open_depth,filename)",
       "cimguiname": "igLogToFile",
       "defaults": {
-        "auto_open_depth": -1,
+        "auto_open_depth": "-1",
         "filename": "NULL"
       },
       "funcname": "LogToFile",
@@ -22093,7 +22093,7 @@
       "call_args": "(auto_open_depth)",
       "cimguiname": "igLogToTTY",
       "defaults": {
-        "auto_open_depth": -1
+        "auto_open_depth": "-1"
       },
       "funcname": "LogToTTY",
       "location": "imgui:690",
@@ -22467,7 +22467,7 @@
       "call_args": "(str_id,popup_flags)",
       "cimguiname": "igOpenPopup",
       "defaults": {
-        "popup_flags": 0
+        "popup_flags": "0"
       },
       "funcname": "OpenPopup",
       "location": "imgui:634",
@@ -22495,7 +22495,7 @@
       "call_args": "(str_id,popup_flags)",
       "cimguiname": "igOpenPopupContextItem",
       "defaults": {
-        "popup_flags": 1,
+        "popup_flags": "1",
         "str_id": "NULL"
       },
       "funcname": "OpenPopupContextItem",
@@ -22524,7 +22524,7 @@
       "call_args": "(id,popup_flags)",
       "cimguiname": "igOpenPopupEx",
       "defaults": {
-        "popup_flags": 0
+        "popup_flags": "0"
       },
       "funcname": "OpenPopupEx",
       "location": "imgui_internal:2083",
@@ -22645,7 +22645,7 @@
         "scale_max": "FLT_MAX",
         "scale_min": "FLT_MAX",
         "stride": "sizeof(float)",
-        "values_offset": 0
+        "values_offset": "0"
       },
       "funcname": "PlotHistogram",
       "location": "imgui:584",
@@ -22705,7 +22705,7 @@
         "overlay_text": "NULL",
         "scale_max": "FLT_MAX",
         "scale_min": "FLT_MAX",
-        "values_offset": 0
+        "values_offset": "0"
       },
       "funcname": "PlotHistogram",
       "location": "imgui:585",
@@ -22766,7 +22766,7 @@
         "scale_max": "FLT_MAX",
         "scale_min": "FLT_MAX",
         "stride": "sizeof(float)",
-        "values_offset": 0
+        "values_offset": "0"
       },
       "funcname": "PlotLines",
       "location": "imgui:582",
@@ -22826,7 +22826,7 @@
         "overlay_text": "NULL",
         "scale_max": "FLT_MAX",
         "scale_min": "FLT_MAX",
-        "values_offset": 0
+        "values_offset": "0"
       },
       "funcname": "PlotLines",
       "location": "imgui:583",
@@ -23003,7 +23003,7 @@
       "call_args": "(count)",
       "cimguiname": "igPopStyleColor",
       "defaults": {
-        "count": 1
+        "count": "1"
       },
       "funcname": "PopStyleColor",
       "location": "imgui:363",
@@ -23027,7 +23027,7 @@
       "call_args": "(count)",
       "cimguiname": "igPopStyleVar",
       "defaults": {
-        "count": 1
+        "count": "1"
       },
       "funcname": "PopStyleVar",
       "location": "imgui:366",
@@ -23840,7 +23840,7 @@
       "cimguiname": "igRenderColorRectWithAlphaCheckerboard",
       "defaults": {
         "rounding": "0.0f",
-        "rounding_corners_flags": -1
+        "rounding_corners_flags": "-1"
       },
       "funcname": "RenderColorRectWithAlphaCheckerboard",
       "location": "imgui_internal:2210",
@@ -23991,7 +23991,7 @@
       "call_args": "(bb,id,flags)",
       "cimguiname": "igRenderNavHighlight",
       "defaults": {
-        "flags": 1
+        "flags": "1"
       },
       "funcname": "RenderNavHighlight",
       "location": "imgui_internal:2211",
@@ -24347,7 +24347,7 @@
       "call_args": "(button)",
       "cimguiname": "igResetMouseDragDelta",
       "defaults": {
-        "button": 0
+        "button": "0"
       },
       "funcname": "ResetMouseDragDelta",
       "location": "imgui:789",
@@ -24583,7 +24583,7 @@
       "call_args": "(label,selected,flags,size)",
       "cimguiname": "igSelectable",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "selected": "false",
         "size": "ImVec2(0,0)"
       },
@@ -24619,7 +24619,7 @@
       "call_args": "(label,p_selected,flags,size)",
       "cimguiname": "igSelectable",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "size": "ImVec2(0,0)"
       },
       "funcname": "Selectable",
@@ -24985,7 +24985,7 @@
       "call_args": "(type,data,sz,cond)",
       "cimguiname": "igSetDragDropPayload",
       "defaults": {
-        "cond": 0
+        "cond": "0"
       },
       "funcname": "SetDragDropPayload",
       "location": "imgui:701",
@@ -25091,7 +25091,7 @@
       "call_args": "(offset)",
       "cimguiname": "igSetKeyboardFocusHere",
       "defaults": {
-        "offset": 0
+        "offset": "0"
       },
       "funcname": "SetKeyboardFocusHere",
       "location": "imgui:715",
@@ -25239,7 +25239,7 @@
       "call_args": "(is_open,cond)",
       "cimguiname": "igSetNextItemOpen",
       "defaults": {
-        "cond": 0
+        "cond": "0"
       },
       "funcname": "SetNextItemOpen",
       "location": "imgui:565",
@@ -25333,7 +25333,7 @@
       "call_args": "(collapsed,cond)",
       "cimguiname": "igSetNextWindowCollapsed",
       "defaults": {
-        "cond": 0
+        "cond": "0"
       },
       "funcname": "SetNextWindowCollapsed",
       "location": "imgui:324",
@@ -25383,7 +25383,7 @@
       "call_args": "(dock_id,cond)",
       "cimguiname": "igSetNextWindowDockID",
       "defaults": {
-        "cond": 0
+        "cond": "0"
       },
       "funcname": "SetNextWindowDockID",
       "location": "imgui:683",
@@ -25432,7 +25432,7 @@
       "call_args": "(pos,cond,pivot)",
       "cimguiname": "igSetNextWindowPos",
       "defaults": {
-        "cond": 0,
+        "cond": "0",
         "pivot": "ImVec2(0,0)"
       },
       "funcname": "SetNextWindowPos",
@@ -25483,7 +25483,7 @@
       "call_args": "(size,cond)",
       "cimguiname": "igSetNextWindowSize",
       "defaults": {
-        "cond": 0
+        "cond": "0"
       },
       "funcname": "SetNextWindowSize",
       "location": "imgui:321",
@@ -25949,7 +25949,7 @@
       "call_args": "(collapsed,cond)",
       "cimguiname": "igSetWindowCollapsed",
       "defaults": {
-        "cond": 0
+        "cond": "0"
       },
       "funcname": "SetWindowCollapsed",
       "location": "imgui:330",
@@ -25979,7 +25979,7 @@
       "call_args": "(name,collapsed,cond)",
       "cimguiname": "igSetWindowCollapsed",
       "defaults": {
-        "cond": 0
+        "cond": "0"
       },
       "funcname": "SetWindowCollapsed",
       "location": "imgui:335",
@@ -26009,7 +26009,7 @@
       "call_args": "(window,collapsed,cond)",
       "cimguiname": "igSetWindowCollapsed",
       "defaults": {
-        "cond": 0
+        "cond": "0"
       },
       "funcname": "SetWindowCollapsed",
       "location": "imgui_internal:1996",
@@ -26156,7 +26156,7 @@
       "call_args": "(pos,cond)",
       "cimguiname": "igSetWindowPos",
       "defaults": {
-        "cond": 0
+        "cond": "0"
       },
       "funcname": "SetWindowPos",
       "location": "imgui:328",
@@ -26186,7 +26186,7 @@
       "call_args": "(name,pos,cond)",
       "cimguiname": "igSetWindowPos",
       "defaults": {
-        "cond": 0
+        "cond": "0"
       },
       "funcname": "SetWindowPos",
       "location": "imgui:333",
@@ -26216,7 +26216,7 @@
       "call_args": "(window,pos,cond)",
       "cimguiname": "igSetWindowPos",
       "defaults": {
-        "cond": 0
+        "cond": "0"
       },
       "funcname": "SetWindowPos",
       "location": "imgui_internal:1994",
@@ -26244,7 +26244,7 @@
       "call_args": "(size,cond)",
       "cimguiname": "igSetWindowSize",
       "defaults": {
-        "cond": 0
+        "cond": "0"
       },
       "funcname": "SetWindowSize",
       "location": "imgui:329",
@@ -26274,7 +26274,7 @@
       "call_args": "(name,size,cond)",
       "cimguiname": "igSetWindowSize",
       "defaults": {
-        "cond": 0
+        "cond": "0"
       },
       "funcname": "SetWindowSize",
       "location": "imgui:334",
@@ -26304,7 +26304,7 @@
       "call_args": "(window,size,cond)",
       "cimguiname": "igSetWindowSize",
       "defaults": {
-        "cond": 0
+        "cond": "0"
       },
       "funcname": "SetWindowSize",
       "location": "imgui_internal:1995",
@@ -26670,7 +26670,7 @@
       "call_args": "(label,v_rad,v_degrees_min,v_degrees_max,format,flags)",
       "cimguiname": "igSliderAngle",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.0f deg\"",
         "v_degrees_max": "+360.0f",
         "v_degrees_min": "-360.0f"
@@ -26771,7 +26771,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderFloat",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.3f\""
       },
       "funcname": "SliderFloat",
@@ -26816,7 +26816,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderFloat2",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.3f\""
       },
       "funcname": "SliderFloat2",
@@ -26861,7 +26861,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderFloat3",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.3f\""
       },
       "funcname": "SliderFloat3",
@@ -26906,7 +26906,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderFloat4",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.3f\""
       },
       "funcname": "SliderFloat4",
@@ -26951,7 +26951,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderInt",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%d\""
       },
       "funcname": "SliderInt",
@@ -26996,7 +26996,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderInt2",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%d\""
       },
       "funcname": "SliderInt2",
@@ -27041,7 +27041,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderInt3",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%d\""
       },
       "funcname": "SliderInt3",
@@ -27086,7 +27086,7 @@
       "call_args": "(label,v,v_min,v_max,format,flags)",
       "cimguiname": "igSliderInt4",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%d\""
       },
       "funcname": "SliderInt4",
@@ -27135,7 +27135,7 @@
       "call_args": "(label,data_type,p_data,p_min,p_max,format,flags)",
       "cimguiname": "igSliderScalar",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "NULL"
       },
       "funcname": "SliderScalar",
@@ -27188,7 +27188,7 @@
       "call_args": "(label,data_type,p_data,components,p_min,p_max,format,flags)",
       "cimguiname": "igSliderScalarN",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "NULL"
       },
       "funcname": "SliderScalarN",
@@ -28012,7 +28012,7 @@
       "call_args": "(text,text_end,flags)",
       "cimguiname": "igTextEx",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "text_end": "NULL"
       },
       "funcname": "TextEx",
@@ -28294,7 +28294,7 @@
       "call_args": "(id,flags)",
       "cimguiname": "igTreeNodeBehaviorIsOpen",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "TreeNodeBehaviorIsOpen",
       "location": "imgui_internal:2251",
@@ -28322,7 +28322,7 @@
       "call_args": "(label,flags)",
       "cimguiname": "igTreeNodeEx",
       "defaults": {
-        "flags": 0
+        "flags": "0"
       },
       "funcname": "TreeNodeEx",
       "location": "imgui:554",
@@ -28765,7 +28765,7 @@
       "call_args": "(label,size,v,v_min,v_max,format,flags)",
       "cimguiname": "igVSliderFloat",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%.3f\""
       },
       "funcname": "VSliderFloat",
@@ -28814,7 +28814,7 @@
       "call_args": "(label,size,v,v_min,v_max,format,flags)",
       "cimguiname": "igVSliderInt",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "\"%d\""
       },
       "funcname": "VSliderInt",
@@ -28867,7 +28867,7 @@
       "call_args": "(label,size,data_type,p_data,p_min,p_max,format,flags)",
       "cimguiname": "igVSliderScalar",
       "defaults": {
-        "flags": 0,
+        "flags": "0",
         "format": "NULL"
       },
       "funcname": "VSliderScalar",
