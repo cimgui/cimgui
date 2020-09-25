@@ -297,7 +297,7 @@ local function isLeaf(re)
 end
 M.getRE = getRE
 --takes preprocesed file in table cdefsor and returns items
-local function parseItems(txt,linenumdict,dumpit)
+local function parseItems(txt,linenumdict, itparent, dumpit)
 	--assert(loca)
 	--dumpit = true
 	local res,resN = getRE()
@@ -354,6 +354,16 @@ local function parseItems(txt,linenumdict,dumpit)
 					if linenumdict then
 						local itemfirstline = itemold:match("[^\n]+")
 						loca = linenumdict[itemfirstline]
+						if type(loca)=="table" then
+							--local prevloca = itemarr[#itemarr] and itemarr[#itemarr].locat
+							--print("loca is table for",itemfirstline)
+							--print("prevloca is",prevloca)
+							--print("parent loca is",itparent and itparent.locat)
+							-- for ii,ss in ipairs(loca) do
+								-- print(ii,ss)
+							-- end
+							loca = table.remove(loca,1)
+						end
 						if not loca then
 							print(itemold)
 							error"no entry in linenumdict"
@@ -990,12 +1000,12 @@ function M.Parser()
 		end
 	end
 	--recursive item parsing
-	function par:parseItemsR2(txt)
-		local itsarr,its = parseItems(txt,self.linenumdict)
+	function par:parseItemsR2(txt, itparent)
+		local itsarr,its = parseItems(txt,self.linenumdict,itparent)
 		for i,it in ipairs(itsarr) do
 			if not isLeaf(it.re_name) then
 				local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
-				it.childs = par:parseItemsR2(inner)
+				it.childs = par:parseItemsR2(inner, it)
 				for j,child in ipairs(it.childs) do
 					child.parent = it
 				end
@@ -1020,7 +1030,16 @@ function M.Parser()
 		self.linenumdict = {}
 		local cdefs2 = {}
 		for i,cdef in ipairs(cdefs) do
-			self.linenumdict[cdef[1]]=cdef[2]
+			if self.linenumdict[cdef[1]] then
+				--print("linenumdict alredy defined for", cdef[1],type(self.linenumdict[cdef[1]]))
+				if type(self.linenumdict[cdef[1]])=="string" then
+					self.linenumdict[cdef[1]] = {self.linenumdict[cdef[1]], cdef[2]}
+				else -- must be table already
+					table.insert(self.linenumdict[cdef[1]],cdef[2])
+				end
+			else
+				self.linenumdict[cdef[1]]=cdef[2]
+			end
 			table.insert(cdefs2,cdef[1])
 		end
 		local txt = table.concat(cdefs2,"\n")
