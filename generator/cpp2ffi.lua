@@ -802,40 +802,55 @@ end
 local function ADDdestructors(FP)
     local defsT = FP.defsT
     local newcdefs = {}
-    --TODO add constructor = true
+
+	local keep_dest_locat = {}
+	--first get destructor locations
+	for numcdef,t in ipairs(FP.funcdefs) do
+        if t.cimguiname then
+            local defT = defsT[t.cimguiname]
+			if not defT[1].ret and not defT[1].constructor then --if constructor not processed
+				if defT[1].funcname:match("~") then
+					keep_dest_locat[defT[1].stname] = defT[1].location
+				end
+			end
+		else
+			assert(false,"no cimguiname")
+        end
+    end
+	
     for numcdef,t in ipairs(FP.funcdefs) do
         newcdefs[#newcdefs+1] = t
         if t.cimguiname then
             local defT = defsT[t.cimguiname]
-            --local defT = cimf[t.signature]
-        --for fname,defT in pairs(FP.defsT) do
         if not defT[1].ret and not defT[1].constructor then --if constructor not processed
             if defT[1].funcname:match("~") then
                 defsT[t.cimguiname] = nil --clear destructor
                 newcdefs[#newcdefs] = nil
             else
-            for j,cons in ipairs(defT) do
-                cons.constructor = true
-            end
-            if(defT[1].stname~=defT[1].funcname) then
-				print(defT[1].stname, defT[1].funcname)
-				error"names should be equal"
-			end
-            local def = {}
-            def.stname = defT[1].stname
-			def.templated = defT[1].templated
-            def.ret = "void"
-            def.ov_cimguiname = def.stname.."_destroy"
-            def.cimguiname = def.ov_cimguiname
-            def.destructor = true
-            def.args = "("..def.stname.."* self)"
-            def.call_args = "(self)"
-            def.signature = "("..def.stname.."*)"
-            def.defaults = {}
-            def.argsT = {{type=def.stname.."*",name="self"}}
-            defsT[def.ov_cimguiname] = {def}
-            defsT[def.ov_cimguiname][def.signature] = def
-            newcdefs[#newcdefs+1]={stname=def.stname,funcname=def.ov_cimguiname,args=def.args,signature=def.signature,cimguiname=def.cimguiname,call_args=def.call_args,ret =def.ret}
+				for j,cons in ipairs(defT) do
+					cons.constructor = true
+				end
+				if(defT[1].stname~=defT[1].funcname) then
+					print(defT[1].stname, defT[1].funcname)
+					error"names should be equal"
+				end
+				local def = {}
+				def.stname = defT[1].stname
+				def.templated = defT[1].templated
+				def.location = keep_dest_locat[defT[1].stname]
+				def.ret = "void"
+				def.ov_cimguiname = def.stname.."_destroy"
+				def.cimguiname = def.ov_cimguiname
+				def.destructor = true
+				def.realdestructor = def.location and true
+				def.args = "("..def.stname.."* self)"
+				def.call_args = "(self)"
+				def.signature = "("..def.stname.."*)"
+				def.defaults = {}
+				def.argsT = {{type=def.stname.."*",name="self"}}
+				defsT[def.ov_cimguiname] = {def}
+				defsT[def.ov_cimguiname][def.signature] = def
+				newcdefs[#newcdefs+1]={stname=def.stname,funcname=def.ov_cimguiname,args=def.args,signature=def.signature,cimguiname=def.cimguiname,call_args=def.call_args,ret =def.ret}
             end
         end
         end
