@@ -225,21 +225,20 @@ local function repair_defaults(defsT,str_and_enu)
 						local enumname = v:gsub("[%w:]-::([%w]+)","%1")
 						local ok,val = pcall(cpp2ffi.parse_enum_value,enumname,enumsvalues)
 						if ok then
-							def.defaults[k] = val
+							def.defaults[k] = tostring(val)
 						else
-							print("deleting default ",v)
-							def.defaults[k] = nil
+							print("default not repaired",k,v)
 						end
 					elseif enumsvalues[v] then
-						def.defaults[k] = enumsvalues[v]
+						def.defaults[k] = tostring(enumsvalues[v])
 					else
 						local ok,val = pcall(cpp2ffi.parse_enum_value,v,enumsvalues,true)
 						if ok then
-							def.defaults[k] = val
+							def.defaults[k] = tostring(val)
 						else
 							def.defaults[k] = def.defaults[k]:gsub("%(%(void%s*%*%)0%)","NULL")
 							if def.defaults[k]:match"%(ImU32%)" then
-								def.defaults[k] = CleanImU32(def.defaults[k])
+								def.defaults[k] = tostring(CleanImU32(def.defaults[k]))
 							end
 						end
 					end
