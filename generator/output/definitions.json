@@ -1381,7 +1381,7 @@
       "call_args": "(user_texture_id,p_min,p_max,uv_min,uv_max,col,rounding,rounding_corners)",
       "cimguiname": "ImDrawList_AddImageRounded",
       "defaults": {
-        "rounding_corners": "15"
+        "rounding_corners": "ImDrawCornerFlags_All"
       },
       "funcname": "AddImageRounded",
       "location": "imgui:2235",
@@ -1677,7 +1677,7 @@
       "cimguiname": "ImDrawList_AddRect",
       "defaults": {
         "rounding": "0.0f",
-        "rounding_corners": "15",
+        "rounding_corners": "ImDrawCornerFlags_All",
         "thickness": "1.0f"
       },
       "funcname": "AddRect",
@@ -1722,7 +1722,7 @@
       "cimguiname": "ImDrawList_AddRectFilled",
       "defaults": {
         "rounding": "0.0f",
-        "rounding_corners": "15"
+        "rounding_corners": "ImDrawCornerFlags_All"
       },
       "funcname": "AddRectFilled",
       "location": "imgui:2213",
@@ -2361,7 +2361,7 @@
       "cimguiname": "ImDrawList_PathRect",
       "defaults": {
         "rounding": "0.0f",
-        "rounding_corners": "15"
+        "rounding_corners": "ImDrawCornerFlags_All"
       },
       "funcname": "PathRect",
       "location": "imgui:2246",
@@ -15057,7 +15057,7 @@
       "call_args": "(ref_pos,size,last_dir,r_outer,r_avoid,policy)",
       "cimguiname": "igFindBestWindowPosForPopupEx",
       "defaults": {
-        "policy": "0"
+        "policy": "ImGuiPopupPositionPolicy_Default"
       },
       "funcname": "FindBestWindowPosForPopupEx",
       "location": "imgui_internal:2091",
@@ -19852,8 +19852,8 @@
       "defaults": {
         "flags": "0",
         "format": "\"%.6f\"",
-        "step": "0",
-        "step_fast": "0"
+        "step": "0.0",
+        "step_fast": "0.0"
       },
       "funcname": "InputDouble",
       "location": "imgui:533",
@@ -22524,7 +22524,7 @@
       "call_args": "(id,popup_flags)",
       "cimguiname": "igOpenPopupEx",
       "defaults": {
-        "popup_flags": "0"
+        "popup_flags": "ImGuiPopupFlags_None"
       },
       "funcname": "OpenPopupEx",
       "location": "imgui_internal:2083",
@@ -23840,7 +23840,7 @@
       "cimguiname": "igRenderColorRectWithAlphaCheckerboard",
       "defaults": {
         "rounding": "0.0f",
-        "rounding_corners_flags": "-1"
+        "rounding_corners_flags": "~0"
       },
       "funcname": "RenderColorRectWithAlphaCheckerboard",
       "location": "imgui_internal:2210",
@@ -23991,7 +23991,7 @@
       "call_args": "(bb,id,flags)",
       "cimguiname": "igRenderNavHighlight",
       "defaults": {
-        "flags": "1"
+        "flags": "ImGuiNavHighlightFlags_TypeDefault"
       },
       "funcname": "RenderNavHighlight",
       "location": "imgui_internal:2211",
