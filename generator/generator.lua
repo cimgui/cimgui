@@ -180,13 +180,6 @@ end
 
 -- function for repairing funcdefs default values
 local function repair_defaults(defsT,str_and_enu)
-	local enumsvalues = {}
-	for k,enu in pairs(str_and_enu.enums) do
-		for i,v in ipairs(enu) do
-			assert(v.calc_value)
-			enumsvalues[v.name] = v.calc_value
-		end
-	end
 	local function deleteOuterPars(def)
 		local w = def:match("^%b()$")
 		if w then
@@ -221,26 +214,9 @@ local function repair_defaults(defsT,str_and_enu)
 				--do only if not a c string
 				local is_cstring = v:sub(1,1)=='"' and v:sub(-1,-1) =='"'
 				if not is_cstring then
-					if v:match"::" then --could be nested enum
-						local enumname = v:gsub("[%w:]-::([%w]+)","%1")
-						local ok,val = pcall(cpp2ffi.parse_enum_value,enumname,enumsvalues)
-						if ok then
-							def.defaults[k] = tostring(val)
-						else
-							print("default not repaired",k,v)
-						end
-					elseif enumsvalues[v] then
-						def.defaults[k] = tostring(enumsvalues[v])
-					else
-						local ok,val = pcall(cpp2ffi.parse_enum_value,v,enumsvalues,true)
-						if ok then
-							def.defaults[k] = tostring(val)
-						else
-							def.defaults[k] = def.defaults[k]:gsub("%(%(void%s*%*%)0%)","NULL")
-							if def.defaults[k]:match"%(ImU32%)" then
-								def.defaults[k] = tostring(CleanImU32(def.defaults[k]))
-							end
-						end
+					def.defaults[k] = def.defaults[k]:gsub("%(%(void%s*%*%)0%)","NULL")
+					if def.defaults[k]:match"%(ImU32%)" then
+						def.defaults[k] = tostring(CleanImU32(def.defaults[k]))
 					end
 				end
 			end
