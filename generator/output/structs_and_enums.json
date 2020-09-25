@@ -3038,10 +3038,10 @@
     "ImVec2": "imgui:220",
     "ImVec2ih": "imgui_internal:417",
     "ImVec4": "imgui:233",
-    "STB_TexteditState": "imstb_textedit:362",
+    "STB_TexteditState": "imstb_textedit:319",
     "StbTexteditRow": "imstb_textedit:362",
-    "StbUndoRecord": "imstb_textedit:362",
-    "StbUndoState": "imstb_textedit:362"
+    "StbUndoRecord": "imstb_textedit:301",
+    "StbUndoState": "imstb_textedit:310"
   },
   "structs": {
     "ImBitVector": [
