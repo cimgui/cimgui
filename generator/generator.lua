@@ -10,10 +10,10 @@ local INTERNAL_GENERATION = script_args[2]:match("internal") and true or false
 local FREETYPE_GENERATION = script_args[2]:match("freetype") and true or false
 local CPRE,CTEST
 if COMPILER == "gcc" or COMPILER == "clang" then
-    CPRE = COMPILER..[[ -E -C -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]
+    CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]
     CTEST = COMPILER.." --version"
 elseif COMPILER == "cl" then
-    CPRE = COMPILER..[[ /E /C /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_API="" /DIMGUI_IMPL_API="" ]]
+    CPRE = COMPILER..[[ /E /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_API="" /DIMGUI_IMPL_API="" ]]
     CTEST = COMPILER
 else
     print("Working without compiler ")
@@ -494,7 +494,7 @@ if #implementations > 0 then
         pipe:close()
     end
 	
-	parser2.separate_locations = function(self, cdefs)
+	parser2.separate_locationsNO = function(self, cdefs)
 		local sepcdefs = {}
 		for i,impl in ipairs(implementations) do
 			sepcdefs[i] = {[[imgui_impl_]].. impl,{}}

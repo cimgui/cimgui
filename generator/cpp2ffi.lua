@@ -345,13 +345,20 @@ local function parseItems(txt,dumpit,loca,linenumdict)
 					end
 				else
 					--item,inercoms = clean_comments(item)
+					local itemold = item
 					item = item:gsub("extern __attribute__%(%(dllexport%)%) ","")
 					local comments = table.concat(outercomms,"\n") --..inercoms
 					if comments=="" then comments=nil end
 					outercomms = {}
 					if linenumdict then
-						local itemfirstline = item:match("[^\n]+")
+						local itemfirstline = itemold:match("[^\n]+")
 						loca = linenumdict[itemfirstline]
+						if not loca then
+							print(itemold)
+							error"no entry in linenumdict"
+						end
+					else
+						error"no linenumdict"
 					end
 					table.insert(itemarr,{re_name=re_name,item=item,locat=loca})--,comments=comments})
 					items[re_name] = items[re_name] or {}
