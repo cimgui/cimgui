@@ -113,13 +113,22 @@ local function strsplit(str, pat)
     end
     return t,t2
 end
+M.strsplit = strsplit
 local function split_comment(line)
-    local comment = line:match("(%s*//.*)") or ""
+    local comment = line:match("(%s*//.*)") --or ""
     line = line:gsub("%s*//.*","")
     line = line:gsub("%s*$","")
     return line,comment
 end
 M.split_comment = split_comment
+local function clean_comments(txt)
+	local comms = ""
+	for comm in txt:gmatch("(%s*//[^\n]*)") do
+		comms = comms..comm
+	end
+	txt = txt:gsub("%s*//[^\n]*","")
+	return txt,comms
+end
 local function strip(cad)
     return cad:gsub("^%s*(.-)%s*$","%1") --remove initial and final spaces
 end
@@ -274,10 +283,12 @@ local function getRE()
 	vardef_re = "^\n*([^;{}]+;)",
 	functionD_re = "^([^;{}]-%b()[\n%s%w]*%b{}%s-;*)",
 	--functionD_re = "^([^;{}]-%b()[^{}%(%)]*%b{})",
-	functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)%s*;"
+	functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)%s*;",
+	comment_re = "^%s*//[^\n]*",
+	comment2_re = "^%s*/%*.-%*/"
 	}
 	
-	local resN = {"functypedef_re","functype_re","function_re","functionD_re","typedef_st_re","struct_re","enum_re","union_re","namespace_re","class_re","typedef_re","vardef_re"}
+	local resN = {"comment2_re","comment_re","functypedef_re","functype_re","function_re","functionD_re","typedef_st_re","struct_re","enum_re","union_re","namespace_re","class_re","typedef_re","vardef_re"}
 	
 	return res,resN
 end
@@ -286,7 +297,7 @@ local function isLeaf(re)
 end
 M.getRE = getRE
 --takes preprocesed file in table cdefsor and returns items
-local function parseItems(txt,dumpit,loca)
+local function parseItems(txt,linenumdict, itparent, dumpit)
 	--assert(loca)
 	--dumpit = true
 	local res,resN = getRE()
@@ -295,6 +306,7 @@ local function parseItems(txt,dumpit,loca)
 	local item
 	local items = {}
 	local itemarr = {}
+	local outercomms = {}
 	while true do
 		local found = false
 		for ire,re_name in ipairs(resN) do
@@ -302,12 +314,68 @@ local function parseItems(txt,dumpit,loca)
 			local i,e = txt:find(re,ini)
 			if i then
 				item = txt:sub(i,e)
+				------------------
+				--[[
 				--if re~=functionD_re then --skip defined functions
 					item = item:gsub("extern __attribute__%(%(dllexport%)%) ","")
 					table.insert(itemarr,{re_name=re_name,item=item,locat=loca})
 				--end
 				items[re_name] = items[re_name] or {}
 				table.insert(items[re_name],item)
+				--]]
+				--------------------
+				if re_name=="comment_re" or re_name=="comment2_re" then
+					--[[
+					table.insert(outercomms,item)
+					-- comments to previous item
+					if itemarr[#itemarr] then 
+						local prev = itemarr[#itemarr].comments or ""
+						itemarr[#itemarr].comments = prev .. item 
+					end
+					--]]
+					--comments begining with \n will go to next item
+					if item:match("^%s*\n") then
+						table.insert(outercomms,item)
+					else
+						-- comments to previous item
+						if itemarr[#itemarr] then 
+							local prev = itemarr[#itemarr].comments or ""
+							itemarr[#itemarr].comments = prev .. item 
+						end
+					end
+				else
+					--item,inercoms = clean_comments(item)
+					local itemold = item
+					item = item:gsub("extern __attribute__%(%(dllexport%)%) ","")
+					local comments = table.concat(outercomms,"\n") --..inercoms
+					if comments=="" then comments=nil end
+					outercomms = {}
+					local loca
+					if linenumdict then
+						local itemfirstline = itemold:match("[^\n]+")
+						loca = linenumdict[itemfirstline]
+						if type(loca)=="table" then
+							--local prevloca = itemarr[#itemarr] and itemarr[#itemarr].locat
+							--print("loca is table for",itemfirstline)
+							--print("prevloca is",prevloca)
+							--print("parent loca is",itparent and itparent.locat)
+							-- for ii,ss in ipairs(loca) do
+								-- print(ii,ss)
+							-- end
+							loca = table.remove(loca,1)
+						end
+						if not loca then
+							print(itemold)
+							error"no entry in linenumdict"
+						end
+					else
+						error"no linenumdict"
+					end
+					table.insert(itemarr,{re_name=re_name,item=item,locat=loca})--,comments=comments})
+					items[re_name] = items[re_name] or {}
+					table.insert(items[re_name],item)
+				end
+				-----------------------
 				found = true
 				ini = e + 1
 				if dumpit then
@@ -451,8 +519,8 @@ local function clean_names_from_signature(self,signat)
 	result = result:sub(1,-2) .. ")"
 	return result
 end
-local function parseFunction(self,stname,lineorig,namespace,locat)
-
+local function parseFunction(self,stname,itt,namespace,locat)
+	local lineorig,comment = split_comment(itt.item)
 	line = clean_spaces(lineorig)
 	--move *
 	line = line:gsub("%s*%*","%*")
@@ -649,7 +717,9 @@ local function parseFunction(self,stname,lineorig,namespace,locat)
     defT.call_args = caar --call_args
     defT.isvararg = signat:match("%.%.%.%)$")
     defT.location = locat
-    --defT.comment = "" --comment
+    local comentario = (itt.comments or "")..(comment or "")
+	if comentario=="" then comentario=nil end
+    defT.comment = comentario
     defT.argsT = argsArr
     if self.get_manuals(defT) then
         defT.manual = true
@@ -743,40 +813,55 @@ end
 local function ADDdestructors(FP)
     local defsT = FP.defsT
     local newcdefs = {}
-    --TODO add constructor = true
+
+	local keep_dest_locat = {}
+	--first get destructor locations
+	for numcdef,t in ipairs(FP.funcdefs) do
+        if t.cimguiname then
+            local defT = defsT[t.cimguiname]
+			if not defT[1].ret and not defT[1].constructor then --if constructor not processed
+				if defT[1].funcname:match("~") then
+					keep_dest_locat[defT[1].stname] = defT[1].location
+				end
+			end
+		else
+			assert(false,"no cimguiname")
+        end
+    end
+	
     for numcdef,t in ipairs(FP.funcdefs) do
         newcdefs[#newcdefs+1] = t
         if t.cimguiname then
             local defT = defsT[t.cimguiname]
-            --local defT = cimf[t.signature]
-        --for fname,defT in pairs(FP.defsT) do
         if not defT[1].ret and not defT[1].constructor then --if constructor not processed
             if defT[1].funcname:match("~") then
                 defsT[t.cimguiname] = nil --clear destructor
                 newcdefs[#newcdefs] = nil
             else
-            for j,cons in ipairs(defT) do
-                cons.constructor = true
-            end
-            if(defT[1].stname~=defT[1].funcname) then
-				print(defT[1].stname, defT[1].funcname)
-				error"names should be equal"
-			end
-            local def = {}
-            def.stname = defT[1].stname
-			def.templated = defT[1].templated
-            def.ret = "void"
-            def.ov_cimguiname = def.stname.."_destroy"
-            def.cimguiname = def.ov_cimguiname
-            def.destructor = true
-            def.args = "("..def.stname.."* self)"
-            def.call_args = "(self)"
-            def.signature = "("..def.stname.."*)"
-            def.defaults = {}
-            def.argsT = {{type=def.stname.."*",name="self"}}
-            defsT[def.ov_cimguiname] = {def}
-            defsT[def.ov_cimguiname][def.signature] = def
-            newcdefs[#newcdefs+1]={stname=def.stname,funcname=def.ov_cimguiname,args=def.args,signature=def.signature,cimguiname=def.cimguiname,call_args=def.call_args,ret =def.ret}
+				for j,cons in ipairs(defT) do
+					cons.constructor = true
+				end
+				if(defT[1].stname~=defT[1].funcname) then
+					print(defT[1].stname, defT[1].funcname)
+					error"names should be equal"
+				end
+				local def = {}
+				def.stname = defT[1].stname
+				def.templated = defT[1].templated
+				def.location = keep_dest_locat[defT[1].stname]
+				def.ret = "void"
+				def.ov_cimguiname = def.stname.."_destroy"
+				def.cimguiname = def.ov_cimguiname
+				def.destructor = true
+				def.realdestructor = def.location and true
+				def.args = "("..def.stname.."* self)"
+				def.call_args = "(self)"
+				def.signature = "("..def.stname.."*)"
+				def.defaults = {}
+				def.argsT = {{type=def.stname.."*",name="self"}}
+				defsT[def.ov_cimguiname] = {def}
+				defsT[def.ov_cimguiname][def.signature] = def
+				newcdefs[#newcdefs+1]={stname=def.stname,funcname=def.ov_cimguiname,args=def.args,signature=def.signature,cimguiname=def.cimguiname,call_args=def.call_args,ret =def.ret}
             end
         end
         end
@@ -861,6 +946,18 @@ function M.Parser()
 	function par.get_manuals(def)
 		return par.manuals[def.ov_cimguiname] or par.manuals[def.cimguiname]
 	end
+	function par:take_lines(cmd_line,names,compiler)
+		local pipe,err = io.popen(cmd_line,"r")
+		if not pipe then
+			error("could not execute COMPILER "..err)
+		end
+		local defines = {}
+		for line,loca,loca2 in M.location(pipe,names,defines,compiler) do
+			self:insert(line, tostring(loca)..":"..tostring(loca2))
+		end
+		pipe:close()
+		return defines
+	end
 	function par:do_parse()
 		self:parseItems()
 		self:gen_structs_and_enums()
@@ -871,7 +968,8 @@ function M.Parser()
 	function par:initTypedefsDict()
 		--typedefs dictionary
 		for i,cdef in ipairs(cdefs) do
-			local line = cdef[1]
+			--local line = cdef[1]
+			local line = split_comment(cdef[1])
 			if line:match("typedef") then
 				line = clean_spaces(line)
 				local value,key = line:match("typedef%s+(.+)%s+([%w_]+);")
@@ -902,12 +1000,12 @@ function M.Parser()
 		end
 	end
 	--recursive item parsing
-	function par:parseItemsR2(txt,doprint,locat)
-		local itsarr,its = parseItems(txt,false,locat)
+	function par:parseItemsR2(txt, itparent)
+		local itsarr,its = parseItems(txt,self.linenumdict,itparent)
 		for i,it in ipairs(itsarr) do
 			if not isLeaf(it.re_name) then
 				local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
-				it.childs = par:parseItemsR2(inner,doprint,locat)
+				it.childs = par:parseItemsR2(inner, it)
 				for j,child in ipairs(it.childs) do
 					child.parent = it
 				end
@@ -928,29 +1026,26 @@ function M.Parser()
 	end
 	function par:parseItems()
 		self:initTypedefsDict()
-		if self.separate_locations then
-			local all_itemsarr = {}
-			local located_cdefs = self:separate_locations(cdefs)
-			for i,lcdef in ipairs(located_cdefs) do
-				local txt = table.concat(lcdef[2],"\n")
-				local itemsarrT,itemsT = par:parseItemsR2(txt,false,lcdef[1])
-				for i,it in ipairs(itemsarrT) do
-					table.insert(all_itemsarr,it)
+		
+		self.linenumdict = {}
+		local cdefs2 = {}
+		for i,cdef in ipairs(cdefs) do
+			if self.linenumdict[cdef[1]] then
+				--print("linenumdict alredy defined for", cdef[1],type(self.linenumdict[cdef[1]]))
+				if type(self.linenumdict[cdef[1]])=="string" then
+					self.linenumdict[cdef[1]] = {self.linenumdict[cdef[1]], cdef[2]}
+				else -- must be table already
+					table.insert(self.linenumdict[cdef[1]],cdef[2])
 				end
+			else
+				self.linenumdict[cdef[1]]=cdef[2]
 			end
-			
-			self.itemsarr = all_itemsarr
-			itemsarr = self.itemsarr
-		else
-			local cdefs2 = {}
-			for i,cdef in ipairs(cdefs) do
-				table.insert(cdefs2,cdef[1])
-			end
-			local txt = table.concat(cdefs2,"\n")
-			
-			self.itemsarr = par:parseItemsR2(txt)
-			itemsarr = self.itemsarr
+			table.insert(cdefs2,cdef[1])
 		end
+		local txt = table.concat(cdefs2,"\n")
+		
+		self.itemsarr = par:parseItemsR2(txt)
+		itemsarr = self.itemsarr
 	end
 	
 	function par:printItems()
@@ -961,6 +1056,7 @@ function M.Parser()
 	function par:clean_structR1(itst)
 		local stru = itst.item
 		local outtab = {}
+		local commtab = {}
 		--local iner = strip_end(stru:match("%b{}"):sub(2,-2))
 		local inistruct = clean_spaces(stru:match("(.-)%b{}"))
 		--local stname = stru:match("struct%s*(%S+)%s*%b{}")
@@ -987,8 +1083,11 @@ function M.Parser()
 		--table.insert(outtab,stru:match("(.-)%b{}"))
 		table.insert(outtab,"\nstruct "..stname.."\n")
 		table.insert(outtab,"{")
+		table.insert(commtab,nil)--"")
+		table.insert(commtab,nil)--"")
 		if derived then
 			table.insert(outtab,"\n    "..derived.." _"..derived..";")
+			table.insert(commtab,nil)--"")
 		end
 		--local itlist,itemsin = parseItems(iner, false,locat)
 		local itlist = itst.childs
@@ -1023,6 +1122,7 @@ function M.Parser()
 					it2 = it2:gsub("%s*=.+;",";")
 				end
 				table.insert(outtab,it2)
+				table.insert(commtab,it.comments )--or "")
 				end
 			elseif it.re_name == "struct_re"  or it.re_name == "enum_re" then
 				--nop
@@ -1033,7 +1133,7 @@ function M.Parser()
 		end
 		--final
 		table.insert(outtab,"\n};")
-		return table.concat(outtab,""),stname,outtab
+		return table.concat(outtab,""),stname,outtab,commtab
 	end
 	local function get_parents_name(it)
 		local parnam = ""
@@ -1063,6 +1163,7 @@ function M.Parser()
 			elseif it.re_name == "enum_re" then
 				local enumname, enumbody = it.item:match"^%s*enum%s+([^%s;{}]+)[%s\n\r]*(%b{})"
 				if enumname then
+					enumbody = clean_comments(enumbody)
 					table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
 					if it.parent then
 						if it.parent.re_name == "namespace_re" then
@@ -1071,7 +1172,8 @@ function M.Parser()
 						end
 					end
 				else --unamed enum just repeat declaration
-					table.insert(outtab,it.item)
+					local cl_item = clean_comments(it.item)
+					table.insert(outtab,cl_item)
 				end
 			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" then
 				local cleanst,structname = self:clean_structR1(it, it.locat)
@@ -1110,10 +1212,10 @@ function M.Parser()
 						end
 					end
 				else
-					self:parseFunction(stname,it.item,namespace,it.locat)
+					self:parseFunction(stname,it,namespace,it.locat)
 				end
 			else
-				print("not processed",it.re_name,it.item:sub(1,20))
+				print("not processed gen",it.re_name,it.item:sub(1,20))
 			end
 		end
 		
@@ -1133,13 +1235,13 @@ function M.Parser()
 		return outtabprest, outtabst
 	end
 	-----------
-	function par:parse_struct_line(line,outtab)
+	function par:parse_struct_line(line,outtab,comment)
 		local functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
 		local functype_reex = "^(%s*[%w%s%*]+%(%*)([%w_]+)(%)%([^%(%)]*%))"
 		line = clean_spaces(line)
 		if line:match(functype_re) then
 			local t1,name,t2 = line:match(functype_reex)
-			table.insert(outtab,{type=t1..t2,name=name})
+			table.insert(outtab,{type=t1..t2,name=name,comment=comment})
 		else
 			--split type name1,name2; in several lines
 			local typen,rest = line:match("%s*([^,]+)%s(%S+[,;])")
@@ -1168,7 +1270,7 @@ function M.Parser()
 					name = ""
 				end
 				local namebitfield,bitfield = name:match("([^:]+):(%d+)") --take care of bitfields
-				table.insert(outtab,{type=typen,template_type=template_type,name=namebitfield or name,bitfield=bitfield})
+				table.insert(outtab,{type=typen,template_type=template_type,name=namebitfield or name,bitfield=bitfield,comment=comment})
 			end
 		end
 	end
@@ -1183,11 +1285,28 @@ function M.Parser()
 		outtab.enums[enumname] = {}
 		table.insert(enumsordered,enumname)
 		local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
-		local enumarr = str_split(inner,",")
+		
+		--clean comments adding them to last item
+		local enumarrtmp = str_split(inner,"\n")
+		local enumarr = {}
+		for k,lin in ipairs(enumarrtmp) do
+			local lin1,comm = split_comment(lin)
+			if lin1~="" then
+				local lin1arr = str_split(lin1,",")
+				for k2,lin1s in ipairs(lin1arr) do
+					if lin1s~="" then table.insert(enumarr,lin1s) end
+				end
+				enumarr[#enumarr] = enumarr[#enumarr] .. (comm or "")
+			end 
+		end
+		
 		for j,line in ipairs(enumarr) do
+			local comment
+			line, comment = split_comment(line)
+			assert(line~="")
 			local name,value = line:match("%s*([%w_]+)%s*=%s*([^,]+)")
 			if value then
-				table.insert(outtab.enums[enumname],{name=name,value=value})
+				table.insert(outtab.enums[enumname],{name=name,value=value,comment=comment})
 				outtab.locations[enumname] = it.locat
 			else --increment by one
 				local name = line:match("%s*([^,]+)")
@@ -1202,7 +1321,7 @@ function M.Parser()
 					value = prevvalue .. "+1"
 				end
 				if name then --avoid last , if present
-				table.insert(outtab.enums[enumname],{name=name,value=value})
+				table.insert(outtab.enums[enumname],{name=name,value=value,comment=comment})
 				outtab.locations[enumname] = it.locat
 				end
 			end
@@ -1225,14 +1344,14 @@ function M.Parser()
 			elseif it.re_name == "enum_re" then
 				enums_for_table(it, outtab, enumsordered)
 			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" then
-				local cleanst,structname,strtab = self:clean_structR1(it, it.locat)
+				local cleanst,structname,strtab,comstab = self:clean_structR1(it, it.locat)
 				--if not void stname or templated
 				if not structname then print("NO NAME",cleanst,it.item) end
 				if structname and not self.typenames[structname] then
 					outtab.structs[structname] = {}
 					outtab.locations[structname] = it.locat
 					for j=3,#strtab-1 do
-						self:parse_struct_line(strtab[j],outtab.structs[structname])
+						self:parse_struct_line(strtab[j],outtab.structs[structname],comstab[j])
 					end
 				end
 			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
@@ -1536,9 +1655,8 @@ local function location(file,locpathT,defines,COMPILER)
                     return nil
                 end
             end
-            if #line==0 then --nothing on emptyline
-            elseif not line:match("%S") then --nothing if only spaces
-            elseif line:sub(1,1) == "#" then
+
+            if line:sub(1,1) == "#" then
 			--elseif line:match"^%s*#" then
                 -- Is this a location pragma?
                 local loc_num_t,location_match = line:match(location_re)
@@ -1555,6 +1673,7 @@ local function location(file,locpathT,defines,COMPILER)
                         end
                     end
 				elseif in_location then
+					loc_num_incr = loc_num_incr + 1
 					local name,val = line:match(define_re)
 					if name and val then
 						--while defines[val] do val = defines[val] end
@@ -1568,6 +1687,7 @@ local function location(file,locpathT,defines,COMPILER)
                 local loc_num_real = loc_num + loc_num_incr
                 loc_num_incr = loc_num_incr + 1
 				--if doprint then print(which_locationold,which_location) end
+				if line:match("%S") then --nothing on emptyline
                 if (which_locationold~=which_location) or (loc_num_realold and loc_num_realold < loc_num_real) then
                     --old line complete
 					--doprint = false
@@ -1579,6 +1699,7 @@ local function location(file,locpathT,defines,COMPILER)
                     which_locationold,loc_num_realold = which_location,loc_num_real
                 --return line,loc_num_real, which_location
                 end
+				end
             end
         until false --forever
     end
@@ -1723,7 +1844,7 @@ local function func_header_generate_funcs(FP)
         local manual = FP.get_manuals(def)
         if not manual and not def.templated then
 
-            local addcoment = def.comment or ""
+            local addcoment = "" --def.comment or ""
             local empty = def.args:match("^%(%)") --no args
             if def.constructor then
                 assert(def.stname ~= "","constructor without struct")

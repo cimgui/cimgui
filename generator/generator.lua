@@ -178,6 +178,52 @@ local function DefsByStruct(FP)
     FP.defsBystruct = structs
 end  
 
+-- function for repairing funcdefs default values
+local function repair_defaults(defsT,str_and_enu)
+	local function deleteOuterPars(def)
+		local w = def:match("^%b()$")
+		if w then
+			w = w:gsub("^%((.+)%)$","%1")
+			return w
+		else 
+			return def 
+		end
+	end
+	local function CleanImU32(def)
+		def = def:gsub("%(ImU32%)","")
+		--quitar () de numeros
+		def = def:gsub("%((%d+)%)","%1")
+		def = deleteOuterPars(def)
+		local bb=cpp2ffi.strsplit(def,"|")
+		for i=1,#bb do
+			local val = deleteOuterPars(bb[i])
+			if val:match"<<" then
+				local v1,v2 = val:match("(%d+)%s*<<%s*(%d+)")
+				val = v1*2^v2
+				bb[i] = val
+			end
+			assert(type(bb[i])=="number")
+		end
+		local res = 0 
+		for i=1,#bb do res = res + bb[i] end 
+		return res
+	end
+	for k,defT in pairs(defsT) do
+		for i,def in ipairs(defT) do
+			for k,v in pairs(def.defaults) do
+				--do only if not a c string
+				local is_cstring = v:sub(1,1)=='"' and v:sub(-1,-1) =='"'
+				if not is_cstring then
+					def.defaults[k] = def.defaults[k]:gsub("%(%(void%s*%*%)0%)","NULL")
+					if def.defaults[k]:match"%(ImU32%)" then
+						def.defaults[k] = tostring(CleanImU32(def.defaults[k]))
+					end
+				end
+			end
+		end
+	end
+end
+
 ----------custom ImVector templates
 local table_do_sorted = cpp2ffi.table_do_sorted
 local function generate_templates(code,codeimpool,templates)
@@ -289,19 +335,6 @@ local function parseImGuiHeader(header,names)
 	--prepare parser
 	local parser = cpp2ffi.Parser()
 	
-	parser.separate_locations = function(self,cdefs)
-		local imguicdefs = {}
-		local othercdefs = {}
-		for i,cdef in ipairs(cdefs) do
-			if cdef[2]=="imgui" then
-				table.insert(imguicdefs,cdef[1])
-			else
-				table.insert(othercdefs,cdef[1])
-			end
-		end
-		return {{"imgui",imguicdefs},{"internal",othercdefs}}
-	end
-	
 	parser.getCname = function(stname,funcname,namespace)
 		local pre = (stname == "") and (namespace and (namespace=="ImGui" and "ig" or namespace.."_") or "ig") or stname.."_"
 		return pre..funcname
@@ -310,30 +343,8 @@ local function parseImGuiHeader(header,names)
 	parser.manuals = cimgui_manuals
 	parser.UDTs = {"ImVec2","ImVec4","ImColor","ImRect"}
 	
-	local pipe,err = io.popen(CPRE..header,"r")
+	local defines = parser:take_lines(CPRE..header,names,COMPILER)
 	
-	if not pipe then
-		error("could not execute COMPILER "..err)
-	end
-	
-	local iterator = cpp2ffi.location
-	
-	--[[
-	local tableo = {}
-	local line
-	repeat 
-		line =pipe:read"*l"
-		table.insert(tableo,line)
-	until not line
-	cpp2ffi.save_data("cdefs1.lua",table.concat(tableo,"\n"))
-	--]]
-	for line,loca,loca2 in iterator(pipe,names,{},COMPILER) do
-		parser:insert(line, loca)
-		--table.insert(tableo,line)
-		--print(loca,loca2)
-	end
-	--cpp2ffi.save_data("cdefs1.lua",table.concat(tableo))
-	pipe:close()
 	return parser
 end
 --generation
@@ -364,19 +375,17 @@ parser1:do_parse()
 save_data("./output/overloads.txt",parser1.overloadstxt)
 cimgui_generation(parser1)
 
-----------save fundefs in definitions.lua for using in bindings
---DefsByStruct(pFP)
-set_defines(parser1.defsT) 
-save_data("./output/definitions.lua",serializeTableF(parser1.defsT))
-
 ----------save struct and enums lua table in structs_and_enums.lua for using in bindings
 
 local structs_and_enums_table = parser1:gen_structs_and_enums_table()
-
------------------------
 save_data("./output/structs_and_enums.lua",serializeTableF(structs_and_enums_table))
 save_data("./output/typedefs_dict.lua",serializeTableF(parser1.typedefs_dict))
 
+----------save fundefs in definitions.lua for using in bindings
+--DefsByStruct(pFP)
+set_defines(parser1.defsT) 
+repair_defaults(parser1.defsT, structs_and_enums_table)
+save_data("./output/definitions.lua",serializeTableF(parser1.defsT))
 
 --check every function has ov_cimguiname
 -- for k,v in pairs(parser1.defsT) do
@@ -409,34 +418,10 @@ if #implementations > 0 then
 				extra_includes = extra_includes .. include_cmd .. inc .. " "
 			end
 		end
+		
+		local defines = parser2:take_lines(CPRE..extra_defines..extra_includes..source, {locati}, COMPILER)
 
-        local pipe,err = io.popen(CPRE..extra_defines..extra_includes..source,"r")
-
-        if not pipe then
-            error("could not get file: "..err)
-        end
-        
-        local iterator = cpp2ffi.location
-        
-        for line,locat in iterator(pipe,{locati},{},COMPILER) do
-            --local line, comment = split_comment(line)
-			parser2:insert(line,locat)
-        end
-        pipe:close()
     end
-	
-	parser2.separate_locations = function(self, cdefs)
-		local sepcdefs = {}
-		for i,impl in ipairs(implementations) do
-			sepcdefs[i] = {[[imgui_impl_]].. impl,{}}
-			for j,cdef in ipairs(cdefs) do
-				if cdef[2]==sepcdefs[i][1] then
-					table.insert(sepcdefs[i][2],cdef[1])
-				end
-			end
-		end
-		return sepcdefs
-	end
 	
     parser2:do_parse()
 
