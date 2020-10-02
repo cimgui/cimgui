@@ -1151,13 +1151,17 @@ function M.Parser()
 		
 		local processer = function(it)
 			if it.re_name == "typedef_re" or it.re_name == "functypedef_re" or it.re_name == "vardef_re" then
-				if not it.parent then
+				if not it.parent or it.parent.re_name=="namespace_re" then
 					table.insert(outtabpre,it.item)
 					-- add typedef after struct name
 					if it.re_name == "vardef_re" and it.item:match"^%s*struct" then
 						local stname = it.item:match("struct%s*(%S+)%s*;")
 						table.insert(typedefs_table,"typedef struct "..stname.." "..stname..";\n")
 						self.typedefs_dict[stname]="struct "..stname
+						if it.parent then --must be struct name; inside namespace
+							local parname = get_parents_name(it)
+							self.embeded_structs[stname] = parname..stname
+						end
 					end
 				end
 			elseif it.re_name == "enum_re" then
