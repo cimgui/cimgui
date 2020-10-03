@@ -1057,6 +1057,7 @@ function M.Parser()
 		local stru = itst.item
 		local outtab = {}
 		local commtab = {}
+		local predeclare = ""
 		--local iner = strip_end(stru:match("%b{}"):sub(2,-2))
 		local inistruct = clean_spaces(stru:match("(.-)%b{}"))
 		--local stname = stru:match("struct%s*(%S+)%s*%b{}")
@@ -1124,7 +1125,16 @@ function M.Parser()
 				table.insert(outtab,it2)
 				table.insert(commtab,it.comments )--or "")
 				end
-			elseif it.re_name == "struct_re"  or it.re_name == "enum_re" then
+			elseif it.re_name == "struct_re" then
+				--check if has declaration
+				local decl = it.item:match"%b{}%s*([^%s}{]+)%s*;"
+				if decl then
+					table.insert(outtab,"\n    "..it.name.." "..decl..";")
+					table.insert(commtab,it.comments )--or "")
+				end
+				local cleanst,structname,strtab,comstab,predec = self:clean_structR1(it)
+				predeclare = predeclare .. predec .. cleanst
+			elseif it.re_name == "enum_re" then
 				--nop
 			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
 				print(it.re_name,"not processed clean_struct",it.item:sub(1,12))
@@ -1133,7 +1143,7 @@ function M.Parser()
 		end
 		--final
 		table.insert(outtab,"\n};")
-		return table.concat(outtab,""),stname,outtab,commtab
+		return table.concat(outtab,""),stname,outtab,commtab, predeclare
 	end
 	local function get_parents_name(it)
 		local parnam = ""
@@ -1180,11 +1190,14 @@ function M.Parser()
 					table.insert(outtab,cl_item)
 				end
 			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" then
-				local cleanst,structname = self:clean_structR1(it, it.locat)
+				local cleanst,structname,strtab,comstab,predec = self:clean_structR1(it)
 				if not structname then print("NO NAME",cleanst,it.item) end
 				--if not void stname or templated
 				if structname and not self.typenames[structname] then
-					table.insert(outtab,cleanst)
+					--dont insert child structs as they are inserted before parent struct
+					if not (it.parent and it.parent.re_name == "struct_re") then
+						table.insert(outtab,predec .. cleanst)
+					end
 					table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
 					self.typedefs_dict[structname]="struct "..structname
 				end
@@ -1348,7 +1361,7 @@ function M.Parser()
 			elseif it.re_name == "enum_re" then
 				enums_for_table(it, outtab, enumsordered)
 			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" then
-				local cleanst,structname,strtab,comstab = self:clean_structR1(it, it.locat)
+				local cleanst,structname,strtab,comstab = self:clean_structR1(it)
 				--if not void stname or templated
 				if not structname then print("NO NAME",cleanst,it.item) end
 				if structname and not self.typenames[structname] then

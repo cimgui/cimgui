@@ -888,20 +888,25 @@ struct ImGuiOnceUponAFrame
 {
      int RefFrame;
 };
+struct ImGuiTextRange
+{
+        const char* b;
+        const char* e;
+};
 struct ImGuiTextFilter
 {
     char InputBuf[256];
     ImVector_ImGuiTextRange Filters;
     int CountGrep;
 };
-struct ImGuiTextRange
-{
-        const char* b;
-        const char* e;
-};
 struct ImGuiTextBuffer
 {
     ImVector_char Buf;
+};
+struct ImGuiStoragePair
+{
+        ImGuiID key;
+        union { int val_i; float val_f; void* val_p; };
 };
 struct ImGuiStorage
 {
@@ -909,11 +914,6 @@ struct ImGuiStorage
 };
 typedef struct ImVector_ImGuiTabBar {int Size;int Capacity;ImGuiTabBar* Data;} ImVector_ImGuiTabBar;
 typedef struct ImPool_ImGuiTabBar {ImVector_ImGuiTabBar Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_ImGuiTabBar;
-struct ImGuiStoragePair
-{
-        ImGuiID key;
-        union { int val_i; float val_f; void* val_p; };
-};
 struct ImGuiListClipper
 {
     int DisplayStart, DisplayEnd;
