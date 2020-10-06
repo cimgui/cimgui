@@ -1331,9 +1331,9 @@ function M.Parser()
 				local prevvalue = enum_table[#enum_table] and enum_table[#enum_table].value
 				local value --= enum_table[#enum_table] and (enum_table[#enum_table].value + 1) or 0
 				if not prevvalue then
-					value = 0
+					value = "0"
 				elseif tonumber(prevvalue) then
-					value = prevvalue +1
+					value = tostring(prevvalue +1)
 				else --should be string
 					value = prevvalue .. "+1"
 				end
