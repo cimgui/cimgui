@@ -104,7 +104,19 @@ local function encode_table(val, stack,level,isvalue)
       if type(k) ~= "string" then
         error("invalid table: mixed or invalid key types")
       end
-      table.insert(res, encode(k, stack,level+1) .. ": " .. encode(v, stack,level+1,true))
+	  local encoded_v
+	  -- Check for empty tables
+	  if type(v) == "table" and next(v) == nil then
+		-- Encode empty tables depending on the key
+        if k == "defaults" then
+		  encoded_v = "{}"
+		else
+		  encoded_v = "[]"
+		end
+	  else
+        encoded_v = encode(v, stack,level+1,true)
+      end
+      table.insert(res, encode(k, stack,level+1) .. ": " .. encoded_v)
     end
     stack[val] = nil
     local inner = table.concat(res, ",\n")
