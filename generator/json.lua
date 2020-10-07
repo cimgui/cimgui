@@ -21,7 +21,10 @@
 -- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 -- SOFTWARE.
 --
-
+--changes---------------------------------------------------------------------
+--prettify: adding carriage return, indentation, dictionaries sorted by key
+--dict_on_empty: table to json.encode to make empty table a dictionary instead of array
+------------------------------------------------------------------------------
 local json = { _version = "0.1.1" }
 
 -------------------------------------------------------------------------------
@@ -30,6 +33,7 @@ local json = { _version = "0.1.1" }
 local TAB = "  "
 local rep = string.rep
 local encode
+local dict_on_empty = {}
 
 local escape_char_map = {
   [ "\\" ] = "\\\\",
@@ -90,7 +94,6 @@ local function encode_table(val, stack,level,isvalue)
     return rep(isvalue and "" or TAB,level).."[" .. inner .. "]"
 
   else
-  ---[[
     local ordered_keys = {}
     for k,v in pairs(val) do
         table.insert(ordered_keys,k)
@@ -99,12 +102,15 @@ local function encode_table(val, stack,level,isvalue)
     -- Treat as an object
     for _,k in ipairs(ordered_keys) do
       local v = val[k]
-    --]]
-    --for k, v in pairs(val) do
+
       if type(k) ~= "string" then
         error("invalid table: mixed or invalid key types")
       end
-      table.insert(res, encode(k, stack,level+1) .. ": " .. encode(v, stack,level+1,true))
+      if type(v) == "table" and next(v) == nil and dict_on_empty[k] then
+          table.insert(res, encode(k, stack,level+1) .. ": {}")
+      else
+          table.insert(res, encode(k, stack,level+1) .. ": " .. encode(v, stack,level+1,true))
+      end
     end
     stack[val] = nil
     local inner = table.concat(res, ",\n")
@@ -147,7 +153,8 @@ encode = function(val, stack,level,isvalue)
 end
 
 
-function json.encode(val)
+function json.encode(val,opts)
+  dict_on_empty = opts and opts.dict_on_empty or {}
   return ( encode(val) )
 end
 
@@ -411,6 +418,5 @@ function json.decode(str)
   end
   return res
 end
-
 
 return json
