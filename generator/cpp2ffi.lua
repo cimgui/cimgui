@@ -724,6 +724,9 @@ local function parseFunction(self,stname,itt,namespace,locat)
     if self.get_manuals(defT) then
         defT.manual = true
     end
+    if self.get_skipped(defT) then
+        defT.skipped = true
+    end
     if ret then
         defT.ret = clean_spaces(ret:gsub("&","*"))
         defT.retref = ret:match("&")
@@ -928,6 +931,7 @@ function M.Parser()
 	par.typedefs_dict = {}
 	par.cname_overloads = {}
 	par.manuals = {}
+	par.skipped = {}
 	par.UDTs = {}
 
 	function par:insert(line,loca)
@@ -945,6 +949,9 @@ function M.Parser()
 	end
 	function par.get_manuals(def)
 		return par.manuals[def.ov_cimguiname] or par.manuals[def.cimguiname]
+	end
+	function par.get_skipped(def)
+		return par.skipped[def.ov_cimguiname] or par.skipped[def.cimguiname]
 	end
 	function par:take_lines(cmd_line,names,compiler)
 		local pipe,err = io.popen(cmd_line,"r")
@@ -1225,7 +1232,7 @@ function M.Parser()
 					if self.ftemplate_list then
 						for iT,vT in ipairs(self.ftemplate_list[ttype]) do
 							local funT = fun:gsub(ttype,vT)
-							self:parseFunction(stname,funT,namespace,it.locat)
+							self:parseFunction(stname,{item=funT},namespace,it.locat)
 						end
 					end
 				else
@@ -1792,7 +1799,7 @@ local function func_implementation(FP)
         local def = cimf[t.signature]
         assert(def)
         local manual = FP.get_manuals(def)
-        if not manual and not def.templated then 
+        if not manual and not def.templated and not FP.get_skipped(def) then 
             if def.constructor then
                 assert(def.stname ~= "","constructor without struct")
                 local empty = def.args:match("^%(%)") --no args
@@ -1859,7 +1866,7 @@ local function func_header_generate_funcs(FP)
         local def = cimf[t.signature]
         assert(def,t.signature..t.cimguiname)
         local manual = FP.get_manuals(def)
-        if not manual and not def.templated then
+        if not manual and not def.templated and not FP.get_skipped(def) then
 
             local addcoment = "" --def.comment or ""
             local empty = def.args:match("^%(%)") --no args
