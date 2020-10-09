@@ -56,6 +56,7 @@ Notes:
   * call_args : a string with the argument names separated by commas for calling imgui function
   * defaults : a collection in which key is argument name and value is the default value.
   * manual : will be true if this function is hand-written (not generated)
+  * skipped : will be true if this function is not generated (and not hand-written)
   * isvararg : is set if some argument is a vararg
   * constructor : is set if the function is a constructor for a class.
   * destructor : is set if the function is a destructor for a class but not just a default destructor.
