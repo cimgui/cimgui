@@ -1225,7 +1225,7 @@ function M.Parser()
 					if self.ftemplate_list then
 						for iT,vT in ipairs(self.ftemplate_list[ttype]) do
 							local funT = fun:gsub(ttype,vT)
-							self:parseFunction(stname,funT,namespace,it.locat)
+							self:parseFunction(stname,{item=funT},namespace,it.locat)
 						end
 					end
 				else
