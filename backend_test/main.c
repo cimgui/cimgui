@@ -8,7 +8,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#define USE_DOCKING
+//#define USE_DOCKING
 
 SDL_Window *window = NULL;
 
