@@ -75,6 +75,6 @@ target_link_libraries(cimgui_sdl ${IMGUI_LIBRARIES} ${IMGUI_SDL_LIBRARY})
 
 #using library
 include_directories(../generator/output/)
-add_executable(test_sdl main.c ../imgui/examples/libs/gl3w/GL/gl3w.c)
+add_executable(test_sdl main.c)
 target_link_libraries(test_sdl ${IMGUI_SDL_LIBRARY} cimgui_sdl)
 
