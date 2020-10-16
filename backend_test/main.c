@@ -5,7 +5,10 @@
 #include <stdio.h>
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 
+#define USE_DOCKING
 
 SDL_Window *window = NULL;
 
@@ -60,15 +63,7 @@ int main(int argc, char* argv[])
     SDL_Log("Failed to initialize OpenGL loader for cimgui_sdl!");
     return 1;
   }
-  
-  // Initialize OpenGL loader for main
-  bool err2 = gl3wInit() != 0;
-  if (err2)
-  {
-    SDL_Log("Failed to initialize OpenGL loader for main!");
-    return 1;
-  }
-  
+
   // check opengl version sdl uses
   //SDL_Log("opengl version: %s", (char*)glGetString(GL_VERSION));
 
@@ -79,7 +74,7 @@ int main(int argc, char* argv[])
   ImGuiIO* ioptr = igGetIO();
   ioptr->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
   //ioptr->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-#ifdef ImGuiConfigFlags_DockingEnable
+#ifdef USE_DOCKING
   ioptr->ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
   ioptr->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 #endif
@@ -168,7 +163,7 @@ int main(int argc, char* argv[])
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData());
-#ifdef ImGuiConfigFlags_DockingEnable
+#ifdef USE_DOCKING
 	if (ioptr->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
             SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
