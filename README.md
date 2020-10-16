@@ -26,6 +26,8 @@ Notes:
   * using makefile on linux/macOS/mingw (Or use CMake to generate project)
   * cmake options are IMGUI_STATIC (compiling as static library), IMGUI_FREETYPE (for using Freetype2) and FREETYPE_PATH (Freetype2 cmake install location)
   * or as in https://github.com/sonoro1234/LuaJIT-ImGui/tree/master/build
+  
+  For compiling with backends there is now an example with SDL2 and opengl3 in folder backend_test. It will generate a cimgui_sdl module and a test_sdl executable. You only need to provide SDL_PATH telling cmake where to look for SDL2 cmake installation.
 
 # using generator
 
@@ -85,6 +87,10 @@ Notes:
 * methods have the same parameter list and return values (where possible)
 * functions that belong to a struct have an extra first argument with a pointer to the struct.
 * where a function returns UDT (user defined type) by value some compilers complain so the function is generated accepting a pointer to the UDT type as the first argument (or second if belongs to a struct).
+
+# usage with backends
+
+* look at backend_test folder for a cmake module building with SDL and opengl3.
 
 # example bindings based on cimgui
 

@@ -79,9 +79,10 @@ int main(int argc, char* argv[])
   ImGuiIO* ioptr = igGetIO();
   ioptr->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
   //ioptr->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+#ifdef ImGuiConfigFlags_DockingEnable
   ioptr->ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
   ioptr->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-  
+#endif
   
   ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
   ImGui_ImplOpenGL3_Init(glsl_version);
@@ -167,7 +168,7 @@ int main(int argc, char* argv[])
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData());
-	
+#ifdef ImGuiConfigFlags_DockingEnable
 	if (ioptr->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
             SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
@@ -176,7 +177,7 @@ int main(int argc, char* argv[])
             igRenderPlatformWindowsDefault(NULL,NULL);
             SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
         }
-	
+#endif
     SDL_GL_SwapWindow(window);
   }
 
