@@ -1,4 +1,7 @@
 #define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#ifdef _WIN32
+#include <windows.h>
+#endif
 #include "cimgui.h"
 #include "cimgui_extras.h"
 #include "cimgui_impl.h"
