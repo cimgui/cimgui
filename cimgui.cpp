@@ -159,6 +159,14 @@ CIMGUI_API ImDrawList* igGetWindowDrawList()
 {
     return ImGui::GetWindowDrawList();
 }
+CIMGUI_API float igGetWindowDpiScale()
+{
+    return ImGui::GetWindowDpiScale();
+}
+CIMGUI_API ImGuiViewport* igGetWindowViewport()
+{
+    return ImGui::GetWindowViewport();
+}
 CIMGUI_API void igGetWindowPos(ImVec2 *pOut)
 {
     *pOut = ImGui::GetWindowPos();
@@ -202,6 +210,10 @@ CIMGUI_API void igSetNextWindowFocus()
 CIMGUI_API void igSetNextWindowBgAlpha(float alpha)
 {
     return ImGui::SetNextWindowBgAlpha(alpha);
+}
+CIMGUI_API void igSetNextWindowViewport(ImGuiID viewport_id)
+{
+    return ImGui::SetNextWindowViewport(viewport_id);
 }
 CIMGUI_API void igSetWindowPosVec2(const ImVec2 pos,ImGuiCond cond)
 {
@@ -1136,6 +1148,30 @@ CIMGUI_API void igSetTabItemClosed(const char* tab_or_docked_window_label)
 {
     return ImGui::SetTabItemClosed(tab_or_docked_window_label);
 }
+CIMGUI_API void igDockSpace(ImGuiID id,const ImVec2 size,ImGuiDockNodeFlags flags,const ImGuiWindowClass* window_class)
+{
+    return ImGui::DockSpace(id,size,flags,window_class);
+}
+CIMGUI_API ImGuiID igDockSpaceOverViewport(ImGuiViewport* viewport,ImGuiDockNodeFlags flags,const ImGuiWindowClass* window_class)
+{
+    return ImGui::DockSpaceOverViewport(viewport,flags,window_class);
+}
+CIMGUI_API void igSetNextWindowDockID(ImGuiID dock_id,ImGuiCond cond)
+{
+    return ImGui::SetNextWindowDockID(dock_id,cond);
+}
+CIMGUI_API void igSetNextWindowClass(const ImGuiWindowClass* window_class)
+{
+    return ImGui::SetNextWindowClass(window_class);
+}
+CIMGUI_API ImGuiID igGetWindowDockID()
+{
+    return ImGui::GetWindowDockID();
+}
+CIMGUI_API bool igIsWindowDocked()
+{
+    return ImGui::IsWindowDocked();
+}
 CIMGUI_API void igLogToTTY(int auto_open_depth)
 {
     return ImGui::LogToTTY(auto_open_depth);
@@ -1284,13 +1320,21 @@ CIMGUI_API int igGetFrameCount()
 {
     return ImGui::GetFrameCount();
 }
-CIMGUI_API ImDrawList* igGetBackgroundDrawList()
+CIMGUI_API ImDrawList* igGetBackgroundDrawListNil()
 {
     return ImGui::GetBackgroundDrawList();
 }
 CIMGUI_API ImDrawList* igGetForegroundDrawListNil()
 {
     return ImGui::GetForegroundDrawList();
+}
+CIMGUI_API ImDrawList* igGetBackgroundDrawListViewportPtr(ImGuiViewport* viewport)
+{
+    return ImGui::GetBackgroundDrawList(viewport);
+}
+CIMGUI_API ImDrawList* igGetForegroundDrawListViewportPtr(ImGuiViewport* viewport)
+{
+    return ImGui::GetForegroundDrawList(viewport);
 }
 CIMGUI_API ImDrawListSharedData* igGetDrawListSharedData()
 {
@@ -1464,6 +1508,34 @@ CIMGUI_API void igMemFree(void* ptr)
 {
     return ImGui::MemFree(ptr);
 }
+CIMGUI_API ImGuiPlatformIO* igGetPlatformIO()
+{
+    return &ImGui::GetPlatformIO();
+}
+CIMGUI_API ImGuiViewport* igGetMainViewport()
+{
+    return ImGui::GetMainViewport();
+}
+CIMGUI_API void igUpdatePlatformWindows()
+{
+    return ImGui::UpdatePlatformWindows();
+}
+CIMGUI_API void igRenderPlatformWindowsDefault(void* platform_render_arg,void* renderer_render_arg)
+{
+    return ImGui::RenderPlatformWindowsDefault(platform_render_arg,renderer_render_arg);
+}
+CIMGUI_API void igDestroyPlatformWindows()
+{
+    return ImGui::DestroyPlatformWindows();
+}
+CIMGUI_API ImGuiViewport* igFindViewportByID(ImGuiID id)
+{
+    return ImGui::FindViewportByID(id);
+}
+CIMGUI_API ImGuiViewport* igFindViewportByPlatformHandle(void* platform_handle)
+{
+    return ImGui::FindViewportByPlatformHandle(platform_handle);
+}
 CIMGUI_API ImGuiStyle* ImGuiStyle_ImGuiStyle(void)
 {
     return IM_NEW(ImGuiStyle)();
@@ -1527,6 +1599,14 @@ CIMGUI_API void ImGuiInputTextCallbackData_ClearSelection(ImGuiInputTextCallback
 CIMGUI_API bool ImGuiInputTextCallbackData_HasSelection(ImGuiInputTextCallbackData* self)
 {
     return self->HasSelection();
+}
+CIMGUI_API ImGuiWindowClass* ImGuiWindowClass_ImGuiWindowClass(void)
+{
+    return IM_NEW(ImGuiWindowClass)();
+}
+CIMGUI_API void ImGuiWindowClass_destroy(ImGuiWindowClass* self)
+{
+    IM_DELETE(self);
 }
 CIMGUI_API ImGuiPayload* ImGuiPayload_ImGuiPayload(void)
 {
@@ -2320,6 +2400,42 @@ CIMGUI_API bool ImFont_IsGlyphRangeUnused(ImFont* self,unsigned int c_begin,unsi
 {
     return self->IsGlyphRangeUnused(c_begin,c_last);
 }
+CIMGUI_API ImGuiPlatformIO* ImGuiPlatformIO_ImGuiPlatformIO(void)
+{
+    return IM_NEW(ImGuiPlatformIO)();
+}
+CIMGUI_API void ImGuiPlatformIO_destroy(ImGuiPlatformIO* self)
+{
+    IM_DELETE(self);
+}
+CIMGUI_API ImGuiPlatformMonitor* ImGuiPlatformMonitor_ImGuiPlatformMonitor(void)
+{
+    return IM_NEW(ImGuiPlatformMonitor)();
+}
+CIMGUI_API void ImGuiPlatformMonitor_destroy(ImGuiPlatformMonitor* self)
+{
+    IM_DELETE(self);
+}
+CIMGUI_API ImGuiViewport* ImGuiViewport_ImGuiViewport(void)
+{
+    return IM_NEW(ImGuiViewport)();
+}
+CIMGUI_API void ImGuiViewport_destroy(ImGuiViewport* self)
+{
+    IM_DELETE(self);
+}
+CIMGUI_API void ImGuiViewport_GetCenter(ImVec2 *pOut,ImGuiViewport* self)
+{
+    *pOut = self->GetCenter();
+}
+CIMGUI_API void ImGuiViewport_GetWorkPos(ImVec2 *pOut,ImGuiViewport* self)
+{
+    *pOut = self->GetWorkPos();
+}
+CIMGUI_API void ImGuiViewport_GetWorkSize(ImVec2 *pOut,ImGuiViewport* self)
+{
+    *pOut = self->GetWorkSize();
+}
 CIMGUI_API ImU32 igImHashData(const void* data,size_t data_size,ImU32 seed)
 {
     return ImHashData(data,data_size,seed);
@@ -2968,6 +3084,86 @@ CIMGUI_API void ImGuiColumns_Clear(ImGuiColumns* self)
 {
     return self->Clear();
 }
+CIMGUI_API ImGuiDockNode* ImGuiDockNode_ImGuiDockNode(ImGuiID id)
+{
+    return IM_NEW(ImGuiDockNode)(id);
+}
+CIMGUI_API void ImGuiDockNode_destroy(ImGuiDockNode* self)
+{
+    IM_DELETE(self);
+}
+CIMGUI_API bool ImGuiDockNode_IsRootNode(ImGuiDockNode* self)
+{
+    return self->IsRootNode();
+}
+CIMGUI_API bool ImGuiDockNode_IsDockSpace(ImGuiDockNode* self)
+{
+    return self->IsDockSpace();
+}
+CIMGUI_API bool ImGuiDockNode_IsFloatingNode(ImGuiDockNode* self)
+{
+    return self->IsFloatingNode();
+}
+CIMGUI_API bool ImGuiDockNode_IsCentralNode(ImGuiDockNode* self)
+{
+    return self->IsCentralNode();
+}
+CIMGUI_API bool ImGuiDockNode_IsHiddenTabBar(ImGuiDockNode* self)
+{
+    return self->IsHiddenTabBar();
+}
+CIMGUI_API bool ImGuiDockNode_IsNoTabBar(ImGuiDockNode* self)
+{
+    return self->IsNoTabBar();
+}
+CIMGUI_API bool ImGuiDockNode_IsSplitNode(ImGuiDockNode* self)
+{
+    return self->IsSplitNode();
+}
+CIMGUI_API bool ImGuiDockNode_IsLeafNode(ImGuiDockNode* self)
+{
+    return self->IsLeafNode();
+}
+CIMGUI_API bool ImGuiDockNode_IsEmpty(ImGuiDockNode* self)
+{
+    return self->IsEmpty();
+}
+CIMGUI_API ImGuiDockNodeFlags ImGuiDockNode_GetMergedFlags(ImGuiDockNode* self)
+{
+    return self->GetMergedFlags();
+}
+CIMGUI_API void ImGuiDockNode_Rect(ImRect *pOut,ImGuiDockNode* self)
+{
+    *pOut = self->Rect();
+}
+CIMGUI_API ImGuiDockContext* ImGuiDockContext_ImGuiDockContext(void)
+{
+    return IM_NEW(ImGuiDockContext)();
+}
+CIMGUI_API void ImGuiDockContext_destroy(ImGuiDockContext* self)
+{
+    IM_DELETE(self);
+}
+CIMGUI_API ImGuiViewportP* ImGuiViewportP_ImGuiViewportP(void)
+{
+    return IM_NEW(ImGuiViewportP)();
+}
+CIMGUI_API void ImGuiViewportP_destroy(ImGuiViewportP* self)
+{
+    IM_DELETE(self);
+}
+CIMGUI_API void ImGuiViewportP_GetMainRect(ImRect *pOut,ImGuiViewportP* self)
+{
+    *pOut = self->GetMainRect();
+}
+CIMGUI_API void ImGuiViewportP_GetWorkRect(ImRect *pOut,ImGuiViewportP* self)
+{
+    *pOut = self->GetWorkRect();
+}
+CIMGUI_API void ImGuiViewportP_ClearRequestFlags(ImGuiViewportP* self)
+{
+    return self->ClearRequestFlags();
+}
 CIMGUI_API ImGuiWindowSettings* ImGuiWindowSettings_ImGuiWindowSettings(void)
 {
     return IM_NEW(ImGuiWindowSettings)();
@@ -3204,6 +3400,10 @@ CIMGUI_API void igStartMouseMovingWindow(ImGuiWindow* window)
 {
     return ImGui::StartMouseMovingWindow(window);
 }
+CIMGUI_API void igStartMouseMovingWindowOrNode(ImGuiWindow* window,ImGuiDockNode* node,bool undock_floating_node)
+{
+    return ImGui::StartMouseMovingWindowOrNode(window,node,undock_floating_node);
+}
 CIMGUI_API void igUpdateMouseMovingWindowNewFrame()
 {
     return ImGui::UpdateMouseMovingWindowNewFrame();
@@ -3211,6 +3411,22 @@ CIMGUI_API void igUpdateMouseMovingWindowNewFrame()
 CIMGUI_API void igUpdateMouseMovingWindowEndFrame()
 {
     return ImGui::UpdateMouseMovingWindowEndFrame();
+}
+CIMGUI_API void igTranslateWindowsInViewport(ImGuiViewportP* viewport,const ImVec2 old_pos,const ImVec2 new_pos)
+{
+    return ImGui::TranslateWindowsInViewport(viewport,old_pos,new_pos);
+}
+CIMGUI_API void igScaleWindowsInViewport(ImGuiViewportP* viewport,float scale)
+{
+    return ImGui::ScaleWindowsInViewport(viewport,scale);
+}
+CIMGUI_API void igDestroyPlatformWindow(ImGuiViewportP* viewport)
+{
+    return ImGui::DestroyPlatformWindow(viewport);
+}
+CIMGUI_API void igShowViewportThumbnails()
+{
+    return ImGui::ShowViewportThumbnails();
 }
 CIMGUI_API void igMarkIniSettingsDirtyNil()
 {
@@ -3516,6 +3732,138 @@ CIMGUI_API ImGuiKeyModFlags igGetMergedKeyModFlags()
 {
     return ImGui::GetMergedKeyModFlags();
 }
+CIMGUI_API void igDockContextInitialize(ImGuiContext* ctx)
+{
+    return ImGui::DockContextInitialize(ctx);
+}
+CIMGUI_API void igDockContextShutdown(ImGuiContext* ctx)
+{
+    return ImGui::DockContextShutdown(ctx);
+}
+CIMGUI_API void igDockContextClearNodes(ImGuiContext* ctx,ImGuiID root_id,bool clear_settings_refs)
+{
+    return ImGui::DockContextClearNodes(ctx,root_id,clear_settings_refs);
+}
+CIMGUI_API void igDockContextRebuildNodes(ImGuiContext* ctx)
+{
+    return ImGui::DockContextRebuildNodes(ctx);
+}
+CIMGUI_API void igDockContextUpdateUndocking(ImGuiContext* ctx)
+{
+    return ImGui::DockContextUpdateUndocking(ctx);
+}
+CIMGUI_API void igDockContextUpdateDocking(ImGuiContext* ctx)
+{
+    return ImGui::DockContextUpdateDocking(ctx);
+}
+CIMGUI_API ImGuiID igDockContextGenNodeID(ImGuiContext* ctx)
+{
+    return ImGui::DockContextGenNodeID(ctx);
+}
+CIMGUI_API void igDockContextQueueDock(ImGuiContext* ctx,ImGuiWindow* target,ImGuiDockNode* target_node,ImGuiWindow* payload,ImGuiDir split_dir,float split_ratio,bool split_outer)
+{
+    return ImGui::DockContextQueueDock(ctx,target,target_node,payload,split_dir,split_ratio,split_outer);
+}
+CIMGUI_API void igDockContextQueueUndockWindow(ImGuiContext* ctx,ImGuiWindow* window)
+{
+    return ImGui::DockContextQueueUndockWindow(ctx,window);
+}
+CIMGUI_API void igDockContextQueueUndockNode(ImGuiContext* ctx,ImGuiDockNode* node)
+{
+    return ImGui::DockContextQueueUndockNode(ctx,node);
+}
+CIMGUI_API bool igDockContextCalcDropPosForDocking(ImGuiWindow* target,ImGuiDockNode* target_node,ImGuiWindow* payload,ImGuiDir split_dir,bool split_outer,ImVec2* out_pos)
+{
+    return ImGui::DockContextCalcDropPosForDocking(target,target_node,payload,split_dir,split_outer,out_pos);
+}
+CIMGUI_API ImGuiDockNode* igDockNodeGetRootNode(ImGuiDockNode* node)
+{
+    return ImGui::DockNodeGetRootNode(node);
+}
+CIMGUI_API int igDockNodeGetDepth(const ImGuiDockNode* node)
+{
+    return ImGui::DockNodeGetDepth(node);
+}
+CIMGUI_API ImGuiDockNode* igGetWindowDockNode()
+{
+    return ImGui::GetWindowDockNode();
+}
+CIMGUI_API bool igGetWindowAlwaysWantOwnTabBar(ImGuiWindow* window)
+{
+    return ImGui::GetWindowAlwaysWantOwnTabBar(window);
+}
+CIMGUI_API void igBeginDocked(ImGuiWindow* window,bool* p_open)
+{
+    return ImGui::BeginDocked(window,p_open);
+}
+CIMGUI_API void igBeginDockableDragDropSource(ImGuiWindow* window)
+{
+    return ImGui::BeginDockableDragDropSource(window);
+}
+CIMGUI_API void igBeginDockableDragDropTarget(ImGuiWindow* window)
+{
+    return ImGui::BeginDockableDragDropTarget(window);
+}
+CIMGUI_API void igSetWindowDock(ImGuiWindow* window,ImGuiID dock_id,ImGuiCond cond)
+{
+    return ImGui::SetWindowDock(window,dock_id,cond);
+}
+CIMGUI_API void igDockBuilderDockWindow(const char* window_name,ImGuiID node_id)
+{
+    return ImGui::DockBuilderDockWindow(window_name,node_id);
+}
+CIMGUI_API ImGuiDockNode* igDockBuilderGetNode(ImGuiID node_id)
+{
+    return ImGui::DockBuilderGetNode(node_id);
+}
+CIMGUI_API ImGuiDockNode* igDockBuilderGetCentralNode(ImGuiID node_id)
+{
+    return ImGui::DockBuilderGetCentralNode(node_id);
+}
+CIMGUI_API ImGuiID igDockBuilderAddNode(ImGuiID node_id,ImGuiDockNodeFlags flags)
+{
+    return ImGui::DockBuilderAddNode(node_id,flags);
+}
+CIMGUI_API void igDockBuilderRemoveNode(ImGuiID node_id)
+{
+    return ImGui::DockBuilderRemoveNode(node_id);
+}
+CIMGUI_API void igDockBuilderRemoveNodeDockedWindows(ImGuiID node_id,bool clear_settings_refs)
+{
+    return ImGui::DockBuilderRemoveNodeDockedWindows(node_id,clear_settings_refs);
+}
+CIMGUI_API void igDockBuilderRemoveNodeChildNodes(ImGuiID node_id)
+{
+    return ImGui::DockBuilderRemoveNodeChildNodes(node_id);
+}
+CIMGUI_API void igDockBuilderSetNodePos(ImGuiID node_id,ImVec2 pos)
+{
+    return ImGui::DockBuilderSetNodePos(node_id,pos);
+}
+CIMGUI_API void igDockBuilderSetNodeSize(ImGuiID node_id,ImVec2 size)
+{
+    return ImGui::DockBuilderSetNodeSize(node_id,size);
+}
+CIMGUI_API ImGuiID igDockBuilderSplitNode(ImGuiID node_id,ImGuiDir split_dir,float size_ratio_for_node_at_dir,ImGuiID* out_id_at_dir,ImGuiID* out_id_at_opposite_dir)
+{
+    return ImGui::DockBuilderSplitNode(node_id,split_dir,size_ratio_for_node_at_dir,out_id_at_dir,out_id_at_opposite_dir);
+}
+CIMGUI_API void igDockBuilderCopyDockSpace(ImGuiID src_dockspace_id,ImGuiID dst_dockspace_id,ImVector_const_charPtr* in_window_remap_pairs)
+{
+    return ImGui::DockBuilderCopyDockSpace(src_dockspace_id,dst_dockspace_id,in_window_remap_pairs);
+}
+CIMGUI_API void igDockBuilderCopyNode(ImGuiID src_node_id,ImGuiID dst_node_id,ImVector_ImGuiID* out_node_remap_pairs)
+{
+    return ImGui::DockBuilderCopyNode(src_node_id,dst_node_id,out_node_remap_pairs);
+}
+CIMGUI_API void igDockBuilderCopyWindowSettings(const char* src_name,const char* dst_name)
+{
+    return ImGui::DockBuilderCopyWindowSettings(src_name,dst_name);
+}
+CIMGUI_API void igDockBuilderFinish(ImGuiID node_id)
+{
+    return ImGui::DockBuilderFinish(node_id);
+}
 CIMGUI_API bool igBeginDragDropTargetCustom(const ImRect bb,ImGuiID id)
 {
     return ImGui::BeginDragDropTargetCustom(bb,id);
@@ -3568,13 +3916,21 @@ CIMGUI_API float igGetColumnNormFromOffset(const ImGuiColumns* columns,float off
 {
     return ImGui::GetColumnNormFromOffset(columns,offset);
 }
-CIMGUI_API bool igBeginTabBarEx(ImGuiTabBar* tab_bar,const ImRect bb,ImGuiTabBarFlags flags)
+CIMGUI_API bool igBeginTabBarEx(ImGuiTabBar* tab_bar,const ImRect bb,ImGuiTabBarFlags flags,ImGuiDockNode* dock_node)
 {
-    return ImGui::BeginTabBarEx(tab_bar,bb,flags);
+    return ImGui::BeginTabBarEx(tab_bar,bb,flags,dock_node);
 }
 CIMGUI_API ImGuiTabItem* igTabBarFindTabByID(ImGuiTabBar* tab_bar,ImGuiID tab_id)
 {
     return ImGui::TabBarFindTabByID(tab_bar,tab_id);
+}
+CIMGUI_API ImGuiTabItem* igTabBarFindMostRecentlySelectedTabForActiveWindow(ImGuiTabBar* tab_bar)
+{
+    return ImGui::TabBarFindMostRecentlySelectedTabForActiveWindow(tab_bar);
+}
+CIMGUI_API void igTabBarAddTab(ImGuiTabBar* tab_bar,ImGuiTabItemFlags tab_flags,ImGuiWindow* window)
+{
+    return ImGui::TabBarAddTab(tab_bar,tab_flags,window);
 }
 CIMGUI_API void igTabBarRemoveTab(ImGuiTabBar* tab_bar,ImGuiID tab_id)
 {
@@ -3592,9 +3948,9 @@ CIMGUI_API bool igTabBarProcessReorder(ImGuiTabBar* tab_bar)
 {
     return ImGui::TabBarProcessReorder(tab_bar);
 }
-CIMGUI_API bool igTabItemEx(ImGuiTabBar* tab_bar,const char* label,bool* p_open,ImGuiTabItemFlags flags)
+CIMGUI_API bool igTabItemEx(ImGuiTabBar* tab_bar,const char* label,bool* p_open,ImGuiTabItemFlags flags,ImGuiWindow* docked_window)
 {
-    return ImGui::TabItemEx(tab_bar,label,p_open,flags);
+    return ImGui::TabItemEx(tab_bar,label,p_open,flags,docked_window);
 }
 CIMGUI_API void igTabItemCalcSize(ImVec2 *pOut,const char* label,bool has_close_button)
 {
@@ -3672,6 +4028,10 @@ CIMGUI_API void igRenderArrowPointingAt(ImDrawList* draw_list,ImVec2 pos,ImVec2 
 {
     return ImGui::RenderArrowPointingAt(draw_list,pos,half_sz,direction,col);
 }
+CIMGUI_API void igRenderArrowDockMenu(ImDrawList* draw_list,ImVec2 p_min,float sz,ImU32 col)
+{
+    return ImGui::RenderArrowDockMenu(draw_list,p_min,sz,col);
+}
 CIMGUI_API void igRenderRectFilledRangeH(ImDrawList* draw_list,const ImRect rect,ImU32 col,float x_start_norm,float x_end_norm,float rounding)
 {
     return ImGui::RenderRectFilledRangeH(draw_list,rect,col,x_start_norm,x_end_norm,rounding);
@@ -3692,9 +4052,9 @@ CIMGUI_API bool igCloseButton(ImGuiID id,const ImVec2 pos)
 {
     return ImGui::CloseButton(id,pos);
 }
-CIMGUI_API bool igCollapseButton(ImGuiID id,const ImVec2 pos)
+CIMGUI_API bool igCollapseButton(ImGuiID id,const ImVec2 pos,ImGuiDockNode* dock_node)
 {
-    return ImGui::CollapseButton(id,pos);
+    return ImGui::CollapseButton(id,pos,dock_node);
 }
 CIMGUI_API bool igArrowButtonEx(const char* str_id,ImGuiDir dir,ImVec2 size_arg,ImGuiButtonFlags flags)
 {
