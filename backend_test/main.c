@@ -17,7 +17,7 @@ SDL_Window *window = NULL;
 
 int main(int argc, char* argv[])
 {
-  
+
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     SDL_Log("failed to init: %s", SDL_GetError());
     return -1;
@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
   }
 
   // check opengl version sdl uses
-  //SDL_Log("opengl version: %s", (char*)glGetString(GL_VERSION));
+  SDL_Log("opengl version: %s", (char*)glGetString(GL_VERSION));
 
   // setup imgui
   igCreateContext(NULL);
