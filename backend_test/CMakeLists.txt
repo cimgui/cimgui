@@ -54,7 +54,7 @@ if(DEFINED SDL_PATH)
 	FIND_PACKAGE(SDL2 REQUIRED PATHS ${SDL_PATH})
 	get_target_property(SDL_INCLUDE SDL2::SDL2 INTERFACE_INCLUDE_DIRECTORIES)
 	message(STATUS "sdlinclude is " ${SDL_INCLUDE})
-	if ("${SDL_INCLUDE}" STREQUAL "") #if not found latest SDL2 cmake config use older
+	if ("${SDL_INCLUDE}" STREQUAL "" OR "${SDL_INCLUDE}" STREQUAL "SDL_INCLUDE-NOTFOUND") #if not found latest SDL2 cmake config use older
 		message(STATUS "sdlinclude2 is " ${SDL2_INCLUDE_DIRS})
 		include_directories(${SDL2_INCLUDE_DIRS})
 		set(IMGUI_SDL_LIBRARY ${SDL2_LIBRARIES})
