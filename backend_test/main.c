@@ -5,6 +5,9 @@
 #include <stdio.h>
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#ifdef _MSC_VER
+#include <windows.h>
+#endif
 #include <GL/gl.h>
 #include <GL/glu.h>
 
@@ -14,11 +17,12 @@ SDL_Window *window = NULL;
 
 int main(int argc, char* argv[])
 {
+  
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     SDL_Log("failed to init: %s", SDL_GetError());
     return -1;
   }
-
+ 
   // Decide GL+GLSL versions
 #if __APPLE__
     // GL 3.2 Core + GLSL 150
@@ -128,7 +132,7 @@ int main(int argc, char* argv[])
       igCheckbox("Demo window", &showDemoWindow);
       igCheckbox("Another window", &showAnotherWindow);
 
-      igSliderFloat("Float", &f, 0.0f, 1.0f, "%.3f", 1.0f);
+      igSliderFloat("Float", &f, 0.0f, 1.0f, "%.3f", 0);
       igColorEdit3("clear color", (float*)&clearColor, 0);
 
       ImVec2 buttonSize;
