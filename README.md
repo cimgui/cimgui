@@ -102,14 +102,14 @@ Notes:
 * [CImGui.jl](https://github.com/Gnimuc/CImGui.jl)
 * [odin-imgui](https://github.com/ThisDrunkDane/odin-imgui)
 * [DerelictImgui](https://github.com/Extrawurst/DerelictImgui)
-* [BindBC-CimGui](https://github.com/MrcSnm/bindbc-cimgui
+* [BindBC-CimGui](https://github.com/MrcSnm/bindbc-cimgui)
 * [imgui-rs](https://github.com/Gekkio/imgui-rs)
 * [imgui-pas](https://github.com/dpethes/imgui-pas)
 
 
 # C examples based on cimgui
 
-* [sdl2_opengl3] (https://github.com/cimgui/cimgui/tree/docking_inter/backend_test)
+* [sdl2_opengl3](https://github.com/cimgui/cimgui/tree/docking_inter/backend_test)
 * [sdl2-cimgui-demo](https://github.com/haxpor/sdl2-cimgui-demo)
 * [cimgui_c_sdl2_example](https://github.com/canoi12/cimgui_c_sdl2_example/)
 * [cimgui-c-example](https://github.com/peko/cimgui-c-example) with GLFW
