@@ -405,7 +405,7 @@ if #implementations > 0 then
 	local config = require"config_generator"
     
     for i,impl in ipairs(implementations) do
-        local source = [[../imgui/examples/imgui_impl_]].. impl .. ".h "
+        local source = [[../imgui/backends/imgui_impl_]].. impl .. ".h "
         local locati = [[imgui_impl_]].. impl
 
 		local define_cmd = COMPILER=="cl" and [[ /E /D]] or [[ -E -D]]
