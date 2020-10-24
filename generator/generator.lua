@@ -395,7 +395,15 @@ save_data("./output/definitions.lua",serializeTableF(parser1.defsT))
 -- end
 
 --=================================Now implementations
-
+local backends_folder 
+local ff,err = io.open ("../imgui/examples/imgui_impl_glfw.h" ,"r")
+if ff then
+	backends_folder = "../imgui/examples/"
+	ff:close()
+else
+	backends_folder = "../imgui/backends/"
+end
+ 
 local parser2
 
 if #implementations > 0 then
@@ -405,7 +413,7 @@ if #implementations > 0 then
 	local config = require"config_generator"
     
     for i,impl in ipairs(implementations) do
-        local source = [[../imgui/examples/imgui_impl_]].. impl .. ".h "
+        local source = backends_folder .. [[imgui_impl_]].. impl .. ".h "
         local locati = [[imgui_impl_]].. impl
 
 		local define_cmd = COMPILER=="cl" and [[ /E /D]] or [[ -E -D]]
