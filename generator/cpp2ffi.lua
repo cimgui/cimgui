@@ -1017,12 +1017,16 @@ function M.Parser()
 					child.parent = it
 				end
 				if it.re_name == "struct_re" then
-					local typename = it.item:match("%s*template%s*<%s*typename%s*(%S+)%s*>")
+					local typename = it.item:match("^%s*template%s*<%s*typename%s*(%S+)%s*>")
 					local stname = it.item:match("struct%s+(%S+)")
 					it.name = stname
-					if typename then -- it is a struct template
+					
+					local templa1,templa2 = it.item:match("^%s*template%s*<%s*(%S+)%s*(%S+)%s*>")
+					if templa1 or templa2 then print("template found",stname,templa1,templa2,"typename",typename) end
+					
+					if typename or templa2 then -- it is a struct template
 						self.typenames = self.typenames or {}
-						self.typenames[stname] = typename
+						self.typenames[stname] = typename or templa2
 					end
 				elseif it.re_name == "namespace_re" then
 					it.name = it.item:match("namespace%s+(%S+)")
@@ -1414,7 +1418,11 @@ function M.Parser()
 						f()
 						t.size = estevalor
 					end
-					assert(t.size,val)
+					--assert(t.size,val)
+					if not t.size then
+						print("not t.size for",val,"in",t.name)
+						error"not t.size"
+					end
 				end
 			end
 		end
