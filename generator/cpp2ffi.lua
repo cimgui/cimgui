@@ -1164,6 +1164,15 @@ function M.Parser()
 		end
 		return parnam
 	end
+	local function get_parents_nameC(it)
+		local parnam = ""
+		while it.parent do
+			parnam = it.parent.name.."_"..parnam
+			it = it.parent
+		end
+		if parnam:sub(-1)=="_" then parnam = parnam:sub(1,-2) end
+		return parnam
+	end
 	function par:gen_structs_and_enums()
 		local outtab = {} 
 		local outtabpre = {}
@@ -1228,7 +1237,7 @@ function M.Parser()
 					if it.parent.re_name == "struct_re" or it.parent.re_name == "typedef_st_re" then
 						stname = it.parent.name
 					elseif it.parent.re_name == "namespace_re" then
-						namespace = it.parent.name
+						namespace = get_parents_nameC(it) --it.parent.name
 					end
 				end
 				if it.item:match"^%s*template%s+<" then
