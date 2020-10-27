@@ -244,6 +244,13 @@ local function generate_templates(code,codeimpool,templates)
 				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
 				table.insert(code,"typedef struct ImChunkStream_"..newte.." {ImVector_"..te.." Buf;} ImChunkStream_"..newte..";\n")
 			end)
+		elseif ttype == "ImSpan" then
+			table_do_sorted(v, function(te,newte)
+				table.insert(code,"typedef struct ImSpan_"..newte.." {"..te.."* Data;" ..te.."* DataEnd;} ImSpan_"..newte..";\n")
+			end)
+		else
+			print("generate_templates ttype not done",ttype)
+			error"generate templates"
 		end
 	end)
 end
