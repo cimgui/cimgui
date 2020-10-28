@@ -1167,10 +1167,10 @@ function M.Parser()
 	local function get_parents_nameC(it)
 		local parnam = ""
 		while it.parent do
-			parnam = it.parent.name.."_"..parnam
+			parnam = it.parent.name.."::"..parnam
 			it = it.parent
 		end
-		if parnam:sub(-1)=="_" then parnam = parnam:sub(1,-2) end
+		if parnam~="" then parnam = parnam:sub(1,-3) end
 		return parnam
 	end
 	function par:gen_structs_and_enums()
