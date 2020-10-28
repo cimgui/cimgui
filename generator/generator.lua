@@ -10,11 +10,26 @@ local INTERNAL_GENERATION = script_args[2]:match("internal") and true or false
 local FREETYPE_GENERATION = script_args[2]:match("freetype") and true or false
 local CFLAGS = ""
 local CPRE,CTEST
+--get implementations
+local implementations = {}
+for i=3,#script_args do
+    if script_args[i]:match("^[-/]") then
+        local key, value = script_args[i]:match("^(.+)=(.+)$")
+        if key and value then
+            CFLAGS = CFLAGS .. " " .. key .. "=\"" .. value:gsub("\"", "\\\"") .. "\"";
+        else
+            CFLAGS = CFLAGS .. " " .. script_args[i]
+        end
+    else
+        table.insert(implementations,script_args[i])
+    end
+end
+
 if COMPILER == "gcc" or COMPILER == "clang" then
-    CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]
+    CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] .. CFLAGS
     CTEST = COMPILER.." --version"
 elseif COMPILER == "cl" then
-    CPRE = COMPILER..[[ /E /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_API="" /DIMGUI_IMPL_API="" ]]
+    CPRE = COMPILER..[[ /E /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_API="" /DIMGUI_IMPL_API="" ]] .. CFLAGS
     CTEST = COMPILER
 else
     print("Working without compiler ")
@@ -43,21 +58,6 @@ assert(HAVE_COMPILER,"gcc, clang or cl needed to run script")
 print("HAVE_COMPILER",HAVE_COMPILER)
 print("INTERNAL_GENERATION",INTERNAL_GENERATION)
 print("FREETYPE_GENERATION",FREETYPE_GENERATION)
---get implementations
-local implementations = {}
-for i=3,#script_args do
-    if script_args[i]:match("^%-") then
-        local key, value = script_args[i]:match("^(.+)=(.+)$")
-        if key and value then
-            CFLAGS = CFLAGS .. " " .. key .. "=\"" .. value:gsub("\"", "\\\"") .. "\"";
-        else
-            CFLAGS = CFLAGS .. " " .. script_args[i]
-        end
-    else
-        table.insert(implementations,script_args[i])
-    end
-end
-
 --------------------------------------------------------------------------
 --this table has the functions to be skipped in generation
 --------------------------------------------------------------------------
@@ -136,7 +136,8 @@ local func_implementation = cpp2ffi.func_implementation
 -------------------functions for getting and setting defines
 local function get_defines(t)
     if COMPILER == "cl" then print"can't get defines with cl compiler"; return {} end
-    local pipe,err = io.popen(COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]],"r")
+    print(COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]] .. CFLAGS)
+    local pipe,err = io.popen(COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]] .. CFLAGS,"r")
     local defines = {}
     while true do
         local line = pipe:read"*l"
