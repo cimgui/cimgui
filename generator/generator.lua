@@ -8,6 +8,7 @@ local script_args = {...}
 local COMPILER = script_args[1]
 local INTERNAL_GENERATION = script_args[2]:match("internal") and true or false
 local FREETYPE_GENERATION = script_args[2]:match("freetype") and true or false
+local CFLAGS = ""
 local CPRE,CTEST
 if COMPILER == "gcc" or COMPILER == "clang" then
     CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]
@@ -44,7 +45,18 @@ print("INTERNAL_GENERATION",INTERNAL_GENERATION)
 print("FREETYPE_GENERATION",FREETYPE_GENERATION)
 --get implementations
 local implementations = {}
-for i=3,#script_args do table.insert(implementations,script_args[i]) end
+for i=3,#script_args do
+    if script_args[i]:match("^%-") then
+        local key, value = script_args[i]:match("^(.+)=(.+)$")
+        if key and value then
+            CFLAGS = CFLAGS .. " " .. key .. "=\"" .. value:gsub("\"", "\\\"") .. "\"";
+        else
+            CFLAGS = CFLAGS .. " " .. script_args[i]
+        end
+    else
+        table.insert(implementations,script_args[i])
+    end
+end
 
 --------------------------------------------------------------------------
 --this table has the functions to be skipped in generation
@@ -335,7 +347,6 @@ end
 print("IMGUI_VERSION",imgui_version)
 --get some defines----------------------------
 gdefines = get_defines{"IMGUI_VERSION","FLT_MAX"}
-                                
 
 --funtion for parsing imgui headers
 local function parseImGuiHeader(header,names)
