@@ -31,6 +31,7 @@ Notes:
 
 # using generator
 
+```
 * this is only needed (before compilation) if you want an imgui version different from the one provided, otherwise generation is already done.
 * you will need LuaJIT (https://github.com/LuaJIT/LuaJIT.git better 2.1 branch) or precompiled for linux/macOS/windows in https://luapower.com/luajit/download
 * you need to use also a C++ compiler for doing preprocessing: gcc (In windows MinGW-W64-builds for example), clang or cl (MSVC). (this repo was done with gcc)
@@ -40,6 +41,7 @@ Notes:
 * edit config_generator.lua for adding includes needed by your chosen backends (vulkan needs that).
 * Run generator.bat or generator.sh with gcc, clang or cl and LuaJIT on your PATH.
 * as a result some files are generated: `cimgui.cpp`, `cimgui.h` and `cimgui_impl.h` for compiling and some lua/json files with information about the binding: `definitions.json` with function info, `structs_and_enums.json` with struct and enum info, `impl_definitions.json` with functions from the backends info. 
+* You can pass compiler flags to generator.sh or generator.bat at the end of the call to further specify the compiler behavior. (e.g. -DIMGUI_USER_CONFIG or -DIMGUI_USE_WCHAR32)
 
 # generate binding
 * C interface is exposed by cimgui.h when you define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
