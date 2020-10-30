@@ -31,7 +31,7 @@ Notes:
 
 # using generator
 
-```
+
 * this is only needed (before compilation) if you want an imgui version different from the one provided, otherwise generation is already done.
 * you will need LuaJIT (https://github.com/LuaJIT/LuaJIT.git better 2.1 branch) or precompiled for linux/macOS/windows in https://luapower.com/luajit/download
 * you need to use also a C++ compiler for doing preprocessing: gcc (In windows MinGW-W64-builds for example), clang or cl (MSVC). (this repo was done with gcc)
