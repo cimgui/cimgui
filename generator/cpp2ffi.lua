@@ -1242,7 +1242,7 @@ function M.Parser()
 				end
 				if it.item:match"^%s*template%s+<" then
 					local ttype,fun = it.item:match"^%s*template%s+<%s*typename%s+([^>]+)%s*>%s*(.+)$"
-					if self.ftemplate_list then
+					if self.ftemplate_list and self.ftemplate_list[ttype] then
 						for iT,vT in ipairs(self.ftemplate_list[ttype]) do
 							local funT = fun:gsub(ttype,vT)
 							self:parseFunction(stname,{item=funT},namespace,it.locat)
