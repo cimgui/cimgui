@@ -1,0 +1,5 @@
+
+
+ - Being able to use a prefix for structs and enums. Could be a manual dictionary or an option to take parent namespace and struct (https://github.com/rokups/ImNodes/pull/20#issuecomment-719713982)
+ 
+ - Being able to generate separate headers for imgui and imgui_internal. (https://github.com/cimgui/cimgui/pull/126#issuecomment-735674105)
