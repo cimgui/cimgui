@@ -396,7 +396,7 @@ cimgui_generation(parser1)
 
 ----------save struct and enums lua table in structs_and_enums.lua for using in bindings
 
-local structs_and_enums_table = parser1:gen_structs_and_enums_table()
+local structs_and_enums_table = parser1.structs_and_enums_table
 save_data("./output/structs_and_enums.lua",serializeTableF(structs_and_enums_table))
 save_data("./output/typedefs_dict.lua",serializeTableF(parser1.typedefs_dict))
 

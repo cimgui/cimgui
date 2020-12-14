@@ -27,13 +27,14 @@ int main(void)
 
     static float f = 0.0f;
     igText("Hello World!");
-    igSliderFloat("float", &f, 0.0f, 1.0f, "%.3f", 1.0f);
+    igSliderFloat("float", &f, 0.0f, 1.0f, "%.3f", 0);
     igText("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io->Framerate, io->Framerate);
     igShowDemoWindow(NULL);
 
     igRender();
   }
-
+  printf("%llu\n",ImGuiWindowFlags_NoTitleBar);
+  printf("size: %d\n",sizeof(ImGuiWindowFlags_NoTitleBar));
   printf("DestroyContext()\n");
   igDestroyContext(NULL);
 

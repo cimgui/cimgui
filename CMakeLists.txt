@@ -2,6 +2,13 @@ cmake_minimum_required(VERSION 3.1)
 
 project(cimgui)
 
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_tables.cpp)
+	set(TABLES_SOURCE "imgui/imgui_tables.cpp")
+else()
+	set(TABLES_SOURCE "")
+endif()
+
+
 #general settings
 file(GLOB IMGUI_SOURCES
     cimgui.cpp
@@ -9,6 +16,7 @@ file(GLOB IMGUI_SOURCES
     imgui/imgui_draw.cpp
     imgui/imgui_demo.cpp
     imgui/imgui_widgets.cpp
+	${TABLES_SOURCE}
 )
 
 set(IMGUI_STATIC "no" CACHE STRING "Build as a static library")
