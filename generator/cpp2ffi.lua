@@ -182,6 +182,9 @@ local function parse_enum_value(value, allenums,dontpost)
 				local val2 = clean(several[i+1])
 				if allenums[val1] then val1 = allenums[val1] end
 				if allenums[val2] then val2 = allenums[val2] end
+				--for getting numbers from "1ULL"
+				if type(val1)=="string" then val1 = loadstring("return "..val1)() end
+				if type(val2)=="string" then val2 = loadstring("return "..val2)() end
 				if v=="~" then
 					assert(several[i]==" " or several[i]=="")
 					several[i] = bit.bnot(val2)
@@ -214,12 +217,14 @@ local function parse_enum_value(value, allenums,dontpost)
 		end
 		if #seps>0 or type(several[1])~="number" and not dontpost then
 			--M.prtable("enline",enline)
-			print("parse_enum_value WARNING",value)
+			print("parse_enum_value WARNING",value,several[1])
 			--M.prtable(several,seps)
 			--M.prtable("allenums",allenums)
 		end
 		assert(#seps==0)
-		assert(type(several[1])=="number")
+		assert(type(several[1])=="number" or type(several[1])=="cdata")
+		--converst 1ULL to "1ULL"
+		if type(several[1])=="cdata" then several[1] = tostring(several[1]) end
 		return several[1]
 	end
 end
@@ -967,6 +972,7 @@ function M.Parser()
 	end
 	function par:do_parse()
 		self:parseItems()
+		self:gen_structs_and_enums_table()
 		self:gen_structs_and_enums()
 		self:compute_overloads()
 		--self:compute_templated()
@@ -1195,10 +1201,28 @@ function M.Parser()
 					end
 				end
 			elseif it.re_name == "enum_re" then
-				local enumname, enumbody = it.item:match"^%s*enum%s+([^%s;{}]+)[%s\n\r]*(%b{})"
+				--local enumname, enumbody = it.item:match"^%s*enum%s+([^%s;{}]+)[%s\n\r]*(%b{})"
+				local enumname = it.item:match"^%s*enum%s+([^%s;{}]+)"
 				if enumname then
-					enumbody = clean_comments(enumbody)
-					table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
+					--if it's an enum with int type changed
+					if self.structs_and_enums_table.enumtypes[enumname] then
+						local enumtype = self.structs_and_enums_table.enumtypes[enumname]
+						local enumbody = ""
+						local extraenums = ""
+						for i,v in ipairs(self.structs_and_enums_table.enums[enumname]) do
+							if type(v.calc_value)=="string" then
+								extraenums = extraenums .."\nstatic const "..enumtype.." "..v.name.." = "..v.calc_value..";"
+							else
+								enumbody = enumbody .. "\n" ..v.name .."="..v.value..","
+							end
+						end
+						enumbody = "{"..enumbody.."\n}"
+						table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";"..extraenums)
+					else
+						local enumbody = it.item:match"(%b{})"
+						enumbody = clean_comments(enumbody)
+						table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
+					end
 					if it.parent then
 						if it.parent.re_name == "namespace_re" then
 							local namespace = it.parent.item:match("namespace%s+(%S+)")
@@ -1208,6 +1232,7 @@ function M.Parser()
 				else --unamed enum just repeat declaration
 					local cl_item = clean_comments(it.item)
 					table.insert(outtab,cl_item)
+					print("unnamed enum",cl_item)
 				end
 			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" then
 				local cleanst,structname,strtab,comstab,predec = self:clean_structR1(it)
@@ -1319,6 +1344,11 @@ function M.Parser()
 			enumname = "unnamed"..unnamed_enum_counter
 			print("unamed enum",enumname,it.parent and ("parent:"..it.parent.name) or "no parent")
 		end
+		local enumtype = it.item:match"^%s*enum%s+[^%s;{}:]+%s*:%s*([^{%s]+)"
+		if enumtype then 
+			print("enumtype",enumtype) 
+			outtab.enumtypes[enumname] = enumtype
+		end
 		outtab.enums[enumname] = {}
 		table.insert(enumsordered,enumname)
 		local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
@@ -1366,7 +1396,7 @@ function M.Parser()
 	end
 	par.enums_for_table = enums_for_table
 	function par:gen_structs_and_enums_table()
-		local outtab = {enums={},structs={},locations={}}
+		local outtab = {enums={},structs={},locations={},enumtypes={}}
 		self.typedefs_table = {}
 		local enumsordered = {}
 		unnamed_enum_counter = 0
@@ -1435,6 +1465,7 @@ function M.Parser()
 				end
 			end
 		end
+		self.structs_and_enums_table = outtab
 		return outtab
 	end
 	par.alltypes = {}
