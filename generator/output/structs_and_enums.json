@@ -2948,6 +2948,7 @@
       }
     ]
   },
+  "enumtypes": [],
   "locations": {
     "ImBitVector": "imgui_internal:482",
     "ImColor": "imgui:2057",

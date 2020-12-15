@@ -2321,6 +2321,7 @@ defs["enums"]["ImGuiWindowFlags_"][32] = {}
 defs["enums"]["ImGuiWindowFlags_"][32]["calc_value"] = 536870912
 defs["enums"]["ImGuiWindowFlags_"][32]["name"] = "ImGuiWindowFlags_DockNodeHost"
 defs["enums"]["ImGuiWindowFlags_"][32]["value"] = "1 << 29"
+defs["enumtypes"] = {}
 defs["locations"] = {}
 defs["locations"]["ImBitVector"] = "imgui_internal:482"
 defs["locations"]["ImColor"] = "imgui:2057"
