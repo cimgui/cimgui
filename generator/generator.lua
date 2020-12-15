@@ -306,7 +306,11 @@ local function cimgui_generation(parser)
 	outpost = outpost1..table.concat(outtabpool)..outpost2
 
 	local cstructsstr = outpre..table.concat(outtab,"")..outpost --..(extra or "")
-
+    
+	if gdefines.IMGUI_HAS_DOCK then
+		cstructsstr = cstructsstr.."\n#define IMGUI_HAS_DOCK       1\n"
+	end
+	
     hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
     local cfuncsstr = func_header_generate(parser)
     hstrfile = hstrfile:gsub([[#include "auto_funcs%.h"]],cfuncsstr)
@@ -324,18 +328,30 @@ end
 --------------------------------------------------------
 -----------------------------do it----------------------
 --------------------------------------------------------
---get imgui.h version--------------------------
+--get imgui.h version and IMGUI_HAS_DOCK--------------------------
+--get some defines wont work for cl ----------------
+gdefines = get_defines{"IMGUI_VERSION","FLT_MAX","IMGUI_HAS_DOCK"}
+--this will work for cl
 local pipe,err = io.open("../imgui/imgui.h","r")
 if not pipe then
     error("could not open file:"..err)
 end
-local imgui_version
+local imgui_version,has_dock
 while true do
     local line = pipe:read"*l"
-    imgui_version = line:match([[#define%s+IMGUI_VERSION%s+(".+")]])
-    if imgui_version then break end
+	if not line then break end
+	if not imgui_version then
+		imgui_version = line:match([[#define%s+IMGUI_VERSION%s+(".+")]])
+	end
+	if not has_dock then
+		has_dock = line:match([[#define%s+IMGUI_HAS_DOCK%s+(".+")]])
+	end
+    if imgui_version and has_dock then break end
 end
 pipe:close()
+
+if has_dock then gdefines.IMGUI_HAS_DOCK = true end
+
 cimgui_header = cimgui_header:gsub("XXX",imgui_version)
 if INTERNAL_GENERATION then
 	cimgui_header = cimgui_header..[[//with imgui_internal.h api
@@ -345,9 +361,13 @@ if FREETYPE_GENERATION then
 	cimgui_header = cimgui_header..[[//with imgui_freetype.h api
 ]]
 end
+if gdefines.IMGUI_HAS_DOCK then
+	cimgui_header = cimgui_header..[[//docking branch
+]]
+	print("IMGUI_HAS_DOCK",gdefines.IMGUI_HAS_DOCK)
+end
 print("IMGUI_VERSION",imgui_version)
---get some defines----------------------------
-gdefines = get_defines{"IMGUI_VERSION","FLT_MAX"}
+
 
 --funtion for parsing imgui headers
 local function parseImGuiHeader(header,names)

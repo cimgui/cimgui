@@ -24,11 +24,13 @@ int main(void)
     io->DisplaySize = display_size;
     io->DeltaTime = 1.0f / 60.0f;
     igNewFrame();
-
+    
+    igBegin("mainwindow",NULL,ImGuiWindowFlags_NoTitleBar);
     static float f = 0.0f;
     igText("Hello World!");
     igSliderFloat("float", &f, 0.0f, 1.0f, "%.3f", 0);
     igText("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io->Framerate, io->Framerate);
+    igEnd();
     igShowDemoWindow(NULL);
 
     igRender();

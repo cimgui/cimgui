@@ -11,7 +11,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-//#define USE_DOCKING
+
 
 SDL_Window *window = NULL;
 
@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
   ImGuiIO* ioptr = igGetIO();
   ioptr->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
   //ioptr->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-#ifdef USE_DOCKING
+#ifdef IMGUI_HAS_DOCK
   ioptr->ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
   ioptr->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 #endif
@@ -167,7 +167,7 @@ int main(int argc, char* argv[])
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData());
-#ifdef USE_DOCKING
+#ifdef IMGUI_HAS_DOCK
 	if (ioptr->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
             SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();

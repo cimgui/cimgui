@@ -2080,6 +2080,7 @@ defs["enums"]["ImGuiWindowFlags_"][30] = {}
 defs["enums"]["ImGuiWindowFlags_"][30]["calc_value"] = 268435456
 defs["enums"]["ImGuiWindowFlags_"][30]["name"] = "ImGuiWindowFlags_ChildMenu"
 defs["enums"]["ImGuiWindowFlags_"][30]["value"] = "1 << 28"
+defs["enumtypes"] = {}
 defs["locations"] = {}
 defs["locations"]["ImBitVector"] = "imgui_internal:470"
 defs["locations"]["ImColor"] = "imgui:1953"

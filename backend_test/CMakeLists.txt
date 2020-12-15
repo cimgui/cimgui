@@ -12,6 +12,12 @@ else()
 	set(BAKENDS_FOLDER "../imgui/examples/")
 endif()
 
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../imgui/imgui_tables.cpp)
+	set(TABLES_SOURCE "../imgui/imgui_tables.cpp")
+else()
+	set(TABLES_SOURCE "")
+endif()
+
 include_directories(../imgui)
 add_definitions("-DIMGUI_DISABLE_OBSOLETE_FUNCTIONS=1")
 
@@ -20,7 +26,8 @@ set(IMGUI_SOURCES ../cimgui.cpp
 ../imgui/imgui.cpp 
 ../imgui/imgui_draw.cpp 
 ../imgui/imgui_demo.cpp 
-../imgui/imgui_widgets.cpp 
+../imgui/imgui_widgets.cpp
+${TABLES_SOURCE} 
 )
 
 set(IMGUI_SOURCES_sdl)
@@ -45,9 +52,9 @@ if(IMGUI_FREETYPE)
 endif(IMGUI_FREETYPE)
 
 #opengl3
-list(APPEND IMGUI_SOURCES ${BAKENDS_FOLDER}imgui_impl_opengl3.cpp ${BAKENDS_FOLDER}libs/gl3w/GL/gl3w.c)
+list(APPEND IMGUI_SOURCES ${BAKENDS_FOLDER}imgui_impl_opengl3.cpp ../imgui/examples/libs/gl3w/GL/gl3w.c)
 list(APPEND IMGUI_SOURCES ./cimgui_extras.cpp)
-include_directories(${BAKENDS_FOLDER}libs/gl3w)
+include_directories(../imgui/examples/libs/gl3w)
 if(WIN32)
        list(APPEND IMGUI_LIBRARIES opengl32)
 else(WIN32)#Unix
