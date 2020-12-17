@@ -278,7 +278,7 @@ local function getRE()
 	structenum_re = "^([^;{}]-%b{}[%s%w_%(%)]*;)",
 	namespace_re = "^([^;{}]-namespace[^;{}]-%b{})",
 	class_re = "^([^;{}]-class[^;{}]-%b{}%s*;)",
-	typedef_re = "^\n*(typedef[^;]+;)",
+	typedef_re = "^\n*%s*(typedef[^;]+;)",
 	typedef_st_re = "^\n*(typedef%s+struct%s*%b{}.-;)",
 	functypedef_re = "^\n*%s*(typedef[%w%s%*_]+%(%s*%*%s*[%w_]+%s*%)%s*%b()%s*;)",
 	functypedef_re = "^\n*%s*(typedef[%w%s%*_]+%([^*]*%*%s*[%w_]+%s*%)%s*%b()%s*;)",
@@ -370,7 +370,12 @@ local function parseItems(txt,linenumdict, itparent, dumpit)
 							loca = table.remove(loca,1)
 						end
 						if not loca then
-							print(itemold)
+							print(string.format("%q , %q ",itemold,itemfirstline),#itemfirstline)
+							for k,v in pairs(linenumdict) do
+								if k:match(itemfirstline) then
+									print(string.format("%q",k),#k)
+								end
+							end
 							error"no entry in linenumdict"
 						end
 					else
@@ -940,7 +945,9 @@ function M.Parser()
 	par.UDTs = {}
 
 	function par:insert(line,loca)
-		table.insert(cdefs,{line,loca})
+		--table.insert(cdefs,{line,loca})
+		--table.insert(cdefs,{line:gsub("^%s*(.-)%s*$", "%1"),loca})
+		table.insert(cdefs,{line:gsub("^(%s*.-)%s*$", "%1"),loca})
 	end
 	function par.getCname(stname,funcname, namespace)
 		if #stname == 0 then return funcname end --top level
@@ -1154,7 +1161,7 @@ function M.Parser()
 			elseif it.re_name == "enum_re" then
 				--nop
 			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
-				print(it.re_name,"not processed clean_struct",it.item:sub(1,12))
+				print(it.re_name,"not processed clean_struct in",stname,it.item:sub(1,24))
 				--M.prtable(it)
 			end
 		end
@@ -1420,6 +1427,8 @@ function M.Parser()
 					for j=3,#strtab-1 do
 						self:parse_struct_line(strtab[j],outtab.structs[structname],comstab[j])
 					end
+				else
+					print("skipped unnamed or templated struct",structname)
 				end
 			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
 				--nop
