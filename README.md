@@ -21,7 +21,7 @@ Notes:
 
 * clone 
   * `git clone --recursive https://github.com/cimgui/cimgui.git`
-  * `git submodule update`
+  * `git submodule update --init --recursive` (If already cloned)
 * compile 
   * using makefile on linux/macOS/mingw (Or use CMake to generate project)
   * cmake options are IMGUI_STATIC (compiling as static library), IMGUI_FREETYPE (for using Freetype2) and FREETYPE_PATH (Freetype2 cmake install location)
