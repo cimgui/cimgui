@@ -47,6 +47,19 @@ ImRect_ImRect	4
 2	nil	ImRect_ImRectVec2 (const ImVec2,const ImVec2)
 3	nil	ImRect_ImRectVec4 (const ImVec4)
 4	nil	ImRect_ImRectFloat (float,float,float,float)
+ImSpan_ImSpan	3
+1	nil	ImSpan_ImSpanNil ()
+2	nil	ImSpan_ImSpanTPtrInt (T*,int)
+3	nil	ImSpan_ImSpanTPtrTPtr (T*,T*)
+ImSpan_begin	2
+1	T*	ImSpan_beginNil ()
+2	const T*	ImSpan_begin_const ()const
+ImSpan_end	2
+1	T*	ImSpan_endNil ()
+2	const T*	ImSpan_end_const ()const
+ImSpan_set	2
+1	void	ImSpan_setInt (T*,int)
+2	void	ImSpan_setTPtr (T*,T*)
 ImVec1_ImVec1	2
 1	nil	ImVec1_ImVec1Nil ()
 2	nil	ImVec1_ImVec1Float (float)
@@ -87,6 +100,11 @@ ImVector_resize	2
 igBeginChild	2
 1	bool	igBeginChildStr (const char*,const ImVec2,bool,ImGuiWindowFlags)
 2	bool	igBeginChildID (ImGuiID,const ImVec2,bool,ImGuiWindowFlags)
+igCheckboxFlags	4
+1	bool	igCheckboxFlagsIntPtr (const char*,int*,int)
+2	bool	igCheckboxFlagsUintPtr (const char*,unsigned int*,unsigned int)
+3	bool	igCheckboxFlagsS64Ptr (const char*,ImS64*,ImS64)
+4	bool	igCheckboxFlagsU64Ptr (const char*,ImU64*,ImU64)
 igCollapsingHeader	2
 1	bool	igCollapsingHeaderTreeNodeFlags (const char*,ImGuiTreeNodeFlags)
 2	bool	igCollapsingHeaderBoolPtr (const char*,bool*,ImGuiTreeNodeFlags)
@@ -115,6 +133,9 @@ igImAbs	2
 igImFloor	2
 1	float	igImFloorFloat (float)
 2	ImVec2	igImFloorVec2 (const ImVec2)
+igImIsPowerOfTwo	2
+1	bool	igImIsPowerOfTwoInt (int)
+2	bool	igImIsPowerOfTwoU64 (ImU64)
 igImLengthSqr	2
 1	float	igImLengthSqrVec2 (const ImVec2)
 2	float	igImLengthSqrVec4 (const ImVec4)
@@ -202,6 +223,9 @@ igSetWindowSize	3
 1	void	igSetWindowSizeVec2 (const ImVec2,ImGuiCond)
 2	void	igSetWindowSizeStr (const char*,const ImVec2,ImGuiCond)
 3	void	igSetWindowSizeWindowPtr (ImGuiWindow*,const ImVec2,ImGuiCond)
+igTableGetColumnName	2
+1	const char*	igTableGetColumnNameInt (int)
+2	const char*	igTableGetColumnNameTablePtr (const ImGuiTable*,int)
 igTreeNode	3
 1	bool	igTreeNodeStr (const char*)
 2	bool	igTreeNodeStrStr (const char*,const char*,...)
@@ -224,4 +248,4 @@ igValue	4
 2	void	igValueInt (const char*,int)
 3	void	igValueUint (const char*,unsigned int)
 4	void	igValueFloat (const char*,float,const char*)
-158 overloaded
+175 overloaded
