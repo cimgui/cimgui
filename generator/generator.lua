@@ -142,11 +142,11 @@ local function get_defines(t)
     while true do
         local line = pipe:read"*l"
         if not line then break end
-        local key,value = line:match([[#define%s+(%S+)%s+(.+)]])
-        if not key or not value then 
+        local key,value = line:match([[#define%s+(%S+)%s*(.*)]])
+        if not key then --or not value then 
             --print(line)
         else
-            defines[key]=value
+            defines[key]=value or ""
         end
     end
     pipe:close()
@@ -344,7 +344,7 @@ while true do
 		imgui_version = line:match([[#define%s+IMGUI_VERSION%s+(".+")]])
 	end
 	if not has_dock then
-		has_dock = line:match([[#define%s+IMGUI_HAS_DOCK%s+(".+")]])
+		has_dock = line:match([[#define%s+IMGUI_HAS_DOCK]])--%s*(".+")]])
 	end
     if imgui_version and has_dock then break end
 end
@@ -364,8 +364,9 @@ end
 if gdefines.IMGUI_HAS_DOCK then
 	cimgui_header = cimgui_header..[[//docking branch
 ]]
-	print("IMGUI_HAS_DOCK",gdefines.IMGUI_HAS_DOCK)
+	
 end
+print("IMGUI_HAS_DOCK",gdefines.IMGUI_HAS_DOCK)
 print("IMGUI_VERSION",imgui_version)
 
 
