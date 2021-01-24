@@ -1,9 +1,7 @@
 typedef struct SDL_Window SDL_Window;
-typedef struct GLFWmonitor GLFWmonitor;
 typedef struct GLFWwindow GLFWwindow;
 
 struct GLFWwindow;
-struct GLFWmonitor;
 
 struct SDL_Window;
 typedef union SDL_Event SDL_Event;CIMGUI_API bool ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window,bool install_callbacks);
@@ -14,7 +12,6 @@ CIMGUI_API void ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window,int button
 CIMGUI_API void ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window,double xoffset,double yoffset);
 CIMGUI_API void ImGui_ImplGlfw_KeyCallback(GLFWwindow* window,int key,int scancode,int action,int mods);
 CIMGUI_API void ImGui_ImplGlfw_CharCallback(GLFWwindow* window,unsigned int c);
-CIMGUI_API void ImGui_ImplGlfw_MonitorCallback(GLFWmonitor* monitor,int event);
 CIMGUI_API bool ImGui_ImplOpenGL3_Init(const char* glsl_version);
 CIMGUI_API void ImGui_ImplOpenGL3_Shutdown();
 CIMGUI_API void ImGui_ImplOpenGL3_NewFrame();
