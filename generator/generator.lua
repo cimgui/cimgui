@@ -170,13 +170,14 @@ local function get_defines(t)
 end
   --subtitution of FLT_MAX value for FLT_MAX or FLT_MIN
 local function set_defines(fdefs)
+	local FLT_MINpat = gdefines.FLT_MIN:gsub("([%.%-])","%%%1")
     for k,defT in pairs(fdefs) do
         for i,def in ipairs(defT) do
             for name,default in pairs(def.defaults) do
                 if default == gdefines.FLT_MAX then
                     def.defaults[name] = "FLT_MAX"
-                elseif default == gdefines.FLT_MIN then
-                    def.defaults[name] = "FLT_MIN"
+                elseif default:match(FLT_MINpat) then
+                    def.defaults[name] = default:gsub(FLT_MINpat,"FLT_MIN")
                 end
             end
         end
