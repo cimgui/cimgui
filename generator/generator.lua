@@ -168,13 +168,16 @@ local function get_defines(t)
     end
     return ret
 end
-  --subtitution of FLT_MAX value for FLT_MAX 
+  --subtitution of FLT_MAX value for FLT_MAX or FLT_MIN
 local function set_defines(fdefs)
+	local FLT_MINpat = gdefines.FLT_MIN:gsub("([%.%-])","%%%1")
     for k,defT in pairs(fdefs) do
         for i,def in ipairs(defT) do
             for name,default in pairs(def.defaults) do
                 if default == gdefines.FLT_MAX then
                     def.defaults[name] = "FLT_MAX"
+                elseif default:match(FLT_MINpat) then
+                    def.defaults[name] = default:gsub(FLT_MINpat,"FLT_MIN")
                 end
             end
         end
@@ -330,7 +333,7 @@ end
 --------------------------------------------------------
 --get imgui.h version and IMGUI_HAS_DOCK--------------------------
 --get some defines wont work for cl ----------------
-gdefines = get_defines{"IMGUI_VERSION","FLT_MAX","IMGUI_HAS_DOCK"}
+gdefines = get_defines{"IMGUI_VERSION","FLT_MAX","FLT_MIN","IMGUI_HAS_DOCK"}
 --this will work for cl
 local pipe,err = io.open("../imgui/imgui.h","r")
 if not pipe then
