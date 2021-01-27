@@ -4680,6 +4680,11 @@ CIMGUI_API float igGET_FLT_MAX()
     return FLT_MAX;
 }
 
+CIMGUI_API float igGET_FLT_MIN()
+{
+    return FLT_MIN;
+}
+
 
 CIMGUI_API ImVector_ImWchar* ImVector_ImWchar_create()
 {
