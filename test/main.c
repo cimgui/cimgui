@@ -2,6 +2,11 @@
 #include <assert.h>
 #include "../cimgui.h"
 
+#ifdef IMGUI_HAS_IMSTR
+#define igBegin igBegin_S
+#define igSliderFloat igSliderFloat_S
+#endif
+
 int main(void)
 {
   assert(igDebugCheckVersionAndDataLayout(igGetVersion(), sizeof(ImGuiIO), sizeof(ImGuiStyle),
