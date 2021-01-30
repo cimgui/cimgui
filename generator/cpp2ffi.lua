@@ -769,6 +769,70 @@ local function AdjustArguments(FP)
         end
     end
 end
+local function ADDIMSTR_S(FP)
+    local defsT = FP.defsT
+    local newcdefs = {}
+    for numcdef,t in ipairs(FP.funcdefs) do
+		newcdefs[#newcdefs+1] = t
+        if t.cimguiname then
+        local cimf = defsT[t.cimguiname]
+        local defT = cimf[t.signature]
+
+        --if isIMSTR return generate _S version
+		local isIMSTR = false
+		for i,arg in ipairs(defT.argsT) do
+			if arg.type == "ImStr" or arg.type == "const ImStr" then isIMSTR=true;break end
+		end
+        --if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
+		--if isIMSTR then print(t.cimguiname,defT.ov_cimguiname,defT.argsoriginal,"isIMSTR") end
+		if isIMSTR then
+            --passing as a pointer arg
+            local defT2 = {}
+            --first strings
+            for k,v in pairs(defT) do
+                defT2[k] = v
+            end
+            --then argsT table
+            defT2.argsT = {}
+            for k,v in ipairs(defT.argsT) do
+				local typ = (v.type == "ImStr" or v.type == "const ImStr") and "const char*" or v.type
+                table.insert(defT2.argsT,{type=typ,name=v.name})
+            end
+			defT2.args = defT.args:gsub("const ImStr","const char*")
+            defT2.args = defT2.args:gsub("ImStr","const char*")
+			--recreate call_args for wrapping into ImStr
+			local caar
+			if #defT.argsT > 0 then
+				caar = "("
+				for i,v in ipairs(defT.argsT) do
+					local name = v.type == "ImStr" and "ImStr("..v.name..")" or v.name
+					if v.ret then --function pointer
+						caar = caar .. name .. ","
+					else
+						local callname = v.reftoptr and "*"..name or name 
+						caar = caar .. callname .. ","
+					end
+				end
+				caar = caar:sub(1,-2)..")"
+			else
+				caar = "()"
+			end
+			defT2.call_args = caar
+			------------------
+            defT2.signature = defT.signature:gsub("ImStr","const char*").."_S"
+            defT2.ov_cimguiname = (defT2.ov_cimguiname or defT2.cimguiname).."_S"
+            defT2.isIMSTR_S = 1
+
+			--replace
+			cimf[#cimf+1] = defT2
+			cimf[defT2.signature] = defT2
+			newcdefs[#newcdefs+1] = {stname=t.stname,funcname=t.funcname,args=defT2.args,signature=defT2.signature,cimguiname=defT2.cimguiname,ret =defT2.ret}
+        end
+		else print("not cimguiname in");M.prtable(t)
+        end
+    end
+	FP.funcdefs = newcdefs
+end
 local function ADDnonUDT(FP)
     local defsT = FP.defsT
     --local newcdefs = {}
@@ -1525,8 +1589,10 @@ function M.Parser()
 		end)
         --print(numoverloaded, "overloaded")
         table.insert(strt,string.format("%d overloaded",numoverloaded))
+		ADDIMSTR_S(self)
 		AdjustArguments(self)
 		ADDnonUDT(self)
+
 		--ADDdestructors(self)
         self.overloadstxt  = table.concat(strt,"\n")
     end
