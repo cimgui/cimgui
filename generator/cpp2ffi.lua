@@ -785,7 +785,7 @@ local function ADDIMSTR_S(FP)
         --if isIMSTR return generate _S version
 		local isIMSTR = false
 		for i,arg in ipairs(defT.argsT) do
-			if arg.type == "ImStr" or arg.type == "const ImStr" then isIMSTR=true;break end
+			if arg.type == "ImStr" then isIMSTR=true;break end
 		end
         --if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
 		--if isIMSTR then print(t.cimguiname,defT.ov_cimguiname,defT.argsoriginal,"isIMSTR") end
@@ -799,7 +799,7 @@ local function ADDIMSTR_S(FP)
             --then argsT table
             defT2.argsT = {}
             for k,v in ipairs(defT.argsT) do
-				local typ = (v.type == "ImStr" or v.type == "const ImStr") and "const char*" or v.type
+				local typ = v.type == "ImStr" and "const char*" or v.type
                 table.insert(defT2.argsT,{type=typ,name=v.name})
             end
 			--defaults table
@@ -807,7 +807,6 @@ local function ADDIMSTR_S(FP)
 			for k,v in pairs(defT.defaults) do
 				defT2.defaults[k] = v
             end
-			defT2.args = defT.args:gsub("const ImStr","const char*")
             defT2.args = defT2.args:gsub("ImStr","const char*")
 			--recreate call_args for wrapping into ImStr
 			local caar
