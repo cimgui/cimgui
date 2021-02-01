@@ -414,14 +414,13 @@ local function parseItems(txt,linenumdict, itparent, dumpit)
 end
 M.parseItems = parseItems
 local function name_overloadsAlgo(v)
+
     local aa = {}
     local bb = {}
     local done = {}
     local maxnum = 0
     for i,t in ipairs(v) do
         bb[i] = ""
-        --local signature = t.signature:sub(2,-2) -- without parenthesis
-		--inside parenthesis
 		local signature = t.signature:match("%b()")
 		signature = signature:sub(2,-2)
 		--add const function
@@ -430,47 +429,52 @@ local function name_overloadsAlgo(v)
 		end
         aa[i] = {}
         local num = 1
-        --for typec in t.signature:gmatch(".-([^,%(%s]+)[,%)]") do
-        --for typec in t.signature:gmatch(".-([^,%(]+)[,%)]") do
-        --for typec in signature:gmatch(".-([^,]+),?") do
         for typec in signature:gsub("(%(.-%))", function(x) return x:gsub(",","\0") end):gmatch(".-([^,]+),?") do
-            --typec = typec:gsub
             aa[i][num] = typec:gsub("%z+", ",")
             num = num + 1
         end
         num = num - 1
         maxnum = (num > maxnum) and num or maxnum
     end
-    
+
     for l=1,maxnum do
         local keys = {}
         local diferent = true
         local equal = true
         for i=1,#v do
             aa[i][l] = aa[i][l] or "nil"
-            keys[aa[i][l]] = 1 + (aa[i][l] and keys[aa[i][l]] or 0)
+            keys[aa[i][l]] = 1 + (keys[aa[i][l]] or 0)
             if not done[i] then
-            for j=i+1,#v do
-                if not done[j] then
-                if aa[i][l] == aa[j][l] then
-                    diferent = false
-                else
-                    equal = false
+                for j=i+1,#v do
+                    if not done[j] then
+                        if aa[i][l] == aa[j][l] then
+                            diferent = false
+                        else
+                            equal = false
+                        end
+                    end
                 end
-                end
-            end
             end
         end
         if not equal then -- not all the same
             for i=1,#v do
                 if not done[i] then
                     bb[i] = bb[i]..(aa[i][l]=="nil" and "" or aa[i][l])
-                    if keys[aa[i][l]] == 1 then
-                        done[i] = true
-                    end
+                    -- if keys[aa[i][l]] == 1 then
+                        -- done[i] = true
+                    -- end
                 end
             end
         end
+		--test done
+		for i=1,#v do
+			done[i] = true
+			for j=1,#v do
+				if i~=j and bb[i]==bb[j] then
+					done[i] = false
+				end
+			end
+		end
     end
 	--avoid empty postfix which will be reserved to generic
 	for i,v in ipairs(bb) do if v=="" then bb[i]="Nil" end end
@@ -798,6 +802,11 @@ local function ADDIMSTR_S(FP)
 				local typ = (v.type == "ImStr" or v.type == "const ImStr") and "const char*" or v.type
                 table.insert(defT2.argsT,{type=typ,name=v.name})
             end
+			--defaults table
+			defT2.defaults = {}
+			for k,v in pairs(defT.defaults) do
+				defT2.defaults[k] = v
+            end
 			defT2.args = defT.args:gsub("const ImStr","const char*")
             defT2.args = defT2.args:gsub("ImStr","const char*")
 			--recreate call_args for wrapping into ImStr
@@ -817,16 +826,26 @@ local function ADDIMSTR_S(FP)
 			else
 				caar = "()"
 			end
-			defT2.call_args = caar
+			defT2.call_args = caar:gsub("ImStr%(([^%(%)]+)%)","%1")
 			------------------
-            defT2.signature = defT.signature:gsub("ImStr","const char*").."_S"
-            defT2.ov_cimguiname = (defT2.ov_cimguiname or defT2.cimguiname).."_S"
+            defT2.signature = defT.signature:gsub("ImStr","const char*") --.."_S"
+            --defT2.ov_cimguiname = (defT2.ov_cimguiname or defT2.cimguiname).."_S"
             defT2.isIMSTR_S = 1
-
-			--replace
+			-- check there is not an equal version in imgui_stname
+			local doadd = true
+			for i,dd in ipairs(cimf) do
+				if dd.signature == defT2.signature then 
+					doadd = false;
+					print("skip _S addition",defT2.cimguiname)
+					break 
+				end
+			end
+			--add _S version
+			if doadd then
 			cimf[#cimf+1] = defT2
 			cimf[defT2.signature] = defT2
 			newcdefs[#newcdefs+1] = {stname=t.stname,funcname=t.funcname,args=defT2.args,signature=defT2.signature,cimguiname=defT2.cimguiname,ret =defT2.ret}
+			end
         end
 		else print("not cimguiname in");M.prtable(t)
         end
@@ -1555,6 +1574,7 @@ function M.Parser()
         for k,v in pairs(self.alltypes) do print(k, typetoStr(k) ) end
     end
     function par:compute_overloads()
+		ADDIMSTR_S(self)
         local strt = {}
         local numoverloaded = 0
         self.alltypes = {}
@@ -1570,6 +1590,15 @@ function M.Parser()
                 for i,t in ipairs(v) do
                     --take overloaded name from manual table or algorythm
                     t.ov_cimguiname = self.getCname_overload(t.stname,t.funcname,t.signature,t.namespace) or k..typetoStr(post[i])
+					--check ...
+					if( t.ov_cimguiname:match"%.%.%.") then
+						print("... in ov",t.ov_cimguiname)
+						for i,dd in ipairs(v) do
+							print(dd.signature,post[i])
+						end
+						error"Bad check ..."
+					end
+					--if t.isIMSTR_S then t.ov_cimguiname = t.ov_cimguiname .. "_S" end
                     table.insert(strt,string.format("%d\t%s\t%s %s",i,t.ret,t.ov_cimguiname,t.signature))
                     --M.prtable(typesc[i],post)
                 end
@@ -1589,7 +1618,7 @@ function M.Parser()
 		end)
         --print(numoverloaded, "overloaded")
         table.insert(strt,string.format("%d overloaded",numoverloaded))
-		ADDIMSTR_S(self)
+		--ADDIMSTR_S(self)
 		AdjustArguments(self)
 		ADDnonUDT(self)
 
