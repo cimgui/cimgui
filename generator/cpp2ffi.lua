@@ -813,7 +813,7 @@ local function ADDIMSTR_S(FP)
 			if #defT.argsT > 0 then
 				caar = "("
 				for i,v in ipairs(defT.argsT) do
-					local name = v.type == "ImStr" and "ImStr("..v.name..")" or v.name
+					local name = v.name --v.type == "ImStr" and "ImStr("..v.name..")" or v.name --wrap
 					if v.ret then --function pointer
 						caar = caar .. name .. ","
 					else
@@ -825,10 +825,10 @@ local function ADDIMSTR_S(FP)
 			else
 				caar = "()"
 			end
-			defT2.call_args = caar:gsub("ImStr%(([^%(%)]+)%)","%1")
+			defT2.call_args = caar --:gsub("ImStr%(([^%(%)]+)%)","%1") --unwrap
 			------------------
             defT2.signature = defT.signature:gsub("ImStr","const char*") --.."_S"
-            --defT2.ov_cimguiname = (defT2.ov_cimguiname or defT2.cimguiname).."_S"
+            defT2.ov_cimguiname = "S"..defT2.ov_cimguiname
             defT2.isIMSTR_S = 1
 			-- check there is not an equal version in imgui_stname
 			local doadd = true
@@ -1573,7 +1573,7 @@ function M.Parser()
         for k,v in pairs(self.alltypes) do print(k, typetoStr(k) ) end
     end
     function par:compute_overloads()
-		ADDIMSTR_S(self)
+		--ADDIMSTR_S(self)
         local strt = {}
         local numoverloaded = 0
         self.alltypes = {}
@@ -1617,7 +1617,7 @@ function M.Parser()
 		end)
         --print(numoverloaded, "overloaded")
         table.insert(strt,string.format("%d overloaded",numoverloaded))
-		--ADDIMSTR_S(self)
+		ADDIMSTR_S(self)
 		AdjustArguments(self)
 		ADDnonUDT(self)
 
