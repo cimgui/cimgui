@@ -829,7 +829,7 @@ local function ADDIMSTR_S(FP)
 			defT2.call_args = caar --:gsub("ImStr%(([^%(%)]+)%)","%1") --unwrap
 			------------------
             defT2.signature = defT.signature:gsub("ImStr","const char*") --.."_S"
-            defT2.ov_cimguiname = "S"..defT2.ov_cimguiname
+            defT2.ov_cimguiname = defT2.ov_cimguiname .. "_Strv"
             defT2.isIMSTR_S = 1
 			-- check there is not an equal version in imgui_stname
 			local doadd = true
