@@ -165,8 +165,11 @@ local function parse_enum_value(value, allenums,dontpost)
 		--already in allenums
 		if allenums[clean(value)] then return allenums[clean(value)] end
 		--must be several and operators
-		--precedence order (hope not ())
-		assert(not value:match("[%(%)]"))
+		------------precedence order (hope not ())
+		--first drop outer ()
+		value = value:gsub("^(%()",""):gsub("(%))$","")
+		assert(not value:match("[%(%)]"),value)
+		
 		local several,seps = strsplit(value,"([<>&|~%+]+)") 
 		--M.prtable(value,several,seps)
 		assert(#seps+1==#several)
@@ -182,6 +185,9 @@ local function parse_enum_value(value, allenums,dontpost)
 				local val2 = clean(several[i+1])
 				if allenums[val1] then val1 = allenums[val1] end
 				if allenums[val2] then val2 = allenums[val2] end
+				--clean 1u
+				if type(val1)=="string" then val1 = val1:gsub("(%d)(u)$","%1") end
+				if type(val2)=="string" then val2 = val2:gsub("(%d)(u)$","%1") end
 				--for getting numbers from "1ULL"
 				if type(val1)=="string" then val1 = loadstring("return "..val1)() end
 				if type(val2)=="string" then val2 = loadstring("return "..val2)() end
@@ -1598,9 +1604,7 @@ function M.Parser()
 						end
 						error"Bad check ..."
 					end
-					--if t.isIMSTR_S then t.ov_cimguiname = t.ov_cimguiname .. "_S" end
                     table.insert(strt,string.format("%d\t%s\t%s %s",i,t.ret,t.ov_cimguiname,t.signature))
-                    --M.prtable(typesc[i],post)
                 end
                 --check not two names are equal (produced by bad cimguiname_overload)
                 for i=1,#v-1 do 
