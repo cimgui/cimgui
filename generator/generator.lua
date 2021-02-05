@@ -313,6 +313,9 @@ local function cimgui_generation(parser)
 	if gdefines.IMGUI_HAS_DOCK then
 		cstructsstr = cstructsstr.."\n#define IMGUI_HAS_DOCK       1\n"
 	end
+	if gdefines.IMGUI_HAS_IMSTR then
+		cstructsstr = cstructsstr.."\n#define IMGUI_HAS_IMSTR       1\n"
+	end
 	
     hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
     local cfuncsstr = func_header_generate(parser)
@@ -333,13 +336,13 @@ end
 --------------------------------------------------------
 --get imgui.h version and IMGUI_HAS_DOCK--------------------------
 --get some defines wont work for cl ----------------
-gdefines = get_defines{"IMGUI_VERSION","FLT_MAX","FLT_MIN","IMGUI_HAS_DOCK"}
+gdefines = get_defines{"IMGUI_VERSION","FLT_MAX","FLT_MIN","IMGUI_HAS_DOCK","IMGUI_HAS_IMSTR"}
 --this will work for cl
 local pipe,err = io.open("../imgui/imgui.h","r")
 if not pipe then
     error("could not open file:"..err)
 end
-local imgui_version,has_dock
+local imgui_version,has_dock,has_imstr 
 while true do
     local line = pipe:read"*l"
 	if not line then break end
@@ -349,11 +352,15 @@ while true do
 	if not has_dock then
 		has_dock = line:match([[#define%s+IMGUI_HAS_DOCK]])--%s*(".+")]])
 	end
-    if imgui_version and has_dock then break end
+	if not has_imstr then
+		has_imstr = line:match([[#define%s+IMGUI_HAS_IMSTR]])--%s*(".+")]])
+	end
+    if imgui_version and has_dock and has_imstr then break end
 end
 pipe:close()
 
 if has_dock then gdefines.IMGUI_HAS_DOCK = true end
+if has_imstr then gdefines.IMGUI_HAS_IMSTR = true end
 
 cimgui_header = cimgui_header:gsub("XXX",imgui_version)
 if INTERNAL_GENERATION then
@@ -369,6 +376,7 @@ if gdefines.IMGUI_HAS_DOCK then
 ]]
 	
 end
+print("IMGUI_HAS_IMSTR",gdefines.IMGUI_HAS_IMSTR)
 print("IMGUI_HAS_DOCK",gdefines.IMGUI_HAS_DOCK)
 print("IMGUI_VERSION",imgui_version)
 

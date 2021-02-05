@@ -165,8 +165,11 @@ local function parse_enum_value(value, allenums,dontpost)
 		--already in allenums
 		if allenums[clean(value)] then return allenums[clean(value)] end
 		--must be several and operators
-		--precedence order (hope not ())
-		assert(not value:match("[%(%)]"))
+		------------precedence order (hope not ())
+		--first drop outer ()
+		value = value:gsub("^(%()",""):gsub("(%))$","")
+		assert(not value:match("[%(%)]"),value)
+		
 		local several,seps = strsplit(value,"([<>&|~%+]+)") 
 		--M.prtable(value,several,seps)
 		assert(#seps+1==#several)
@@ -182,6 +185,9 @@ local function parse_enum_value(value, allenums,dontpost)
 				local val2 = clean(several[i+1])
 				if allenums[val1] then val1 = allenums[val1] end
 				if allenums[val2] then val2 = allenums[val2] end
+				--clean 1u
+				if type(val1)=="string" then val1 = val1:gsub("(%d)(u)$","%1") end
+				if type(val2)=="string" then val2 = val2:gsub("(%d)(u)$","%1") end
 				--for getting numbers from "1ULL"
 				if type(val1)=="string" then val1 = loadstring("return "..val1)() end
 				if type(val2)=="string" then val2 = loadstring("return "..val2)() end
@@ -414,14 +420,13 @@ local function parseItems(txt,linenumdict, itparent, dumpit)
 end
 M.parseItems = parseItems
 local function name_overloadsAlgo(v)
+
     local aa = {}
     local bb = {}
     local done = {}
     local maxnum = 0
     for i,t in ipairs(v) do
         bb[i] = ""
-        --local signature = t.signature:sub(2,-2) -- without parenthesis
-		--inside parenthesis
 		local signature = t.signature:match("%b()")
 		signature = signature:sub(2,-2)
 		--add const function
@@ -430,47 +435,52 @@ local function name_overloadsAlgo(v)
 		end
         aa[i] = {}
         local num = 1
-        --for typec in t.signature:gmatch(".-([^,%(%s]+)[,%)]") do
-        --for typec in t.signature:gmatch(".-([^,%(]+)[,%)]") do
-        --for typec in signature:gmatch(".-([^,]+),?") do
         for typec in signature:gsub("(%(.-%))", function(x) return x:gsub(",","\0") end):gmatch(".-([^,]+),?") do
-            --typec = typec:gsub
             aa[i][num] = typec:gsub("%z+", ",")
             num = num + 1
         end
         num = num - 1
         maxnum = (num > maxnum) and num or maxnum
     end
-    
+
     for l=1,maxnum do
         local keys = {}
         local diferent = true
         local equal = true
         for i=1,#v do
             aa[i][l] = aa[i][l] or "nil"
-            keys[aa[i][l]] = 1 + (aa[i][l] and keys[aa[i][l]] or 0)
+            keys[aa[i][l]] = 1 + (keys[aa[i][l]] or 0)
             if not done[i] then
-            for j=i+1,#v do
-                if not done[j] then
-                if aa[i][l] == aa[j][l] then
-                    diferent = false
-                else
-                    equal = false
+                for j=i+1,#v do
+                    if not done[j] then
+                        if aa[i][l] == aa[j][l] then
+                            diferent = false
+                        else
+                            equal = false
+                        end
+                    end
                 end
-                end
-            end
             end
         end
         if not equal then -- not all the same
             for i=1,#v do
                 if not done[i] then
                     bb[i] = bb[i]..(aa[i][l]=="nil" and "" or aa[i][l])
-                    if keys[aa[i][l]] == 1 then
-                        done[i] = true
-                    end
+                    -- if keys[aa[i][l]] == 1 then
+                        -- done[i] = true
+                    -- end
                 end
             end
         end
+		--test done
+		for i=1,#v do
+			done[i] = true
+			for j=1,#v do
+				if i~=j and bb[i]==bb[j] then
+					done[i] = false
+				end
+			end
+		end
     end
 	--avoid empty postfix which will be reserved to generic
 	for i,v in ipairs(bb) do if v=="" then bb[i]="Nil" end end
@@ -493,6 +503,7 @@ local function typetoStr(typ)
     typ = typ:gsub("float","Float")
     typ = typ:gsub("uInt","Uint")
     typ = typ:gsub("ImGui","")
+    typ = typ:gsub("ImStr","STR")
     typ = typ:gsub("Im","")
     typ = typ:gsub("[<>]","")
     return typ
@@ -768,6 +779,84 @@ local function AdjustArguments(FP)
             end
         end
     end
+end
+local function ADDIMSTR_S(FP)
+    local defsT = FP.defsT
+    local newcdefs = {}
+    for numcdef,t in ipairs(FP.funcdefs) do
+		newcdefs[#newcdefs+1] = t
+        if t.cimguiname then
+        local cimf = defsT[t.cimguiname]
+        local defT = cimf[t.signature]
+
+        --if isIMSTR return generate _S version
+		local isIMSTR = false
+		for i,arg in ipairs(defT.argsT) do
+			if arg.type == "ImStr" then isIMSTR=true;break end
+		end
+        --if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
+		--if isIMSTR then print(t.cimguiname,defT.ov_cimguiname,defT.argsoriginal,"isIMSTR") end
+		if isIMSTR then
+            --passing as a pointer arg
+            local defT2 = {}
+            --first strings
+            for k,v in pairs(defT) do
+                defT2[k] = v
+            end
+            --then argsT table
+            defT2.argsT = {}
+            for k,v in ipairs(defT.argsT) do
+				local typ = v.type == "ImStr" and "const char*" or v.type
+                table.insert(defT2.argsT,{type=typ,name=v.name})
+            end
+			--defaults table
+			defT2.defaults = {}
+			for k,v in pairs(defT.defaults) do
+				defT2.defaults[k] = v
+            end
+            defT2.args = defT2.args:gsub("ImStr","const char*")
+			--recreate call_args for wrapping into ImStr
+			local caar
+			if #defT.argsT > 0 then
+				caar = "("
+				for i,v in ipairs(defT.argsT) do
+					local name = v.name --v.type == "ImStr" and "ImStr("..v.name..")" or v.name --wrap
+					if v.ret then --function pointer
+						caar = caar .. name .. ","
+					else
+						local callname = v.reftoptr and "*"..name or name 
+						caar = caar .. callname .. ","
+					end
+				end
+				caar = caar:sub(1,-2)..")"
+			else
+				caar = "()"
+			end
+			defT2.call_args = caar --:gsub("ImStr%(([^%(%)]+)%)","%1") --unwrap
+			------------------
+            defT2.signature = defT.signature:gsub("ImStr","const char*") --.."_S"
+            defT2.ov_cimguiname = defT2.ov_cimguiname .. "_Strv"
+            defT2.isIMSTR_S = 1
+			-- check there is not an equal version in imgui_stname
+			local doadd = true
+			for i,dd in ipairs(cimf) do
+				if dd.signature == defT2.signature then 
+					doadd = false;
+					print("skip _S addition",defT2.cimguiname)
+					break 
+				end
+			end
+			--add _S version
+			if doadd then
+			cimf[#cimf+1] = defT2
+			cimf[defT2.signature] = defT2
+			newcdefs[#newcdefs+1] = {stname=t.stname,funcname=t.funcname,args=defT2.args,signature=defT2.signature,cimguiname=defT2.cimguiname,ret =defT2.ret}
+			end
+        end
+		else print("not cimguiname in");M.prtable(t)
+        end
+    end
+	FP.funcdefs = newcdefs
 end
 local function ADDnonUDT(FP)
     local defsT = FP.defsT
@@ -1491,6 +1580,7 @@ function M.Parser()
         for k,v in pairs(self.alltypes) do print(k, typetoStr(k) ) end
     end
     function par:compute_overloads()
+		--ADDIMSTR_S(self)
         local strt = {}
         local numoverloaded = 0
         self.alltypes = {}
@@ -1506,8 +1596,15 @@ function M.Parser()
                 for i,t in ipairs(v) do
                     --take overloaded name from manual table or algorythm
                     t.ov_cimguiname = self.getCname_overload(t.stname,t.funcname,t.signature,t.namespace) or k..typetoStr(post[i])
+					--check ...
+					if( t.ov_cimguiname:match"%.%.%.") then
+						print("... in ov",t.ov_cimguiname)
+						for i,dd in ipairs(v) do
+							print(dd.signature,post[i])
+						end
+						error"Bad check ..."
+					end
                     table.insert(strt,string.format("%d\t%s\t%s %s",i,t.ret,t.ov_cimguiname,t.signature))
-                    --M.prtable(typesc[i],post)
                 end
                 --check not two names are equal (produced by bad cimguiname_overload)
                 for i=1,#v-1 do 
@@ -1525,8 +1622,10 @@ function M.Parser()
 		end)
         --print(numoverloaded, "overloaded")
         table.insert(strt,string.format("%d overloaded",numoverloaded))
+		ADDIMSTR_S(self)
 		AdjustArguments(self)
 		ADDnonUDT(self)
+
 		--ADDdestructors(self)
         self.overloadstxt  = table.concat(strt,"\n")
     end
