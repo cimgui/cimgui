@@ -164,9 +164,6 @@ igItemSize	2
 igListBox	2
 1	bool	igListBoxStr_arr (const char*,int*,const char* const[],int,int)
 2	bool	igListBoxFnBoolPtr (const char*,int*,bool(*)(void*,int,const char**),void*,int,int)
-igListBoxHeader	2
-1	bool	igListBoxHeaderVec2 (const char*,const ImVec2)
-2	bool	igListBoxHeaderInt (const char*,int,int)
 igMarkIniSettingsDirty	2
 1	void	igMarkIniSettingsDirtyNil ()
 2	void	igMarkIniSettingsDirtyWindowPtr (ImGuiWindow*)
@@ -248,4 +245,4 @@ igValue	4
 2	void	igValueInt (const char*,int)
 3	void	igValueUint (const char*,unsigned int)
 4	void	igValueFloat (const char*,float,const char*)
-175 overloaded
+173 overloaded

@@ -19,6 +19,7 @@
   "ImFontAtlas": "struct ImFontAtlas",
   "ImFontAtlasCustomRect": "struct ImFontAtlasCustomRect",
   "ImFontAtlasFlags": "int",
+  "ImFontBuilderIO": "struct ImFontBuilderIO",
   "ImFontConfig": "struct ImFontConfig",
   "ImFontGlyph": "struct ImFontGlyph",
   "ImFontGlyphRangesBuilder": "struct ImFontGlyphRangesBuilder",
