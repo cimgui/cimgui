@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.1)
 
 project(cimgui VERSION 0.1.1)
 
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends")
+	set(BAKENDS_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends")
+else()
+	set(BAKENDS_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/imgui/examples")
+endif()
+
 if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_tables.cpp)
 	set(TABLES_SOURCE "imgui/imgui_tables.cpp")
 else()
@@ -43,7 +49,7 @@ endif(IMGUI_FREETYPE)
 
 if(IMGUI_GLFW)
 	list(APPEND IMGUI_SOURCES
-		imgui/backends/imgui_impl_glfw.cpp
+		"${BAKENDS_FOLDER}/imgui_impl_glfw.cpp"
 	)
 endif(IMGUI_GLFW)
 
@@ -52,7 +58,7 @@ if(IMGUI_OPENGL3)
 	list(APPEND IMGUI_INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
 	list(APPEND IMGUI_LIBRARIES ${OPENGL_LIBRARIES})
 	list(APPEND IMGUI_SOURCES
-		imgui/backends/imgui_impl_opengl3.cpp
+		"${BAKENDS_FOLDER}/imgui_impl_opengl3.cpp"
 	)
 endif(IMGUI_OPENGL3)
 
