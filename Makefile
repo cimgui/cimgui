@@ -6,6 +6,7 @@ OBJS = cimgui.o
 OBJS += ./imgui/imgui.o
 OBJS += ./imgui/imgui_draw.o
 OBJS += ./imgui/imgui_demo.o
+OBJS += ./imgui/imgui_tables.o
 OBJS += ./imgui/imgui_widgets.o
 
 CXXFLAGS=-O2 -fno-exceptions -fno-rtti
