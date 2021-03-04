@@ -12,11 +12,11 @@
 #include <GL/glu.h>
 
 #ifdef IMGUI_HAS_IMSTR
-#define igBegin igBeginStr
-#define igSliderFloat igSliderFloatStr
-#define igCheckbox igCheckboxStr
-#define igColorEdit3 igColorEdit3Str
-#define igButton igButtonStr
+#define igBegin igBegin_Str
+#define igSliderFloat igSliderFloat_Str
+#define igCheckbox igCheckbox_Str
+#define igColorEdit3 igColorEdit3_Str
+#define igButton igButton_Str
 #endif
 
 SDL_Window *window = NULL;
