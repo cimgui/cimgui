@@ -3,11 +3,11 @@
 #include "../cimgui.h"
 
 #ifdef IMGUI_HAS_IMSTR
-#define igBegin SigBegin
-#define igSliderFloat SigSliderFloat
-#define igCheckbox SigCheckbox
-#define igColorEdit3 SigColorEdit3
-#define igButton SigButton
+#define igBegin igBegin_Strv
+#define igSliderFloat igSliderFloat_Strv
+#define igCheckbox igCheckbox_Strv
+#define igColorEdit3 igColorEdit3_Strv
+#define igButton igButton_Strv
 #endif
 
 int main(void)
