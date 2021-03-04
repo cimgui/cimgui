@@ -506,7 +506,7 @@ local function typetoStr(typ)
     --typ = typ:gsub("ImStr","STR")
     typ = typ:gsub("Im","")
     typ = typ:gsub("[<>]","")
-    return typ
+    return "_"..typ
 end
 --used to clean signature in function ptr argument
 local function clean_names_from_signature(self,signat)
