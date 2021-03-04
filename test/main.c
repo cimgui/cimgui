@@ -3,8 +3,8 @@
 #include "../cimgui.h"
 
 #ifdef IMGUI_HAS_IMSTR
-#define igBegin igBegin_Strv
-#define igSliderFloat igSliderFloat_Strv
+#define igBegin igBeginStr
+#define igSliderFloat igSliderFloatStr
 #define igCheckbox igCheckbox_Strv
 #define igColorEdit3 igColorEdit3_Strv
 #define igButton igButton_Strv
