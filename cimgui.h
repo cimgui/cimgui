@@ -12,9 +12,6 @@
     #else
         #define API __declspec(dllexport)
     #endif
-    #ifndef __GNUC__
-    #define snprintf sprintf_s
-    #endif
 #else
     #ifdef __GNUC__
         #define API  __attribute__((__visibility__("default")))
