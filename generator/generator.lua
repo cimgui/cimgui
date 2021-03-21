@@ -8,6 +8,7 @@ local script_args = {...}
 local COMPILER = script_args[1]
 local INTERNAL_GENERATION = script_args[2]:match("internal") and true or false
 local FREETYPE_GENERATION = script_args[2]:match("freetype") and true or false
+local IMGUI_PATH = os.getenv"IMGUI_PATH" or "../imgui"
 local CFLAGS = ""
 local CPRE,CTEST
 --get implementations
@@ -136,8 +137,8 @@ local func_implementation = cpp2ffi.func_implementation
 -------------------functions for getting and setting defines
 local function get_defines(t)
     if COMPILER == "cl" then print"can't get defines with cl compiler"; return {} end
-    print(COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]] .. CFLAGS)
-    local pipe,err = io.popen(COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ../imgui/imgui.h]] .. CFLAGS,"r")
+    print(COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]..IMGUI_PATH..[[/imgui.h]] .. CFLAGS)
+    local pipe,err = io.popen(COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]..IMGUI_PATH..[[/imgui.h]] .. CFLAGS,"r")
     local defines = {}
     while true do
         local line = pipe:read"*l"
@@ -338,7 +339,7 @@ end
 --get some defines wont work for cl ----------------
 gdefines = get_defines{"IMGUI_VERSION","FLT_MAX","FLT_MIN","IMGUI_HAS_DOCK","IMGUI_HAS_IMSTR"}
 --this will work for cl
-local pipe,err = io.open("../imgui/imgui.h","r")
+local pipe,err = io.open(IMGUI_PATH.."/imgui.h","r")
 if not pipe then
     error("could not open file:"..err)
 end
@@ -401,24 +402,24 @@ end
 --generation
 print("------------------generation with "..COMPILER.."------------------------")
 local parser1
-local headers = [[#include "../imgui/imgui.h" 
+local headers = [[#include "]]..IMGUI_PATH..[[/imgui.h" 
 ]]
 local headersT = {[[imgui]]}
 if INTERNAL_GENERATION then
-	headers = headers .. [[#include "../imgui/imgui_internal.h"
+	headers = headers .. [[#include "]]..IMGUI_PATH..[[/imgui_internal.h"
 	]]
 	headersT[#headersT + 1] = [[imgui_internal]]
 	headersT[#headersT + 1] = [[imstb_textedit]]
 end
 if FREETYPE_GENERATION then
 	headers = headers .. [[
-	#include "../imgui/misc/freetype/imgui_freetype.h"
+	#include "]]..IMGUI_PATH..[[/misc/freetype/imgui_freetype.h"
 	]]
 	headersT[#headersT + 1] = [[imgui_freetype]]
 end
 save_data("headers.h",headers)
 local include_cmd = COMPILER=="cl" and [[ /I ]] or [[ -I ]]
-local extra_includes = include_cmd.." ../imgui "
+local extra_includes = include_cmd.." " ..IMGUI_PATH.." "
 local parser1 = parseImGuiHeader(extra_includes .. [[headers.h]],headersT)
 os.remove("headers.h")
 parser1:do_parse()
@@ -447,12 +448,12 @@ save_data("./output/definitions.lua",serializeTableF(parser1.defsT))
 
 --=================================Now implementations
 local backends_folder 
-local ff,err = io.open ("../imgui/examples/imgui_impl_glfw.h" ,"r")
+local ff,err = io.open (IMGUI_PATH .. "/examples/imgui_impl_glfw.h" ,"r")
 if ff then
-	backends_folder = "../imgui/examples/"
+	backends_folder = IMGUI_PATH .. "/examples/"
 	ff:close()
 else
-	backends_folder = "../imgui/backends/"
+	backends_folder = IMGUI_PATH .. "/backends/"
 end
  
 local parser2
@@ -471,7 +472,7 @@ if #implementations > 0 then
 		local extra_defines = ""
 		if impl == "opengl3" then extra_defines = define_cmd .. "IMGUI_IMPL_OPENGL_LOADER_GL3W " end
 		local include_cmd = COMPILER=="cl" and [[ /I ]] or [[ -I ]]
-		local extra_includes = include_cmd.." ../imgui "
+		local extra_includes = include_cmd.." ".. IMGUI_PATH .." "
 		if config[impl] then
 			for j,inc in ipairs(config[impl]) do
 				extra_includes = extra_includes .. include_cmd .. inc .. " "
