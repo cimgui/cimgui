@@ -506,7 +506,7 @@ local function typetoStr(typ)
     --typ = typ:gsub("ImStr","STR")
     typ = typ:gsub("Im","")
     typ = typ:gsub("[<>]","")
-    return typ
+    return "_"..typ
 end
 --used to clean signature in function ptr argument
 local function clean_names_from_signature(self,signat)
@@ -835,7 +835,8 @@ local function ADDIMSTR_S(FP)
 			defT2.call_args = caar 
 			------------------
             defT2.signature = defT.signature:gsub("ImStrv","const char*") --.."_S"
-            defT2.ov_cimguiname = defT2.ov_cimguiname .. "_Strv"
+            --defT2.ov_cimguiname = defT2.ov_cimguiname --.. "_Strv"
+			--defT.ov_cimguiname = defT.ov_cimguiname .. "_Strv"
             defT2.isIMSTR_S = 1
 			-- check there is not an equal version in imgui_stname
 			local doadd = true
@@ -1589,7 +1590,7 @@ function M.Parser()
         for k,v in pairs(self.alltypes) do print(k, typetoStr(k) ) end
     end
     function par:compute_overloads()
-		--ADDIMSTR_S(self)
+		ADDIMSTR_S(self)
         local strt = {}
         local numoverloaded = 0
         self.alltypes = {}
@@ -1631,7 +1632,7 @@ function M.Parser()
 		end)
         --print(numoverloaded, "overloaded")
         table.insert(strt,string.format("%d overloaded",numoverloaded))
-		ADDIMSTR_S(self)
+		--ADDIMSTR_S(self)
 		AdjustArguments(self)
 		ADDnonUDT(self)
 
