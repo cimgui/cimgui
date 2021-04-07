@@ -8,6 +8,7 @@
 #define igCheckbox igCheckbox_Str
 #define igColorEdit3 igColorEdit3_Str
 #define igButton igButton_Str
+#define igDebugCheckVersionAndDataLayout igDebugCheckVersionAndDataLayout_Str
 #endif
 
 int main(void)
