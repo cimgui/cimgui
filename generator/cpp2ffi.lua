@@ -812,6 +812,10 @@ local function ADDIMSTR_S(FP)
 			--defaults table
 			defT2.defaults = {}
 			for k,v in pairs(defT.defaults) do
+				if v:match"ImStrv" then
+					v = v:gsub("ImStrv%(([^%)]-)%)","%1")
+					v = v == "" and "NULL" or v
+				end
 				defT2.defaults[k] = v
             end
             defT2.args = defT2.args:gsub("ImStrv","const char*")
