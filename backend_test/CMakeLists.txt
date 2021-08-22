@@ -52,7 +52,7 @@ if(IMGUI_FREETYPE)
 endif(IMGUI_FREETYPE)
 
 #opengl3
-list(APPEND IMGUI_SOURCES ${BAKENDS_FOLDER}imgui_impl_opengl3.cpp ../imgui/examples/libs/gl3w/GL/gl3w.c)
+list(APPEND IMGUI_SOURCES ${BAKENDS_FOLDER}imgui_impl_opengl3.cpp)
 list(APPEND IMGUI_SOURCES ./cimgui_extras.cpp)
 include_directories(../imgui/examples/libs/gl3w)
 if(WIN32)
