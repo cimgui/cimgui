@@ -127,9 +127,10 @@ igGetID	3
 1	ImGuiID	igGetID_Str (const char*)
 2	ImGuiID	igGetID_StrStr (const char*,const char*)
 3	ImGuiID	igGetID_Ptr (const void*)
-igImAbs	2
-1	float	igImAbs_Float (float)
-2	double	igImAbs_double (double)
+igImAbs	3
+1	int	igImAbs_Int (int)
+2	float	igImAbs_Float (float)
+3	double	igImAbs_double (double)
 igImFloor	2
 1	float	igImFloor_Float (float)
 2	ImVec2	igImFloor_Vec2 (const ImVec2)
@@ -149,6 +150,9 @@ igImLog	2
 igImPow	2
 1	float	igImPow_Float (float,float)
 2	double	igImPow_double (double,double)
+igImRsqrt	2
+1	float	igImRsqrt_Float (float)
+2	double	igImRsqrt_double (double)
 igImSign	2
 1	float	igImSign_Float (float)
 2	double	igImSign_double (double)
@@ -170,6 +174,9 @@ igMarkIniSettingsDirty	2
 igMenuItem	2
 1	bool	igMenuItem_Bool (const char*,const char*,bool,bool)
 2	bool	igMenuItem_BoolPtr (const char*,const char*,bool*,bool)
+igOpenPopup	2
+1	void	igOpenPopup_Str (const char*,ImGuiPopupFlags)
+2	void	igOpenPopup_ID (ImGuiID,ImGuiPopupFlags)
 igPlotHistogram	2
 1	void	igPlotHistogram_FloatPtr (const char*,const float*,int,int,const char*,float,float,ImVec2,int)
 2	void	igPlotHistogram_FnFloatPtr (const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)
@@ -220,6 +227,9 @@ igSetWindowSize	3
 1	void	igSetWindowSize_Vec2 (const ImVec2,ImGuiCond)
 2	void	igSetWindowSize_Str (const char*,const ImVec2,ImGuiCond)
 3	void	igSetWindowSize_WindowPtr (ImGuiWindow*,const ImVec2,ImGuiCond)
+igTableGcCompactTransientBuffers	2
+1	void	igTableGcCompactTransientBuffers_TablePtr (ImGuiTable*)
+2	void	igTableGcCompactTransientBuffers_TableTempDataPtr (ImGuiTableTempData*)
 igTableGetColumnName	2
 1	const char*	igTableGetColumnName_Int (int)
 2	const char*	igTableGetColumnName_TablePtr (const ImGuiTable*,int)
@@ -245,4 +255,4 @@ igValue	4
 2	void	igValue_Int (const char*,int)
 3	void	igValue_Uint (const char*,unsigned int)
 4	void	igValue_Float (const char*,float,const char*)
-173 overloaded
+180 overloaded
