@@ -14,7 +14,7 @@ local CPRE,CTEST
 --get implementations
 local implementations = {}
 for i=3,#script_args do
-    if script_args[i]:match(COMPILER == cl and "^/" or "^%-") then
+    if script_args[i]:match(COMPILER == "cl" and "^/" or "^%-") then
         local key, value = script_args[i]:match("^(.+)=(.+)$")
         if key and value then
             CFLAGS = CFLAGS .. " " .. key .. "=\"" .. value:gsub("\"", "\\\"") .. "\"";
