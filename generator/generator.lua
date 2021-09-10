@@ -14,7 +14,7 @@ local CPRE,CTEST
 --get implementations
 local implementations = {}
 for i=3,#script_args do
-    if script_args[i]:match(COMPILER == cl and "^/" or "^%-") then
+    if script_args[i]:match(COMPILER == "cl" and "^/" or "^%-") then
         local key, value = script_args[i]:match("^(.+)=(.+)$")
         if key and value then
             CFLAGS = CFLAGS .. " " .. key .. "=\"" .. value:gsub("\"", "\\\"") .. "\"";
@@ -30,7 +30,7 @@ if COMPILER == "gcc" or COMPILER == "clang" then
     CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] .. CFLAGS
     CTEST = COMPILER.." --version"
 elseif COMPILER == "cl" then
-    CPRE = COMPILER..[[ /E /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_API="" /DIMGUI_IMPL_API="" ]] .. CFLAGS
+    CPRE = COMPILER..[[ /E /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_DEBUG_PARANOID /DIMGUI_API="" /DIMGUI_IMPL_API="" ]] .. CFLAGS
     CTEST = COMPILER
 else
     print("Working without compiler ")
@@ -136,14 +136,16 @@ local func_implementation = cpp2ffi.func_implementation
 
 -------------------functions for getting and setting defines
 local function get_defines(t)
-    if COMPILER == "cl" then print"can't get defines with cl compiler"; return {} end
-    print(COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]..IMGUI_PATH..[[/imgui.h]] .. CFLAGS)
-    local pipe,err = io.popen(COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]..IMGUI_PATH..[[/imgui.h]] .. CFLAGS,"r")
+    local compiler_cmd = COMPILER == "cl"
+                         and COMPILER..[[ /TP /nologo /c /Fo"NUL" /I "]]..IMGUI_PATH..[[" print_defines.cpp]]..CFLAGS
+                         or COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]..IMGUI_PATH..[[/imgui.h]]..CFLAGS
+    print(compiler_cmd)
+    local pipe,err = io.popen(compiler_cmd,"r")
     local defines = {}
     while true do
         local line = pipe:read"*l"
         if not line then break end
-        local key,value = line:match([[#define%s+(%S+)%s*(.*)]])
+        local key,value = line:match([[^#define%s+(%S+)%s*(.*)]])
         if not key then --or not value then 
             --print(line)
         else
@@ -159,7 +161,7 @@ local function get_defines(t)
         local aa = defines[v]
         while true do
             local tmp = defines[aa]
-            if not tmp then 
+            if not tmp then
                 break
             else
                 aa = tmp
@@ -336,34 +338,13 @@ end
 -----------------------------do it----------------------
 --------------------------------------------------------
 --get imgui.h version and IMGUI_HAS_DOCK--------------------------
---get some defines wont work for cl ----------------
+--defines for the cl compiler must be present in the print_defines.cpp file
 gdefines = get_defines{"IMGUI_VERSION","FLT_MAX","FLT_MIN","IMGUI_HAS_DOCK","IMGUI_HAS_IMSTR"}
---this will work for cl
-local pipe,err = io.open(IMGUI_PATH.."/imgui.h","r")
-if not pipe then
-    error("could not open file:"..err)
-end
-local imgui_version,has_dock,has_imstr 
-while true do
-    local line = pipe:read"*l"
-	if not line then break end
-	if not imgui_version then
-		imgui_version = line:match([[#define%s+IMGUI_VERSION%s+(".+")]])
-	end
-	if not has_dock then
-		has_dock = line:match([[#define%s+IMGUI_HAS_DOCK]])--%s*(".+")]])
-	end
-	if not has_imstr then
-		has_imstr = line:match([[#define%s+IMGUI_HAS_IMSTR]])--%s*(".+")]])
-	end
-    if imgui_version and has_dock and has_imstr then break end
-end
-pipe:close()
 
-if has_dock then gdefines.IMGUI_HAS_DOCK = true end
-if has_imstr then gdefines.IMGUI_HAS_IMSTR = true end
+if gdefines.IMGUI_HAS_DOCK then gdefines.IMGUI_HAS_DOCK = true end
+if gdefines.IMGUI_HAS_IMSTR then gdefines.IMGUI_HAS_IMSTR = true end
 
-cimgui_header = cimgui_header:gsub("XXX",imgui_version)
+cimgui_header = cimgui_header:gsub("XXX",gdefines.IMGUI_VERSION)
 if INTERNAL_GENERATION then
 	cimgui_header = cimgui_header..[[//with imgui_internal.h api
 ]]
@@ -379,7 +360,7 @@ if gdefines.IMGUI_HAS_DOCK then
 end
 print("IMGUI_HAS_IMSTR",gdefines.IMGUI_HAS_IMSTR)
 print("IMGUI_HAS_DOCK",gdefines.IMGUI_HAS_DOCK)
-print("IMGUI_VERSION",imgui_version)
+print("IMGUI_VERSION",gdefines.IMGUI_VERSION)
 
 
 --funtion for parsing imgui headers
