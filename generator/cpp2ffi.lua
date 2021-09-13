@@ -1361,7 +1361,12 @@ function M.Parser()
 					or (it.re_name == "typedef_st_re" and it.item:match("%b{}%s*(%S+)%s*;"))
 					--TODO nesting namespace and class
 					local parname = get_parents_name(it)
-					self.embeded_structs[embededst] = parname..embededst
+					if it.parent.re_name == "struct_re" then
+						--needed by cimnodes with struct tag name equals member name
+						self.embeded_structs[embededst] = "struct "..parname..embededst
+					else
+						self.embeded_structs[embededst] = parname..embededst
+					end
 				end
 			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
 				--nop
