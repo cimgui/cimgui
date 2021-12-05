@@ -621,6 +621,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
 	local functype_re =        "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
     local functype_reex =     "^(%s*[%w%s%*]+)%(%*([%w_]+)%)(%([^%(%)]*%))"
     local functype_arg_rest = "^(%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)),*(.*)"
+	local functype_fp =		  "^%s*[%w%s%*]+%(__cdecl%*[%s]+([%w_]+)%)%([%w%s%*,]+%)" -- int(__cdecl* compare_func)(void const*,void const*)
 	local argsTa2 = {}
 	local noname_counter = 0
 	for i,ar in ipairs(argsTa) do
@@ -646,6 +647,10 @@ local function parseFunction(self,stname,itt,namespace,locat)
 				ar1,defa = ar:match"([^=]+)=([^=]+)"
 				ar1 = ar1 or ar
 				typ,name = ar1:match("(.+)%s([^%s]+)")
+			end
+			if ar:match(functype_fp) then
+				typ = ar
+				name = ar:match(functype_fp)
 			end
 			if not typ or not name or name:match"%*" or M.c_types[name]  or self.typedefs_dict[name] then
 				print("argument without name",funcname,typ,name,ar)
@@ -684,14 +689,23 @@ local function parseFunction(self,stname,itt,namespace,locat)
 			if v.ret then --function pointer
 				asp = asp .. v.ret .. "(*" .. v.name .. ")" .. v.signature .. ","
 				caar = caar .. v.name .. ","
-				signat = signat .. v.ret .. "(*)" .. clean_names_from_signature(self,v.signature) .. ","
+				signat = signat .. v.ret .. "(*)" .. clean_names_from_signature(self,v.signature) .. ","			
 			else
-				local siz = v.type:match("(%[%d*%])") or ""
-				local typ = v.type:gsub("(%[%d*%])","")
-				asp = asp .. typ .. (v.name~="..." and " "..v.name or "") .. siz .. ","
-				local callname = v.reftoptr and "*"..v.name or v.name 
-				caar = caar .. callname .. ","
-				signat = signat .. typ .. siz .. ","
+				if not v.type:match(functype_fp) then
+					local siz = v.type:match("(%[%d*%])") or ""
+					local typ = v.type:gsub("(%[%d*%])","")
+					asp = asp .. typ .. (v.name~="..." and " "..v.name or "") .. siz .. ","
+					local callname = v.reftoptr and "*"..v.name or v.name 
+					caar = caar .. callname .. ","
+					signat = signat .. typ .. siz .. ","
+				else
+					-- inline function pointer args handling
+					local siz = v.type:match("(%[%d*%])") or ""
+					local typ = v.type:gsub("(%[%d*%])","")
+					asp = asp .. typ .. siz .. ","
+					caar = caar .. v.name .. ","
+					signat = signat .. typ .. siz .. ","
+				end
 			end
 		end
 		asp = asp:sub(1,-2)..")"
