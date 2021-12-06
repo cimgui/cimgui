@@ -376,7 +376,7 @@ local function parseItems(txt,linenumdict, itparent, dumpit)
 							loca = table.remove(loca,1)
 						end
 						if not loca then
-							print(string.format("%q , %q ",itemold,itemfirstline),#itemfirstline)
+							print("not loca",string.format("%q , %q ",itemold,itemfirstline),#itemfirstline)
 							for k,v in pairs(linenumdict) do
 								if k:match(itemfirstline) then
 									print(string.format("%q",k),#k)
@@ -618,16 +618,18 @@ local function parseFunction(self,stname,itt,namespace,locat)
 	end
 	
 	--get typ, name and defaults
-	local functype_re =        "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
-    local functype_reex =     "^(%s*[%w%s%*]+)%(%*([%w_]+)%)(%([^%(%)]*%))"
-    local functype_arg_rest = "^(%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)),*(.*)"
+	local functype_re =        "^%s*[%w%s%*]+%(%*%s*[%w_]+%)%([^%(%)]*%)"
+    local functype_reex =     "^(%s*[%w%s%*]+)%(%*%s*([%w_]+)%)(%([^%(%)]*%))"
 	local argsTa2 = {}
 	local noname_counter = 0
 	for i,ar in ipairs(argsTa) do
 		local typ,name,retf,sigf,reftoptr,defa,ar1
+		local has_cdecl = ar:match"__cdecl"
+		if has_cdecl then ar = ar:gsub("__cdecl","") end
 		if ar:match(functype_re) then
 			local t1,namef,t2 = ar:match(functype_reex)
-            typ, name = t1.."(*)"..t2, namef
+			local f_ = has_cdecl and "(__cdecl*)" or "(*)"
+            typ, name = t1..f_..t2, namef
             retf = t1
             sigf = t2
 		else
@@ -662,7 +664,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
                 name = name:gsub("(%[%d*%])","")
             end
 		end
-		argsTa2[i] = {type=typ,name=name,default=defa,reftoptr=reftoptr,ret=retf,signature=sigf}
+		argsTa2[i] = {type=typ,name=name,default=defa,reftoptr=reftoptr,ret=retf,signature=sigf,has_cdecl=has_cdecl}
 		if ar:match("&") and not ar:match("const") then
             --only post error if not manual
             local cname = self.getCname(stname,funcname, namespace) --cimguiname
@@ -682,9 +684,10 @@ local function parseFunction(self,stname,itt,namespace,locat)
 		signat = "("
 		for i,v in ipairs(argsArr) do
 			if v.ret then --function pointer
-				asp = asp .. v.ret .. "(*" .. v.name .. ")" .. v.signature .. ","
+				local f_ = v.has_cdecl and "(__cdecl*" or "(*"
+				asp = asp .. v.ret .. f_ .. v.name .. ")" .. v.signature .. ","
 				caar = caar .. v.name .. ","
-				signat = signat .. v.ret .. "(*)" .. clean_names_from_signature(self,v.signature) .. ","
+				signat = signat .. v.ret .. f_..")" .. clean_names_from_signature(self,v.signature) .. ","
 			else
 				local siz = v.type:match("(%[%d*%])") or ""
 				local typ = v.type:gsub("(%[%d*%])","")
@@ -1158,13 +1161,14 @@ function M.Parser()
 		local cdefs2 = {}
 		for i,cdef in ipairs(cdefs) do
 			if self.linenumdict[cdef[1]] then
-				--print("linenumdict alredy defined for", cdef[1],type(self.linenumdict[cdef[1]]))
+				--print("linenumdict already defined for", cdef[1],type(self.linenumdict[cdef[1]]))
 				if type(self.linenumdict[cdef[1]])=="string" then
 					self.linenumdict[cdef[1]] = {self.linenumdict[cdef[1]], cdef[2]}
 				else -- must be table already
 					table.insert(self.linenumdict[cdef[1]],cdef[2])
 				end
 			else
+				--print("nuevo linenumdict es",cdef[1],cdef[2])
 				self.linenumdict[cdef[1]]=cdef[2]
 			end
 			table.insert(cdefs2,cdef[1])
@@ -2084,7 +2088,7 @@ end
 M.func_header_generate = func_header_generate
 --[=[
 -- tests
-local line = [[struct ImDrawListSharedData
+local code = [[struct ImDrawListSharedData
 {
     ImVec2 TexUvWhitePixel;
     ImFont* Font;
@@ -2098,11 +2102,16 @@ local line = [[struct ImDrawListSharedData
     ImDrawListSharedData();
     void SetCircleSegmentMaxError(float max_error);
 };]]
+local code = [[static inline void      ImQsort(void* base, size_t count, size_t size_of_element, int(__cdecl *compare_func)(void const*, void const*)) { if (count > 1) qsort(base, count, size_of_element, compare_func); }
+]]
 local parser = M.Parser()
-parser:insert(line)
+for line in code:gmatch("[^\n]+") do
+	print("inserting",line)
+	parser:insert(line,"11")
+end
 parser:do_parse()
---M.prtable(parser)
-M.prtable(parser:gen_structs_and_enums_table())
+M.prtable(parser)
+--M.prtable(parser:gen_structs_and_enums_table())
 --]=]
 --print(clean_spaces[[ImVec2 ArcFastVtx[12 * 1];]])
 
