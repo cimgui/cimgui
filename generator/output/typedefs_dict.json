@@ -58,6 +58,8 @@
   "ImGuiLastItemData": "struct ImGuiLastItemData",
   "ImGuiLayoutType": "int",
   "ImGuiListClipper": "struct ImGuiListClipper",
+  "ImGuiListClipperData": "struct ImGuiListClipperData",
+  "ImGuiListClipperRange": "struct ImGuiListClipperRange",
   "ImGuiMemAllocFunc": "void*(*)(size_t sz,void* user_data);",
   "ImGuiMemFreeFunc": "void(*)(void* ptr,void* user_data);",
   "ImGuiMenuColumns": "struct ImGuiMenuColumns",
