@@ -27,7 +27,7 @@ Notes:
   * cmake options are IMGUI_STATIC (compiling as static library), IMGUI_FREETYPE (for using Freetype2) and FREETYPE_PATH (Freetype2 cmake install location)
   * or as in https://github.com/sonoro1234/LuaJIT-ImGui/tree/master/build
   
-  For compiling with backends there is now an example with SDL2 and opengl3 in folder backend_test. It will generate a cimgui_sdl module and a test_sdl executable. You only need to provide SDL_PATH telling cmake where to look for SDL2 cmake installation.
+  For compiling with backends there is now an example with SDL2 and opengl3 in folder backend_test. It will generate a cimgui_sdl module and a test_sdl executable.
 
 # using generator
 
