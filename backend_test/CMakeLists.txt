@@ -92,8 +92,6 @@ else(SDL2_FOUND)
 	else(DEFINED SDL_PATH)
 		message(FATAL_ERROR "Cannot find SDL. Maybe try specifying SDL_PATH?")
 	endif(DEFINED SDL_PATH)
-
-	set(IMGUI_SDL_LIBRARY SDL2)
 endif(SDL2_FOUND)
 
 add_library(cimgui_sdl SHARED ${IMGUI_SOURCES})
