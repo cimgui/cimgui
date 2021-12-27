@@ -26,6 +26,10 @@ for i=3,#script_args do
     end
 end
 
+if FREETYPE_GENERATION then
+	CFLAGS = CFLAGS .. " -DIMGUI_ENABLE_FREETYPE "
+end
+
 if COMPILER == "gcc" or COMPILER == "clang" then
     CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] .. CFLAGS
     CTEST = COMPILER.." --version"
@@ -59,6 +63,7 @@ assert(HAVE_COMPILER,"gcc, clang or cl needed to run script")
 print("HAVE_COMPILER",HAVE_COMPILER)
 print("INTERNAL_GENERATION",INTERNAL_GENERATION)
 print("FREETYPE_GENERATION",FREETYPE_GENERATION)
+print("CPRE",CPRE)
 --------------------------------------------------------------------------
 --this table has the functions to be skipped in generation
 --------------------------------------------------------------------------
@@ -331,7 +336,8 @@ local function cimgui_generation(parser)
     local hstrfile = read_data"./cimgui_template.cpp"
 
     hstrfile = hstrfile:gsub([[#include "auto_funcs%.cpp"]],cimplem)
-    save_data("./output/cimgui.cpp",cimgui_header,hstrfile)
+	local ftdef = FREETYPE_GENERATION and "#define IMGUI_ENABLE_FREETYPE\n" or ""
+    save_data("./output/cimgui.cpp",cimgui_header, ftdef, hstrfile)
 
 end
 --------------------------------------------------------
