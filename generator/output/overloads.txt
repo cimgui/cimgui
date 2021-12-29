@@ -121,8 +121,8 @@ igGetColorU32	3
 3	ImU32	igGetColorU32_U32 (ImU32)
 igGetForegroundDrawList	3
 1	ImDrawList*	igGetForegroundDrawList_Nil ()
-2	ImDrawList*	igGetForegroundDrawList_WindowPtr (ImGuiWindow*)
-3	ImDrawList*	igGetForegroundDrawList_ViewportPtr (ImGuiViewport*)
+2	ImDrawList*	igGetForegroundDrawList_ViewportPtr (ImGuiViewport*)
+3	ImDrawList*	igGetForegroundDrawList_WindowPtr (ImGuiWindow*)
 igGetID	3
 1	ImGuiID	igGetID_Str (const char*)
 2	ImGuiID	igGetID_StrStr (const char*,const char*)
