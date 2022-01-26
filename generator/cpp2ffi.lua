@@ -170,13 +170,13 @@ local function parse_enum_value(value, allenums,dontpost)
 		value = value:gsub("^(%()",""):gsub("(%))$","")
 		assert(not value:match("[%(%)]"),value)
 		
-		local several,seps = strsplit(value,"([<>&|~%+]+)") 
+		local several,seps = strsplit(value,"([<>&|~%+%-]+)") 
 		--M.prtable(value,several,seps)
 		assert(#seps+1==#several)
 		
 		local i = 1
 		local ik = 1
-		local sepk = {"~","<<",">>","&","^","|","+"}
+		local sepk = {"~","<<",">>","&","^","|","+","-"}
 		while(#seps>0) do
 			local sep = sepk[ik]
 			local v = seps[i]
@@ -206,6 +206,8 @@ local function parse_enum_value(value, allenums,dontpost)
 					several[i] = bit.bor(val1,val2)
 				elseif v=="+" then
 					several[i] = val1 + val2
+				elseif v=="-" then
+					several[i] = val1 - val2
 				else
 					error("unknown operator "..v)
 				end
@@ -223,7 +225,7 @@ local function parse_enum_value(value, allenums,dontpost)
 		end
 		if #seps>0 or type(several[1])~="number" and not dontpost then
 			--M.prtable("enline",enline)
-			print("parse_enum_value WARNING",value,several[1])
+			print("parse_enum_value WARNING:",value,several[1])
 			--M.prtable(several,seps)
 			--M.prtable("allenums",allenums)
 		end
@@ -324,7 +326,9 @@ local function parseItems(txt,linenumdict, itparent, dumpit)
 			local re = res[re_name]
 			local i,e = txt:find(re,ini)
 			if i then
+				
 				item = txt:sub(i,e)
+				--print("re_name",re_name,item)
 				------------------
 				--[[
 				--if re~=functionD_re then --skip defined functions
@@ -377,12 +381,18 @@ local function parseItems(txt,linenumdict, itparent, dumpit)
 						end
 						if not loca then
 							print("not loca",string.format("%q , %q ",itemold,itemfirstline),#itemfirstline)
-							for k,v in pairs(linenumdict) do
-								if k:match(itemfirstline) then
-									print(string.format("%q",k),#k)
-								end
+							-- for k,v in pairs(linenumdict) do
+								-- if k:match(itemfirstline) then
+									-- print(string.format("%q",k),#k)
+								-- end
+							-- end
+							--error"no entry in linenumdict"
+							--take locat from parent
+							if itparent.locat then
+								loca = itparent.locat
+							else
+								error"no entry in linenumdict"
 							end
-							error"no entry in linenumdict"
 						end
 					else
 						error"no linenumdict"
@@ -1140,7 +1150,8 @@ function M.Parser()
 					local stname = it.item:match("struct%s+(%S+)")
 					it.name = stname
 					
-					local templa1,templa2 = it.item:match("^%s*template%s*<%s*(%S+)%s*(%S+)%s*>")
+					--local templa1,templa2 = it.item:match("^%s*template%s*<%s*(%S+)%s*(%S+)%s*>")
+					local templa2 = it.item:match("^%s*template%s*<%s*([^<>]+)%s*>")
 					if templa1 or templa2 then print("template found",stname,templa1,templa2,"typename",typename) end
 					
 					if typename or templa2 then -- it is a struct template
@@ -2088,21 +2099,20 @@ end
 M.func_header_generate = func_header_generate
 --[=[
 -- tests
-local code = [[struct ImDrawListSharedData
+local code = [[
+template<int BITCOUNT, int OFFSET = 0>
+struct IMGUI_API ImBitArray
 {
-    ImVec2 TexUvWhitePixel;
-    ImFont* Font;
-    float FontSize;
-    float CurveTessellationTol;
-    float CircleSegmentMaxError;
-    ImVec4 ClipRectFullscreen;
-    ImDrawListFlags InitialFlags;
-    ImVec2 ArcFastVtx[12 * 1];
-    ImU8 CircleSegmentCounts[64];
-    ImDrawListSharedData();
-    void SetCircleSegmentMaxError(float max_error);
-};]]
-local code = [[static inline void      ImQsort(void* base, size_t count, size_t size_of_element, int(__cdecl *compare_func)(void const*, void const*)) { if (count > 1) qsort(base, count, size_of_element, compare_func); }
+    ImU32           Storage[(BITCOUNT + 31) >> 5];
+    ImBitArray()                                { ClearAllBits(); }
+    void            ClearAllBits()              { memset(Storage, 0, sizeof(Storage)); }
+    void            SetAllBits()                { memset(Storage, 255, sizeof(Storage)); }
+    bool            TestBit(int n) const        { IM_ASSERT(n + OFFSET < BITCOUNT); return ImBitArrayTestBit(Storage, n + OFFSET); }
+    void            SetBit(int n)               { IM_ASSERT(n + OFFSET < BITCOUNT); ImBitArraySetBit(Storage, n + OFFSET); }
+    void            ClearBit(int n)             { IM_ASSERT(n + OFFSET < BITCOUNT); ImBitArrayClearBit(Storage, n + OFFSET); }
+    void            SetBitRange(int n, int n2)  { ImBitArraySetBitRange(Storage, n + OFFSET, n2 + OFFSET); } // Works on range [n..n2)
+    bool            operator[](int n) const     { IM_ASSERT(n + OFFSET < BITCOUNT); return ImBitArrayTestBit(Storage, n + OFFSET); }
+};
 ]]
 local parser = M.Parser()
 for line in code:gmatch("[^\n]+") do
