@@ -250,34 +250,36 @@ end
 
 ----------custom ImVector templates
 local table_do_sorted = cpp2ffi.table_do_sorted
-local function generate_templates(code,codeimpool,templates)
-    table.insert(code,"\n"..[[typedef struct ImVector{int Size;int Capacity;void* Data;} ImVector;]].."\n")
-	table_do_sorted(templates , function (ttype, v)
+local function gentemplatetypedef(self,ttype,te,newte)
+		local code = {}
+		--print("gentemplatetypedef",ttype,te,newte)
+		if not newte then return "" end
+		self.templates_done = self.templates_done or {}
+		self.templates_done[ttype] = self.templates_done[ttype] or {}
+		if self.templates_done[ttype][te] then return "" end
+		self.templates_done[ttype][te] = true
 		if ttype == "ImVector" then
-			table_do_sorted(v, function(te,newte)
 				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
-			end)
 		elseif ttype == "ImPool" then
 			--declare ImGuiStorage
-			table_do_sorted(v, function(te, newte)
-				table.insert(codeimpool,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
-				table.insert(codeimpool,"typedef struct ImPool_"..newte.." {ImVector_"..te.." Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_"..newte..";\n")
-			end)
+				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
+				table.insert(code,"typedef struct ImPool_"..newte.." {ImVector_"..te.." Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_"..newte..";\n")
 		elseif ttype == "ImChunkStream" then
-			table_do_sorted(v, function(te,newte)
 				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
 				table.insert(code,"typedef struct ImChunkStream_"..newte.." {ImVector_"..te.." Buf;} ImChunkStream_"..newte..";\n")
-			end)
 		elseif ttype == "ImSpan" then
-			table_do_sorted(v, function(te,newte)
 				table.insert(code,"typedef struct ImSpan_"..newte.." {"..te.."* Data;" ..te.."* DataEnd;} ImSpan_"..newte..";\n")
-			end)
+		-- elseif ttype == "ImBitArray" then
+			-- table_do_sorted(v, function(te,newte)
+				-- table.insert(code,"typedef struct ImBitArray_"..newte.." {const int Size ="..te..";ImU32 Storage[("..te.." + 31) >> 5];" .."} ImBitArray_"..newte..";\n")
+			-- end)
 		else
-			print("generate_templates ttype not done",ttype)
-			error"generate templates"
+			print("gentemplatetypedef ttype not done",ttype)
+			error"gentemplatetypedef"
 		end
-	end)
+		return "\n"..table.concat(code,"")
 end
+
 --generate cimgui.cpp cimgui.h 
 local function cimgui_generation(parser)
 
@@ -308,15 +310,9 @@ local function cimgui_generation(parser)
 	cpp2ffi.prtable(parser.templates)
 	cpp2ffi.prtable(parser.typenames)
 	
-	local outtab = {}
-	local outtabpool = {}
-    generate_templates(outtab, outtabpool, parser.templates)
-	
-	--move outtabpool after ImGuiStorage definition
-	local outpost1, outpost2 = outpost:match("^(.+struct ImGuiStorage%s*\n%b{};\n)(.+)$")
-	outpost = outpost1..table.concat(outtabpool)..outpost2
 
-	local cstructsstr = outpre..table.concat(outtab,"")..outpost --..(extra or "")
+	local  tdt = parser:generate_templates()
+	local cstructsstr = outpre..tdt..outpost 
     
 	if gdefines.IMGUI_HAS_DOCK then
 		cstructsstr = cstructsstr.."\n#define IMGUI_HAS_DOCK       1\n"
@@ -381,6 +377,7 @@ local function parseImGuiHeader(header,names)
 	parser.cname_overloads = cimgui_overloads
 	parser.manuals = cimgui_manuals
 	parser.UDTs = {"ImVec2","ImVec4","ImColor","ImRect"}
+	parser.gentemplatetypedef = gentemplatetypedef
 	
 	local defines = parser:take_lines(CPRE..header,names,COMPILER)
 	

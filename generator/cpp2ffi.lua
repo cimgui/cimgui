@@ -1194,8 +1194,25 @@ function M.Parser()
 		printItems(items)
 	end
 	par.parseFunction = parseFunction
-	
-	function par:clean_structR1(itst)
+	local uniques = {}
+	local function check_unique_typedefs(l,uniques)
+		if not uniques[l] then
+			uniques[l] = true
+			return true
+		end
+		return false
+	end
+	function par:generate_templates()
+		local ttd = {}
+		M.table_do_sorted(self.templates , function (ttype, v)
+			--print("generate_templates",ttype,v)
+			M.table_do_sorted(v, function(te,newte) 
+				table.insert(ttd,self:gentemplatetypedef(ttype,te,newte))
+			end)
+		end)
+		return table.concat(ttd,"")
+	end
+	function par:clean_structR1(itst,doheader)
 		local stru = itst.item
 		local outtab = {}
 		local commtab = {}
@@ -1255,6 +1272,10 @@ function M.Parser()
 					it2 = it2:gsub("(<[%w_%*%s]+>)([^%s])","%1 %2") --add if not present space after <>
 					it2 = it2:gsub("<([%w_%*%s]+)>","_"..te)
 					end
+					if doheader then
+						local templatetypedef = self:gentemplatetypedef(ttype, template,self.templates[ttype][template])
+						predeclare = predeclare .. templatetypedef
+					end
 				end
 				--clean mutable
 				it2 = it2:gsub("mutable","")
@@ -1274,7 +1295,15 @@ function M.Parser()
 					table.insert(outtab,"\n    "..it.name.." "..decl..";")
 					table.insert(commtab,it.comments )--or "")
 				end
-				local cleanst,structname,strtab,comstab,predec = self:clean_structR1(it)
+				local cleanst,structname,strtab,comstab,predec = self:clean_structR1(it,doheader)
+				if doheader then
+				local tst = "\ntypedef struct "..structname.." "..structname..";\n"
+						if check_unique_typedefs(tst,uniques) then
+							--table.insert(outtab,tst)
+							--print("xxxxxxxxxxxxxxxinsert typedef",structname)
+							cleanst = cleanst .. tst
+						end
+				end
 				predeclare = predeclare .. predec .. cleanst
 			elseif it.re_name == "enum_re" then
 				--nop
@@ -1304,11 +1333,14 @@ function M.Parser()
 		if parnam~="" then parnam = parnam:sub(1,-3) end
 		return parnam
 	end
+	
+
 	function par:gen_structs_and_enums()
 		local outtab = {} 
 		local outtabpre = {}
 		local typedefs_table = {}
 		self.embeded_enums = {}
+		--local uniques = {}
 		
 		local processer = function(it)
 			if it.re_name == "typedef_re" or it.re_name == "functypedef_re" or it.re_name == "vardef_re" then
@@ -1317,7 +1349,11 @@ function M.Parser()
 					-- add typedef after struct name
 					if it.re_name == "vardef_re" and it.item:match"^%s*struct" then
 						local stname = it.item:match("struct%s*(%S+)%s*;")
-						table.insert(typedefs_table,"typedef struct "..stname.." "..stname..";\n")
+						--table.insert(typedefs_table,"typedef struct "..stname.." "..stname..";\n")
+						local tst = "\ntypedef struct "..stname.." "..stname..";"
+						if check_unique_typedefs(tst,uniques) then
+							table.insert(outtabpre,tst)
+						end
 						self.typedefs_dict[stname]="struct "..stname
 						if it.parent then --must be struct name; inside namespace
 							local parname = get_parents_name(it)
@@ -1360,16 +1396,21 @@ function M.Parser()
 					print("unnamed enum",cl_item)
 				end
 			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" then
-				local cleanst,structname,strtab,comstab,predec = self:clean_structR1(it)
+				local cleanst,structname,strtab,comstab,predec = self:clean_structR1(it,true)
 				if not structname then print("NO NAME",cleanst,it.item) end
 				--if not void stname or templated
 				if structname and not self.typenames[structname] then
+					
+					--table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
+					local tst = "\ntypedef struct "..structname.." "..structname..";"
+						if check_unique_typedefs(tst,uniques) then
+							table.insert(outtab,tst)
+						end
+					self.typedefs_dict[structname]="struct "..structname
 					--dont insert child structs as they are inserted before parent struct
 					if not (it.parent and it.parent.re_name == "struct_re") then
 						table.insert(outtab,predec .. cleanst)
 					end
-					table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
-					self.typedefs_dict[structname]="struct "..structname
 				end
 				if it.parent  then --and (it.parent.re_name == "struct_re" or it.parent.re_name == "typedef_st_re" then
 					local embededst = (it.re_name == "struct_re" and it.item:match("struct%s+(%S+)")) 
@@ -1413,13 +1454,13 @@ function M.Parser()
 		
 		self:Listing(itemsarr,processer)
 		
-		local uniques = {}
-		for i,l in ipairs(typedefs_table) do
-			if not uniques[l] then
-				uniques[l] = true
-				table.insert(outtabpre,1,l)
-			end
-		end
+		-- local uniques = {}
+		-- for i,l in ipairs(typedefs_table) do
+			-- if not uniques[l] then
+				-- uniques[l] = true
+				-- table.insert(outtabpre,1,l)
+			-- end
+		-- end
 		--check arg detection failure if no name in function declaration
 		check_arg_detection(self.defsT,self.typedefs_dict)
 		local outtabprest, outtabst = table.concat(outtabpre,""),table.concat(outtab,"")
