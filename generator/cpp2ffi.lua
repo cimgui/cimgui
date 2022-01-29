@@ -1345,6 +1345,28 @@ function M.Parser()
 		local processer = function(it)
 			if it.re_name == "typedef_re" or it.re_name == "functypedef_re" or it.re_name == "vardef_re" then
 				if not it.parent or it.parent.re_name=="namespace_re" then
+					if it.re_name == "typedef_re" then
+						--check if it is templated
+						local ttype,template =    it.item:match"([^%s,%(%)]+)%s*<(.+)>"
+						if template then
+							--if self.typenames[ttype] ~= template then --rule out T (template typename)
+							local te = template:gsub("%s","_")
+							te = te:gsub("%*","Ptr")
+							--self.templates[ttype] = self.templates[ttype] or {}
+							--self.templates[ttype][template] = te
+							it.item = it.item:gsub("(<[%w_%*%s]+>)([^%s])","%1 %2") --add if not present space after <>
+							it.item = it.item:gsub("<([%w_%*%s]+)>","_"..te)
+							--end
+							
+							--local templatetypedef = self:gentemplatetypedef(ttype, template,self.templates[ttype][template])
+								--predeclare = predeclare .. templatetypedef
+							print("ccccccccccccccccccccccccccccccccc")
+							print(ttype,template,te)
+							print("item:",it.item)
+							--self:gentemplatetypedef(ttype,template,te))
+						end
+						
+					end
 					table.insert(outtabpre,it.item)
 					-- add typedef after struct name
 					if it.re_name == "vardef_re" and it.item:match"^%s*struct" then

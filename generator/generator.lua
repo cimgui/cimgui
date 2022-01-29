@@ -269,10 +269,11 @@ local function gentemplatetypedef(self,ttype,te,newte)
 				table.insert(code,"typedef struct ImChunkStream_"..newte.." {ImVector_"..te.." Buf;} ImChunkStream_"..newte..";\n")
 		elseif ttype == "ImSpan" then
 				table.insert(code,"typedef struct ImSpan_"..newte.." {"..te.."* Data;" ..te.."* DataEnd;} ImSpan_"..newte..";\n")
-		-- elseif ttype == "ImBitArray" then
-			-- table_do_sorted(v, function(te,newte)
-				-- table.insert(code,"typedef struct ImBitArray_"..newte.." {const int Size ="..te..";ImU32 Storage[("..te.." + 31) >> 5];" .."} ImBitArray_"..newte..";\n")
-			-- end)
+		elseif ttype == "ImBitArray" then
+				if te:match"," then
+					local args = cpp2ffi.strsplit(te,",")
+				end
+				table.insert(code,"typedef struct ImBitArray_"..newte.." {ImU32 Storage[("..args[1].." + 31) >> 5];" .."} ImBitArray_"..newte..";\n")
 		else
 			print("gentemplatetypedef ttype not done",ttype)
 			error"gentemplatetypedef"
