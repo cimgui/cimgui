@@ -157,11 +157,12 @@ local function check_template(code)
 		te = te:gsub("%s","_")
 		te = te:gsub("%*","Ptr")
 	
-		code2 = code:gsub("(<[%w_%*%s]+>)([^%s])","%1 %2")
+		code2 = code:gsub("(<[%w_%*%s]+>)([^%s%*])","%1 %2")
 		code2 = code2:gsub("<([^<>]-)>","_"..te)
 	end
 	return ttype,template,te,code2
 end
+----------------------------------------
 local function parse_enum_value(value, allenums,dontpost)
 	local function clean(val)
 		if type(val)=="string" then
