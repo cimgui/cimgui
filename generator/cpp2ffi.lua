@@ -1505,6 +1505,7 @@ function M.Parser()
 		else
 			--split type name1,name2; in several lines
 			local typen,rest = line:match("%s*([^,]+)%s(%S+[,;])")
+			--print(typen,"rest:",rest)
             if not typen then -- Lets try Type*name
                 typen,rest = line:match("([^,]+%*)(%S+[,;])")
             end
@@ -1598,6 +1599,7 @@ function M.Parser()
 		self.typedefs_table = {}
 		local enumsordered = {}
 		unnamed_enum_counter = 0
+		self.templated_structs = {}
 		
 		local processer = function(it)
 			if it.re_name == "typedef_re" or it.re_name == "functypedef_re" or it.re_name == "vardef_re" then
@@ -1619,7 +1621,17 @@ function M.Parser()
 						self:parse_struct_line(strtab[j],outtab.structs[structname],comstab[j])
 					end
 				else
-					print("skipped unnamed or templated struct",structname)
+					--templated struct
+					if structname then
+						print("saving templated struct",structname)
+						self.templated_structs[structname] = {}
+						for j=3,#strtab-1 do
+							self:parse_struct_line(strtab[j],self.templated_structs[structname],comstab[j])
+						end
+						M.prtable(self.templated_structs[structname])
+					else
+						print("skipped unnamed struct",structname)
+					end
 				end
 			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
 				--nop
@@ -2169,7 +2181,7 @@ M.func_header_generate = func_header_generate
 -- tests
 local code = [[
 template<int BITCOUNT, int OFFSET = 0>
-struct IMGUI_API ImBitArray
+struct ImBitArray
 {
     ImU32           Storage[(BITCOUNT + 31) >> 5];
     ImBitArray()                                { ClearAllBits(); }
@@ -2184,7 +2196,7 @@ struct IMGUI_API ImBitArray
 ]]
 local parser = M.Parser()
 for line in code:gmatch("[^\n]+") do
-	print("inserting",line)
+	--print("inserting",line)
 	parser:insert(line,"11")
 end
 parser:do_parse()
@@ -2192,5 +2204,17 @@ M.prtable(parser)
 --M.prtable(parser:gen_structs_and_enums_table())
 --]=]
 --print(clean_spaces[[ImVec2 ArcFastVtx[12 * 1];]])
-
+--[=[
+local code = [[ImU32 Storage[(BITCOUNT + 31) >> 5];]]
+--local code = [[ImU32 Storage[37 + 2];]]
+local parser = M.Parser()
+parser:insert(code,"11")
+--parser:do_parse()
+--M.prtable(parser)
+local tab={}
+print(type(code),code)
+print(clean_spaces(code))
+parser:parse_struct_line(code,tab)
+M.prtable(tab)
+--]=]
 return M
