@@ -270,8 +270,9 @@ local function gentemplatetypedef(self,ttype,te,newte)
 		elseif ttype == "ImSpan" then
 				table.insert(code,"typedef struct ImSpan_"..newte.." {"..te.."* Data;" ..te.."* DataEnd;} ImSpan_"..newte..";\n")
 		elseif ttype == "ImBitArray" then
+				local args = {te}
 				if te:match"," then
-					local args = cpp2ffi.strsplit(te,",")
+					args = cpp2ffi.strsplit(te,",")
 				end
 				table.insert(code,"typedef struct ImBitArray_"..newte.." {ImU32 Storage[("..args[1].." + 31) >> 5];" .."} ImBitArray_"..newte..";\n")
 		else

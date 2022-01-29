@@ -147,6 +147,21 @@ local function clean_spaces(cad)
 end
 
 ------------------------------------
+local function check_template(code)
+	local ttype,template = code:match("([^%s,%(%)]+)%s*<(.-)>")
+	local code2,te
+	if template then
+		te = template:gsub("%s*,%s*",",")
+		te = te:gsub(",","__")
+		te = te:gsub("%-","less")
+		te = te:gsub("%s","_")
+		te = te:gsub("%*","Ptr")
+	
+		code2 = code:gsub("(<[%w_%*%s]+>)([^%s])","%1 %2")
+		code2 = code2:gsub("<([^<>]-)>","_"..te)
+	end
+	return ttype,template,te,code2
+end
 local function parse_enum_value(value, allenums,dontpost)
 	local function clean(val)
 		if type(val)=="string" then
@@ -611,20 +626,15 @@ local function parseFunction(self,stname,itt,namespace,locat)
 	--- templates in args
 	for i,ar in ipairs(argsTa) do
 		--TODO several diferent templates
-		local ttype,template = ar:match("([^%s,%(%)]+)%s*<(.-)>")
+		local ttype,template,te,code2 = check_template(ar) --ar:match("([^%s,%(%)]+)%s*<(.-)>")
 
-		local te=""
 		if template then
 			if self.typenames[stname] ~= template then --rule out template typename
-			te = template:gsub("%s","_")
-			te = te:gsub("%*","Ptr")
-	
-			self.templates[ttype] = self.templates[ttype] or {}
-			self.templates[ttype][template] = te
-			te = "_"..te
+				self.templates[ttype] = self.templates[ttype] or {}
+				self.templates[ttype][template] = te
 			end
 		end
-	    argsTa[i] = ar:gsub("<([%w_%*%s]+)>",te) --ImVector
+	    argsTa[i] = te and code2 or ar --ar:gsub("<([%w_%*%s]+)>",te) --ImVector
 	end
 	
 	--get typ, name and defaults
@@ -1262,15 +1272,12 @@ function M.Parser()
 			if  not (it.re_name == "vardef_re" and it.item:match"static") then --skip static variables
 				local it2 = it.item --:gsub("<([%w_]+)>","_%1") --templates
 				--local ttype,template = it.item:match("([^%s,%(%)]+)%s*<(.+)>")
-				local ttype,template =    it.item:match"([^%s,%(%)]+)%s*<(.+)>"
+				local ttype,template,te,code2 =  check_template(it2)  --it.item:match"([^%s,%(%)]+)%s*<(.+)>"
 				if template then
 					if self.typenames[ttype] ~= template then --rule out T (template typename)
-					local te = template:gsub("%s","_")
-					te = te:gsub("%*","Ptr")
-					self.templates[ttype] = self.templates[ttype] or {}
-					self.templates[ttype][template] = te
-					it2 = it2:gsub("(<[%w_%*%s]+>)([^%s])","%1 %2") --add if not present space after <>
-					it2 = it2:gsub("<([%w_%*%s]+)>","_"..te)
+						self.templates[ttype] = self.templates[ttype] or {}
+						self.templates[ttype][template] = te
+						it2=code2
 					end
 					if doheader then
 						local templatetypedef = self:gentemplatetypedef(ttype, template,self.templates[ttype][template])
@@ -1345,29 +1352,26 @@ function M.Parser()
 		local processer = function(it)
 			if it.re_name == "typedef_re" or it.re_name == "functypedef_re" or it.re_name == "vardef_re" then
 				if not it.parent or it.parent.re_name=="namespace_re" then
+					local it2 = it.item
 					if it.re_name == "typedef_re" then
 						--check if it is templated
-						local ttype,template =    it.item:match"([^%s,%(%)]+)%s*<(.+)>"
+						local ttype,template,te,code2 = check_template(it2)   --it.item:match"([^%s,%(%)]+)%s*<(.+)>"
 						if template then
 							--if self.typenames[ttype] ~= template then --rule out T (template typename)
-							local te = template:gsub("%s","_")
-							te = te:gsub("%*","Ptr")
 							--self.templates[ttype] = self.templates[ttype] or {}
 							--self.templates[ttype][template] = te
-							it.item = it.item:gsub("(<[%w_%*%s]+>)([^%s])","%1 %2") --add if not present space after <>
-							it.item = it.item:gsub("<([%w_%*%s]+)>","_"..te)
 							--end
 							
 							--local templatetypedef = self:gentemplatetypedef(ttype, template,self.templates[ttype][template])
 								--predeclare = predeclare .. templatetypedef
-							print("ccccccccccccccccccccccccccccccccc")
-							print(ttype,template,te)
-							print("item:",it.item)
-							--self:gentemplatetypedef(ttype,template,te))
+
+							local tdt = self:gentemplatetypedef(ttype,template,te)
+							it2 = tdt..code2
 						end
 						
 					end
-					table.insert(outtabpre,it.item)
+					--table.insert(outtabpre,it2)
+					table.insert(outtab,it2)
 					-- add typedef after struct name
 					if it.re_name == "vardef_re" and it.item:match"^%s*struct" then
 						local stname = it.item:match("struct%s*(%S+)%s*;")
