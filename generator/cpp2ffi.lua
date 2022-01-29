@@ -1629,7 +1629,7 @@ function M.Parser()
 						for j=3,#strtab-1 do
 							self:parse_struct_line(strtab[j],self.templated_structs[structname],comstab[j])
 						end
-						M.prtable(self.templated_structs[structname])
+						--M.prtable(self.templated_structs[structname])
 					else
 						print("skipped unnamed struct",structname)
 					end
@@ -1847,6 +1847,15 @@ function M.Parser()
 		for i,v in ipairs(newcdefs) do
 			table.insert(self.funcdefs,v)
 		end
+	end
+	function par:gentemplatetypedef(ttype,te,newte)
+		--print("gentemplatetypedef",ttype,te,newte)
+		if not newte then return "" end
+		self.templates_done = self.templates_done or {}
+		self.templates_done[ttype] = self.templates_done[ttype] or {}
+		if self.templates_done[ttype][te] then return "" end
+		self.templates_done[ttype][te] = true
+		return self:gen_template_typedef(ttype,te,newte) --given by user
 	end
 	return par
 end

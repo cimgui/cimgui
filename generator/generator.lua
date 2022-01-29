@@ -250,14 +250,8 @@ end
 
 ----------custom ImVector templates
 local table_do_sorted = cpp2ffi.table_do_sorted
-local function gentemplatetypedef(self,ttype,te,newte)
+local function gen_template_typedef(self,ttype,te,newte)
 		local code = {}
-		--print("gentemplatetypedef",ttype,te,newte)
-		if not newte then return "" end
-		self.templates_done = self.templates_done or {}
-		self.templates_done[ttype] = self.templates_done[ttype] or {}
-		if self.templates_done[ttype][te] then return "" end
-		self.templates_done[ttype][te] = true
 		if ttype == "ImVector" then
 				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
 		elseif ttype == "ImPool" then
@@ -379,7 +373,7 @@ local function parseImGuiHeader(header,names)
 	parser.cname_overloads = cimgui_overloads
 	parser.manuals = cimgui_manuals
 	parser.UDTs = {"ImVec2","ImVec4","ImColor","ImRect"}
-	parser.gentemplatetypedef = gentemplatetypedef
+	parser.gen_template_typedef = gen_template_typedef
 	
 	local defines = parser:take_lines(CPRE..header,names,COMPILER)
 	
