@@ -1855,7 +1855,50 @@ function M.Parser()
 		self.templates_done[ttype] = self.templates_done[ttype] or {}
 		if self.templates_done[ttype][te] then return "" end
 		self.templates_done[ttype][te] = true
-		return self:gen_template_typedef(ttype,te,newte) --given by user
+		--return self:gen_template_typedef(ttype,te,newte) --given by user
+		return self:gen_template_typedef_auto(ttype,te,newte)
+	end
+	function par:gen_template_typedef_auto(ttype,te,newte)
+		assert(self.templated_structs[ttype])
+		local defi = self.templated_structs[ttype]
+		local Targ = strsplit(self.typenames[ttype],",")
+		local defa = {}
+		local tes = strsplit(te,",")
+		--get the only name of template arg
+		for i,arg in ipairs(Targ) do
+			Targ[i] = strip(arg)
+			defa[i] = Targ[i]:match"=(.+)" --get default
+			if defa[i] then defa[i] = strip(defa[i]) end
+			Targ[i] = Targ[i]:gsub("%s*=.+","")
+			Targ[i] = Targ[i]:match"%S+$"
+		end
+
+		--assert(not Targ:match",") --still not several
+		local code = {}
+		local precode = {}
+		for i,v in ipairs(defi) do
+			local typ = v.type  --:gsub(Targ,te)
+			local nam = v.name  --:gsub(Targ,te)
+			for j,w in ipairs(Targ) do
+				local subs = tes[j] or defa[j]
+				typ = typ:gsub(w,subs)
+				nam = nam:gsub(w,subs)
+			end
+			--if typ still has template
+			local ttypet,templatet,tet,code2t =  check_template(typ)
+			if templatet then
+				typ = code2t
+				table.insert(precode, self:gentemplatetypedef(ttypet,templatet,tet))
+			end
+			--if name still has template
+			local ttypet,templatet,tet,code2t =  check_template(nam)
+			if templatet then
+				nam = code2t
+				table.insert(precode, self:gentemplatetypedef(ttypet,templatet,tet))
+			end
+			table.insert(code, typ.." "..nam..";")
+		end
+		return table.concat(precode).."\ntypedef struct "..ttype.."_"..newte.." {"..table.concat(code).."} "..ttype.."_"..newte..";\n"
 	end
 	return par
 end
@@ -2227,4 +2270,6 @@ print(clean_spaces(code))
 parser:parse_struct_line(code,tab)
 M.prtable(tab)
 --]=]
+
+
 return M
