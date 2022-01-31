@@ -248,33 +248,6 @@ local function repair_defaults(defsT,str_and_enu)
 	end
 end
 
-----------custom ImVector templates
-local table_do_sorted = cpp2ffi.table_do_sorted
-local function gen_template_typedef(self,ttype,te,newte)
-		local code = {}
-		if ttype == "ImVector" then
-				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
-		elseif ttype == "ImPool" then
-			--declare ImGuiStorage
-				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
-				table.insert(code,"typedef struct ImPool_"..newte.." {ImVector_"..te.." Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_"..newte..";\n")
-		elseif ttype == "ImChunkStream" then
-				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
-				table.insert(code,"typedef struct ImChunkStream_"..newte.." {ImVector_"..te.." Buf;} ImChunkStream_"..newte..";\n")
-		elseif ttype == "ImSpan" then
-				table.insert(code,"typedef struct ImSpan_"..newte.." {"..te.."* Data;" ..te.."* DataEnd;} ImSpan_"..newte..";\n")
-		elseif ttype == "ImBitArray" then
-				local args = {te}
-				if te:match"," then
-					args = cpp2ffi.strsplit(te,",")
-				end
-				table.insert(code,"typedef struct ImBitArray_"..newte.." {ImU32 Storage[("..args[1].." + 31) >> 5];" .."} ImBitArray_"..newte..";\n")
-		else
-			print("gentemplatetypedef ttype not done",ttype)
-			error"gentemplatetypedef"
-		end
-		return "\n"..table.concat(code,"")
-end
 
 --generate cimgui.cpp cimgui.h 
 local function cimgui_generation(parser)
@@ -373,7 +346,7 @@ local function parseImGuiHeader(header,names)
 	parser.cname_overloads = cimgui_overloads
 	parser.manuals = cimgui_manuals
 	parser.UDTs = {"ImVec2","ImVec4","ImColor","ImRect"}
-	parser.gen_template_typedef = gen_template_typedef
+	--parser.gen_template_typedef = gen_template_typedef --use auto
 	
 	local defines = parser:take_lines(CPRE..header,names,COMPILER)
 	
@@ -495,6 +468,10 @@ end
 ---[[
 local json = require"json"
 save_data("./output/definitions.json",json.encode(json_prepare(parser1.defsT),{dict_on_empty={defaults=true}}))
+--delete extra info for json
+structs_and_enums_table.templated_structs = nil
+structs_and_enums_table.typenames = nil
+structs_and_enums_table.templates_done = nil
 save_data("./output/structs_and_enums.json",json.encode(structs_and_enums_table))
 save_data("./output/typedefs_dict.json",json.encode(parser1.typedefs_dict))
 if parser2 then
