@@ -176,6 +176,7 @@ local function parse_enum_value(value, allenums,dontpost)
 	if type(value)=="number" then
 		return value
 	elseif type(value)=="string" then 
+		--print(value)
 		--numbers
 		local numval = tonumber(value)
 		if numval then return numval end 
@@ -297,6 +298,7 @@ local function getRE()
 	local res = {
 	function_re = "^([^;{}]+%b()[\n%s]*;)%s*",
 	function_re = "^([^;{}=]+%b()[\n%s%w]*;)", --const at the end
+	function_re = "^([^;{}=]+%b()[\n%s%w%(%)_]*;)", --attribute(deprecated)
 	struct_re = "^([^;{}]-struct[^;{}]-%b{}[%s%w_%(%)]*;)",
 	enum_re = "^([^;{}]-enum[^;{}]-%b{}[%s%w_%(%)]*;)",
 	union_re = "^([^;{}]-union[^;{}]-%b{}[%s%w_%(%)]*;)",
@@ -1090,9 +1092,12 @@ function M.Parser()
 			error("could not execute COMPILER "..err)
 		end
 		local defines = {}
+		local preprocessed = {}--
 		for line,loca,loca2 in M.location(pipe,names,defines,compiler) do
 			self:insert(line, tostring(loca)..":"..tostring(loca2))
+			table.insert(preprocessed,line)--
 		end
+		save_data("preprocesed.h",table.concat(preprocessed,"\n"))
 		pipe:close()
 		return defines
 	end
@@ -1345,6 +1350,8 @@ function M.Parser()
 	
 
 	function par:gen_structs_and_enums()
+		print"--------------gen_structs_and_enums"
+		--M.prtable(self.typenames)
 		local outtab = {} 
 		local outtabpre = {}
 		local typedefs_table = {}
@@ -1596,11 +1603,25 @@ function M.Parser()
 	end
 	par.enums_for_table = enums_for_table
 	function par:gen_structs_and_enums_table()
+		print"--------------gen_structs_and_enums_table"
 		local outtab = {enums={},structs={},locations={},enumtypes={}}
 		self.typedefs_table = {}
 		local enumsordered = {}
 		unnamed_enum_counter = 0
 		self.templated_structs = {}
+		--take cimgui templated_structs if given
+		if self.cimgui_inherited then
+			self.templated_structs = self.cimgui_inherited.templated_structs
+			self.templates_done = self.cimgui_inherited.templates_done
+			--M.prtable(self.typenames)
+			for k,v in pairs(self.cimgui_inherited.typenames) do
+				assert(not self.typenames[k])
+				if self.typenames[k] then
+					print("typenames repeated",k,self.typenames[k],v)
+				end
+				self.typenames[k] = v
+			end
+		end
 		
 		local processer = function(it)
 			if it.re_name == "typedef_re" or it.re_name == "functypedef_re" or it.re_name == "vardef_re" then
@@ -1644,7 +1665,16 @@ function M.Parser()
 		self:Listing(itemsarr,processer)
 		
 		--calcule size of name[16+1] [xxx_COUNT]
-		local allenums = {}
+		local allenums = {} 
+		--take cimgui struct_and_enums if given
+		if self.cimgui_inherited then
+			for k,v in pairs(self.cimgui_inherited.enums) do
+				for j,v2 in ipairs(v) do
+					allenums[v2.name] = v2.calc_value
+					--print(k,v.calc_value)
+				end
+			end
+		end
 		--first calc_value in enums
 		for i,enumname in ipairs(enumsordered) do
 		--for enumname,enum in pairs(outtab.enums) do
@@ -1708,6 +1738,7 @@ function M.Parser()
                 --print(k,#v)
                 table.insert(strt,string.format("%s\t%d",k,#v))
                 local typesc,post = name_overloadsAlgo(v)
+				--M.prtable(v)
                 for i,t in ipairs(v) do
                     --take overloaded name from manual table or algorythm
                     t.ov_cimguiname = self.getCname_overload(t.stname,t.funcname,t.signature,t.namespace) or k..typetoStr(post[i])
@@ -1859,7 +1890,7 @@ function M.Parser()
 		return self:gen_template_typedef_auto(ttype,te,newte)
 	end
 	function par:gen_template_typedef_auto(ttype,te,newte)
-		assert(self.templated_structs[ttype])
+		assert(self.templated_structs[ttype],ttype)
 		local defi = self.templated_structs[ttype]
 		local Targ = strsplit(self.typenames[ttype],",")
 		local defa = {}
@@ -2233,20 +2264,25 @@ M.func_header_generate = func_header_generate
 --[=[
 -- tests
 local code = [[
-template<int BITCOUNT, int OFFSET = 0>
-struct ImBitArray
-{
-    ImU32           Storage[(BITCOUNT + 31) >> 5];
-    ImBitArray()                                { ClearAllBits(); }
-    void            ClearAllBits()              { memset(Storage, 0, sizeof(Storage)); }
-    void            SetAllBits()                { memset(Storage, 255, sizeof(Storage)); }
-    bool            TestBit(int n) const        { IM_ASSERT(n + OFFSET < BITCOUNT); return ImBitArrayTestBit(Storage, n + OFFSET); }
-    void            SetBit(int n)               { IM_ASSERT(n + OFFSET < BITCOUNT); ImBitArraySetBit(Storage, n + OFFSET); }
-    void            ClearBit(int n)             { IM_ASSERT(n + OFFSET < BITCOUNT); ImBitArrayClearBit(Storage, n + OFFSET); }
-    void            SetBitRange(int n, int n2)  { ImBitArraySetBitRange(Storage, n + OFFSET, n2 + OFFSET); } // Works on range [n..n2)
-    bool            operator[](int n) const     { IM_ASSERT(n + OFFSET < BITCOUNT); return ImBitArrayTestBit(Storage, n + OFFSET); }
-};
-]]
+
+ bool BeginPlot(const char* title_id, 
+ const char* x_label, const char* y_label, 
+ const ImVec2& size = ImVec2(-1,0), 
+ ImPlotFlags flags = ImPlotFlags_None, 
+ ImPlotAxisFlags x_flags = ImPlotAxisFlags_None, 
+ ImPlotAxisFlags y_flags = ImPlotAxisFlags_None, 
+ ImPlotAxisFlags y2_flags = ImPlotAxisFlags_AuxDefault, 
+ ImPlotAxisFlags y3_flags = ImPlotAxisFlags_AuxDefault, 
+ const char* y2_label = ((void *)0), 
+ const char* y3_label = ((void *)0)) __attribute__( ( deprecated ) );
+                                                                       
+]]		
+local code = [[
+
+ bool BeginPlot(const char* title_id, const char* x_label, const char* y_label, const ImVec2& size = ImVec2(-1,0), ImPlotFlags flags = ImPlotFlags_None, ImPlotAxisFlags x_flags = ImPlotAxisFlags_None, ImPlotAxisFlags y_flags = ImPlotAxisFlags_None, ImPlotAxisFlags y2_flags = ImPlotAxisFlags_AuxDefault, ImPlotAxisFlags y3_flags = ImPlotAxisFlags_AuxDefault, const char* y2_label = ((void *)0), const char* y3_label = ((void *)0)) __attribute__( ( deprecated ) )
+                                                                               ;
+                                                                       
+]]																		  
 local parser = M.Parser()
 for line in code:gmatch("[^\n]+") do
 	--print("inserting",line)
