@@ -75,7 +75,7 @@ ImVec4_ImVec4	2
 2	nil	ImVec4_ImVec4_Float (float,float,float,float)
 ImVector_ImVector	2
 1	nil	ImVector_ImVector_Nil ()
-2	nil	ImVector_ImVector_Vector (const ImVector)
+2	nil	ImVector_ImVector_Vector_T_ (const ImVector_T )
 ImVector_back	2
 1	T*	ImVector_back_Nil ()
 2	const T*	ImVector_back__const ()const

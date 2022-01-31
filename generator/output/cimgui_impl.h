@@ -1,7 +1,7 @@
-typedef struct SDL_Window SDL_Window;
-typedef struct GLFWmonitor GLFWmonitor;
-typedef struct GLFWwindow GLFWwindow;
 
+typedef struct GLFWwindow GLFWwindow;
+typedef struct GLFWmonitor GLFWmonitor;
+typedef struct SDL_Window SDL_Window;
 struct GLFWwindow;
 struct GLFWmonitor;
 
