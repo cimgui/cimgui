@@ -248,36 +248,7 @@ local function repair_defaults(defsT,str_and_enu)
 	end
 end
 
-----------custom ImVector templates
-local table_do_sorted = cpp2ffi.table_do_sorted
-local function generate_templates(code,codeimpool,templates)
-    table.insert(code,"\n"..[[typedef struct ImVector{int Size;int Capacity;void* Data;} ImVector;]].."\n")
-	table_do_sorted(templates , function (ttype, v)
-		if ttype == "ImVector" then
-			table_do_sorted(v, function(te,newte)
-				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
-			end)
-		elseif ttype == "ImPool" then
-			--declare ImGuiStorage
-			table_do_sorted(v, function(te, newte)
-				table.insert(codeimpool,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
-				table.insert(codeimpool,"typedef struct ImPool_"..newte.." {ImVector_"..te.." Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_"..newte..";\n")
-			end)
-		elseif ttype == "ImChunkStream" then
-			table_do_sorted(v, function(te,newte)
-				table.insert(code,"typedef struct ImVector_"..newte.." {int Size;int Capacity;"..te.."* Data;} ImVector_"..newte..";\n")
-				table.insert(code,"typedef struct ImChunkStream_"..newte.." {ImVector_"..te.." Buf;} ImChunkStream_"..newte..";\n")
-			end)
-		elseif ttype == "ImSpan" then
-			table_do_sorted(v, function(te,newte)
-				table.insert(code,"typedef struct ImSpan_"..newte.." {"..te.."* Data;" ..te.."* DataEnd;} ImSpan_"..newte..";\n")
-			end)
-		else
-			print("generate_templates ttype not done",ttype)
-			error"generate templates"
-		end
-	end)
-end
+
 --generate cimgui.cpp cimgui.h 
 local function cimgui_generation(parser)
 
@@ -308,15 +279,9 @@ local function cimgui_generation(parser)
 	cpp2ffi.prtable(parser.templates)
 	cpp2ffi.prtable(parser.typenames)
 	
-	local outtab = {}
-	local outtabpool = {}
-    generate_templates(outtab, outtabpool, parser.templates)
-	
-	--move outtabpool after ImGuiStorage definition
-	local outpost1, outpost2 = outpost:match("^(.+struct ImGuiStorage%s*\n%b{};\n)(.+)$")
-	outpost = outpost1..table.concat(outtabpool)..outpost2
 
-	local cstructsstr = outpre..table.concat(outtab,"")..outpost --..(extra or "")
+	local  tdt = parser:generate_templates()
+	local cstructsstr = outpre..tdt..outpost 
     
 	if gdefines.IMGUI_HAS_DOCK then
 		cstructsstr = cstructsstr.."\n#define IMGUI_HAS_DOCK       1\n"
@@ -381,6 +346,7 @@ local function parseImGuiHeader(header,names)
 	parser.cname_overloads = cimgui_overloads
 	parser.manuals = cimgui_manuals
 	parser.UDTs = {"ImVec2","ImVec4","ImColor","ImRect"}
+	--parser.gen_template_typedef = gen_template_typedef --use auto
 	
 	local defines = parser:take_lines(CPRE..header,names,COMPILER)
 	
@@ -417,6 +383,10 @@ cimgui_generation(parser1)
 ----------save struct and enums lua table in structs_and_enums.lua for using in bindings
 
 local structs_and_enums_table = parser1.structs_and_enums_table
+structs_and_enums_table.templated_structs = parser1.templated_structs
+structs_and_enums_table.typenames = parser1.typenames
+structs_and_enums_table.templates_done = parser1.templates_done
+
 save_data("./output/structs_and_enums.lua",serializeTableF(structs_and_enums_table))
 save_data("./output/typedefs_dict.lua",serializeTableF(parser1.typedefs_dict))
 
@@ -498,6 +468,10 @@ end
 ---[[
 local json = require"json"
 save_data("./output/definitions.json",json.encode(json_prepare(parser1.defsT),{dict_on_empty={defaults=true}}))
+--delete extra info for json
+structs_and_enums_table.templated_structs = nil
+structs_and_enums_table.typenames = nil
+structs_and_enums_table.templates_done = nil
 save_data("./output/structs_and_enums.json",json.encode(structs_and_enums_table))
 save_data("./output/typedefs_dict.json",json.encode(parser1.typedefs_dict))
 if parser2 then

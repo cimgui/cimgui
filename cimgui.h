@@ -39,89 +39,65 @@ typedef unsigned __int64 ImU64;
 
 
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
-typedef struct ImGuiTableColumnSettings ImGuiTableColumnSettings;
-typedef struct ImGuiTableCellData ImGuiTableCellData;
-typedef struct ImGuiStackTool ImGuiStackTool;
-typedef struct ImGuiStackLevelInfo ImGuiStackLevelInfo;
-typedef struct ImGuiViewportP ImGuiViewportP;
-typedef struct ImGuiListClipperData ImGuiListClipperData;
-typedef struct ImGuiListClipperRange ImGuiListClipperRange;
-typedef struct ImGuiPtrOrIndex ImGuiPtrOrIndex;
-typedef struct ImGuiShrinkWidthItem ImGuiShrinkWidthItem;
-typedef struct ImGuiWindowStackData ImGuiWindowStackData;
-typedef struct ImGuiComboPreviewData ImGuiComboPreviewData;
-typedef struct ImGuiDataTypeTempStorage ImGuiDataTypeTempStorage;
-typedef struct ImVec2ih ImVec2ih;
-typedef struct ImVec1 ImVec1;
-typedef struct StbTexteditRow StbTexteditRow;
-typedef struct STB_TexteditState STB_TexteditState;
-typedef struct StbUndoState StbUndoState;
-typedef struct StbUndoRecord StbUndoRecord;
-typedef struct ImGuiWindowSettings ImGuiWindowSettings;
-typedef struct ImGuiWindowTempData ImGuiWindowTempData;
-typedef struct ImGuiWindow ImGuiWindow;
-typedef struct ImGuiTableColumnsSettings ImGuiTableColumnsSettings;
-typedef struct ImGuiTableSettings ImGuiTableSettings;
-typedef struct ImGuiTableTempData ImGuiTableTempData;
-typedef struct ImGuiTableColumn ImGuiTableColumn;
-typedef struct ImGuiTable ImGuiTable;
-typedef struct ImGuiTabItem ImGuiTabItem;
-typedef struct ImGuiTabBar ImGuiTabBar;
-typedef struct ImGuiStyleMod ImGuiStyleMod;
-typedef struct ImGuiStackSizes ImGuiStackSizes;
-typedef struct ImGuiSettingsHandler ImGuiSettingsHandler;
-typedef struct ImGuiPopupData ImGuiPopupData;
-typedef struct ImGuiOldColumns ImGuiOldColumns;
-typedef struct ImGuiOldColumnData ImGuiOldColumnData;
-typedef struct ImGuiNextItemData ImGuiNextItemData;
-typedef struct ImGuiNextWindowData ImGuiNextWindowData;
-typedef struct ImGuiMetricsConfig ImGuiMetricsConfig;
-typedef struct ImGuiNavItemData ImGuiNavItemData;
-typedef struct ImGuiMenuColumns ImGuiMenuColumns;
-typedef struct ImGuiLastItemData ImGuiLastItemData;
-typedef struct ImGuiInputTextState ImGuiInputTextState;
-typedef struct ImGuiGroupData ImGuiGroupData;
-typedef struct ImGuiDataTypeInfo ImGuiDataTypeInfo;
-typedef struct ImGuiContextHook ImGuiContextHook;
-typedef struct ImGuiColorMod ImGuiColorMod;
-typedef struct ImDrawDataBuilder ImDrawDataBuilder;
-typedef struct ImRect ImRect;
-typedef struct ImBitVector ImBitVector;
-typedef struct ImFontAtlasCustomRect ImFontAtlasCustomRect;
-typedef struct ImDrawCmdHeader ImDrawCmdHeader;
-typedef struct ImGuiStoragePair ImGuiStoragePair;
-typedef struct ImGuiTextRange ImGuiTextRange;
-typedef struct ImVec4 ImVec4;
-typedef struct ImVec2 ImVec2;
-typedef struct ImGuiViewport ImGuiViewport;
-typedef struct ImGuiTextFilter ImGuiTextFilter;
-typedef struct ImGuiTextBuffer ImGuiTextBuffer;
-typedef struct ImGuiTableColumnSortSpecs ImGuiTableColumnSortSpecs;
-typedef struct ImGuiTableSortSpecs ImGuiTableSortSpecs;
-typedef struct ImGuiStyle ImGuiStyle;
-typedef struct ImGuiStorage ImGuiStorage;
-typedef struct ImGuiSizeCallbackData ImGuiSizeCallbackData;
-typedef struct ImGuiPayload ImGuiPayload;
-typedef struct ImGuiOnceUponAFrame ImGuiOnceUponAFrame;
-typedef struct ImGuiListClipper ImGuiListClipper;
-typedef struct ImGuiInputTextCallbackData ImGuiInputTextCallbackData;
-typedef struct ImGuiIO ImGuiIO;
-typedef struct ImGuiContext ImGuiContext;
-typedef struct ImColor ImColor;
-typedef struct ImFontGlyphRangesBuilder ImFontGlyphRangesBuilder;
-typedef struct ImFontGlyph ImFontGlyph;
-typedef struct ImFontConfig ImFontConfig;
-typedef struct ImFontBuilderIO ImFontBuilderIO;
-typedef struct ImFontAtlas ImFontAtlas;
-typedef struct ImFont ImFont;
-typedef struct ImDrawVert ImDrawVert;
-typedef struct ImDrawListSplitter ImDrawListSplitter;
-typedef struct ImDrawListSharedData ImDrawListSharedData;
-typedef struct ImDrawList ImDrawList;
-typedef struct ImDrawData ImDrawData;
-typedef struct ImDrawCmd ImDrawCmd;
-typedef struct ImDrawChannel ImDrawChannel;
 
+typedef struct ImDrawChannel ImDrawChannel;
+typedef struct ImDrawCmd ImDrawCmd;
+typedef struct ImDrawData ImDrawData;
+typedef struct ImDrawList ImDrawList;
+typedef struct ImDrawListSharedData ImDrawListSharedData;
+typedef struct ImDrawListSplitter ImDrawListSplitter;
+typedef struct ImDrawVert ImDrawVert;
+typedef struct ImFont ImFont;
+typedef struct ImFontAtlas ImFontAtlas;
+typedef struct ImFontBuilderIO ImFontBuilderIO;
+typedef struct ImFontConfig ImFontConfig;
+typedef struct ImFontGlyph ImFontGlyph;
+typedef struct ImFontGlyphRangesBuilder ImFontGlyphRangesBuilder;
+typedef struct ImColor ImColor;
+typedef struct ImGuiContext ImGuiContext;
+typedef struct ImGuiIO ImGuiIO;
+typedef struct ImGuiInputTextCallbackData ImGuiInputTextCallbackData;
+typedef struct ImGuiListClipper ImGuiListClipper;
+typedef struct ImGuiOnceUponAFrame ImGuiOnceUponAFrame;
+typedef struct ImGuiPayload ImGuiPayload;
+typedef struct ImGuiSizeCallbackData ImGuiSizeCallbackData;
+typedef struct ImGuiStorage ImGuiStorage;
+typedef struct ImGuiStyle ImGuiStyle;
+typedef struct ImGuiTableSortSpecs ImGuiTableSortSpecs;
+typedef struct ImGuiTableColumnSortSpecs ImGuiTableColumnSortSpecs;
+typedef struct ImGuiTextBuffer ImGuiTextBuffer;
+typedef struct ImGuiTextFilter ImGuiTextFilter;
+typedef struct ImGuiViewport ImGuiViewport;
+typedef struct ImBitVector ImBitVector;
+typedef struct ImRect ImRect;
+typedef struct ImDrawDataBuilder ImDrawDataBuilder;
+typedef struct ImGuiColorMod ImGuiColorMod;
+typedef struct ImGuiContextHook ImGuiContextHook;
+typedef struct ImGuiDataTypeInfo ImGuiDataTypeInfo;
+typedef struct ImGuiGroupData ImGuiGroupData;
+typedef struct ImGuiInputTextState ImGuiInputTextState;
+typedef struct ImGuiLastItemData ImGuiLastItemData;
+typedef struct ImGuiMenuColumns ImGuiMenuColumns;
+typedef struct ImGuiNavItemData ImGuiNavItemData;
+typedef struct ImGuiMetricsConfig ImGuiMetricsConfig;
+typedef struct ImGuiNextWindowData ImGuiNextWindowData;
+typedef struct ImGuiNextItemData ImGuiNextItemData;
+typedef struct ImGuiOldColumnData ImGuiOldColumnData;
+typedef struct ImGuiOldColumns ImGuiOldColumns;
+typedef struct ImGuiPopupData ImGuiPopupData;
+typedef struct ImGuiSettingsHandler ImGuiSettingsHandler;
+typedef struct ImGuiStackSizes ImGuiStackSizes;
+typedef struct ImGuiStyleMod ImGuiStyleMod;
+typedef struct ImGuiTabBar ImGuiTabBar;
+typedef struct ImGuiTabItem ImGuiTabItem;
+typedef struct ImGuiTable ImGuiTable;
+typedef struct ImGuiTableColumn ImGuiTableColumn;
+typedef struct ImGuiTableTempData ImGuiTableTempData;
+typedef struct ImGuiTableSettings ImGuiTableSettings;
+typedef struct ImGuiTableColumnsSettings ImGuiTableColumnsSettings;
+typedef struct ImGuiWindow ImGuiWindow;
+typedef struct ImGuiWindowTempData ImGuiWindowTempData;
+typedef struct ImGuiWindowSettings ImGuiWindowSettings;
 struct ImDrawChannel;
 struct ImDrawCmd;
 struct ImDrawData;
@@ -203,113 +179,12 @@ typedef int (*ImGuiInputTextCallback)(ImGuiInputTextCallbackData* data);
 typedef void (*ImGuiSizeCallback)(ImGuiSizeCallbackData* data);
 typedef void* (*ImGuiMemAllocFunc)(size_t sz, void* user_data);
 typedef void (*ImGuiMemFreeFunc)(void* ptr, void* user_data);
-typedef void (*ImDrawCallback)(const ImDrawList* parent_list, const ImDrawCmd* cmd);
-struct ImBitVector;
-struct ImRect;
-struct ImDrawDataBuilder;
-struct ImDrawListSharedData;
-struct ImGuiColorMod;
-struct ImGuiContext;
-struct ImGuiContextHook;
-struct ImGuiDataTypeInfo;
-struct ImGuiGroupData;
-struct ImGuiInputTextState;
-struct ImGuiLastItemData;
-struct ImGuiMenuColumns;
-struct ImGuiNavItemData;
-struct ImGuiMetricsConfig;
-struct ImGuiNextWindowData;
-struct ImGuiNextItemData;
-struct ImGuiOldColumnData;
-struct ImGuiOldColumns;
-struct ImGuiPopupData;
-struct ImGuiSettingsHandler;
-struct ImGuiStackSizes;
-struct ImGuiStyleMod;
-struct ImGuiTabBar;
-struct ImGuiTabItem;
-struct ImGuiTable;
-struct ImGuiTableColumn;
-struct ImGuiTableTempData;
-struct ImGuiTableSettings;
-struct ImGuiTableColumnsSettings;
-struct ImGuiWindow;
-struct ImGuiWindowTempData;
-struct ImGuiWindowSettings;
-typedef int ImGuiLayoutType;
-typedef int ImGuiActivateFlags;
-typedef int ImGuiItemFlags;
-typedef int ImGuiItemStatusFlags;
-typedef int ImGuiOldColumnFlags;
-typedef int ImGuiNavHighlightFlags;
-typedef int ImGuiNavDirSourceFlags;
-typedef int ImGuiNavMoveFlags;
-typedef int ImGuiNextItemDataFlags;
-typedef int ImGuiNextWindowDataFlags;
-typedef int ImGuiScrollFlags;
-typedef int ImGuiSeparatorFlags;
-typedef int ImGuiTextFlags;
-typedef int ImGuiTooltipFlags;
-typedef void (*ImGuiErrorLogCallback)(void* user_data, const char* fmt, ...);
-extern ImGuiContext* GImGui;
-typedef FILE* ImFileHandle;
-typedef int ImPoolIdx;
-typedef void (*ImGuiContextHookCallback)(ImGuiContext* ctx, ImGuiContextHook* hook);
-typedef ImS8 ImGuiTableColumnIdx;
-typedef ImU8 ImGuiTableDrawChannelIdx;
-typedef struct ImVector{int Size;int Capacity;void* Data;} ImVector;
-typedef struct ImVector_ImGuiTableSettings {int Size;int Capacity;ImGuiTableSettings* Data;} ImVector_ImGuiTableSettings;
-typedef struct ImChunkStream_ImGuiTableSettings {ImVector_ImGuiTableSettings Buf;} ImChunkStream_ImGuiTableSettings;
-typedef struct ImVector_ImGuiWindowSettings {int Size;int Capacity;ImGuiWindowSettings* Data;} ImVector_ImGuiWindowSettings;
-typedef struct ImChunkStream_ImGuiWindowSettings {ImVector_ImGuiWindowSettings Buf;} ImChunkStream_ImGuiWindowSettings;
-typedef struct ImSpan_ImGuiTableCellData {ImGuiTableCellData* Data;ImGuiTableCellData* DataEnd;} ImSpan_ImGuiTableCellData;
-typedef struct ImSpan_ImGuiTableColumn {ImGuiTableColumn* Data;ImGuiTableColumn* DataEnd;} ImSpan_ImGuiTableColumn;
-typedef struct ImSpan_ImGuiTableColumnIdx {ImGuiTableColumnIdx* Data;ImGuiTableColumnIdx* DataEnd;} ImSpan_ImGuiTableColumnIdx;
-typedef struct ImVector_ImDrawChannel {int Size;int Capacity;ImDrawChannel* Data;} ImVector_ImDrawChannel;
-typedef struct ImVector_ImDrawCmd {int Size;int Capacity;ImDrawCmd* Data;} ImVector_ImDrawCmd;
-typedef struct ImVector_ImDrawIdx {int Size;int Capacity;ImDrawIdx* Data;} ImVector_ImDrawIdx;
-typedef struct ImVector_ImDrawListPtr {int Size;int Capacity;ImDrawList** Data;} ImVector_ImDrawListPtr;
-typedef struct ImVector_ImDrawVert {int Size;int Capacity;ImDrawVert* Data;} ImVector_ImDrawVert;
-typedef struct ImVector_ImFontPtr {int Size;int Capacity;ImFont** Data;} ImVector_ImFontPtr;
-typedef struct ImVector_ImFontAtlasCustomRect {int Size;int Capacity;ImFontAtlasCustomRect* Data;} ImVector_ImFontAtlasCustomRect;
-typedef struct ImVector_ImFontConfig {int Size;int Capacity;ImFontConfig* Data;} ImVector_ImFontConfig;
-typedef struct ImVector_ImFontGlyph {int Size;int Capacity;ImFontGlyph* Data;} ImVector_ImFontGlyph;
-typedef struct ImVector_ImGuiColorMod {int Size;int Capacity;ImGuiColorMod* Data;} ImVector_ImGuiColorMod;
-typedef struct ImVector_ImGuiContextHook {int Size;int Capacity;ImGuiContextHook* Data;} ImVector_ImGuiContextHook;
-typedef struct ImVector_ImGuiGroupData {int Size;int Capacity;ImGuiGroupData* Data;} ImVector_ImGuiGroupData;
-typedef struct ImVector_ImGuiID {int Size;int Capacity;ImGuiID* Data;} ImVector_ImGuiID;
-typedef struct ImVector_ImGuiItemFlags {int Size;int Capacity;ImGuiItemFlags* Data;} ImVector_ImGuiItemFlags;
-typedef struct ImVector_ImGuiListClipperData {int Size;int Capacity;ImGuiListClipperData* Data;} ImVector_ImGuiListClipperData;
-typedef struct ImVector_ImGuiListClipperRange {int Size;int Capacity;ImGuiListClipperRange* Data;} ImVector_ImGuiListClipperRange;
-typedef struct ImVector_ImGuiOldColumnData {int Size;int Capacity;ImGuiOldColumnData* Data;} ImVector_ImGuiOldColumnData;
-typedef struct ImVector_ImGuiOldColumns {int Size;int Capacity;ImGuiOldColumns* Data;} ImVector_ImGuiOldColumns;
-typedef struct ImVector_ImGuiPopupData {int Size;int Capacity;ImGuiPopupData* Data;} ImVector_ImGuiPopupData;
-typedef struct ImVector_ImGuiPtrOrIndex {int Size;int Capacity;ImGuiPtrOrIndex* Data;} ImVector_ImGuiPtrOrIndex;
-typedef struct ImVector_ImGuiSettingsHandler {int Size;int Capacity;ImGuiSettingsHandler* Data;} ImVector_ImGuiSettingsHandler;
-typedef struct ImVector_ImGuiShrinkWidthItem {int Size;int Capacity;ImGuiShrinkWidthItem* Data;} ImVector_ImGuiShrinkWidthItem;
-typedef struct ImVector_ImGuiStackLevelInfo {int Size;int Capacity;ImGuiStackLevelInfo* Data;} ImVector_ImGuiStackLevelInfo;
-typedef struct ImVector_ImGuiStoragePair {int Size;int Capacity;ImGuiStoragePair* Data;} ImVector_ImGuiStoragePair;
-typedef struct ImVector_ImGuiStyleMod {int Size;int Capacity;ImGuiStyleMod* Data;} ImVector_ImGuiStyleMod;
-typedef struct ImVector_ImGuiTabItem {int Size;int Capacity;ImGuiTabItem* Data;} ImVector_ImGuiTabItem;
-typedef struct ImVector_ImGuiTableColumnSortSpecs {int Size;int Capacity;ImGuiTableColumnSortSpecs* Data;} ImVector_ImGuiTableColumnSortSpecs;
-typedef struct ImVector_ImGuiTableTempData {int Size;int Capacity;ImGuiTableTempData* Data;} ImVector_ImGuiTableTempData;
-typedef struct ImVector_ImGuiTextRange {int Size;int Capacity;ImGuiTextRange* Data;} ImVector_ImGuiTextRange;
-typedef struct ImVector_ImGuiViewportPPtr {int Size;int Capacity;ImGuiViewportP** Data;} ImVector_ImGuiViewportPPtr;
-typedef struct ImVector_ImGuiWindowPtr {int Size;int Capacity;ImGuiWindow** Data;} ImVector_ImGuiWindowPtr;
-typedef struct ImVector_ImGuiWindowStackData {int Size;int Capacity;ImGuiWindowStackData* Data;} ImVector_ImGuiWindowStackData;
-typedef struct ImVector_ImTextureID {int Size;int Capacity;ImTextureID* Data;} ImVector_ImTextureID;
-typedef struct ImVector_ImU32 {int Size;int Capacity;ImU32* Data;} ImVector_ImU32;
-typedef struct ImVector_ImVec2 {int Size;int Capacity;ImVec2* Data;} ImVector_ImVec2;
-typedef struct ImVector_ImVec4 {int Size;int Capacity;ImVec4* Data;} ImVector_ImVec4;
-typedef struct ImVector_ImWchar {int Size;int Capacity;ImWchar* Data;} ImVector_ImWchar;
-typedef struct ImVector_char {int Size;int Capacity;char* Data;} ImVector_char;
-typedef struct ImVector_float {int Size;int Capacity;float* Data;} ImVector_float;
-typedef struct ImVector_unsigned_char {int Size;int Capacity;unsigned char* Data;} ImVector_unsigned_char;
-
+typedef struct ImVec2 ImVec2;
 struct ImVec2
 {
     float x, y;
 };
+typedef struct ImVec4 ImVec4;
 struct ImVec4
 {
     float x, y, z, w;
@@ -855,6 +730,8 @@ struct ImGuiStyle
     float CircleTessellationMaxError;
     ImVec4 Colors[ImGuiCol_COUNT];
 };
+typedef struct ImVector_ImWchar {int Size;int Capacity;ImWchar* Data;} ImVector_ImWchar;
+
 struct ImGuiIO
 {
     ImGuiConfigFlags ConfigFlags;
@@ -998,12 +875,19 @@ struct ImGuiTextRange
         const char* b;
         const char* e;
 };
+typedef struct ImGuiTextRange ImGuiTextRange;
+
+typedef struct ImVector_ImGuiTextRange {int Size;int Capacity;ImGuiTextRange* Data;} ImVector_ImGuiTextRange;
+
 struct ImGuiTextFilter
 {
     char InputBuf[256];
     ImVector_ImGuiTextRange Filters;
     int CountGrep;
 };
+typedef struct ImGuiTextRange ImGuiTextRange;
+typedef struct ImVector_char {int Size;int Capacity;char* Data;} ImVector_char;
+
 struct ImGuiTextBuffer
 {
     ImVector_char Buf;
@@ -1013,14 +897,15 @@ struct ImGuiStoragePair
         ImGuiID key;
         union { int val_i; float val_f; void* val_p; };
 };
+typedef struct ImGuiStoragePair ImGuiStoragePair;
+
+typedef struct ImVector_ImGuiStoragePair {int Size;int Capacity;ImGuiStoragePair* Data;} ImVector_ImGuiStoragePair;
+
 struct ImGuiStorage
 {
     ImVector_ImGuiStoragePair Data;
 };
-typedef struct ImVector_ImGuiTabBar {int Size;int Capacity;ImGuiTabBar* Data;} ImVector_ImGuiTabBar;
-typedef struct ImPool_ImGuiTabBar {ImVector_ImGuiTabBar Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_ImGuiTabBar;
-typedef struct ImVector_ImGuiTable {int Size;int Capacity;ImGuiTable* Data;} ImVector_ImGuiTable;
-typedef struct ImPool_ImGuiTable {ImVector_ImGuiTable Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;} ImPool_ImGuiTable;
+typedef struct ImGuiStoragePair ImGuiStoragePair;
 struct ImGuiListClipper
 {
     int DisplayStart;
@@ -1034,6 +919,7 @@ struct ImColor
 {
     ImVec4 Value;
 };
+typedef void (*ImDrawCallback)(const ImDrawList* parent_list, const ImDrawCmd* cmd);
 struct ImDrawCmd
 {
     ImVec4 ClipRect;
@@ -1050,17 +936,24 @@ struct ImDrawVert
     ImVec2 uv;
     ImU32 col;
 };
+typedef struct ImDrawCmdHeader ImDrawCmdHeader;
 struct ImDrawCmdHeader
 {
     ImVec4 ClipRect;
     ImTextureID TextureId;
     unsigned int VtxOffset;
 };
+typedef struct ImVector_ImDrawCmd {int Size;int Capacity;ImDrawCmd* Data;} ImVector_ImDrawCmd;
+
+typedef struct ImVector_ImDrawIdx {int Size;int Capacity;ImDrawIdx* Data;} ImVector_ImDrawIdx;
+
 struct ImDrawChannel
 {
     ImVector_ImDrawCmd _CmdBuffer;
     ImVector_ImDrawIdx _IdxBuffer;
 };
+typedef struct ImVector_ImDrawChannel {int Size;int Capacity;ImDrawChannel* Data;} ImVector_ImDrawChannel;
+
 struct ImDrawListSplitter
 {
     int _Current;
@@ -1090,6 +983,14 @@ typedef enum {
     ImDrawListFlags_AntiAliasedFill = 1 << 2,
     ImDrawListFlags_AllowVtxOffset = 1 << 3
 }ImDrawListFlags_;
+typedef struct ImVector_ImDrawVert {int Size;int Capacity;ImDrawVert* Data;} ImVector_ImDrawVert;
+
+typedef struct ImVector_ImVec4 {int Size;int Capacity;ImVec4* Data;} ImVector_ImVec4;
+
+typedef struct ImVector_ImTextureID {int Size;int Capacity;ImTextureID* Data;} ImVector_ImTextureID;
+
+typedef struct ImVector_ImVec2 {int Size;int Capacity;ImVec2* Data;} ImVector_ImVec2;
+
 struct ImDrawList
 {
     ImVector_ImDrawCmd CmdBuffer;
@@ -1150,10 +1051,13 @@ struct ImFontGlyph
     float X0, Y0, X1, Y1;
     float U0, V0, U1, V1;
 };
+typedef struct ImVector_ImU32 {int Size;int Capacity;ImU32* Data;} ImVector_ImU32;
+
 struct ImFontGlyphRangesBuilder
 {
     ImVector_ImU32 UsedChars;
 };
+typedef struct ImFontAtlasCustomRect ImFontAtlasCustomRect;
 struct ImFontAtlasCustomRect
 {
     unsigned short Width, Height;
@@ -1169,6 +1073,12 @@ typedef enum {
     ImFontAtlasFlags_NoMouseCursors = 1 << 1,
     ImFontAtlasFlags_NoBakedLines = 1 << 2
 }ImFontAtlasFlags_;
+typedef struct ImVector_ImFontPtr {int Size;int Capacity;ImFont** Data;} ImVector_ImFontPtr;
+
+typedef struct ImVector_ImFontAtlasCustomRect {int Size;int Capacity;ImFontAtlasCustomRect* Data;} ImVector_ImFontAtlasCustomRect;
+
+typedef struct ImVector_ImFontConfig {int Size;int Capacity;ImFontConfig* Data;} ImVector_ImFontConfig;
+
 struct ImFontAtlas
 {
     ImFontAtlasFlags Flags;
@@ -1193,6 +1103,10 @@ struct ImFontAtlas
     int PackIdMouseCursors;
     int PackIdLines;
 };
+typedef struct ImVector_float {int Size;int Capacity;float* Data;} ImVector_float;
+
+typedef struct ImVector_ImFontGlyph {int Size;int Capacity;ImFontGlyph* Data;} ImVector_ImFontGlyph;
+
 struct ImFont
 {
     ImVector_float IndexAdvanceX;
@@ -1227,6 +1141,55 @@ struct ImGuiViewport
     ImVec2 WorkPos;
     ImVec2 WorkSize;
 };
+struct ImBitVector;
+struct ImRect;
+struct ImDrawDataBuilder;
+struct ImDrawListSharedData;
+struct ImGuiColorMod;
+struct ImGuiContext;
+struct ImGuiContextHook;
+struct ImGuiDataTypeInfo;
+struct ImGuiGroupData;
+struct ImGuiInputTextState;
+struct ImGuiLastItemData;
+struct ImGuiMenuColumns;
+struct ImGuiNavItemData;
+struct ImGuiMetricsConfig;
+struct ImGuiNextWindowData;
+struct ImGuiNextItemData;
+struct ImGuiOldColumnData;
+struct ImGuiOldColumns;
+struct ImGuiPopupData;
+struct ImGuiSettingsHandler;
+struct ImGuiStackSizes;
+struct ImGuiStyleMod;
+struct ImGuiTabBar;
+struct ImGuiTabItem;
+struct ImGuiTable;
+struct ImGuiTableColumn;
+struct ImGuiTableTempData;
+struct ImGuiTableSettings;
+struct ImGuiTableColumnsSettings;
+struct ImGuiWindow;
+struct ImGuiWindowTempData;
+struct ImGuiWindowSettings;
+typedef int ImGuiLayoutType;
+typedef int ImGuiActivateFlags;
+typedef int ImGuiItemFlags;
+typedef int ImGuiItemStatusFlags;
+typedef int ImGuiOldColumnFlags;
+typedef int ImGuiNavHighlightFlags;
+typedef int ImGuiNavDirSourceFlags;
+typedef int ImGuiNavMoveFlags;
+typedef int ImGuiNextItemDataFlags;
+typedef int ImGuiNextWindowDataFlags;
+typedef int ImGuiScrollFlags;
+typedef int ImGuiSeparatorFlags;
+typedef int ImGuiTextFlags;
+typedef int ImGuiTooltipFlags;
+typedef void (*ImGuiErrorLogCallback)(void* user_data, const char* fmt, ...);
+extern ImGuiContext* GImGui;
+typedef struct StbUndoRecord StbUndoRecord;
 struct StbUndoRecord
 {
    int where;
@@ -1234,6 +1197,7 @@ struct StbUndoRecord
    int delete_length;
    int char_storage;
 };
+typedef struct StbUndoState StbUndoState;
 struct StbUndoState
 {
    StbUndoRecord undo_rec [99];
@@ -1241,6 +1205,7 @@ struct StbUndoState
    short undo_point, redo_point;
    int undo_char_point, redo_char_point;
 };
+typedef struct STB_TexteditState STB_TexteditState;
 struct STB_TexteditState
 {
    int cursor;
@@ -1256,6 +1221,7 @@ struct STB_TexteditState
    float preferred_x;
    StbUndoState undostate;
 };
+typedef struct StbTexteditRow StbTexteditRow;
 struct StbTexteditRow
 {
    float x0,x1;
@@ -1263,10 +1229,13 @@ struct StbTexteditRow
    float ymin,ymax;
    int num_chars;
 };
+typedef FILE* ImFileHandle;
+typedef struct ImVec1 ImVec1;
 struct ImVec1
 {
     float x;
 };
+typedef struct ImVec2ih ImVec2ih;
 struct ImVec2ih
 {
     short x, y;
@@ -1280,6 +1249,7 @@ struct ImBitVector
 {
     ImVector_ImU32 Storage;
 };
+typedef int ImPoolIdx;
 struct ImDrawListSharedData
 {
     ImVec2 TexUvWhitePixel;
@@ -1294,6 +1264,8 @@ struct ImDrawListSharedData
     ImU8 CircleSegmentCounts[64];
     const ImVec4* TexUvLines;
 };
+typedef struct ImVector_ImDrawListPtr {int Size;int Capacity;ImDrawList** Data;} ImVector_ImDrawListPtr;
+
 struct ImDrawDataBuilder
 {
     ImVector_ImDrawListPtr Layers[2];
@@ -1422,6 +1394,7 @@ typedef enum {
     ImGuiPopupPositionPolicy_ComboBox,
     ImGuiPopupPositionPolicy_Tooltip
 }ImGuiPopupPositionPolicy;
+typedef struct ImGuiDataTypeTempStorage ImGuiDataTypeTempStorage;
 struct ImGuiDataTypeTempStorage
 {
     ImU8 Data[8];
@@ -1448,6 +1421,7 @@ struct ImGuiStyleMod
     ImGuiStyleVar VarIdx;
     union { int BackupInt[2]; float BackupFloat[2]; };
 };
+typedef struct ImGuiComboPreviewData ImGuiComboPreviewData;
 struct ImGuiComboPreviewData
 {
     ImRect PreviewRect;
@@ -1572,22 +1546,26 @@ struct ImGuiStackSizes
     short SizeOfBeginPopupStack;
     short SizeOfDisabledStack;
 };
+typedef struct ImGuiWindowStackData ImGuiWindowStackData;
 struct ImGuiWindowStackData
 {
     ImGuiWindow* Window;
     ImGuiLastItemData ParentLastItemDataBackup;
     ImGuiStackSizes StackSizesOnBegin;
 };
+typedef struct ImGuiShrinkWidthItem ImGuiShrinkWidthItem;
 struct ImGuiShrinkWidthItem
 {
     int Index;
     float Width;
 };
+typedef struct ImGuiPtrOrIndex ImGuiPtrOrIndex;
 struct ImGuiPtrOrIndex
 {
     void* Ptr;
     int Index;
 };
+typedef struct ImGuiListClipperRange ImGuiListClipperRange;
 struct ImGuiListClipperRange
 {
     int Min;
@@ -1596,6 +1574,9 @@ struct ImGuiListClipperRange
     ImS8 PosToIndexOffsetMin;
     ImS8 PosToIndexOffsetMax;
 };
+typedef struct ImGuiListClipperData ImGuiListClipperData;
+typedef struct ImVector_ImGuiListClipperRange {int Size;int Capacity;ImGuiListClipperRange* Data;} ImVector_ImGuiListClipperRange;
+
 struct ImGuiListClipperData
 {
     ImGuiListClipper* ListClipper;
@@ -1683,6 +1664,8 @@ struct ImGuiOldColumnData
     ImGuiOldColumnFlags Flags;
     ImRect ClipRect;
 };
+typedef struct ImVector_ImGuiOldColumnData {int Size;int Capacity;ImGuiOldColumnData* Data;} ImVector_ImGuiOldColumnData;
+
 struct ImGuiOldColumns
 {
     ImGuiID ID;
@@ -1701,6 +1684,7 @@ struct ImGuiOldColumns
     ImVector_ImGuiOldColumnData Columns;
     ImDrawListSplitter Splitter;
 };
+typedef struct ImGuiViewportP ImGuiViewportP;
 struct ImGuiViewportP
 {
     ImGuiViewport _ImGuiViewport;
@@ -1744,6 +1728,7 @@ struct ImGuiMetricsConfig
     int ShowWindowsRectsType;
     int ShowTablesRectsType;
 };
+typedef struct ImGuiStackLevelInfo ImGuiStackLevelInfo;
 struct ImGuiStackLevelInfo
 {
     ImGuiID ID;
@@ -1751,6 +1736,9 @@ struct ImGuiStackLevelInfo
     bool QuerySuccess;
     char Desc[58];
 };
+typedef struct ImGuiStackTool ImGuiStackTool;
+typedef struct ImVector_ImGuiStackLevelInfo {int Size;int Capacity;ImGuiStackLevelInfo* Data;} ImVector_ImGuiStackLevelInfo;
+
 struct ImGuiStackTool
 {
     int LastActiveFrame;
@@ -1758,6 +1746,7 @@ struct ImGuiStackTool
     ImGuiID QueryId;
     ImVector_ImGuiStackLevelInfo Results;
 };
+typedef void (*ImGuiContextHookCallback)(ImGuiContext* ctx, ImGuiContextHook* hook);
 typedef enum { ImGuiContextHookType_NewFramePre, ImGuiContextHookType_NewFramePost, ImGuiContextHookType_EndFramePre, ImGuiContextHookType_EndFramePost, ImGuiContextHookType_RenderPre, ImGuiContextHookType_RenderPost, ImGuiContextHookType_Shutdown, ImGuiContextHookType_PendingRemoval_ }ImGuiContextHookType;
 struct ImGuiContextHook
 {
@@ -1767,6 +1756,50 @@ struct ImGuiContextHook
     ImGuiContextHookCallback Callback;
     void* UserData;
 };
+typedef struct ImVector_ImGuiWindowPtr {int Size;int Capacity;ImGuiWindow** Data;} ImVector_ImGuiWindowPtr;
+
+typedef struct ImVector_ImGuiWindowStackData {int Size;int Capacity;ImGuiWindowStackData* Data;} ImVector_ImGuiWindowStackData;
+
+typedef struct ImVector_ImGuiColorMod {int Size;int Capacity;ImGuiColorMod* Data;} ImVector_ImGuiColorMod;
+
+typedef struct ImVector_ImGuiStyleMod {int Size;int Capacity;ImGuiStyleMod* Data;} ImVector_ImGuiStyleMod;
+
+typedef struct ImVector_ImGuiID {int Size;int Capacity;ImGuiID* Data;} ImVector_ImGuiID;
+
+typedef struct ImVector_ImGuiItemFlags {int Size;int Capacity;ImGuiItemFlags* Data;} ImVector_ImGuiItemFlags;
+
+typedef struct ImVector_ImGuiGroupData {int Size;int Capacity;ImGuiGroupData* Data;} ImVector_ImGuiGroupData;
+
+typedef struct ImVector_ImGuiPopupData {int Size;int Capacity;ImGuiPopupData* Data;} ImVector_ImGuiPopupData;
+
+typedef struct ImVector_ImGuiViewportPPtr {int Size;int Capacity;ImGuiViewportP** Data;} ImVector_ImGuiViewportPPtr;
+
+typedef struct ImVector_unsigned_char {int Size;int Capacity;unsigned char* Data;} ImVector_unsigned_char;
+
+typedef struct ImVector_ImGuiListClipperData {int Size;int Capacity;ImGuiListClipperData* Data;} ImVector_ImGuiListClipperData;
+
+typedef struct ImVector_ImGuiTableTempData {int Size;int Capacity;ImGuiTableTempData* Data;} ImVector_ImGuiTableTempData;
+
+typedef struct ImVector_ImGuiTable {int Size;int Capacity;ImGuiTable* Data;} ImVector_ImGuiTable;
+
+typedef struct ImPool_ImGuiTable {ImVector_ImGuiTable Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;ImPoolIdx AliveCount;} ImPool_ImGuiTable;
+
+typedef struct ImVector_ImGuiTabBar {int Size;int Capacity;ImGuiTabBar* Data;} ImVector_ImGuiTabBar;
+
+typedef struct ImPool_ImGuiTabBar {ImVector_ImGuiTabBar Buf;ImGuiStorage Map;ImPoolIdx FreeIdx;ImPoolIdx AliveCount;} ImPool_ImGuiTabBar;
+
+typedef struct ImVector_ImGuiPtrOrIndex {int Size;int Capacity;ImGuiPtrOrIndex* Data;} ImVector_ImGuiPtrOrIndex;
+
+typedef struct ImVector_ImGuiShrinkWidthItem {int Size;int Capacity;ImGuiShrinkWidthItem* Data;} ImVector_ImGuiShrinkWidthItem;
+
+typedef struct ImVector_ImGuiSettingsHandler {int Size;int Capacity;ImGuiSettingsHandler* Data;} ImVector_ImGuiSettingsHandler;
+
+typedef struct ImChunkStream_ImGuiWindowSettings {ImVector_char Buf;} ImChunkStream_ImGuiWindowSettings;
+
+typedef struct ImChunkStream_ImGuiTableSettings {ImVector_char Buf;} ImChunkStream_ImGuiTableSettings;
+
+typedef struct ImVector_ImGuiContextHook {int Size;int Capacity;ImGuiContextHook* Data;} ImVector_ImGuiContextHook;
+
 struct ImGuiContext
 {
     bool Initialized;
@@ -2020,6 +2053,8 @@ struct ImGuiWindowTempData
     ImVector_float ItemWidthStack;
     ImVector_float TextWrapPosStack;
 };
+typedef struct ImVector_ImGuiOldColumns {int Size;int Capacity;ImGuiOldColumns* Data;} ImVector_ImGuiOldColumns;
+
 struct ImGuiWindow
 {
     char* Name;
@@ -2131,6 +2166,8 @@ struct ImGuiTabItem
     ImS16 IndexDuringLayout;
     bool WantClose;
 };
+typedef struct ImVector_ImGuiTabItem {int Size;int Capacity;ImGuiTabItem* Data;} ImVector_ImGuiTabItem;
+
 struct ImGuiTabBar
 {
     ImVector_ImGuiTabItem Tabs;
@@ -2165,6 +2202,8 @@ struct ImGuiTabBar
     ImVec2 BackupCursorPos;
     ImGuiTextBuffer TabsNames;
 };
+typedef ImS8 ImGuiTableColumnIdx;
+typedef ImU8 ImGuiTableDrawChannelIdx;
 struct ImGuiTableColumn
 {
     ImGuiTableColumnFlags Flags;
@@ -2209,11 +2248,20 @@ struct ImGuiTableColumn
     ImU8 SortDirectionsAvailMask : 4;
     ImU8 SortDirectionsAvailList;
 };
+typedef struct ImGuiTableCellData ImGuiTableCellData;
 struct ImGuiTableCellData
 {
     ImU32 BgColor;
     ImGuiTableColumnIdx Column;
 };
+typedef struct ImSpan_ImGuiTableColumn {ImGuiTableColumn* Data;ImGuiTableColumn* DataEnd;} ImSpan_ImGuiTableColumn;
+
+typedef struct ImSpan_ImGuiTableColumnIdx {ImGuiTableColumnIdx* Data;ImGuiTableColumnIdx* DataEnd;} ImSpan_ImGuiTableColumnIdx;
+
+typedef struct ImSpan_ImGuiTableCellData {ImGuiTableCellData* Data;ImGuiTableCellData* DataEnd;} ImSpan_ImGuiTableCellData;
+
+typedef struct ImVector_ImGuiTableColumnSortSpecs {int Size;int Capacity;ImGuiTableColumnSortSpecs* Data;} ImVector_ImGuiTableColumnSortSpecs;
+
 struct ImGuiTable
 {
     ImGuiID ID;
@@ -2335,6 +2383,7 @@ struct ImGuiTableTempData
     float HostBackupItemWidth;
     int HostBackupItemWidthStackSize;
 };
+typedef struct ImGuiTableColumnSettings ImGuiTableColumnSettings;
 struct ImGuiTableColumnSettings
 {
     float WidthOrWeight;

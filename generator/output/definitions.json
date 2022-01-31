@@ -551,7 +551,7 @@
   ],
   "ImChunkStream_swap": [
     {
-      "args": "(ImChunkStream* self,ImChunkStream* rhs)",
+      "args": "(ImChunkStream* self,ImChunkStream_T * rhs)",
       "argsT": [
         {
           "name": "self",
@@ -560,7 +560,7 @@
         {
           "name": "rhs",
           "reftoptr": true,
-          "type": "ImChunkStream*"
+          "type": "ImChunkStream_T *"
         }
       ],
       "argsoriginal": "(ImChunkStream<T>& rhs)",
@@ -571,7 +571,7 @@
       "location": "imgui_internal:675",
       "ov_cimguiname": "ImChunkStream_swap",
       "ret": "void",
-      "signature": "(ImChunkStream*)",
+      "signature": "(ImChunkStream_T *)",
       "stname": "ImChunkStream",
       "templated": true
     }
@@ -11148,11 +11148,11 @@
       "templated": true
     },
     {
-      "args": "(const ImVector src)",
+      "args": "(const ImVector_T  src)",
       "argsT": [
         {
           "name": "src",
-          "type": "const ImVector"
+          "type": "const ImVector_T "
         }
       ],
       "argsoriginal": "(const ImVector<T>& src)",
@@ -11162,8 +11162,8 @@
       "defaults": {},
       "funcname": "ImVector",
       "location": "imgui:1708",
-      "ov_cimguiname": "ImVector_ImVector_Vector",
-      "signature": "(const ImVector)",
+      "ov_cimguiname": "ImVector_ImVector_Vector_T_",
+      "signature": "(const ImVector_T )",
       "stname": "ImVector",
       "templated": true
     }
@@ -12010,7 +12010,7 @@
   ],
   "ImVector_swap": [
     {
-      "args": "(ImVector* self,ImVector* rhs)",
+      "args": "(ImVector* self,ImVector_T * rhs)",
       "argsT": [
         {
           "name": "self",
@@ -12019,7 +12019,7 @@
         {
           "name": "rhs",
           "reftoptr": true,
-          "type": "ImVector*"
+          "type": "ImVector_T *"
         }
       ],
       "argsoriginal": "(ImVector<T>& rhs)",
@@ -12030,7 +12030,7 @@
       "location": "imgui:1732",
       "ov_cimguiname": "ImVector_swap",
       "ret": "void",
-      "signature": "(ImVector*)",
+      "signature": "(ImVector_T *)",
       "stname": "ImVector",
       "templated": true
     }
@@ -20612,7 +20612,7 @@
       "cimguiname": "igImRsqrt",
       "defaults": {},
       "funcname": "ImRsqrt",
-      "location": "imgui_internal:417",
+      "location": "imgui_internal:419",
       "ov_cimguiname": "igImRsqrt_Float",
       "ret": "float",
       "signature": "(float)",
