@@ -17,7 +17,7 @@
       "cimguiname": "ImGui_ImplGlfw_CharCallback",
       "defaults": {},
       "funcname": "ImGui_ImplGlfw_CharCallback",
-      "location": "imgui_impl_glfw:40",
+      "location": "imgui_impl_glfw:45",
       "ov_cimguiname": "ImGui_ImplGlfw_CharCallback",
       "ret": "void",
       "signature": "(GLFWwindow*,unsigned int)",
@@ -42,10 +42,39 @@
       "cimguiname": "ImGui_ImplGlfw_CursorEnterCallback",
       "defaults": {},
       "funcname": "ImGui_ImplGlfw_CursorEnterCallback",
-      "location": "imgui_impl_glfw:36",
+      "location": "imgui_impl_glfw:40",
       "ov_cimguiname": "ImGui_ImplGlfw_CursorEnterCallback",
       "ret": "void",
       "signature": "(GLFWwindow*,int)",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplGlfw_CursorPosCallback": [
+    {
+      "args": "(GLFWwindow* window,double x,double y)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "GLFWwindow*"
+        },
+        {
+          "name": "x",
+          "type": "double"
+        },
+        {
+          "name": "y",
+          "type": "double"
+        }
+      ],
+      "argsoriginal": "(GLFWwindow* window,double x,double y)",
+      "call_args": "(window,x,y)",
+      "cimguiname": "ImGui_ImplGlfw_CursorPosCallback",
+      "defaults": {},
+      "funcname": "ImGui_ImplGlfw_CursorPosCallback",
+      "location": "imgui_impl_glfw:41",
+      "ov_cimguiname": "ImGui_ImplGlfw_CursorPosCallback",
+      "ret": "void",
+      "signature": "(GLFWwindow*,double,double)",
       "stname": ""
     }
   ],
@@ -124,6 +153,27 @@
       "stname": ""
     }
   ],
+  "ImGui_ImplGlfw_InstallCallbacks": [
+    {
+      "args": "(GLFWwindow* window)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "GLFWwindow*"
+        }
+      ],
+      "argsoriginal": "(GLFWwindow* window)",
+      "call_args": "(window)",
+      "cimguiname": "ImGui_ImplGlfw_InstallCallbacks",
+      "defaults": {},
+      "funcname": "ImGui_ImplGlfw_InstallCallbacks",
+      "location": "imgui_impl_glfw:35",
+      "ov_cimguiname": "ImGui_ImplGlfw_InstallCallbacks",
+      "ret": "void",
+      "signature": "(GLFWwindow*)",
+      "stname": ""
+    }
+  ],
   "ImGui_ImplGlfw_KeyCallback": [
     {
       "args": "(GLFWwindow* window,int key,int scancode,int action,int mods)",
@@ -154,7 +204,7 @@
       "cimguiname": "ImGui_ImplGlfw_KeyCallback",
       "defaults": {},
       "funcname": "ImGui_ImplGlfw_KeyCallback",
-      "location": "imgui_impl_glfw:39",
+      "location": "imgui_impl_glfw:44",
       "ov_cimguiname": "ImGui_ImplGlfw_KeyCallback",
       "ret": "void",
       "signature": "(GLFWwindow*,int,int,int,int)",
@@ -179,7 +229,7 @@
       "cimguiname": "ImGui_ImplGlfw_MonitorCallback",
       "defaults": {},
       "funcname": "ImGui_ImplGlfw_MonitorCallback",
-      "location": "imgui_impl_glfw:41",
+      "location": "imgui_impl_glfw:46",
       "ov_cimguiname": "ImGui_ImplGlfw_MonitorCallback",
       "ret": "void",
       "signature": "(GLFWmonitor*,int)",
@@ -212,7 +262,7 @@
       "cimguiname": "ImGui_ImplGlfw_MouseButtonCallback",
       "defaults": {},
       "funcname": "ImGui_ImplGlfw_MouseButtonCallback",
-      "location": "imgui_impl_glfw:37",
+      "location": "imgui_impl_glfw:42",
       "ov_cimguiname": "ImGui_ImplGlfw_MouseButtonCallback",
       "ret": "void",
       "signature": "(GLFWwindow*,int,int,int)",
@@ -232,6 +282,27 @@
       "ov_cimguiname": "ImGui_ImplGlfw_NewFrame",
       "ret": "void",
       "signature": "()",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplGlfw_RestoreCallbacks": [
+    {
+      "args": "(GLFWwindow* window)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "GLFWwindow*"
+        }
+      ],
+      "argsoriginal": "(GLFWwindow* window)",
+      "call_args": "(window)",
+      "cimguiname": "ImGui_ImplGlfw_RestoreCallbacks",
+      "defaults": {},
+      "funcname": "ImGui_ImplGlfw_RestoreCallbacks",
+      "location": "imgui_impl_glfw:36",
+      "ov_cimguiname": "ImGui_ImplGlfw_RestoreCallbacks",
+      "ret": "void",
+      "signature": "(GLFWwindow*)",
       "stname": ""
     }
   ],
@@ -257,7 +328,7 @@
       "cimguiname": "ImGui_ImplGlfw_ScrollCallback",
       "defaults": {},
       "funcname": "ImGui_ImplGlfw_ScrollCallback",
-      "location": "imgui_impl_glfw:38",
+      "location": "imgui_impl_glfw:43",
       "ov_cimguiname": "ImGui_ImplGlfw_ScrollCallback",
       "ret": "void",
       "signature": "(GLFWwindow*,double,double)",
@@ -298,7 +369,7 @@
       "cimguiname": "ImGui_ImplGlfw_WindowFocusCallback",
       "defaults": {},
       "funcname": "ImGui_ImplGlfw_WindowFocusCallback",
-      "location": "imgui_impl_glfw:35",
+      "location": "imgui_impl_glfw:39",
       "ov_cimguiname": "ImGui_ImplGlfw_WindowFocusCallback",
       "ret": "void",
       "signature": "(GLFWwindow*,int)",
@@ -592,7 +663,7 @@
       "cimguiname": "ImGui_ImplSDL2_InitForD3D",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_InitForD3D",
-      "location": "imgui_impl_sdl:26",
+      "location": "imgui_impl_sdl:27",
       "ov_cimguiname": "ImGui_ImplSDL2_InitForD3D",
       "ret": "bool",
       "signature": "(SDL_Window*)",
@@ -613,7 +684,7 @@
       "cimguiname": "ImGui_ImplSDL2_InitForMetal",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_InitForMetal",
-      "location": "imgui_impl_sdl:27",
+      "location": "imgui_impl_sdl:28",
       "ov_cimguiname": "ImGui_ImplSDL2_InitForMetal",
       "ret": "bool",
       "signature": "(SDL_Window*)",
@@ -638,7 +709,7 @@
       "cimguiname": "ImGui_ImplSDL2_InitForOpenGL",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_InitForOpenGL",
-      "location": "imgui_impl_sdl:24",
+      "location": "imgui_impl_sdl:25",
       "ov_cimguiname": "ImGui_ImplSDL2_InitForOpenGL",
       "ret": "bool",
       "signature": "(SDL_Window*,void*)",
@@ -647,22 +718,26 @@
   ],
   "ImGui_ImplSDL2_InitForSDLRenderer": [
     {
-      "args": "(SDL_Window* window)",
+      "args": "(SDL_Window* window,SDL_Renderer* renderer)",
       "argsT": [
         {
           "name": "window",
           "type": "SDL_Window*"
+        },
+        {
+          "name": "renderer",
+          "type": "SDL_Renderer*"
         }
       ],
-      "argsoriginal": "(SDL_Window* window)",
-      "call_args": "(window)",
+      "argsoriginal": "(SDL_Window* window,SDL_Renderer* renderer)",
+      "call_args": "(window,renderer)",
       "cimguiname": "ImGui_ImplSDL2_InitForSDLRenderer",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_InitForSDLRenderer",
-      "location": "imgui_impl_sdl:28",
+      "location": "imgui_impl_sdl:29",
       "ov_cimguiname": "ImGui_ImplSDL2_InitForSDLRenderer",
       "ret": "bool",
-      "signature": "(SDL_Window*)",
+      "signature": "(SDL_Window*,SDL_Renderer*)",
       "stname": ""
     }
   ],
@@ -680,7 +755,7 @@
       "cimguiname": "ImGui_ImplSDL2_InitForVulkan",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_InitForVulkan",
-      "location": "imgui_impl_sdl:25",
+      "location": "imgui_impl_sdl:26",
       "ov_cimguiname": "ImGui_ImplSDL2_InitForVulkan",
       "ret": "bool",
       "signature": "(SDL_Window*)",
@@ -696,7 +771,7 @@
       "cimguiname": "ImGui_ImplSDL2_NewFrame",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_NewFrame",
-      "location": "imgui_impl_sdl:30",
+      "location": "imgui_impl_sdl:31",
       "ov_cimguiname": "ImGui_ImplSDL2_NewFrame",
       "ret": "void",
       "signature": "()",
@@ -717,7 +792,7 @@
       "cimguiname": "ImGui_ImplSDL2_ProcessEvent",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_ProcessEvent",
-      "location": "imgui_impl_sdl:31",
+      "location": "imgui_impl_sdl:32",
       "ov_cimguiname": "ImGui_ImplSDL2_ProcessEvent",
       "ret": "bool",
       "signature": "(const SDL_Event*)",
@@ -733,7 +808,7 @@
       "cimguiname": "ImGui_ImplSDL2_Shutdown",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_Shutdown",
-      "location": "imgui_impl_sdl:29",
+      "location": "imgui_impl_sdl:30",
       "ov_cimguiname": "ImGui_ImplSDL2_Shutdown",
       "ret": "void",
       "signature": "()",
