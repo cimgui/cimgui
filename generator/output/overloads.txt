@@ -134,6 +134,9 @@ igImAbs	3
 igImFloor	2
 1	float	igImFloor_Float (float)
 2	ImVec2	igImFloor_Vec2 (const ImVec2)
+igImFloorSigned	2
+1	float	igImFloorSigned_Float (float)
+2	ImVec2	igImFloorSigned_Vec2 (const ImVec2)
 igImIsPowerOfTwo	2
 1	bool	igImIsPowerOfTwo_Int (int)
 2	bool	igImIsPowerOfTwo_U64 (ImU64)
@@ -255,4 +258,4 @@ igValue	4
 2	void	igValue_Int (const char*,int)
 3	void	igValue_Uint (const char*,unsigned int)
 4	void	igValue_Float (const char*,float,const char*)
-180 overloaded
+182 overloaded
