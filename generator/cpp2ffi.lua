@@ -592,6 +592,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
 	line = line:gsub("inline","")
 	line = line:gsub("mutable","")
 	line = line:gsub("explicit","")
+	line = line:gsub("constexpr","")
 	--skip operator
 	if line:match("operator") then return end
 	--skip template
