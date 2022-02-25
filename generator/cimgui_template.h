@@ -51,12 +51,12 @@ CIMGUI_API void igLogText(CONST char *fmt, ...);
 //no appendfV
 CIMGUI_API void ImGuiTextBuffer_appendf(struct ImGuiTextBuffer *buffer, const char *fmt, ...);
 //for getting FLT_MAX in bindings
-CIMGUI_API float igGET_FLT_MAX();
+CIMGUI_API float igGET_FLT_MAX(void);
 //for getting FLT_MIN in bindings
-CIMGUI_API float igGET_FLT_MIN();
+CIMGUI_API float igGET_FLT_MIN(void);
 
 
-CIMGUI_API ImVector_ImWchar* ImVector_ImWchar_create();
+CIMGUI_API ImVector_ImWchar* ImVector_ImWchar_create(void);
 CIMGUI_API void ImVector_ImWchar_destroy(ImVector_ImWchar* self);
 CIMGUI_API void ImVector_ImWchar_Init(ImVector_ImWchar* p);
 CIMGUI_API void ImVector_ImWchar_UnInit(ImVector_ImWchar* p);

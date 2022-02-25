@@ -121,7 +121,8 @@ local function func_header_impl_generate(FP)
 			else
                 
                 if def.stname == "" then --ImGui namespace or top level
-                    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
+                    local empty = def.args:match("^%(%)") --no args
+                    table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname..(empty and "(void)" or def.args)..";"..addcoment.."\n")
                 else
 					cpp2ffi.prtable(def)
                     error("class function in implementations")
