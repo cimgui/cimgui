@@ -1,10 +1,10 @@
 ----------------overloadings---------------------------
 ImColor_ImColor	5
 1	nil	ImColor_ImColor_Nil ()
-2	nil	ImColor_ImColor_Int (int,int,int,int)
-3	nil	ImColor_ImColor_U32 (ImU32)
-4	nil	ImColor_ImColor_Float (float,float,float,float)
-5	nil	ImColor_ImColor_Vec4 (const ImVec4)
+2	nil	ImColor_ImColor_Float (float,float,float,float)
+3	nil	ImColor_ImColor_Vec4 (const ImVec4)
+4	nil	ImColor_ImColor_Int (int,int,int,int)
+5	nil	ImColor_ImColor_U32 (ImU32)
 ImDrawList_AddText	2
 1	void	ImDrawList_AddText_Vec2 (const ImVec2,ImU32,const char*,const char*)
 2	void	ImDrawList_AddText_FontPtr (const ImFont*,float,const ImVec2,ImU32,const char*,const char*,float,const ImVec4*)
@@ -26,10 +26,6 @@ ImGuiWindow_GetID	3
 1	ImGuiID	ImGuiWindow_GetID_Str (const char*,const char*)
 2	ImGuiID	ImGuiWindow_GetID_Ptr (const void*)
 3	ImGuiID	ImGuiWindow_GetID_Int (int)
-ImGuiWindow_GetIDNoKeepAlive	3
-1	ImGuiID	ImGuiWindow_GetIDNoKeepAlive_Str (const char*,const char*)
-2	ImGuiID	ImGuiWindow_GetIDNoKeepAlive_Ptr (const void*)
-3	ImGuiID	ImGuiWindow_GetIDNoKeepAlive_Int (int)
 ImPool_Remove	2
 1	void	ImPool_Remove_TPtr (ImGuiID,const T*)
 2	void	ImPool_Remove_PoolIdx (ImGuiID,ImPoolIdx)
@@ -69,7 +65,7 @@ ImVec2_ImVec2	2
 ImVec2ih_ImVec2ih	3
 1	nil	ImVec2ih_ImVec2ih_Nil ()
 2	nil	ImVec2ih_ImVec2ih_short (short,short)
-3	nil	ImVec2ih_ImVec2ih_Vec2 (const ImVec2)
+3		ImVec2ih_ImVec2ih_Vec2 (const ImVec2)
 ImVec4_ImVec4	2
 1	nil	ImVec4_ImVec4_Nil ()
 2	nil	ImVec4_ImVec4_Float (float,float,float,float)
@@ -258,4 +254,4 @@ igValue	4
 2	void	igValue_Int (const char*,int)
 3	void	igValue_Uint (const char*,unsigned int)
 4	void	igValue_Float (const char*,float,const char*)
-182 overloaded
+179 overloaded
