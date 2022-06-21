@@ -593,6 +593,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
 	line = line:gsub("mutable","")
 	line = line:gsub("explicit","")
 	line = line:gsub("constexpr","")
+	line = clean_spaces(line)
 	--skip operator
 	if line:match("operator") then return end
 	--skip template
@@ -2280,9 +2281,13 @@ local code = [[
 ]]		
 local code = [[
 
- bool BeginPlot(const char* title_id, const char* x_label, const char* y_label, const ImVec2& size = ImVec2(-1,0), ImPlotFlags flags = ImPlotFlags_None, ImPlotAxisFlags x_flags = ImPlotAxisFlags_None, ImPlotAxisFlags y_flags = ImPlotAxisFlags_None, ImPlotAxisFlags y2_flags = ImPlotAxisFlags_AuxDefault, ImPlotAxisFlags y3_flags = ImPlotAxisFlags_AuxDefault, const char* y2_label = ((void *)0), const char* y3_label = ((void *)0)) __attribute__( ( deprecated ) )
-                                                                               ;
-                                                                       
+struct ImVec2ih
+{
+    short   x, y;
+    constexpr ImVec2ih()                           : x(0), y(0) {}
+    constexpr ImVec2ih(short _x, short _y)         : x(_x), y(_y) {}
+    constexpr explicit ImVec2ih(const ImVec2& rhs) : x((short)rhs.x), y((short)rhs.y) {}
+};
 ]]																		  
 local parser = M.Parser()
 for line in code:gmatch("[^\n]+") do
