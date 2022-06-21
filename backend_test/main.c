@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
     
     // start imgui frame
     ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame(window);
+    ImGui_ImplSDL2_NewFrame();
     igNewFrame();
 
     if (showDemoWindow)
