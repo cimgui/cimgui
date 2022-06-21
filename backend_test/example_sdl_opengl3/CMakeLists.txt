@@ -6,27 +6,28 @@ endif(WIN32)
 #general settings
 
 
-if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../imgui/backends)
-	set(BAKENDS_FOLDER "../imgui/backends/")
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../../imgui/backends)
+	set(BAKENDS_FOLDER "../../imgui/backends/")
 else()
-	set(BAKENDS_FOLDER "../imgui/examples/")
+	set(BAKENDS_FOLDER "../../imgui/examples/")
 endif()
 
-if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../imgui/imgui_tables.cpp)
-	set(TABLES_SOURCE "../imgui/imgui_tables.cpp")
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../../imgui/imgui_tables.cpp)
+	set(TABLES_SOURCE "../../imgui/imgui_tables.cpp")
 else()
 	set(TABLES_SOURCE "")
 endif()
 
-include_directories(../imgui)
+include_directories(../../imgui)
 add_definitions("-DIMGUI_DISABLE_OBSOLETE_FUNCTIONS=1")
 
-include_directories(../)
-set(IMGUI_SOURCES ../cimgui.cpp 
-../imgui/imgui.cpp 
-../imgui/imgui_draw.cpp 
-../imgui/imgui_demo.cpp 
-../imgui/imgui_widgets.cpp
+include_directories(../../)
+set(IMGUI_SOURCES 
+../../cimgui.cpp 
+../../imgui/imgui.cpp 
+../../imgui/imgui_draw.cpp 
+../../imgui/imgui_demo.cpp 
+../../imgui/imgui_widgets.cpp
 ${TABLES_SOURCE} 
 )
 
@@ -47,13 +48,13 @@ option(IMGUI_FREETYPE "add Freetype2" OFF)
 if(IMGUI_FREETYPE)
 	FIND_PACKAGE(freetype REQUIRED PATHS ${FREETYPE_PATH})
 	list(APPEND IMGUI_LIBRARIES freetype)
-	list(APPEND IMGUI_SOURCES ../imgui/misc/freetype/imgui_freetype.cpp)
+	list(APPEND IMGUI_SOURCES ../../imgui/misc/freetype/imgui_freetype.cpp)
 	add_definitions("-DCIMGUI_FREETYPE=1")
 endif(IMGUI_FREETYPE)
 
 #opengl3
 list(APPEND IMGUI_SOURCES ${BAKENDS_FOLDER}imgui_impl_opengl3.cpp)
-include_directories(../imgui/examples/libs/gl3w)
+include_directories(../../imgui/examples/libs/gl3w)
 if(WIN32)
        list(APPEND IMGUI_LIBRARIES opengl32)
 else(WIN32)#Unix
@@ -97,7 +98,7 @@ add_library(cimgui_sdl SHARED ${IMGUI_SOURCES})
 target_link_libraries(cimgui_sdl ${IMGUI_LIBRARIES} ${IMGUI_SDL_LIBRARY})
 
 #using library
-include_directories(../generator/output/)
+include_directories(../../generator/output/)
 add_executable(test_sdl main.c)
 target_compile_definitions(test_sdl PUBLIC -DCIMGUI_USE_OPENGL3 -DCIMGUI_USE_SDL)
 if (MINGW)
