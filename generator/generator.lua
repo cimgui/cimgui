@@ -421,7 +421,7 @@ if #implementations > 0 then
     parser2 = cpp2ffi.Parser()
 	
 	local config = require"config_generator"
-    
+    local impl_str = ""
     for i,impl in ipairs(implementations) do
         local source = backends_folder .. [[imgui_impl_]].. impl .. ".h "
         local locati = [[imgui_impl_]].. impl
@@ -438,15 +438,22 @@ if #implementations > 0 then
 		end
 		
 		local defines = parser2:take_lines(CPRE..extra_defines..extra_includes..source, {locati}, COMPILER)
-
+		
+		local parser3 = cpp2ffi.Parser()
+		parser3:take_lines(CPRE..extra_defines..extra_includes..source, {locati}, COMPILER)
+		parser3:do_parse()
+		local cfuncsstr = func_header_impl_generate(parser3) 
+		local cstructstr1,cstructstr2 = parser3.structs_and_enums[1], parser3.structs_and_enums[2]
+		impl_str = impl_str .. "#ifdef CIMGUI_USE_".. string.upper(impl).."\n" .. cstructstr1 .. cstructstr2 .. cfuncsstr .. "\n#endif\n"
     end
 	
     parser2:do_parse()
 
     -- save ./cimgui_impl.h
-    local cfuncsstr = func_header_impl_generate(parser2) 
-	local cstructstr1,cstructstr2 = parser2.structs_and_enums[1], parser2.structs_and_enums[2]
-    save_data("./output/cimgui_impl.h",cstructstr1,cstructstr2,cfuncsstr)
+    --local cfuncsstr = func_header_impl_generate(parser2) 
+	--local cstructstr1,cstructstr2 = parser2.structs_and_enums[1], parser2.structs_and_enums[2]
+    --save_data("./output/cimgui_impl.h",cstructstr1,cstructstr2,cfuncsstr)
+	save_data("./output/cimgui_impl.h",impl_str)
 
     ----------save fundefs in impl_definitions.lua for using in bindings
     save_data("./output/impl_definitions.lua",serializeTableF(parser2.defsT))
