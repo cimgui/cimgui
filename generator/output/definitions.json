@@ -11774,7 +11774,6 @@
       "funcname": "ImVec2ih",
       "location": "imgui_internal:503",
       "ov_cimguiname": "ImVec2ih_ImVec2ih_Vec2",
-      "ret": "",
       "signature": "(const ImVec2)",
       "stname": "ImVec2ih"
     }

@@ -65,7 +65,7 @@ ImVec2_ImVec2	2
 ImVec2ih_ImVec2ih	3
 1	nil	ImVec2ih_ImVec2ih_Nil ()
 2	nil	ImVec2ih_ImVec2ih_short (short,short)
-3		ImVec2ih_ImVec2ih_Vec2 (const ImVec2)
+3	nil	ImVec2ih_ImVec2ih_Vec2 (const ImVec2)
 ImVec4_ImVec4	2
 1	nil	ImVec4_ImVec4_Nil ()
 2	nil	ImVec4_ImVec4_Float (float,float,float,float)
