@@ -569,6 +569,46 @@ local function clean_names_from_signature(self,signat)
 	result = result:sub(1,-2) .. ")"
 	return result
 end
+local function clean_functypedef(line)
+	local first, args = line:match("(typedef .-%(%*[_%w]+%))%s*(%b())")
+
+	if not args then
+		print"not getting args in"
+		print(line)
+		print(first,"args",args)
+		error"clean_functypedef not getting args"
+    end
+	
+	local argsp = args:sub(2,-2)..","
+	local argsTa = {}
+	for tynam in argsp:gmatch("([^,]+),") do
+		if tynam:match("%)") and not tynam:match("%b()") then
+			--patenthesis not closed are merged in previous (happens in some defaults)
+			argsTa[#argsTa] = argsTa[#argsTa]..","..tynam
+			while argsTa[#argsTa]:match("%)") and not argsTa[#argsTa]:match("%b()") do
+				argsTa[#argsTa-1] = argsTa[#argsTa-1] .. "," .. argsTa[#argsTa]
+				argsTa[#argsTa] = nil
+			end
+		else
+			argsTa[#argsTa+1] = tynam
+		end
+	end
+
+	local result = "\n"..first.."("
+	for i,ar in ipairs(argsTa) do
+		if ar:match("&") then
+			if ar:match("const") then
+				argsTa[i] = ar:gsub("&","")
+			else
+				argsTa[i] = ar:gsub("&","*")
+			end
+        end
+		result = result..argsTa[i]..(i==#argsTa and ");" or ",")
+	end
+	--M.prtable(argsTa)
+	--print(result)
+	return result
+end
 local function parseFunction(self,stname,itt,namespace,locat)
 	local lineorig,comment = split_comment(itt.item)
 	line = clean_spaces(lineorig)
@@ -1379,7 +1419,8 @@ function M.Parser()
 							local tdt = self:gentemplatetypedef(ttype,template,te)
 							it2 = tdt..code2
 						end
-						
+					elseif it.re_name == "functypedef_re" then
+						it2 = clean_functypedef(it2)
 					end
 					--table.insert(outtabpre,it2)
 					table.insert(outtab,it2)
@@ -2265,29 +2306,10 @@ end
 M.func_header_generate = func_header_generate
 --[=[
 -- tests
+
 local code = [[
 
- bool BeginPlot(const char* title_id, 
- const char* x_label, const char* y_label, 
- const ImVec2& size = ImVec2(-1,0), 
- ImPlotFlags flags = ImPlotFlags_None, 
- ImPlotAxisFlags x_flags = ImPlotAxisFlags_None, 
- ImPlotAxisFlags y_flags = ImPlotAxisFlags_None, 
- ImPlotAxisFlags y2_flags = ImPlotAxisFlags_AuxDefault, 
- ImPlotAxisFlags y3_flags = ImPlotAxisFlags_AuxDefault, 
- const char* y2_label = ((void *)0), 
- const char* y3_label = ((void *)0)) __attribute__( ( deprecated ) );
-                                                                       
-]]		
-local code = [[
-
-struct ImVec2ih
-{
-    short   x, y;
-    constexpr ImVec2ih()                           : x(0), y(0) {}
-    constexpr ImVec2ih(short _x, short _y)         : x(_x), y(_y) {}
-    constexpr explicit ImVec2ih(const ImVec2& rhs) : x((short)rhs.x), y((short)rhs.y) {}
-};
+typedef void (*ImPlotLocator)(ImPlotTicker& ticker, const ImPlotRange& range, float pixels, bool vertical, ImPlotFormatter formatter, void* formatter_data);
 ]]																		  
 local parser = M.Parser()
 for line in code:gmatch("[^\n]+") do
@@ -2296,7 +2318,7 @@ for line in code:gmatch("[^\n]+") do
 end
 parser:do_parse()
 M.prtable(parser)
---M.prtable(parser:gen_structs_and_enums_table())
+M.prtable(parser:gen_structs_and_enums_table())
 --]=]
 --print(clean_spaces[[ImVec2 ArcFastVtx[12 * 1];]])
 --[=[
