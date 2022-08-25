@@ -148,17 +148,22 @@ local function get_defines(t)
     print(compiler_cmd)
     local pipe,err = io.popen(compiler_cmd,"r")
     local defines = {}
+    local output = { err }
     while true do
         local line = pipe:read"*l"
         if not line then break end
         local key,value = line:match([[^#define%s+(%S+)%s*(.*)]])
         if not key then --or not value then 
+            table.insert(output, line)
             --print(line)
         else
             defines[key]=value or ""
         end
     end
     pipe:close()
+    -- Might fail if imconfig.h includes headers to other parts of your
+    -- project. Try defining IMGUI_DISABLE_INCLUDE_IMCONFIG_H.
+    assert(next(defines), table.concat(output, "\n"))
     --require"anima.utils"
     --prtable(defines)
     --FLT_MAX
@@ -312,6 +317,7 @@ end
 --get imgui.h version and IMGUI_HAS_DOCK--------------------------
 --defines for the cl compiler must be present in the print_defines.cpp file
 gdefines = get_defines{"IMGUI_VERSION","FLT_MAX","FLT_MIN","IMGUI_HAS_DOCK","IMGUI_HAS_IMSTR"}
+assert(gdefines.IMGUI_VERSION, "Failed to read IMGUI_VERSION from imgui.h.")
 
 if gdefines.IMGUI_HAS_DOCK then gdefines.IMGUI_HAS_DOCK = true end
 if gdefines.IMGUI_HAS_IMSTR then gdefines.IMGUI_HAS_IMSTR = true end
