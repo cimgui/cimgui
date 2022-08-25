@@ -143,7 +143,7 @@ local func_implementation = cpp2ffi.func_implementation
 -------------------functions for getting and setting defines
 local function get_defines(t)
     local compiler_cmd = COMPILER == "cl"
-                         and COMPILER..[[ /TP /nologo /c /Fo"NUL" /I "]]..IMGUI_PATH..[[" print_defines.cpp]]..CFLAGS
+                         and COMPILER..[[ /TP /nologo /c /Fo"NUL" /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /I "]]..IMGUI_PATH..[[" print_defines.cpp]]..CFLAGS
                          or COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]..IMGUI_PATH..[[/imgui.h]]..CFLAGS
     print(compiler_cmd)
     local pipe,err = io.popen(compiler_cmd,"r")
