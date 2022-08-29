@@ -381,12 +381,26 @@ parser1:do_parse()
 save_data("./output/overloads.txt",parser1.overloadstxt)
 cimgui_generation(parser1)
 
+local enum_comments = {}
+for line in io.lines(IMGUI_PATH .."/imgui.h") do
+    local name, comment = line:match("^%s+(%u%l%S+).-,.*//%s+(.*)$")
+    if name then
+        enum_comments[name] = comment
+    end
+end
+
 ----------save struct and enums lua table in structs_and_enums.lua for using in bindings
 
 local structs_and_enums_table = parser1.structs_and_enums_table
 structs_and_enums_table.templated_structs = parser1.templated_structs
 structs_and_enums_table.typenames = parser1.typenames
 structs_and_enums_table.templates_done = parser1.templates_done
+
+for name, vals in pairs(structs_and_enums_table.enums) do
+    for k, v in pairs(vals) do
+        v.comment = enum_comments[v.name]
+    end
+end
 
 save_data("./output/structs_and_enums.lua",serializeTableF(structs_and_enums_table))
 save_data("./output/typedefs_dict.lua",serializeTableF(parser1.typedefs_dict))
