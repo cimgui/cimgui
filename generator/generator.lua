@@ -381,11 +381,21 @@ parser1:do_parse()
 save_data("./output/overloads.txt",parser1.overloadstxt)
 cimgui_generation(parser1)
 
-local enum_comments = {}
+local comments = {
+    enum = {},
+    func = {},
+}
+local lnum = 0
 for line in io.lines(IMGUI_PATH .."/imgui.h") do
+    lnum = lnum + 1
     local name, comment = line:match("^%s+(%u%l%S+).-,.*//%s+(.*)$")
     if name then
-        enum_comments[name] = comment
+        comments.enum[name] = comment
+    end
+    name, comment = line:match("IMGUI_API%s.*%s(%u%l%w*)%(.*%);%s+// (.*)")
+    if name then
+        -- Overloads mean name is not unique. Tag with line number.
+        comments.func[name.."|imgui:"..lnum] = comment
     end
 end
 
@@ -398,7 +408,7 @@ structs_and_enums_table.templates_done = parser1.templates_done
 
 for name, vals in pairs(structs_and_enums_table.enums) do
     for k, v in pairs(vals) do
-        v.comment = enum_comments[v.name]
+        v.comment = comments.enum[v.name]
     end
 end
 
@@ -409,6 +419,13 @@ save_data("./output/typedefs_dict.lua",serializeTableF(parser1.typedefs_dict))
 --DefsByStruct(pFP)
 set_defines(parser1.defsT) 
 repair_defaults(parser1.defsT, structs_and_enums_table)
+for name, defs in pairs(parser1.defsT) do
+    for _,v in ipairs(defs) do
+        if v.funcname and v.location then
+            v.comment = comments.func[v.funcname.."|"..v.location]
+        end
+    end
+end
 save_data("./output/definitions.lua",serializeTableF(parser1.defsT))
 
 --check every function has ov_cimguiname
