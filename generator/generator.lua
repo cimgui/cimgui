@@ -143,16 +143,18 @@ local func_implementation = cpp2ffi.func_implementation
 -------------------functions for getting and setting defines
 local function get_defines(t)
     local compiler_cmd = COMPILER == "cl"
-                         and COMPILER..[[ /TP /nologo /c /Fo"NUL" /I "]]..IMGUI_PATH..[[" print_defines.cpp]]..CFLAGS
+                         and COMPILER..[[ /TP /nologo /c /Fo"NUL" /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS ]]..CFLAGS..[[ /I"]]..IMGUI_PATH..[[" print_defines.cpp]]
                          or COMPILER..[[ -E -dM -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]]..IMGUI_PATH..[[/imgui.h]]..CFLAGS
     print(compiler_cmd)
     local pipe,err = io.popen(compiler_cmd,"r")
     local defines = {}
+    local compiler_output = {"There were fails in compilation."}
     while true do
         local line = pipe:read"*l"
         if not line then break end
         local key,value = line:match([[^#define%s+(%S+)%s*(.*)]])
         if not key then --or not value then 
+			table.insert(compiler_output, line)
             --print(line)
         else
             defines[key]=value or ""
@@ -161,7 +163,7 @@ local function get_defines(t)
     pipe:close()
     --require"anima.utils"
     --prtable(defines)
-    --FLT_MAX
+	assert(next(defines), table.concat(compiler_output, "\n"))
     local ret = {}
     for i,v in ipairs(t) do
         local aa = defines[v]
