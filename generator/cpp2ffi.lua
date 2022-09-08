@@ -1231,16 +1231,17 @@ function M.Parser()
 		self.linenumdict = {}
 		local cdefs2 = {}
 		for i,cdef in ipairs(cdefs) do
-			if self.linenumdict[cdef[1]] then
+			local cdef1 = clean_comments(cdef[1])
+			if self.linenumdict[cdef1] then
 				--print("linenumdict already defined for", cdef[1],type(self.linenumdict[cdef[1]]))
-				if type(self.linenumdict[cdef[1]])=="string" then
-					self.linenumdict[cdef[1]] = {self.linenumdict[cdef[1]], cdef[2]}
+				if type(self.linenumdict[cdef1])=="string" then
+					self.linenumdict[cdef1] = {self.linenumdict[cdef1], cdef[2]}
 				else -- must be table already
-					table.insert(self.linenumdict[cdef[1]],cdef[2])
+					table.insert(self.linenumdict[cdef1],cdef[2])
 				end
 			else
 				--print("nuevo linenumdict es",cdef[1],cdef[2])
-				self.linenumdict[cdef[1]]=cdef[2]
+				self.linenumdict[cdef1]=cdef[2]
 			end
 			table.insert(cdefs2,cdef[1])
 		end
