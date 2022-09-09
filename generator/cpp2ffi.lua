@@ -1335,11 +1335,11 @@ function M.Parser()
 		--table.insert(outtab,stru:match("(.-)%b{}"))
 		table.insert(outtab,"\nstruct "..stname.."\n")
 		table.insert(outtab,"{")
-		table.insert(commtab,nil)--"")
-		table.insert(commtab,nil)--"")
+		table.insert(commtab,"")
+		table.insert(commtab,"")
 		if derived then
 			table.insert(outtab,"\n    "..derived.." _"..derived..";")
-			table.insert(commtab,nil)--"")
+			table.insert(commtab,"")
 		end
 		--local itlist,itemsin = parseItems(iner, false,locat)
 		local itlist = itst.childs
@@ -1375,14 +1375,14 @@ function M.Parser()
 					it2 = it2:gsub("%s*=.+;",";")
 				end
 				table.insert(outtab,it2)
-				table.insert(commtab,it.comments )--or "")
+				table.insert(commtab,it.comments or "")
 				end
 			elseif it.re_name == "struct_re" then
 				--check if has declaration
 				local decl = it.item:match"%b{}%s*([^%s}{]+)%s*;"
 				if decl then
 					table.insert(outtab,"\n    "..it.name.." "..decl..";")
-					table.insert(commtab,it.comments )--or "")
+					table.insert(commtab,it.comments or "")
 				end
 				local cleanst,structname,strtab,comstab,predec = self:clean_structR1(it,doheader)
 				if doheader then
@@ -1580,6 +1580,7 @@ function M.Parser()
 	end
 	-----------
 	function par:parse_struct_line(line,outtab,comment)
+		comment = comment ~= "" and comment or nil
 		local functype_re = "^%s*[%w%s%*]+%(%*[%w_]+%)%([^%(%)]*%)"
 		local functype_reex = "^(%s*[%w%s%*]+%(%*)([%w_]+)(%)%([^%(%)]*%))"
 		line = clean_spaces(line)
