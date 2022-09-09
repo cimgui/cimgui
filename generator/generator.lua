@@ -32,10 +32,10 @@ if FREETYPE_GENERATION then
 end
 
 if COMPILER == "gcc" or COMPILER == "clang" then
-    CPRE = COMPILER..(COMMENTS_GENERATION and " -C " or "")..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] .. CFLAGS
+    CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] .. CFLAGS
     CTEST = COMPILER.." --version"
 elseif COMPILER == "cl" then
-    CPRE = COMPILER..(COMMENTS_GENERATION and " /C " or "")..[[ /E /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_DEBUG_PARANOID /DIMGUI_API="" /DIMGUI_IMPL_API="" ]] .. CFLAGS
+    CPRE = COMPILER..[[ /E /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_DEBUG_PARANOID /DIMGUI_API="" /DIMGUI_IMPL_API="" ]] .. CFLAGS
     CTEST = COMPILER
 else
     print("Working without compiler ")
@@ -352,7 +352,7 @@ local function parseImGuiHeader(header,names)
 	parser.manuals = cimgui_manuals
 	parser.UDTs = {"ImVec2","ImVec4","ImColor","ImRect"}
 	--parser.gen_template_typedef = gen_template_typedef --use auto
-	
+	parser.COMMENTS_GENERATION = COMMENTS_GENERATION
 	local defines = parser:take_lines(CPRE..header,names,COMPILER)
 	
 	return parser

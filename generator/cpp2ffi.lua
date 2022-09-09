@@ -116,7 +116,7 @@ end
 M.strsplit = strsplit
 local function split_comment(line)
     local comment = line:match("(%s*//.*)") --or ""
-    line = line:gsub("%s*//.*","")
+    line = line:gsub("%s*//[^\n]*","")
     line = line:gsub("%s*$","")
     return line,comment
 end
@@ -611,6 +611,7 @@ local function clean_functypedef(line)
 	return result
 end
 local function parseFunction(self,stname,itt,namespace,locat)
+
 	local lineorig,comment = split_comment(itt.item)
 	line = clean_spaces(lineorig)
 	--move *
@@ -1130,6 +1131,9 @@ function M.Parser()
 		return par.skipped[def.ov_cimguiname] or par.skipped[def.cimguiname]
 	end
 	function par:take_lines(cmd_line,names,compiler)
+		if self.COMMENTS_GENERATION then
+			cmd_line = cmd_line .. (compiler=="cl" and " /C " or " -C ")
+		end
 		local pipe,err = io.popen(cmd_line,"r")
 		if not pipe then
 			error("could not execute COMPILER "..err)
@@ -1246,7 +1250,34 @@ function M.Parser()
 			table.insert(cdefs2,cdef[1])
 		end
 		local txt = table.concat(cdefs2,"\n")
-		
+		--clean bad positioned comments inside functionD_re
+		if self.COMMENTS_GENERATION then
+		print"cleaning comments inside functionD_re--------------"
+		---[[
+		local nn = 0
+		local txtclean = {}
+		local reg = "(\n[%w%s]-[%w]+%s*%b())(%s*//[^\n]*)([\n%s%w]*%b{}%s-;*)"
+		--reg = "^([^;{}]-%b()[\n%s%w]*%b{}%s-;*)"
+		local ini = 1
+		local i,e,a,b,c = txt:find(reg,ini)
+		while i do
+			print(i,e,#txt)
+			table.insert(txtclean,txt:sub(ini,i-1))
+			table.insert(txtclean,a)
+			print("a:",a)
+			print("b:",b)
+			print("c:",c)
+			c = c:gsub("(%s*//[^\n]*)","")
+			table.insert(txtclean,c)
+			nn = nn + 1
+			ini = e + 1
+			i,e,a,b,c = txt:find(reg,ini)
+		end
+		table.insert(txtclean,txt:sub(ini))
+		print("end cleaning ------------------------------",nn)
+		txt = table.concat(txtclean)
+		end
+		--]]
 		self.itemsarr = par:parseItemsR2(txt)
 		itemsarr = self.itemsarr
 	end

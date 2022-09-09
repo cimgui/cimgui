@@ -15,8 +15,8 @@ set PATH=%PATH%;C:\anima;C:\mingws\i686-7.2.0-release-posix-dwarf-rt_v5-rev1\min
 :: set PATH=%PATH%;C:\luaGL\sources\luajit-master\luajit-master\bin\mingw32;C:\mingw32\bin;
 ::process  files
 :: arg[1] compiler name gcc, clang or cl
-:: arg[2] options as words in one string: internal for imgui_internal generation, freetype for freetype generation
-:: examples: "" "internal" "internal freetype"
+:: arg[2] options as words in one string: internal for imgui_internal generation, freetype for freetype generation, comments for comments generation
+:: examples: "" "internal" "internal freetype comments"
 :: arg[3..n] name of implementations to generate and/or CFLAGS (e.g. -DIMGUI_USER_CONFIG or -DIMGUI_USE_WCHAR32)
 luajit ./generator.lua gcc "internal" glfw opengl3 opengl2 sdl
 
