@@ -633,7 +633,7 @@ local function CleanImU32(def)
 			val = v1*2^v2
 			bb[i] = val
 		end
-		assert(type(bb[i])=="number")
+		assert(type(bb[i])=="number",bb[i])
 	end
 	local res = 0 
 	for i=1,#bb do res = res + bb[i] end 
@@ -827,7 +827,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
 				local is_cstring = ar.default:sub(1,1)=='"' and ar.default:sub(-1,-1) =='"'
 				if not is_cstring then
 					ar.default = ar.default:gsub("%(%(void%s*%*%)0%)","NULL")
-					if ar.default:match"%(ImU32%)" then
+					if ar.default:match"%(ImU32%)" and not ar.default:match"sizeof" then
 						ar.default = tostring(CleanImU32(ar.default))
 					end
 				end
