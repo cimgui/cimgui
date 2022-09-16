@@ -610,6 +610,35 @@ local function clean_functypedef(line)
 	--print(result)
 	return result
 end
+
+local function CleanImU32(def)
+	local function deleteOuterPars(def)
+		local w = def:match("^%b()$")
+		if w then
+			w = w:gsub("^%((.+)%)$","%1")
+			return w
+		else 
+			return def 
+		end
+	end
+	def = def:gsub("%(ImU32%)","")
+	--quitar () de numeros
+	def = def:gsub("%((%d+)%)","%1")
+	def = deleteOuterPars(def)
+	local bb=strsplit(def,"|")
+	for i=1,#bb do
+		local val = deleteOuterPars(bb[i])
+		if val:match"<<" then
+			local v1,v2 = val:match("(%d+)%s*<<%s*(%d+)")
+			val = v1*2^v2
+			bb[i] = val
+		end
+		assert(type(bb[i])=="number")
+	end
+	local res = 0 
+	for i=1,#bb do res = res + bb[i] end 
+	return res
+end
 local function parseFunction(self,stname,itt,namespace,locat)
 
 	local lineorig,comment = split_comment(itt.item)
@@ -793,6 +822,15 @@ local function parseFunction(self,stname,itt,namespace,locat)
     defT.defaults = {}
 	for i,ar in ipairs(argsArr) do
 		if ar.default then
+			--clean defaults
+			--do only if not a c string
+				local is_cstring = ar.default:sub(1,1)=='"' and ar.default:sub(-1,-1) =='"'
+				if not is_cstring then
+					ar.default = ar.default:gsub("%(%(void%s*%*%)0%)","NULL")
+					if ar.default:match"%(ImU32%)" then
+						ar.default = tostring(CleanImU32(ar.default))
+					end
+				end
 			defT.defaults[ar.name] = ar.default
 			ar.default = nil
 		end

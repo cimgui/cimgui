@@ -511,7 +511,7 @@ defs["ImGui_ImplOpenGL3_Init"][1]["argsoriginal"] = "(const char* glsl_version=(
 defs["ImGui_ImplOpenGL3_Init"][1]["call_args"] = "(glsl_version)"
 defs["ImGui_ImplOpenGL3_Init"][1]["cimguiname"] = "ImGui_ImplOpenGL3_Init"
 defs["ImGui_ImplOpenGL3_Init"][1]["defaults"] = {}
-defs["ImGui_ImplOpenGL3_Init"][1]["defaults"]["glsl_version"] = "((void*)0)"
+defs["ImGui_ImplOpenGL3_Init"][1]["defaults"]["glsl_version"] = "NULL"
 defs["ImGui_ImplOpenGL3_Init"][1]["funcname"] = "ImGui_ImplOpenGL3_Init"
 defs["ImGui_ImplOpenGL3_Init"][1]["location"] = "imgui_impl_opengl3:25"
 defs["ImGui_ImplOpenGL3_Init"][1]["ov_cimguiname"] = "ImGui_ImplOpenGL3_Init"

@@ -586,7 +586,7 @@
       "call_args": "(glsl_version)",
       "cimguiname": "ImGui_ImplOpenGL3_Init",
       "defaults": {
-        "glsl_version": "((void*)0)"
+        "glsl_version": "NULL"
       },
       "funcname": "ImGui_ImplOpenGL3_Init",
       "location": "imgui_impl_opengl3:25",

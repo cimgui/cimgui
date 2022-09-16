@@ -207,52 +207,6 @@ local function DefsByStruct(FP)
     FP.defsBystruct = structs
 end  
 
--- function for repairing funcdefs default values
-local function repair_defaults(defsT,str_and_enu)
-	local function deleteOuterPars(def)
-		local w = def:match("^%b()$")
-		if w then
-			w = w:gsub("^%((.+)%)$","%1")
-			return w
-		else 
-			return def 
-		end
-	end
-	local function CleanImU32(def)
-		def = def:gsub("%(ImU32%)","")
-		--quitar () de numeros
-		def = def:gsub("%((%d+)%)","%1")
-		def = deleteOuterPars(def)
-		local bb=cpp2ffi.strsplit(def,"|")
-		for i=1,#bb do
-			local val = deleteOuterPars(bb[i])
-			if val:match"<<" then
-				local v1,v2 = val:match("(%d+)%s*<<%s*(%d+)")
-				val = v1*2^v2
-				bb[i] = val
-			end
-			assert(type(bb[i])=="number")
-		end
-		local res = 0 
-		for i=1,#bb do res = res + bb[i] end 
-		return res
-	end
-	for k,defT in pairs(defsT) do
-		for i,def in ipairs(defT) do
-			for k,v in pairs(def.defaults) do
-				--do only if not a c string
-				local is_cstring = v:sub(1,1)=='"' and v:sub(-1,-1) =='"'
-				if not is_cstring then
-					def.defaults[k] = def.defaults[k]:gsub("%(%(void%s*%*%)0%)","NULL")
-					if def.defaults[k]:match"%(ImU32%)" then
-						def.defaults[k] = tostring(CleanImU32(def.defaults[k]))
-					end
-				end
-			end
-		end
-	end
-end
-
 
 --generate cimgui.cpp cimgui.h 
 local function cimgui_generation(parser)
@@ -398,7 +352,6 @@ save_data("./output/typedefs_dict.lua",serializeTableF(parser1.typedefs_dict))
 ----------save fundefs in definitions.lua for using in bindings
 --DefsByStruct(pFP)
 set_defines(parser1.defsT) 
-repair_defaults(parser1.defsT, structs_and_enums_table)
 save_data("./output/definitions.lua",serializeTableF(parser1.defsT))
 
 --check every function has ov_cimguiname
