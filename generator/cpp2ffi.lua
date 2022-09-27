@@ -1492,6 +1492,12 @@ function M.Parser()
 						end
 					elseif it.re_name == "functypedef_re" then
 						it2 = clean_functypedef(it2)
+					else
+						assert(it.re_name == "vardef_re")
+						if it2:match"enum" then
+							print("--skip enum forward declaration:",it2)
+							it2 = ""
+						end
 					end
 					--table.insert(outtabpre,it2)
 					table.insert(outtab,it2)
@@ -2389,10 +2395,7 @@ M.func_header_generate = func_header_generate
 
 local code = [[
 
-struct pedro {
-	int uno = 1;
-	bool dos = {};
-};
+enum pedro : int ;
 
 ]]																		  
 local parser = M.Parser()
