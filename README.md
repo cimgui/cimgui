@@ -37,7 +37,7 @@ Notes:
 * you will need LuaJIT (https://github.com/LuaJIT/LuaJIT.git better 2.1 branch) or precompiled for linux/macOS/windows in https://luapower.com/luajit/download
 * you need to use also a C++ compiler for doing preprocessing: gcc (In windows MinGW-W64-builds for example), clang or cl (MSVC). (this repo was done with gcc)
 * update `imgui` folder to the version you desire.
-* edit `generator/generator.bat` on windows, or `generator/generator.sh` on linux, to choose between gcc, clang, or cl and to choose desired backends and whether imgui_internal is generated or not and Freetype2 is used or not. 
+* edit `generator/generator.bat` on windows, or `generator/generator.sh` on linux, to choose between gcc, clang, or cl and to choose desired backends and whether imgui_internal is generated or not, Freetype2 is used or not and comments are generated or not
 * the defaults of generator are gcc as compiler, imgui_internal included and sdl, glfw, vulkan, opengl2 and opengl3 as backends.
 * edit config_generator.lua for adding includes needed by your chosen backends (vulkan needs that).
 * Run generator.bat or generator.sh with gcc, clang or cl and LuaJIT on your PATH.
