@@ -94,7 +94,31 @@ Notes:
 
 # usage with backends
 
-* look at backend_test folder for a cmake module building with SDL and opengl3.
+* To get started with a minimal C application, you can use the examples in the `backend_test` folder for SDL and opengl3 backends. The following steps have been tested on Debian using SDL, but similar principles will apply elsewhere.
+
+```bash
+# After cloning this repository, open one of the `backend_test` folders e.g. `example_sdl_opengl3`
+cd backend_test/example_sdl_opengl3/
+
+# Make sure the relevant backend is installed - in this case SDL2
+sudo apt install libsdl2-dev
+
+# Check whether CMake is installed
+# It can be installed here if not: https://cmake.org/install/
+cmake --version
+
+# Run CMake to create the files necessary to build the application
+cmake -S ./ -B ./build
+
+# Open the `./build` folder that should get created
+cd build/
+
+# Run `make` to build the executable
+make
+
+# Run the executable
+./test_sdl
+```
 
 # example bindings based on cimgui
 
