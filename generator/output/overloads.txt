@@ -155,6 +155,24 @@ igImRsqrt	2
 igImSign	2
 1	float	igImSign_Float (float)
 2	double	igImSign_double (double)
+igIsKeyDown	2
+1	bool	igIsKeyDown_Nil (ImGuiKey)
+2	bool	igIsKeyDown_ID (ImGuiKey,ImGuiID)
+igIsKeyPressed	2
+1	bool	igIsKeyPressed_Bool (ImGuiKey,bool)
+2	bool	igIsKeyPressed_ID (ImGuiKey,ImGuiID,ImGuiInputFlags)
+igIsKeyReleased	2
+1	bool	igIsKeyReleased_Nil (ImGuiKey)
+2	bool	igIsKeyReleased_ID (ImGuiKey,ImGuiID)
+igIsMouseClicked	2
+1	bool	igIsMouseClicked_Bool (ImGuiMouseButton,bool)
+2	bool	igIsMouseClicked_ID (ImGuiMouseButton,ImGuiID,ImGuiInputFlags)
+igIsMouseDown	2
+1	bool	igIsMouseDown_Nil (ImGuiMouseButton)
+2	bool	igIsMouseDown_ID (ImGuiMouseButton,ImGuiID)
+igIsMouseReleased	2
+1	bool	igIsMouseReleased_Nil (ImGuiMouseButton)
+2	bool	igIsMouseReleased_ID (ImGuiMouseButton,ImGuiID)
 igIsPopupOpen	2
 1	bool	igIsPopupOpen_Str (const char*,ImGuiPopupFlags)
 2	bool	igIsPopupOpen_ID (ImGuiID,ImGuiPopupFlags)
@@ -226,6 +244,9 @@ igSetWindowSize	3
 1	void	igSetWindowSize_Vec2 (const ImVec2,ImGuiCond)
 2	void	igSetWindowSize_Str (const char*,const ImVec2,ImGuiCond)
 3	void	igSetWindowSize_WindowPtr (ImGuiWindow*,const ImVec2,ImGuiCond)
+igTabItemCalcSize	2
+1	ImVec2	igTabItemCalcSize_Str (const char*,bool)
+2	ImVec2	igTabItemCalcSize_WindowPtr (ImGuiWindow*)
 igTableGcCompactTransientBuffers	2
 1	void	igTableGcCompactTransientBuffers_TablePtr (ImGuiTable*)
 2	void	igTableGcCompactTransientBuffers_TableTempDataPtr (ImGuiTableTempData*)
@@ -254,4 +275,4 @@ igValue	4
 2	void	igValue_Int (const char*,int)
 3	void	igValue_Uint (const char*,unsigned int)
 4	void	igValue_Float (const char*,float,const char*)
-179 overloaded
+193 overloaded
