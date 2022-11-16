@@ -71,7 +71,7 @@ find_package(glfw3 REQUIRED)
 # set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 # set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 # set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-# add_subdirectory(${PROJECT_SOURCE_DIR}/deps/glfw)
+# add_subdirectory(<path_to_glfw_source>)
 
 
 add_library(cimgui SHARED ${IMGUI_SOURCES})
