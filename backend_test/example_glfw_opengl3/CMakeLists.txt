@@ -1,4 +1,4 @@
-Project(cmimgui_glfw)
+Project(cimgui_glfw)
 cmake_minimum_required(VERSION 3.11)
 if(WIN32) # to mingw work as all the others
 	set(CMAKE_SHARED_LIBRARY_PREFIX "")

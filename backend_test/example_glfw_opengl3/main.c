@@ -7,7 +7,7 @@
 #include <windows.h>
 #endif
 #include <GL/gl.h>
-#include <GL/glu.h>
+
 
 #ifdef IMGUI_HAS_IMSTR
 #define igBegin igBegin_Str
