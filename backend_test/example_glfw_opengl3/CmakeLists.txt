@@ -1,5 +1,5 @@
 Project(cmimgui_glfw)
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.11)
 if(WIN32) # to mingw work as all the others
 	set(CMAKE_SHARED_LIBRARY_PREFIX "")
 endif(WIN32)
@@ -64,17 +64,24 @@ endif(WIN32)
 
 # GLFW
 list(APPEND IMGUI_SOURCES ${BAKENDS_FOLDER}imgui_impl_glfw.cpp)
-find_package(glfw3 REQUIRED)
 
-# alternatively, you can build from source.
-# this tends to be quite the lifesaver on windows.
-# set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-# set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-# set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-# add_subdirectory(<path_to_glfw_source>)
+set(GLFW_VERSION 3.3.8)
+include(FetchContent)
+	FetchContent_Declare(
+    glfw
+    URL https://github.com/glfw/glfw/archive/refs/tags/${GLFW_VERSION}.tar.gz)
 
-# imgui/glfw get confused if not statically built 
-# on windows.
+FetchContent_GetProperties(glfw)
+if (NOT glfw_POPULATED)
+	set(FETCHCONTENT_QUIET NO)
+    FetchContent_Populate(glfw)
+	set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+	set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+	add_subdirectory(${glfw_SOURCE_DIR} ${glfw_BINARY_DIR})
+endif()
+
+
+# glfw/imgui gets confused if it is not statically built.
 IF (WIN32)
   add_library(cimgui STATIC ${IMGUI_SOURCES})
 ELSE()
