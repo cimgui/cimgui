@@ -117,8 +117,8 @@ igGetColorU32	3
 3	ImU32	igGetColorU32_U32 (ImU32)
 igGetForegroundDrawList	3
 1	ImDrawList*	igGetForegroundDrawList_Nil ()
-2	ImDrawList*	igGetForegroundDrawList_ViewportPtr (ImGuiViewport*)
-3	ImDrawList*	igGetForegroundDrawList_WindowPtr (ImGuiWindow*)
+2	ImDrawList*	igGetForegroundDrawList_WindowPtr (ImGuiWindow*)
+3	ImDrawList*	igGetForegroundDrawList_ViewportPtr (ImGuiViewport*)
 igGetID	3
 1	ImGuiID	igGetID_Str (const char*)
 2	ImGuiID	igGetID_StrStr (const char*,const char*)
@@ -244,9 +244,6 @@ igSetWindowSize	3
 1	void	igSetWindowSize_Vec2 (const ImVec2,ImGuiCond)
 2	void	igSetWindowSize_Str (const char*,const ImVec2,ImGuiCond)
 3	void	igSetWindowSize_WindowPtr (ImGuiWindow*,const ImVec2,ImGuiCond)
-igTabItemCalcSize	2
-1	ImVec2	igTabItemCalcSize_Str (const char*,bool)
-2	ImVec2	igTabItemCalcSize_WindowPtr (ImGuiWindow*)
 igTableGcCompactTransientBuffers	2
 1	void	igTableGcCompactTransientBuffers_TablePtr (ImGuiTable*)
 2	void	igTableGcCompactTransientBuffers_TableTempDataPtr (ImGuiTableTempData*)
@@ -275,4 +272,4 @@ igValue	4
 2	void	igValue_Int (const char*,int)
 3	void	igValue_Uint (const char*,unsigned int)
 4	void	igValue_Float (const char*,float,const char*)
-193 overloaded
+191 overloaded
