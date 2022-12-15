@@ -30,6 +30,8 @@ jobs:
         elif [ "$GITHUB_OS" == "windows-latest" ];
         then
           vcpkg install luajit
+          echo "/C/vcpkg/packages/luajit_x86-windows/tools" >> $GITHUB_PATH
+          echo "/C/vcpkg/packages/luajit_x86-windows/bin"   >> $GITHUB_PATH
         fi
 
     - name: Download Submodules
@@ -47,7 +49,6 @@ jobs:
     - name: Generate Bindings
       shell: bash
       run: |
-        export PATH=$PATH:/C/vcpkg/packages/luajit_x86-windows/tools/:/C/vcpkg/packages/luajit_x86-windows/bin/
         cd ./generator
         bash ./generator.sh
 
