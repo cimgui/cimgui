@@ -75,6 +75,9 @@ local cimgui_manuals = {
     --igColorConvertRGBtoHSV = true,
     --igColorConvertHSVtoRGB = true
 }
+local cimgui_skipped = {
+	 --igShowDemoWindow = true
+}
 --------------------------------------------------------------------------
 --this table is a dictionary to force a naming of function overloading (instead of algorythmic generated)
 --first level is cimguiname without postfix, second level is the signature of the function, value is the
@@ -304,6 +307,7 @@ local function parseImGuiHeader(header,names)
 	end
 	parser.cname_overloads = cimgui_overloads
 	parser.manuals = cimgui_manuals
+	parser.skipped = cimgui_skipped
 	parser.UDTs = {"ImVec2","ImVec4","ImColor","ImRect"}
 	--parser.gen_template_typedef = gen_template_typedef --use auto
 	parser.COMMENTS_GENERATION = COMMENTS_GENERATION
