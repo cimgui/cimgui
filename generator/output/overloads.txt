@@ -123,6 +123,9 @@ igGetID	3
 1	ImGuiID	igGetID_Str (const char*)
 2	ImGuiID	igGetID_StrStr (const char*,const char*)
 3	ImGuiID	igGetID_Ptr (const void*)
+igGetIDWithSeed	2
+1	ImGuiID	igGetIDWithSeed_Str (const char*,const char*,ImGuiID)
+2	ImGuiID	igGetIDWithSeed_Int (int,ImGuiID)
 igImAbs	3
 1	int	igImAbs_Int (int)
 2	float	igImAbs_Float (float)
@@ -275,4 +278,4 @@ igValue	4
 2	void	igValue_Int (const char*,int)
 3	void	igValue_Uint (const char*,unsigned int)
 4	void	igValue_Float (const char*,float,const char*)
-193 overloaded
+195 overloaded
