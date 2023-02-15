@@ -436,10 +436,11 @@ local function parseItems(txt,linenumdict, itparent, dumpit)
 							-- end
 							--error"no entry in linenumdict"
 							--take locat from parent
-							if itparent.locat then
+							if itparent and itparent.locat then
 								loca = itparent.locat
 							else
-								error"no entry in linenumdict"
+								loca = 0
+								--error"no entry in linenumdict"
 							end
 						end
 					else

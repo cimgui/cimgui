@@ -66,7 +66,7 @@ endif(WIN32)
 
 
 #sdl2
-list(APPEND IMGUI_SOURCES ${BAKENDS_FOLDER}imgui_impl_sdl.cpp)
+list(APPEND IMGUI_SOURCES ${BAKENDS_FOLDER}imgui_impl_sdl2.cpp)
 if(DEFINED SDL_PATH)
 	message(STATUS "SDL_PATH defined as " ${SDL_PATH})
 	FIND_PACKAGE(SDL2 PATHS ${SDL_PATH})
