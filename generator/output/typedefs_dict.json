@@ -42,6 +42,7 @@
   "ImGuiDataType": "int",
   "ImGuiDataTypeInfo": "struct ImGuiDataTypeInfo",
   "ImGuiDataTypeTempStorage": "struct ImGuiDataTypeTempStorage",
+  "ImGuiDataVarInfo": "struct ImGuiDataVarInfo",
   "ImGuiDebugLogFlags": "int",
   "ImGuiDir": "int",
   "ImGuiDockContext": "struct ImGuiDockContext",
