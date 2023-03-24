@@ -986,15 +986,28 @@ local function ADDIMSTR_S(FP)
 				if dd.signature == defT2.signature then 
 					doadd = false;
 					print("skip _S addition",defT2.cimguiname)
+					--M.prtable(defT2)
 					break 
 				end
 			end
+			--delete imstrv generation
+			if FP.NOIMSTRV then
+				newcdefs[#newcdefs] = nil
+				cimf[t.signature] = nil
+				for i,v in ipairs(cimf) do
+					if v.signature == t.signature then
+						table.remove(cimf, i)
+						break
+					end
+				end
+			end
 			--add _S version
-			if doadd then
+			if doadd and not FP.NOCHAR then
 			cimf[#cimf+1] = defT2
 			cimf[defT2.signature] = defT2
 			newcdefs[#newcdefs+1] = {stname=t.stname,funcname=t.funcname,args=defT2.args,signature=defT2.signature,cimguiname=defT2.cimguiname,ret =defT2.ret}
 			end
+			
         end
 		else print("not cimguiname in");M.prtable(t)
         end
