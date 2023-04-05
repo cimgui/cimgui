@@ -22,4 +22,4 @@ then
   suffix='.exe'
 fi
 
-luajit$suffix ./generator.lua gcc "internal noimstrv" glfw opengl3 opengl2 sdl2
+luajit$suffix ./generator.lua gcc "internal noimstrv" glfw opengl3 opengl2 sdl2 "$@"
