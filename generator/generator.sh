@@ -16,38 +16,10 @@
 # arg[2] options as words in one string: internal for imgui_internal generation, freetype for freetype generation, comments for comments generation, nochar to skip char* function version, noimstrv to skip imstrv
 # examples: "" "internal" "internal freetype" "comments internal"
 # arg[3..n] name of implementations to generate and/or CLFLAGS (e.g. -DIMGUI_USER_CONFIG or -DIMGUI_USE_WCHAR32)
-#
-#!/bin/bash
-
-# parse command line arguments
-# ref: https://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
-POSITIONAL_ARGS=()
-
-while [[ $# -gt 0 ]]; do
-  case $1 in
-    -c|--cflags)
-      CFLAGS="$2"
-      shift # past argument
-      shift # past value
-      ;;
-    -*|--*)
-      echo "Unknown option $1"
-      exit 1
-      ;;
-    *)
-      POSITIONAL_ARGS+=("$1") # save positional arg
-      shift # past argument
-      ;;
-  esac
-done
-
-set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
 if [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]];
 then
   suffix='.exe'
 fi
 
-echo "CFLAGS: " $CFLAGS
-
-luajit$suffix ./generator.lua gcc "internal noimstrv" glfw opengl3 opengl2 sdl2 $CFLAGS
+luajit$suffix ./generator.lua gcc "internal noimstrv" glfw opengl3 opengl2 sdl2 "$@"
