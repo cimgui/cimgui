@@ -10,7 +10,6 @@ else()
 	set(TABLES_SOURCE "")
 endif()
 
-
 #general settings
 file(GLOB IMGUI_SOURCES
     cimgui.cpp
@@ -20,6 +19,11 @@ file(GLOB IMGUI_SOURCES
     imgui/imgui_widgets.cpp
 	${TABLES_SOURCE}
 )
+
+
+set(IMGUI_EXTRA_SOURCES "" CACHE STRING "Extra sources to add to IMGUI_SOURCES")
+
+list(APPEND IMGUI_SOURCES ${IMGUI_EXTRA_SOURCES})
 
 set(IMGUI_STATIC "no" CACHE STRING "Build as a static library")
 set(IMGUI_FREETYPE "no" CACHE STRING "Build with freetype library")
