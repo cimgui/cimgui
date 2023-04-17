@@ -25,6 +25,17 @@ POSITIONAL_ARGS=()
 TARGETS="internal noimstrv"
 CFLAGS="glfw opengl3 opengl2 sdl2"
 
+help() {
+        cat <<EOF
+Usage of generator.sh:
+   -t --target    specify which imgui features should be generated
+                  (default: $TARGETS)
+   -c --cflags    specify additional gcc flags
+                  (default: $CFLAGS
+   -h --help      show this message and exit
+EOF
+}
+
 while [[ $# -gt 0 ]]; do
   case $1 in
     -c|--cflags)
@@ -37,8 +48,13 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
+    -h|--help)
+      help
+      exit 0
+      ;;
     -*|--*)
       echo "Unknown option $1"
+      help
       exit 1
       ;;
     *)
