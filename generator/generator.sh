@@ -17,7 +17,6 @@
 # examples: "" "internal" "internal freetype" "comments internal"
 # arg[3..n] name of implementations to generate and/or CLFLAGS (e.g. -DIMGUI_USER_CONFIG or -DIMGUI_USE_WCHAR32)
 #
-#!/bin/bash
 
 # parse command line arguments
 # ref: https://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
