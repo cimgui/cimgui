@@ -22,6 +22,9 @@
 # ref: https://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
 POSITIONAL_ARGS=()
 
+TARGETS="internal noimstrv"
+CFLAGS="glfw opengl3 opengl2 sdl2"
+
 while [[ $# -gt 0 ]]; do
   case $1 in
     -c|--cflags)
@@ -55,4 +58,4 @@ fi
 echo "CFLAGS: " $CFLAGS
 echo "TARGETS: " $TARGETS
 
-luajit$suffix ./generator.lua gcc "internal noimstrv $TARGETS" glfw opengl3 opengl2 sdl2 $CFLAGS
+luajit$suffix ./generator.lua gcc "$TARGETS" $CFLAGS
