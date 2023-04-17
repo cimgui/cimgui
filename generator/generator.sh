@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/bash
 
 # this script must be executed in this directory
 # all the output goes to generator/output folder
@@ -30,6 +30,11 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
+    -t|--target)
+      TARGETS="$2"
+      shift # past argument
+      shift # past value
+      ;;
     -*|--*)
       echo "Unknown option $1"
       exit 1
@@ -49,5 +54,6 @@ then
 fi
 
 echo "CFLAGS: " $CFLAGS
+echo "TARGETS: " $TARGETS
 
-luajit$suffix ./generator.lua gcc "internal noimstrv" glfw opengl3 opengl2 sdl2 $CFLAGS
+luajit$suffix ./generator.lua gcc "internal noimstrv $TARGETS" glfw opengl3 opengl2 sdl2 $CFLAGS
