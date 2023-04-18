@@ -103,7 +103,7 @@ target_link_libraries(cimgui_sdl ${IMGUI_LIBRARIES} ${IMGUI_SDL_LIBRARY})
 #using library
 include_directories(../../generator/output/)
 add_executable(test_sdl main.c)
-target_compile_definitions(test_sdl PUBLIC -DCIMGUI_USE_OPENGL3 -DCIMGUI_USE_SDL)
+target_compile_definitions(test_sdl PUBLIC -DCIMGUI_USE_OPENGL3 -DCIMGUI_USE_SDL2)
 if (MINGW)
 target_link_options(test_sdl PRIVATE "-mconsole")
 endif()

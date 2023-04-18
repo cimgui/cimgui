@@ -9,6 +9,8 @@ local COMPILER = script_args[1]
 local INTERNAL_GENERATION = script_args[2]:match("internal") and true or false
 local FREETYPE_GENERATION = script_args[2]:match("freetype") and true or false
 local COMMENTS_GENERATION = script_args[2]:match("comments") and true or false
+local NOCHAR = script_args[2]:match("nochar") and true or false
+local NOIMSTRV = script_args[2]:match("noimstrv") and true or false
 local IMGUI_PATH = os.getenv"IMGUI_PATH" or "../imgui"
 local CFLAGS = ""
 local CPRE,CTEST
@@ -249,7 +251,9 @@ local function cimgui_generation(parser)
 		cstructsstr = cstructsstr.."\n#define IMGUI_HAS_DOCK       1\n"
 	end
 	if gdefines.IMGUI_HAS_IMSTR then
+		if not (NOCHAR or NOIMSTRV) then
 		cstructsstr = cstructsstr.."\n#define IMGUI_HAS_IMSTR       1\n"
+		end
 	end
 	
     hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
@@ -291,7 +295,10 @@ if gdefines.IMGUI_HAS_DOCK then
 ]]
 	
 end
+assert(not NOCHAR or not NOIMSTRV,"nochar and noimstrv cant be set at the same time")
 print("IMGUI_HAS_IMSTR",gdefines.IMGUI_HAS_IMSTR)
+print("NOCHAR",NOCHAR)
+print("NOIMSTRV",NOIMSTRV)
 print("IMGUI_HAS_DOCK",gdefines.IMGUI_HAS_DOCK)
 print("IMGUI_VERSION",gdefines.IMGUI_VERSION)
 
@@ -311,6 +318,8 @@ local function parseImGuiHeader(header,names)
 	parser.UDTs = {"ImVec2","ImVec4","ImColor","ImRect"}
 	--parser.gen_template_typedef = gen_template_typedef --use auto
 	parser.COMMENTS_GENERATION = COMMENTS_GENERATION
+	parser.NOCHAR = NOCHAR
+	parser.NOIMSTRV = NOIMSTRV
 	local defines = parser:take_lines(CPRE..header,names,COMPILER)
 	
 	return parser

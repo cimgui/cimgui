@@ -11,7 +11,7 @@ History:
 Initially cimgui was developed by Stephan Dilly as hand-written code but lately turned into an auto-generated version by sonoro1234 in order to keep up with imgui more easily (letting the user select the desired branch and commit)
 
 Notes:
-* currently this wrapper is based on version [1.89.3 of Dear ImGui with internal api]
+* currently this wrapper is based on version [1.89.5 of Dear ImGui with internal api]
 * only functions, structs and enums from imgui.h (an optionally imgui_internal.h) are wrapped.
 * if you are interested in imgui backends you should look [LuaJIT-ImGui](https://github.com/sonoro1234/LuaJIT-ImGui) project.
 * All naming is algorithmic except for those names that were coded in cimgui_overloads table (https://github.com/cimgui/cimgui/blob/master/generator/generator.lua#L60). In the official version this table is empty.
@@ -42,8 +42,9 @@ Notes:
 * edit config_generator.lua for adding includes needed by your chosen backends (vulkan needs that).
 * Run generator.bat or generator.sh with gcc, clang or cl and LuaJIT on your PATH.
 * as a result some files are generated: `cimgui.cpp`, `cimgui.h` and `cimgui_impl.h` for compiling and some lua/json files with information about the binding: `definitions.json` with function info, `structs_and_enums.json` with struct and enum info, `impl_definitions.json` with functions from the backends info. 
-* You can pass compiler flags to generator.sh or generator.bat at the end of the call to further specify the compiler behavior. (e.g. -DIMGUI_USER_CONFIG or -DIMGUI_USE_WCHAR32)
-
+* You can pass compiler flags to generator.sh or generator.bat by editing them at the end of the call to further specify the compiler behavior. (e.g. -DIMGUI_USER_CONFIG or -DIMGUI_USE_WCHAR32)
+* You are able to pass any extra argument to generator.sh (.bat) in the command-line.
+* If you are using different options than cimgui repo and if you want to keep them after a cimgui update, you can keep them in a copy of generator.sh (.bat) outside of cimgui folder where `cd cimgui/generator` is used before luajit call. See https://github.com/cimgui/cimgui/issues/232#issuecomment-1497059497
 # generate binding
 * C interface is exposed by cimgui.h when you define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 * with your prefered language you can use the lua or json files generated as in:
