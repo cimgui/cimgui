@@ -68,6 +68,8 @@
   "ImGuiInputFlags": "int",
   "ImGuiInputTextCallback": "int(*)(ImGuiInputTextCallbackData* data);",
   "ImGuiInputTextCallbackData": "struct ImGuiInputTextCallbackData",
+  "ImGuiInputTextDeactivateData": "struct ImGuiInputTextDeactivateData",
+  "ImGuiInputTextDeactivatedState": "struct ImGuiInputTextDeactivatedState",
   "ImGuiInputTextFlags": "int",
   "ImGuiInputTextState": "struct ImGuiInputTextState",
   "ImGuiItemFlags": "int",
