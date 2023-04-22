@@ -349,6 +349,8 @@ local parser1 = parseImGuiHeader(extra_includes .. [[headers.h]],headersT)
 os.remove("headers.h")
 parser1:do_parse()
 
+--to debug items parsing
+--save_data("./itemsarr2.txt",cpp2ffi.ToStr(parser1.itemsarr))
 save_data("./output/overloads.txt",parser1.overloadstxt)
 cimgui_generation(parser1)
 

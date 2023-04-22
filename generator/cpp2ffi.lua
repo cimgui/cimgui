@@ -68,6 +68,7 @@ local function ToStr(t,dometatables)
 	_ToStr(t,strTG,recG,nameG)
 	return table.concat(strTG)
 end
+M.ToStr = ToStr
 function M.prtable(...)
 	for i=1, select('#', ...) do
 		local t = select(i, ...)
@@ -1309,6 +1310,20 @@ function M.Parser()
 		end
 		return itsarr
 	end
+	local function sanitize_comments(txt)
+		local txtclean = {}
+		local reg = "//[^\n\r]+"
+		local ini = 1
+		local i,e,a = txt:find(reg,ini)
+		while i do
+			table.insert(txtclean,txt:sub(ini,i-1))
+			local com = txt:sub(i,e):gsub("[{}]+","")
+			table.insert(txtclean,com)
+			ini = e + 1
+			i,e,a = txt:find(reg,ini)
+		end
+		return table.concat(txtclean)
+	end
 	function par:parseItems()
 		self:initTypedefsDict()
 		
@@ -1330,8 +1345,11 @@ function M.Parser()
 			table.insert(cdefs2,cdef[1])
 		end
 		local txt = table.concat(cdefs2,"\n")
+		save_data("./preprocode"..tostring(self):gsub("table: ","")..".c",txt)
 		--clean bad positioned comments inside functionD_re
 		if self.COMMENTS_GENERATION then
+		print"cleaning { and } inside comments"
+			txt = sanitize_comments(txt)
 		print"cleaning comments inside functionD_re--------------"
 		---[[
 		local nn = 0
