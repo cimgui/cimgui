@@ -52,6 +52,7 @@
   "ImGuiDockRequest": "struct ImGuiDockRequest",
   "ImGuiDragDropFlags": "int",
   "ImGuiErrorLogCallback": "void(*)(void* user_data,const char* fmt,...);",
+  "ImGuiFocusRequestFlags": "int",
   "ImGuiFocusedFlags": "int",
   "ImGuiGroupData": "struct ImGuiGroupData",
   "ImGuiHoveredFlags": "int",
