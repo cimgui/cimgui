@@ -1346,7 +1346,7 @@ function M.Parser()
 			table.insert(cdefs2,cdef[1])
 		end
 		local txt = table.concat(cdefs2,"\n")
-		save_data("./preprocode"..tostring(self):gsub("table: ","")..".c",txt)
+		--save_data("./preprocode"..tostring(self):gsub("table: ","")..".c",txt)
 		--clean bad positioned comments inside functionD_re
 		if self.COMMENTS_GENERATION then
 		print"cleaning { and } inside comments"
