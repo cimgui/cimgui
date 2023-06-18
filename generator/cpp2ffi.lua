@@ -346,7 +346,7 @@ local function getRE()
 	return res,resN
 end
 local function isLeaf(re)
-	return (re ~= "typedef_st_re" and re ~= "struct_re" and re~="namespace_re" and re~="class_re")
+	return (re ~= "typedef_st_re" and re ~= "struct_re" and re~="namespace_re" and re~="class_re" and re~="union_re")
 end
 M.getRE = getRE
 --takes preprocesed file in table cdefsor and returns items
@@ -1322,6 +1322,7 @@ function M.Parser()
 			ini = e + 1
 			i,e,a = txt:find(reg,ini)
 		end
+		table.insert(txtclean,txt:sub(ini,-1))
 		return table.concat(txtclean)
 	end
 	function par:parseItems()
@@ -1375,6 +1376,7 @@ function M.Parser()
 		print("end cleaning ------------------------------",nn)
 		txt = table.concat(txtclean)
 		end
+		--save_data("./preparse"..tostring(self):gsub("table: ","")..".c",txt)
 		--]]
 		self.itemsarr = par:parseItemsR2(txt)
 		itemsarr = self.itemsarr
@@ -1448,33 +1450,43 @@ function M.Parser()
 			return "" 
 		end --here we avoid empty structs
 		for j,it in ipairs(itlist) do
-			if (it.re_name == "vardef_re" or it.re_name == "functype_re" or it.re_name == "union_re") then
-			if  not (it.re_name == "vardef_re" and it.item:match"static") then --skip static variables
-				local it2 = it.item --:gsub("<([%w_]+)>","_%1") --templates
-				--local ttype,template = it.item:match("([^%s,%(%)]+)%s*<(.+)>")
-				local ttype,template,te,code2 =  check_template(it2)  --it.item:match"([^%s,%(%)]+)%s*<(.+)>"
-				if template then
-					if self.typenames[ttype] ~= template then --rule out T (template typename)
-						self.templates[ttype] = self.templates[ttype] or {}
-						self.templates[ttype][template] = te
-						it2=code2
+			if (it.re_name == "vardef_re" or it.re_name == "functype_re") then -- or it.re_name == "union_re") then
+				if  not (it.re_name == "vardef_re" and it.item:match"static") then --skip static variables
+				
+					local it2 = it.item --:gsub("<([%w_]+)>","_%1") --templates
+					--local ttype,template = it.item:match("([^%s,%(%)]+)%s*<(.+)>")
+					local ttype,template,te,code2 =  check_template(it2)  --it.item:match"([^%s,%(%)]+)%s*<(.+)>"
+					if template then
+						if self.typenames[ttype] ~= template then --rule out T (template typename)
+							self.templates[ttype] = self.templates[ttype] or {}
+							self.templates[ttype][template] = te
+							it2=code2
+						end
+						if doheader then
+							local templatetypedef = self:gentemplatetypedef(ttype, template,self.templates[ttype][template])
+							predeclare = predeclare .. templatetypedef
+						end
 					end
-					if doheader then
-						local templatetypedef = self:gentemplatetypedef(ttype, template,self.templates[ttype][template])
-						predeclare = predeclare .. templatetypedef
+					--clean mutable
+					it2 = it2:gsub("mutable","")
+					--clean namespaces
+					it2 = it2:gsub("%w+::","")
+					--clean initializations
+					if it.re_name == "vardef_re" then
+						it2 = it2:gsub("%s*=.+;",";")
 					end
+					table.insert(outtab,it2)
+					table.insert(commtab,{above=it.prevcomments,sameline=it.comments})--it.comments or "")
 				end
-				--clean mutable
-				it2 = it2:gsub("mutable","")
-				--clean namespaces
-				it2 = it2:gsub("%w+::","")
-				--clean initializations
-				if it.re_name == "vardef_re" then
-					it2 = it2:gsub("%s*=.+;",";")
+			elseif it.re_name == "union_re" then
+				local com = ""
+				for _,ch in ipairs(it.childs) do
+					com = com .. (ch.comments or "")
 				end
-				table.insert(outtab,it2)
-				table.insert(commtab,{above=it.prevcomments,sameline=it.comments})--it.comments or "")
-				end
+				local item = clean_comments(it.item)
+				table.insert(outtab,item)
+				com = (com ~= "") and com or nil
+				table.insert(commtab,{above=it.prevcomments,sameline=com})
 			elseif it.re_name == "struct_re" then
 				--check if has declaration
 				local decl = it.item:match"%b{}%s*([^%s}{]+)%s*;"
@@ -1484,12 +1496,12 @@ function M.Parser()
 				end
 				local cleanst,structname,strtab,comstab,predec = self:clean_structR1(it,doheader)
 				if doheader then
-				local tst = "\ntypedef struct "..structname.." "..structname..";\n"
-						if check_unique_typedefs(tst,uniques) then
-							--table.insert(outtab,tst)
-							--print("xxxxxxxxxxxxxxxinsert typedef",structname)
-							cleanst = cleanst .. tst
-						end
+					local tst = "\ntypedef struct "..structname.." "..structname..";\n"
+					if check_unique_typedefs(tst,uniques) then
+						--table.insert(outtab,tst)
+						--print("xxxxxxxxxxxxxxxinsert typedef",structname)
+						cleanst = cleanst .. tst
+					end
 				end
 				predeclare = predeclare .. predec .. cleanst
 			elseif it.re_name == "enum_re" then
