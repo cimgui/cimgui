@@ -449,9 +449,9 @@ end
 local json = require"json"
 save_data("./output/definitions.json",json.encode(json_prepare(parser1.defsT),{dict_on_empty={defaults=true}}))
 --delete extra info for json
-structs_and_enums_table.templated_structs = nil
-structs_and_enums_table.typenames = nil
-structs_and_enums_table.templates_done = nil
+--structs_and_enums_table.templated_structs = nil
+--structs_and_enums_table.typenames = nil
+--structs_and_enums_table.templates_done = nil
 save_data("./output/structs_and_enums.json",json.encode(structs_and_enums_table))
 save_data("./output/typedefs_dict.json",json.encode(parser1.typedefs_dict))
 if parser2 then

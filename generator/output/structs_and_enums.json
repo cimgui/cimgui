@@ -10687,5 +10687,163 @@
         "type": "int"
       }
     ]
+  },
+  "templated_structs": {
+    "ImBitArray": [
+      {
+        "name": "Storage[(BITCOUNT+31)>>5]",
+        "type": "ImU32"
+      }
+    ],
+    "ImChunkStream": [
+      {
+        "name": "Buf",
+        "template_type": "char",
+        "type": "ImVector_char"
+      }
+    ],
+    "ImPool": [
+      {
+        "name": "Buf",
+        "type": "ImVector<T>"
+      },
+      {
+        "name": "Map",
+        "type": "ImGuiStorage"
+      },
+      {
+        "name": "FreeIdx",
+        "type": "ImPoolIdx"
+      },
+      {
+        "name": "AliveCount",
+        "type": "ImPoolIdx"
+      }
+    ],
+    "ImSpan": [
+      {
+        "name": "Data",
+        "type": "T*"
+      },
+      {
+        "name": "DataEnd",
+        "type": "T*"
+      }
+    ],
+    "ImSpanAllocator": [
+      {
+        "name": "BasePtr",
+        "type": "char*"
+      },
+      {
+        "name": "CurrOff",
+        "type": "int"
+      },
+      {
+        "name": "CurrIdx",
+        "type": "int"
+      },
+      {
+        "name": "Offsets[CHUNKS]",
+        "type": "int"
+      },
+      {
+        "name": "Sizes[CHUNKS]",
+        "type": "int"
+      }
+    ],
+    "ImVector": [
+      {
+        "name": "Size",
+        "type": "int"
+      },
+      {
+        "name": "Capacity",
+        "type": "int"
+      },
+      {
+        "name": "Data",
+        "type": "T*"
+      }
+    ]
+  },
+  "templates_done": {
+    "ImBitArray": {
+      "ImGuiKey_NamedKey_COUNT, -ImGuiKey_NamedKey_BEGIN": true
+    },
+    "ImChunkStream": {
+      "ImGuiTableSettings": true,
+      "ImGuiWindowSettings": true
+    },
+    "ImPool": {
+      "ImGuiTabBar": true,
+      "ImGuiTable": true
+    },
+    "ImSpan": {
+      "ImGuiTableCellData": true,
+      "ImGuiTableColumn": true,
+      "ImGuiTableColumnIdx": true
+    },
+    "ImVector": {
+      "ImDrawChannel": true,
+      "ImDrawCmd": true,
+      "ImDrawIdx": true,
+      "ImDrawList*": true,
+      "ImDrawVert": true,
+      "ImFont*": true,
+      "ImFontAtlasCustomRect": true,
+      "ImFontConfig": true,
+      "ImFontGlyph": true,
+      "ImGuiColorMod": true,
+      "ImGuiContextHook": true,
+      "ImGuiDockNodeSettings": true,
+      "ImGuiDockRequest": true,
+      "ImGuiGroupData": true,
+      "ImGuiID": true,
+      "ImGuiInputEvent": true,
+      "ImGuiItemFlags": true,
+      "ImGuiKeyRoutingData": true,
+      "ImGuiListClipperData": true,
+      "ImGuiListClipperRange": true,
+      "ImGuiOldColumnData": true,
+      "ImGuiOldColumns": true,
+      "ImGuiPlatformMonitor": true,
+      "ImGuiPopupData": true,
+      "ImGuiPtrOrIndex": true,
+      "ImGuiSettingsHandler": true,
+      "ImGuiShrinkWidthItem": true,
+      "ImGuiStackLevelInfo": true,
+      "ImGuiStoragePair": true,
+      "ImGuiStyleMod": true,
+      "ImGuiTabBar": true,
+      "ImGuiTabItem": true,
+      "ImGuiTable": true,
+      "ImGuiTableColumnSortSpecs": true,
+      "ImGuiTableInstanceData": true,
+      "ImGuiTableTempData": true,
+      "ImGuiTextRange": true,
+      "ImGuiViewport*": true,
+      "ImGuiViewportP*": true,
+      "ImGuiWindow*": true,
+      "ImGuiWindowStackData": true,
+      "ImTextureID": true,
+      "ImU32": true,
+      "ImVec2": true,
+      "ImVec4": true,
+      "ImWchar": true,
+      "char": true,
+      "const char*": true,
+      "float": true,
+      "int": true,
+      "unsigned char": true
+    }
+  },
+  "typenames": {
+    "ImBitArray": "int BITCOUNT, int OFFSET = 0",
+    "ImChunkStream": "T",
+    "ImPool": "T",
+    "ImSpan": "T",
+    "ImSpanAllocator": "int CHUNKS",
+    "ImVector": "T"
   }
 }
