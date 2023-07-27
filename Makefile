@@ -59,10 +59,18 @@ $(OUTPUTNAME):$(OBJS)
 	$(CXX) -o $(OUTPUTNAME) $(OBJS) $(CXXFLAGS) $(LINKFLAGS)
 
 clean:
+ifeq ($(OS),Windows_NT)
+	del /q $(subst /,\,$(OBJS))
+else
 	rm -f $(OBJS)
+endif
 
 fclean: clean
+ifeq ($(OS),Windows_NT)
+	del /q $(subst /,\,$(OUTPUTNAME))
+else
 	rm -f $(OUTPUTNAME)
+endif
 
 re: fclean all
 
