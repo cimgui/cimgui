@@ -1716,8 +1716,9 @@ function M.Parser()
             end
 			local template_type 
 			for k,v in pairs(self.templates) do
-				local template_type2 = typen:match(k.."_(.+)")
-				if template_type2 then 
+				--local template_type2 = typen:match(k.."_(.+)")
+				local template_type2 = typen:match(k.."_([^%*]+)") --discard * for pointers
+				if template_type2 then
 					for k1,k2 in pairs(v) do
 						if template_type2==k2 then
 							template_type=k1
