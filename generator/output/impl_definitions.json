@@ -737,6 +737,27 @@
       "stname": ""
     }
   ],
+  "ImGui_ImplSDL2_InitForOther": [
+    {
+      "args": "(SDL_Window* window)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "SDL_Window*"
+        }
+      ],
+      "argsoriginal": "(SDL_Window* window)",
+      "call_args": "(window)",
+      "cimguiname": "ImGui_ImplSDL2_InitForOther",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDL2_InitForOther",
+      "location": "imgui_impl_sdl2:34",
+      "ov_cimguiname": "ImGui_ImplSDL2_InitForOther",
+      "ret": "bool",
+      "signature": "(SDL_Window*)",
+      "stname": ""
+    }
+  ],
   "ImGui_ImplSDL2_InitForSDLRenderer": [
     {
       "args": "(SDL_Window* window,SDL_Renderer* renderer)",
@@ -792,7 +813,7 @@
       "cimguiname": "ImGui_ImplSDL2_NewFrame",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_NewFrame",
-      "location": "imgui_impl_sdl2:35",
+      "location": "imgui_impl_sdl2:36",
       "ov_cimguiname": "ImGui_ImplSDL2_NewFrame",
       "ret": "void",
       "signature": "()",
@@ -813,7 +834,7 @@
       "cimguiname": "ImGui_ImplSDL2_ProcessEvent",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_ProcessEvent",
-      "location": "imgui_impl_sdl2:36",
+      "location": "imgui_impl_sdl2:37",
       "ov_cimguiname": "ImGui_ImplSDL2_ProcessEvent",
       "ret": "bool",
       "signature": "(const SDL_Event*)",
@@ -829,7 +850,7 @@
       "cimguiname": "ImGui_ImplSDL2_Shutdown",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_Shutdown",
-      "location": "imgui_impl_sdl2:34",
+      "location": "imgui_impl_sdl2:35",
       "ov_cimguiname": "ImGui_ImplSDL2_Shutdown",
       "ret": "void",
       "signature": "()",

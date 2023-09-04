@@ -96,6 +96,7 @@
   "ImGuiNavHighlightFlags": "int",
   "ImGuiNavItemData": "struct ImGuiNavItemData",
   "ImGuiNavMoveFlags": "int",
+  "ImGuiNavTreeNodeData": "struct ImGuiNavTreeNodeData",
   "ImGuiNextItemData": "struct ImGuiNextItemData",
   "ImGuiNextItemDataFlags": "int",
   "ImGuiNextWindowData": "struct ImGuiNextWindowData",
