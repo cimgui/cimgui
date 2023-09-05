@@ -14,6 +14,7 @@ endif()
 #general settings
 file(GLOB IMGUI_SOURCES
     cimgui.cpp
+    cimgui_bonfire.cpp
     imgui/imgui.cpp
     imgui/imgui_draw.cpp
     imgui/imgui_demo.cpp
