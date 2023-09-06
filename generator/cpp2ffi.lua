@@ -1427,12 +1427,19 @@ function M.Parser()
 			stname = stru:match("%b{}%s*(%S+)%s*;")
 		end
 		
+		local is_nested
 		if not stname then
-			print(stru)
-			error"could not get stname"
+			is_nested = itst.parent and (itst.parent.re_name == "struct_re")
+			if is_nested then
+				--print("unamed nested struct",stru)
+				stname = ""
+			else
+				print(stru)
+				error"could not get stname"
+			end
 		end
 		--initial
-		--table.insert(outtab,stru:match("(.-)%b{}"))
+
 		table.insert(outtab,"\nstruct "..stname.."\n")
 		table.insert(outtab,"{")
 		table.insert(commtab,"")
@@ -1474,6 +1481,7 @@ function M.Parser()
 					--clean initializations
 					if it.re_name == "vardef_re" then
 						it2 = it2:gsub("%s*=.+;",";")
+						it2 = it2:gsub("%b{}","")
 					end
 					table.insert(outtab,it2)
 					table.insert(commtab,{above=it.prevcomments,sameline=it.comments})--it.comments or "")
@@ -1488,22 +1496,32 @@ function M.Parser()
 				com = (com ~= "") and com or nil
 				table.insert(commtab,{above=it.prevcomments,sameline=com})
 			elseif it.re_name == "struct_re" then
+				--print("nested struct in",stname)
 				--check if has declaration
 				local decl = it.item:match"%b{}%s*([^%s}{]+)%s*;"
-				if decl then
-					table.insert(outtab,"\n    "..it.name.." "..decl..";")
-					table.insert(commtab,{above=it.prevcomments,sameline=it.comments})--it.comments or "")
-				end
 				local cleanst,structname,strtab,comstab,predec = self:clean_structR1(it,doheader)
-				if doheader then
-					local tst = "\ntypedef struct "..structname.." "..structname..";\n"
-					if check_unique_typedefs(tst,uniques) then
-						--table.insert(outtab,tst)
-						--print("xxxxxxxxxxxxxxxinsert typedef",structname)
-						cleanst = cleanst .. tst
+				if structname == "" then --unamed nested struct
+					print("----generate unamed nested struct----")
+					local nestst = cleanst:gsub(";$"," "..decl..";")
+					table.insert(outtab,nestst)
+					table.insert(commtab,{})
+				else
+					
+					if decl then
+						table.insert(outtab,"\n    "..it.name.." "..decl..";")
+						table.insert(commtab,{above=it.prevcomments,sameline=it.comments})--it.comments or "")
 					end
+					
+					if doheader then
+						local tst = "\ntypedef struct "..structname.." "..structname..";\n"
+						if check_unique_typedefs(tst,uniques) then
+							--table.insert(outtab,tst)
+							--print("xxxxxxxxxxxxxxxinsert typedef",structname)
+							cleanst = cleanst .. tst
+						end
+					end
+					predeclare = predeclare .. predec .. cleanst
 				end
-				predeclare = predeclare .. predec .. cleanst
 			elseif it.re_name == "enum_re" then
 				--nop
 			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
