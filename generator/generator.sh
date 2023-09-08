@@ -66,10 +66,10 @@ done
 
 set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
-if [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]];
-then
-  suffix='.exe'
-fi
+# if [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]];
+# then
+#   suffix='.exe'
+# fi
 
 echo "CFLAGS: " $CFLAGS
 echo "TARGETS: " $TARGETS

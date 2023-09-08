@@ -54,6 +54,7 @@ CIMGUI_API bool ImGui_ImplSDL2_InitForVulkan(SDL_Window* window);
 CIMGUI_API bool ImGui_ImplSDL2_InitForD3D(SDL_Window* window);
 CIMGUI_API bool ImGui_ImplSDL2_InitForMetal(SDL_Window* window);
 CIMGUI_API bool ImGui_ImplSDL2_InitForSDLRenderer(SDL_Window* window,SDL_Renderer* renderer);
+CIMGUI_API bool ImGui_ImplSDL2_InitForOther(SDL_Window* window);
 CIMGUI_API void ImGui_ImplSDL2_Shutdown(void);
 CIMGUI_API void ImGui_ImplSDL2_NewFrame(void);
 CIMGUI_API bool ImGui_ImplSDL2_ProcessEvent(const SDL_Event* event);

@@ -29,9 +29,9 @@ jobs:
           sudo apt-get install -y luajit
         elif [ "$GITHUB_OS" == "windows-latest" ];
         then
-          vcpkg install luajit
-          echo "/C/vcpkg/packages/luajit_x86-windows/tools" >> $GITHUB_PATH
-          echo "/C/vcpkg/packages/luajit_x86-windows/bin"   >> $GITHUB_PATH
+          vcpkg install luajit:x64-windows
+          echo "/C/vcpkg/installed/x64-windows/tools/luajit" >> $GITHUB_PATH
+          echo "/C/vcpkg/installed/x64-windows/bin"   >> $GITHUB_PATH
         fi
 
     - name: Download Submodules
