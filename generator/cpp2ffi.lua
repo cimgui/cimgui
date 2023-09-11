@@ -1292,7 +1292,8 @@ function M.Parser()
 				end
 				if it.re_name == "struct_re" then
 					local typename = it.item:match("^%s*template%s*<%s*typename%s*(%S+)%s*>")
-					local stname = it.item:match("struct%s+(%S+)")
+					--local stname = it.item:match("struct%s+(%S+)")
+					local stname = it.item:match("struct%s+([^%s{]+)") --unamed
 					it.name = stname
 					
 					--local templa1,templa2 = it.item:match("^%s*template%s*<%s*(%S+)%s*(%S+)%s*>")
@@ -1346,6 +1347,12 @@ function M.Parser()
 			table.insert(cdefs2,cdef[1])
 		end
 		local txt = table.concat(cdefs2,"\n")
+		--string substitution
+		if self.str_subst then
+			for k,v in pairs(self.str_subst) do
+				txt = txt:gsub(k,v)
+			end
+		end
 		--save_data("./preprocode"..tostring(self):gsub("table: ","")..".c",txt)
 		--clean bad positioned comments inside functionD_re
 		if self.COMMENTS_GENERATION then
@@ -1496,12 +1503,13 @@ function M.Parser()
 				com = (com ~= "") and com or nil
 				table.insert(commtab,{above=it.prevcomments,sameline=com})
 			elseif it.re_name == "struct_re" then
-				--print("nested struct in",stname)
+				--print("nested struct in",stname,it.name)
 				--check if has declaration
 				local decl = it.item:match"%b{}%s*([^%s}{]+)%s*;"
 				local cleanst,structname,strtab,comstab,predec = self:clean_structR1(it,doheader)
-				if structname == "" then --unamed nested struct
-					print("----generate unamed nested struct----")
+				if not structname  then --unamed nested struct
+					--print("----generate unamed nested struct----",it.name)
+					--M.prtable(it)
 					local nestst = cleanst:gsub(";$"," "..decl..";")
 					table.insert(outtab,nestst)
 					table.insert(commtab,{})
@@ -1531,6 +1539,9 @@ function M.Parser()
 		end
 		--final
 		table.insert(outtab,"\n};")
+		if (stname=="" and is_nested) then
+			stname = nil
+		end
 		return table.concat(outtab,""),stname,outtab,commtab, predeclare
 	end
 	local function get_parents_name(it)
