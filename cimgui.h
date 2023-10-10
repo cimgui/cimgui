@@ -6,7 +6,7 @@
 #define CIMGUI_INCLUDED
 #include <stdio.h>
 #include <stdint.h>
-#if defined _WIN32 || defined __CYGWIN__
+#if defined _WIN32 || defined __CYGWIN__ || defined FORCE_DECL_EXPORT
     #ifdef CIMGUI_NO_EXPORT
         #define API
     #else
