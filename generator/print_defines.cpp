@@ -8,6 +8,10 @@
 #pragma message(CIMGUI_DEFSTRING(IMGUI_VERSION))
 #endif
 
+#ifdef IMGUI_VERSION_NUM
+#pragma message(CIMGUI_DEFSTRING(IMGUI_VERSION_NUM))
+#endif
+
 #ifdef IMGUI_HAS_DOCK
 #pragma message(CIMGUI_DEFSTRING(IMGUI_HAS_DOCK))
 #endif
