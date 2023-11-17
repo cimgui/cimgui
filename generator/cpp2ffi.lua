@@ -481,12 +481,14 @@ end
 M.parseItems = parseItems
 local function name_overloadsAlgo(v)
 
-    local aa = {}
-    local bb = {}
-    local done = {}
+    local aa = {} -- args
+    local bb = {} -- overloaded names
+	local cc = {} -- discrimination args
+    local done = {} -- overloading finished discrimination
     local maxnum = 0
     for i,t in ipairs(v) do
         bb[i] = ""
+		cc[i] = {}
 		local signature = t.signature:match("%b()")
 		signature = signature:sub(2,-2)
 		--add const function
@@ -526,9 +528,7 @@ local function name_overloadsAlgo(v)
             for i=1,#v do
                 if not done[i] then
                     bb[i] = bb[i]..(aa[i][l]=="nil" and "" or aa[i][l])
-                    -- if keys[aa[i][l]] == 1 then
-                        -- done[i] = true
-                    -- end
+					cc[i][l] = aa[i][l]
                 end
             end
         end
@@ -544,8 +544,9 @@ local function name_overloadsAlgo(v)
     end
 	--avoid empty postfix which will be reserved to generic
 	for i,v in ipairs(bb) do if v=="" then bb[i]="Nil" end end
-    return aa,bb
+    return aa,bb,cc
 end
+M.name_overloadsAlgo = name_overloadsAlgo
 local function typetoStr(typ)
 	--print("typetoStr",typ)
     --typ = typ:gsub("[^%(%)]+%(%*?(.+)%).+","%1") -- funcs
@@ -1292,7 +1293,8 @@ function M.Parser()
 				end
 				if it.re_name == "struct_re" then
 					local typename = it.item:match("^%s*template%s*<%s*typename%s*(%S+)%s*>")
-					local stname = it.item:match("struct%s+(%S+)")
+					--local stname = it.item:match("struct%s+(%S+)")
+					local stname = it.item:match("struct%s+([^%s{]+)") --unamed
 					it.name = stname
 					
 					--local templa1,templa2 = it.item:match("^%s*template%s*<%s*(%S+)%s*(%S+)%s*>")
@@ -1346,6 +1348,12 @@ function M.Parser()
 			table.insert(cdefs2,cdef[1])
 		end
 		local txt = table.concat(cdefs2,"\n")
+		--string substitution
+		if self.str_subst then
+			for k,v in pairs(self.str_subst) do
+				txt = txt:gsub(k,v)
+			end
+		end
 		--save_data("./preprocode"..tostring(self):gsub("table: ","")..".c",txt)
 		--clean bad positioned comments inside functionD_re
 		if self.COMMENTS_GENERATION then
@@ -1496,12 +1504,13 @@ function M.Parser()
 				com = (com ~= "") and com or nil
 				table.insert(commtab,{above=it.prevcomments,sameline=com})
 			elseif it.re_name == "struct_re" then
-				--print("nested struct in",stname)
+				--print("nested struct in",stname,it.name)
 				--check if has declaration
 				local decl = it.item:match"%b{}%s*([^%s}{]+)%s*;"
 				local cleanst,structname,strtab,comstab,predec = self:clean_structR1(it,doheader)
-				if structname == "" then --unamed nested struct
-					print("----generate unamed nested struct----")
+				if not structname  then --unamed nested struct
+					--print("----generate unamed nested struct----",it.name)
+					--M.prtable(it)
 					local nestst = cleanst:gsub(";$"," "..decl..";")
 					table.insert(outtab,nestst)
 					table.insert(commtab,{})
@@ -1531,6 +1540,9 @@ function M.Parser()
 		end
 		--final
 		table.insert(outtab,"\n};")
+		if (stname=="" and is_nested) then
+			stname = nil
+		end
 		return table.concat(outtab,""),stname,outtab,commtab, predeclare
 	end
 	local function get_parents_name(it)
@@ -1658,15 +1670,17 @@ function M.Parser()
 					end
 				end
 				if it.parent  then --and (it.parent.re_name == "struct_re" or it.parent.re_name == "typedef_st_re" then
-					local embededst = (it.re_name == "struct_re" and it.item:match("struct%s+(%S+)")) 
+					local embededst = (it.re_name == "struct_re" and it.item:match("struct%s+([^%s{]+)")) 
 					or (it.re_name == "typedef_st_re" and it.item:match("%b{}%s*(%S+)%s*;"))
 					--TODO nesting namespace and class
-					local parname = get_parents_name(it)
-					if it.parent.re_name == "struct_re" then
-						--needed by cimnodes with struct tag name equals member name
-						self.embeded_structs[embededst] = "struct "..parname..embededst
-					else
-						self.embeded_structs[embededst] = parname..embededst
+					if embededst then --discards false which can happen with untagged structs
+						local parname = get_parents_name(it)
+						if it.parent.re_name == "struct_re" then
+							--needed by cimnodes with struct tag name equals member name
+							self.embeded_structs[embededst] = "struct "..parname..embededst
+						else
+							self.embeded_structs[embededst] = parname..embededst
+						end
 					end
 				end
 			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
@@ -1963,8 +1977,15 @@ function M.Parser()
                 numoverloaded = numoverloaded + #v
                 --print(k,#v)
                 table.insert(strt,string.format("%s\t%d",k,#v))
-                local typesc,post = name_overloadsAlgo(v)
-				--M.prtable(v)
+                local typesc,post,pat = name_overloadsAlgo(v)
+				-- if k=="igImLerp" then
+				-- print"----------------------"
+				-- M.prtable(v)
+				-- M.prtable(typesc)
+				-- M.prtable(post)
+				-- M.prtable(pat)
+				-- os.exit()
+				-- end
                 for i,t in ipairs(v) do
                     --take overloaded name from manual table or algorythm
                     t.ov_cimguiname = self.getCname_overload(t.stname,t.funcname,t.signature,t.namespace) or k..typetoStr(post[i])
