@@ -481,12 +481,14 @@ end
 M.parseItems = parseItems
 local function name_overloadsAlgo(v)
 
-    local aa = {}
-    local bb = {}
-    local done = {}
+    local aa = {} -- args
+    local bb = {} -- overloaded names
+	local cc = {} -- discrimination args
+    local done = {} -- overloading finished discrimination
     local maxnum = 0
     for i,t in ipairs(v) do
         bb[i] = ""
+		cc[i] = {}
 		local signature = t.signature:match("%b()")
 		signature = signature:sub(2,-2)
 		--add const function
@@ -526,9 +528,7 @@ local function name_overloadsAlgo(v)
             for i=1,#v do
                 if not done[i] then
                     bb[i] = bb[i]..(aa[i][l]=="nil" and "" or aa[i][l])
-                    -- if keys[aa[i][l]] == 1 then
-                        -- done[i] = true
-                    -- end
+					cc[i][l] = aa[i][l]
                 end
             end
         end
@@ -544,8 +544,9 @@ local function name_overloadsAlgo(v)
     end
 	--avoid empty postfix which will be reserved to generic
 	for i,v in ipairs(bb) do if v=="" then bb[i]="Nil" end end
-    return aa,bb
+    return aa,bb,cc
 end
+M.name_overloadsAlgo = name_overloadsAlgo
 local function typetoStr(typ)
 	--print("typetoStr",typ)
     --typ = typ:gsub("[^%(%)]+%(%*?(.+)%).+","%1") -- funcs
@@ -1976,8 +1977,15 @@ function M.Parser()
                 numoverloaded = numoverloaded + #v
                 --print(k,#v)
                 table.insert(strt,string.format("%s\t%d",k,#v))
-                local typesc,post = name_overloadsAlgo(v)
-				--M.prtable(v)
+                local typesc,post,pat = name_overloadsAlgo(v)
+				-- if k=="igImLerp" then
+				-- print"----------------------"
+				-- M.prtable(v)
+				-- M.prtable(typesc)
+				-- M.prtable(post)
+				-- M.prtable(pat)
+				-- os.exit()
+				-- end
                 for i,t in ipairs(v) do
                     --take overloaded name from manual table or algorythm
                     t.ov_cimguiname = self.getCname_overload(t.stname,t.funcname,t.signature,t.namespace) or k..typetoStr(post[i])
