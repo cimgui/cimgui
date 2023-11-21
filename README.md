@@ -95,7 +95,8 @@ Notes:
 
 # usage with backends
 
-* look at backend_test folder for a cmake module building with SDL and opengl3.
+* look at backend_test folder for a cmake module building with SDL and opengl3, glfw and opengl3, SDL and Vulkan
+* read [How can cimgui backends be used](https://github.com/cimgui/cimgui/issues/157)
 
 # example bindings based on cimgui
 
