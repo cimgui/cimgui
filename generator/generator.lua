@@ -33,7 +33,7 @@ if FREETYPE_GENERATION then
 	CFLAGS = CFLAGS .. " -DIMGUI_ENABLE_FREETYPE "
 end
 
-if COMPILER == "gcc" or COMPILER == "clang" then
+if COMPILER == "gcc" or COMPILER == "clang" or COMPILER == "zig cc" then
     CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] .. CFLAGS
     CTEST = COMPILER.." --version"
 elseif COMPILER == "cl" then
