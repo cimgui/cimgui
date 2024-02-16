@@ -684,7 +684,7 @@
       "cimguiname": "ImGui_ImplSDL2_InitForD3D",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_InitForD3D",
-      "location": "imgui_impl_sdl2:31",
+      "location": "imgui_impl_sdl2:32",
       "ov_cimguiname": "ImGui_ImplSDL2_InitForD3D",
       "ret": "bool",
       "signature": "(SDL_Window*)",
@@ -705,7 +705,7 @@
       "cimguiname": "ImGui_ImplSDL2_InitForMetal",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_InitForMetal",
-      "location": "imgui_impl_sdl2:32",
+      "location": "imgui_impl_sdl2:33",
       "ov_cimguiname": "ImGui_ImplSDL2_InitForMetal",
       "ret": "bool",
       "signature": "(SDL_Window*)",
@@ -730,7 +730,7 @@
       "cimguiname": "ImGui_ImplSDL2_InitForOpenGL",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_InitForOpenGL",
-      "location": "imgui_impl_sdl2:29",
+      "location": "imgui_impl_sdl2:30",
       "ov_cimguiname": "ImGui_ImplSDL2_InitForOpenGL",
       "ret": "bool",
       "signature": "(SDL_Window*,void*)",
@@ -751,7 +751,7 @@
       "cimguiname": "ImGui_ImplSDL2_InitForOther",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_InitForOther",
-      "location": "imgui_impl_sdl2:34",
+      "location": "imgui_impl_sdl2:35",
       "ov_cimguiname": "ImGui_ImplSDL2_InitForOther",
       "ret": "bool",
       "signature": "(SDL_Window*)",
@@ -776,7 +776,7 @@
       "cimguiname": "ImGui_ImplSDL2_InitForSDLRenderer",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_InitForSDLRenderer",
-      "location": "imgui_impl_sdl2:33",
+      "location": "imgui_impl_sdl2:34",
       "ov_cimguiname": "ImGui_ImplSDL2_InitForSDLRenderer",
       "ret": "bool",
       "signature": "(SDL_Window*,SDL_Renderer*)",
@@ -797,7 +797,7 @@
       "cimguiname": "ImGui_ImplSDL2_InitForVulkan",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_InitForVulkan",
-      "location": "imgui_impl_sdl2:30",
+      "location": "imgui_impl_sdl2:31",
       "ov_cimguiname": "ImGui_ImplSDL2_InitForVulkan",
       "ret": "bool",
       "signature": "(SDL_Window*)",
@@ -813,7 +813,7 @@
       "cimguiname": "ImGui_ImplSDL2_NewFrame",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_NewFrame",
-      "location": "imgui_impl_sdl2:36",
+      "location": "imgui_impl_sdl2:37",
       "ov_cimguiname": "ImGui_ImplSDL2_NewFrame",
       "ret": "void",
       "signature": "()",
@@ -834,10 +834,42 @@
       "cimguiname": "ImGui_ImplSDL2_ProcessEvent",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_ProcessEvent",
-      "location": "imgui_impl_sdl2:37",
+      "location": "imgui_impl_sdl2:38",
       "ov_cimguiname": "ImGui_ImplSDL2_ProcessEvent",
       "ret": "bool",
       "signature": "(const SDL_Event*)",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDL2_SetGamepadMode": [
+    {
+      "args": "(ImGui_ImplSDL2_GamepadMode mode,struct _SDL_GameController** manual_gamepads_array,int manual_gamepads_count)",
+      "argsT": [
+        {
+          "name": "mode",
+          "type": "ImGui_ImplSDL2_GamepadMode"
+        },
+        {
+          "name": "manual_gamepads_array",
+          "type": "struct _SDL_GameController**"
+        },
+        {
+          "name": "manual_gamepads_count",
+          "type": "int"
+        }
+      ],
+      "argsoriginal": "(ImGui_ImplSDL2_GamepadMode mode,struct _SDL_GameController** manual_gamepads_array=((void*)0),int manual_gamepads_count=-1)",
+      "call_args": "(mode,manual_gamepads_array,manual_gamepads_count)",
+      "cimguiname": "ImGui_ImplSDL2_SetGamepadMode",
+      "defaults": {
+        "manual_gamepads_array": "NULL",
+        "manual_gamepads_count": "-1"
+      },
+      "funcname": "ImGui_ImplSDL2_SetGamepadMode",
+      "location": "imgui_impl_sdl2:43",
+      "ov_cimguiname": "ImGui_ImplSDL2_SetGamepadMode",
+      "ret": "void",
+      "signature": "(ImGui_ImplSDL2_GamepadMode,struct _SDL_GameController**,int)",
       "stname": ""
     }
   ],
@@ -850,7 +882,7 @@
       "cimguiname": "ImGui_ImplSDL2_Shutdown",
       "defaults": {},
       "funcname": "ImGui_ImplSDL2_Shutdown",
-      "location": "imgui_impl_sdl2:35",
+      "location": "imgui_impl_sdl2:36",
       "ov_cimguiname": "ImGui_ImplSDL2_Shutdown",
       "ret": "void",
       "signature": "()",
