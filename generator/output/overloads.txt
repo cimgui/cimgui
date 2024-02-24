@@ -114,7 +114,7 @@ igGetBackgroundDrawList	2
 igGetColorU32	3
 1	ImU32	igGetColorU32_Col (ImGuiCol,float)
 2	ImU32	igGetColorU32_Vec4 (const ImVec4)
-3	ImU32	igGetColorU32_U32 (ImU32)
+3	ImU32	igGetColorU32_U32 (ImU32,float)
 igGetForegroundDrawList	3
 1	ImDrawList*	igGetForegroundDrawList_Nil ()
 2	ImDrawList*	igGetForegroundDrawList_ViewportPtr (ImGuiViewport*)
