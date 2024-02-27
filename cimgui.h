@@ -3269,6 +3269,8 @@ struct ImFontBuilderIO
 };
 #define IMGUI_HAS_DOCK       1
 
+#define ImDrawCallback_ResetRenderState       (ImDrawCallback)(-8)
+
 #else
 struct GLFWwindow;
 struct SDL_Window;

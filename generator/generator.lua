@@ -250,6 +250,9 @@ local function cimgui_generation(parser)
 	if gdefines.IMGUI_HAS_DOCK then
 		cstructsstr = cstructsstr.."\n#define IMGUI_HAS_DOCK       1\n"
 	end
+	if gdefines.ImDrawCallback_ResetRenderState then
+		cstructsstr = cstructsstr.."\n#define ImDrawCallback_ResetRenderState       "..gdefines.ImDrawCallback_ResetRenderState.."\n"
+	end
 	if gdefines.IMGUI_HAS_IMSTR then
 		if not (NOCHAR or NOIMSTRV) then
 		cstructsstr = cstructsstr.."\n#define IMGUI_HAS_IMSTR       1\n"
@@ -276,8 +279,8 @@ end
 --------------------------------------------------------
 --get imgui.h version and IMGUI_HAS_DOCK--------------------------
 --defines for the cl compiler must be present in the print_defines.cpp file
-gdefines = get_defines{"IMGUI_VERSION","IMGUI_VERSION_NUM","FLT_MAX","FLT_MIN","IMGUI_HAS_DOCK","IMGUI_HAS_IMSTR"}
-
+gdefines = get_defines{"IMGUI_VERSION","IMGUI_VERSION_NUM","FLT_MAX","FLT_MIN","IMGUI_HAS_DOCK","IMGUI_HAS_IMSTR","ImDrawCallback_ResetRenderState"}
+--cpp2ffi.prtable(gdefines)
 if gdefines.IMGUI_HAS_DOCK then gdefines.IMGUI_HAS_DOCK = true end
 if gdefines.IMGUI_HAS_IMSTR then gdefines.IMGUI_HAS_IMSTR = true end
 
