@@ -118,3 +118,4 @@ Notes:
 * [sdl2-cimgui-demo](https://github.com/haxpor/sdl2-cimgui-demo)
 * [cimgui_c_sdl2_example](https://github.com/canoi12/cimgui_c_sdl2_example/)
 * [cimgui-c-example](https://github.com/peko/cimgui-c-example) with GLFW
+* [raylib-cimgui](https://github.com/alfredbaudisch/raylib-cimgui)
