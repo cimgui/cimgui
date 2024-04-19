@@ -27,3 +27,7 @@
 #ifdef FLT_MAX
 #pragma message(CIMGUI_DEFSTRING(FLT_MAX))
 #endif
+
+#ifdef ImDrawCallback_ResetRenderState
+#pragma message(CIMGUI_DEFSTRING(ImDrawCallback_ResetRenderState))
+#endif
