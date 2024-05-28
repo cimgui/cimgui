@@ -163,19 +163,19 @@ igImTrunc	2
 2	ImVec2	igImTrunc_Vec2 (const ImVec2)
 igIsKeyChordPressed	2
 1	bool	igIsKeyChordPressed_Nil (ImGuiKeyChord)
-2	bool	igIsKeyChordPressed_ID (ImGuiKeyChord,ImGuiID,ImGuiInputFlags)
+2	bool	igIsKeyChordPressed_InputFlags (ImGuiKeyChord,ImGuiInputFlags,ImGuiID)
 igIsKeyDown	2
 1	bool	igIsKeyDown_Nil (ImGuiKey)
 2	bool	igIsKeyDown_ID (ImGuiKey,ImGuiID)
 igIsKeyPressed	2
 1	bool	igIsKeyPressed_Bool (ImGuiKey,bool)
-2	bool	igIsKeyPressed_ID (ImGuiKey,ImGuiID,ImGuiInputFlags)
+2	bool	igIsKeyPressed_InputFlags (ImGuiKey,ImGuiInputFlags,ImGuiID)
 igIsKeyReleased	2
 1	bool	igIsKeyReleased_Nil (ImGuiKey)
 2	bool	igIsKeyReleased_ID (ImGuiKey,ImGuiID)
 igIsMouseClicked	2
 1	bool	igIsMouseClicked_Bool (ImGuiMouseButton,bool)
-2	bool	igIsMouseClicked_ID (ImGuiMouseButton,ImGuiID,ImGuiInputFlags)
+2	bool	igIsMouseClicked_InputFlags (ImGuiMouseButton,ImGuiInputFlags,ImGuiID)
 igIsMouseDoubleClicked	2
 1	bool	igIsMouseDoubleClicked_Nil (ImGuiMouseButton)
 2	bool	igIsMouseDoubleClicked_ID (ImGuiMouseButton,ImGuiID)
@@ -256,6 +256,9 @@ igSetWindowSize	3
 1	void	igSetWindowSize_Vec2 (const ImVec2,ImGuiCond)
 2	void	igSetWindowSize_Str (const char*,const ImVec2,ImGuiCond)
 3	void	igSetWindowSize_WindowPtr (ImGuiWindow*,const ImVec2,ImGuiCond)
+igShortcut	2
+1	bool	igShortcut_Nil (ImGuiKeyChord,ImGuiInputFlags)
+2	bool	igShortcut_ID (ImGuiKeyChord,ImGuiInputFlags,ImGuiID)
 igTabItemCalcSize	2
 1	ImVec2	igTabItemCalcSize_Str (const char*,bool)
 2	ImVec2	igTabItemCalcSize_WindowPtr (ImGuiWindow*)
@@ -287,4 +290,4 @@ igValue	4
 2	void	igValue_Int (const char*,int)
 3	void	igValue_Uint (const char*,unsigned int)
 4	void	igValue_Float (const char*,float,const char*)
-201 overloaded
+203 overloaded
