@@ -4786,6 +4786,10 @@ CIMGUI_API void ImVector_ImWchar_destroy(ImVector_ImWchar* self);
 CIMGUI_API void ImVector_ImWchar_Init(ImVector_ImWchar* p);
 CIMGUI_API void ImVector_ImWchar_UnInit(ImVector_ImWchar* p);
 
+#ifdef IMGUI_HAS_DOCK
+CIMGUI_API void ImGuiPlatformIO_Set_Platform_GetWindowPos(ImGuiPlatformIO* platform_io, void(*user_callback)(ImGuiViewport* vp, ImVec2* out_pos));
+CIMGUI_API void ImGuiPlatformIO_Set_Platform_GetWindowSize(ImGuiPlatformIO* platform_io, void(*user_callback)(ImGuiViewport* vp, ImVec2* out_size));
+#endif
 
 #endif //CIMGUI_INCLUDED
 
