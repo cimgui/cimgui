@@ -751,6 +751,8 @@ local function parseFunction(self,stname,itt,namespace,locat)
 	local argsTa2 = {}
 	local noname_counter = 0
 	for i,ar in ipairs(argsTa) do
+		--avoid var name without space type&name -> type& name
+		ar = ar:gsub("&(%S)","& %1")
 		local typ,name,retf,sigf,reftoptr,defa,ar1
 		local has_cdecl = ar:match"__cdecl"
 		if has_cdecl then ar = ar:gsub("__cdecl","") end
