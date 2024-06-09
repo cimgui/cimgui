@@ -18,7 +18,7 @@ set PATH=%PATH%;C:\anima;C:\mingws\i686-7.2.0-release-posix-dwarf-rt_v5-rev1\min
 :: arg[2] options as words in one string: internal for imgui_internal generation, freetype for freetype generation, comments for comments generation, nochar to skip char* function version, noimstrv to skip imstrv
 :: examples: "" "internal" "internal freetype comments"
 :: arg[3..n] name of implementations to generate and/or CFLAGS (e.g. -DIMGUI_USER_CONFIG or -DIMGUI_USE_WCHAR32)
-luajit ./generator.lua gcc "internal noimstrv" glfw opengl3 opengl2 sdl2 %*
+luajit ./generator.lua gcc "internal noimstrv" glfw opengl3 opengl2 sdl2 dx11 %*
 
 ::leave console open
 cmd /k

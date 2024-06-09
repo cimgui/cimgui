@@ -1,4 +1,114 @@
 {
+  "ImGui_ImplDX11_CreateDeviceObjects": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGui_ImplDX11_CreateDeviceObjects",
+      "defaults": {},
+      "funcname": "ImGui_ImplDX11_CreateDeviceObjects",
+      "location": "imgui_impl_dx11:31",
+      "ov_cimguiname": "ImGui_ImplDX11_CreateDeviceObjects",
+      "ret": "bool",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplDX11_Init": [
+    {
+      "args": "(ID3D11Device* device,ID3D11DeviceContext* device_context)",
+      "argsT": [
+        {
+          "name": "device",
+          "type": "ID3D11Device*"
+        },
+        {
+          "name": "device_context",
+          "type": "ID3D11DeviceContext*"
+        }
+      ],
+      "argsoriginal": "(ID3D11Device* device,ID3D11DeviceContext* device_context)",
+      "call_args": "(device,device_context)",
+      "cimguiname": "ImGui_ImplDX11_Init",
+      "defaults": {},
+      "funcname": "ImGui_ImplDX11_Init",
+      "location": "imgui_impl_dx11:24",
+      "ov_cimguiname": "ImGui_ImplDX11_Init",
+      "ret": "bool",
+      "signature": "(ID3D11Device*,ID3D11DeviceContext*)",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplDX11_InvalidateDeviceObjects": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGui_ImplDX11_InvalidateDeviceObjects",
+      "defaults": {},
+      "funcname": "ImGui_ImplDX11_InvalidateDeviceObjects",
+      "location": "imgui_impl_dx11:30",
+      "ov_cimguiname": "ImGui_ImplDX11_InvalidateDeviceObjects",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplDX11_NewFrame": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGui_ImplDX11_NewFrame",
+      "defaults": {},
+      "funcname": "ImGui_ImplDX11_NewFrame",
+      "location": "imgui_impl_dx11:26",
+      "ov_cimguiname": "ImGui_ImplDX11_NewFrame",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplDX11_RenderDrawData": [
+    {
+      "args": "(ImDrawData* draw_data)",
+      "argsT": [
+        {
+          "name": "draw_data",
+          "type": "ImDrawData*"
+        }
+      ],
+      "argsoriginal": "(ImDrawData* draw_data)",
+      "call_args": "(draw_data)",
+      "cimguiname": "ImGui_ImplDX11_RenderDrawData",
+      "defaults": {},
+      "funcname": "ImGui_ImplDX11_RenderDrawData",
+      "location": "imgui_impl_dx11:27",
+      "ov_cimguiname": "ImGui_ImplDX11_RenderDrawData",
+      "ret": "void",
+      "signature": "(ImDrawData*)",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplDX11_Shutdown": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGui_ImplDX11_Shutdown",
+      "defaults": {},
+      "funcname": "ImGui_ImplDX11_Shutdown",
+      "location": "imgui_impl_dx11:25",
+      "ov_cimguiname": "ImGui_ImplDX11_Shutdown",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
   "ImGui_ImplGlfw_CharCallback": [
     {
       "args": "(GLFWwindow* window,unsigned int c)",
