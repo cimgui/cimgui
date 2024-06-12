@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
   clearColor.y = 0.55f;
   clearColor.z = 0.60f;
   clearColor.w = 1.00f;
-
+	
   // main event loop
   bool quit = false;
   while (!glfwWindowShouldClose(window))
@@ -162,6 +162,9 @@ int main(int argc, char *argv[])
 
     // render
     igRender();
+	const float clear_color_with_alpha[4] = { clearColor.x * clearColor.w, clearColor.y * clearColor.w, clearColor.z * clearColor.w, clearColor.w };
+        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, nullptr);
+        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
 	ImGui_ImplDX11_RenderDrawData(igGetDrawData());
 #ifdef IMGUI_HAS_DOCK
     if (ioptr->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) 
