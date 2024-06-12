@@ -1,6 +1,10 @@
 #define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 #include "cimgui.h"
 #include "cimgui_impl.h"
+#define D3D11_NO_HELPERS
+#define CINTERFACE
+#define COBJMACROS
+#define WIN32_LEAN_AND_MEAN
 #include <d3d11.h>
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
@@ -10,7 +14,7 @@
 #include <windows.h>
 #endif
 
-
+#pragma comment(lib, "dxguid.lib")
 
 #ifdef IMGUI_HAS_IMSTR
 #define igBegin igBegin_Str
@@ -37,7 +41,7 @@ void CleanupRenderTarget();
 void window_size_callback(GLFWwindow* window, int width, int height)
 {
 	CleanupRenderTarget();
-    g_pSwapChain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
+    IDXGISwapChain_ResizeBuffers(g_pSwapChain, 0, width, height, DXGI_FORMAT_UNKNOWN, 0);
     CreateRenderTarget();
 }
 
@@ -163,8 +167,8 @@ int main(int argc, char *argv[])
     // render
     igRender();
 	const float clear_color_with_alpha[4] = { clearColor.x * clearColor.w, clearColor.y * clearColor.w, clearColor.z * clearColor.w, clearColor.w };
-        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, nullptr);
-        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
+        ID3D11DeviceContext_OMSetRenderTargets(g_pd3dDeviceContext, 1, &g_mainRenderTargetView, NULL);
+        ID3D11DeviceContext_ClearRenderTargetView(g_pd3dDeviceContext, g_mainRenderTargetView, clear_color_with_alpha);
 	ImGui_ImplDX11_RenderDrawData(igGetDrawData());
 #ifdef IMGUI_HAS_DOCK
     if (ioptr->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) 
@@ -173,7 +177,7 @@ int main(int argc, char *argv[])
       igRenderPlatformWindowsDefault(NULL, NULL);
     }
 #endif
-    g_pSwapChain->Present(1, 0); // Present with vsync
+    IDXGISwapChain_Present(g_pSwapChain,1, 0); // Present with vsync
     //g_pSwapChain->Present(0, 0); // Present without vsync
   }
 
@@ -213,7 +217,7 @@ bool CreateDeviceD3D(HWND hWnd)
     //createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
     D3D_FEATURE_LEVEL featureLevel;
     const D3D_FEATURE_LEVEL featureLevelArray[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_0, };
-    if (D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &featureLevel, &g_pd3dDeviceContext) != S_OK)
+    if (D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &featureLevel, &g_pd3dDeviceContext) != S_OK)
         return false;
 
     CreateRenderTarget();
@@ -223,21 +227,21 @@ bool CreateDeviceD3D(HWND hWnd)
 void CleanupDeviceD3D()
 {
     CleanupRenderTarget();
-    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = nullptr; }
-    if (g_pd3dDeviceContext) { g_pd3dDeviceContext->Release(); g_pd3dDeviceContext = nullptr; }
-    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = nullptr; }
+    if (g_pSwapChain) { IDXGISwapChain_Release(g_pSwapChain); g_pSwapChain = NULL; }
+    if (g_pd3dDeviceContext) { ID3D11DeviceContext_Release(g_pd3dDeviceContext); g_pd3dDeviceContext = NULL; }
+    if (g_pd3dDevice) { ID3D11Device_Release(g_pd3dDevice); g_pd3dDevice = NULL; }
 }
 
 void CreateRenderTarget()
 {
     ID3D11Texture2D* pBackBuffer;
-    g_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
-    g_pd3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &g_mainRenderTargetView);
-    pBackBuffer->Release();
+    IDXGISwapChain_GetBuffer(g_pSwapChain, 0, &IID_ID3D11Texture2D, (void**)&pBackBuffer);
+    ID3D11Device_CreateRenderTargetView(g_pd3dDevice, pBackBuffer, NULL, &g_mainRenderTargetView);
+    ID3D11Texture2D_Release(pBackBuffer);
 }
 
 void CleanupRenderTarget()
 {
-    if (g_mainRenderTargetView) { g_mainRenderTargetView->Release(); g_mainRenderTargetView = nullptr; }
+    if (g_mainRenderTargetView) { ID3D11RenderTargetView_Release(g_mainRenderTargetView); g_mainRenderTargetView = NULL; }
 }
 
