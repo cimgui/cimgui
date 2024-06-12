@@ -1,4 +1,4 @@
-Project(cimgui_glfw)
+Project(cimgui_glfwdx11)
 cmake_minimum_required(VERSION 3.11)
 if(WIN32) # to mingw work as all the others
 	set(CMAKE_SHARED_LIBRARY_PREFIX "")
@@ -92,11 +92,11 @@ target_link_libraries(cimgui ${IMGUI_LIBRARIES} glfw)
 
 # using library
 include_directories(../../generator/output/)
-#add_executable(${PROJECT_NAME} main.c)
-#target_compile_definitions(${PROJECT_NAME} PUBLIC -DCIMGUI_USE_DX11 -DCIMGUI_USE_GLFW)
+add_executable(${PROJECT_NAME} main.cpp)
+target_compile_definitions(${PROJECT_NAME} PUBLIC -DCIMGUI_USE_DX11 -DCIMGUI_USE_GLFW)
 if (MINGW)
 	#target_link_options(${PROJECT_NAME} PRIVATE "-mconsole")
 endif()
-#target_link_libraries(${PROJECT_NAME} ${IMGUI_SDL_LIBRARY} cimgui)
+target_link_libraries(${PROJECT_NAME} d3d11 d3dcompiler.lib cimgui)
 
 
