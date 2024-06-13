@@ -234,7 +234,7 @@ void CleanupDeviceD3D()
 
 void CreateRenderTarget()
 {
-    ID3D11Texture2D* pBackBuffer;
+    ID3D11Resource* pBackBuffer;
     IDXGISwapChain_GetBuffer(g_pSwapChain, 0, &IID_ID3D11Texture2D, (void**)&pBackBuffer);
     ID3D11Device_CreateRenderTargetView(g_pd3dDevice, pBackBuffer, NULL, &g_mainRenderTargetView);
     ID3D11Texture2D_Release(pBackBuffer);
