@@ -4,6 +4,9 @@ if(WIN32) # to mingw work as all the others
 	set(CMAKE_SHARED_LIBRARY_PREFIX "")
 endif(WIN32)
 
+#run in build dir
+set (CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
+
 set (CMAKE_CXX_STANDARD 11)
 
 # general settings
@@ -32,7 +35,6 @@ set(IMGUI_SOURCES
 ${TABLES_SOURCE} 
 )
 
-set(IMGUI_SOURCES_sdl)
 set(IMGUI_LIBRARIES )
 
 if (WIN32)
@@ -70,23 +72,34 @@ include(FetchContent)
 	FetchContent_Declare(
     glfw
     URL https://github.com/glfw/glfw/archive/refs/tags/${GLFW_VERSION}.tar.gz)
+	#GIT_REPOSITORY https://github.com/glfw/glfw )
 
 FetchContent_GetProperties(glfw)
 if (NOT glfw_POPULATED)
 	set(FETCHCONTENT_QUIET NO)
     FetchContent_Populate(glfw)
+	set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 	set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 	set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-	add_subdirectory(${glfw_SOURCE_DIR} ${glfw_BINARY_DIR})
+	if (NOT STATIC_BUILD)
+	set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
+	endif()
+	add_subdirectory(${glfw_SOURCE_DIR} ${glfw_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
+#if dynamic glfw then install
+install(TARGETS glfw RUNTIME DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+					LIBRARY DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+)
+#FIND_PACKAGE(glfw3 PATHS "C:/LuaGL/gitsources/BUILDS/GLFW/install" REQUIRED)
 
-# glfw/imgui gets confused if it is not statically built.
-IF (WIN32)
-  add_library(cimgui STATIC ${IMGUI_SOURCES})
-ELSE()
+
+if (NOT STATIC_BUILD)
   add_library(cimgui SHARED ${IMGUI_SOURCES})
-ENDIF()
+else()
+  add_library(cimgui STATIC ${IMGUI_SOURCES})
+endif()
+
 
 target_link_libraries(cimgui ${IMGUI_LIBRARIES} glfw)
 
@@ -95,9 +108,6 @@ target_link_libraries(cimgui ${IMGUI_LIBRARIES} glfw)
 include_directories(../../generator/output/)
 add_executable(${PROJECT_NAME} main.c)
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DCIMGUI_USE_OPENGL3 -DCIMGUI_USE_GLFW)
-if (MINGW)
-	target_link_options(${PROJECT_NAME} PRIVATE "-mconsole")
-endif()
-target_link_libraries(${PROJECT_NAME} ${IMGUI_SDL_LIBRARY} cimgui)
+target_link_libraries(${PROJECT_NAME} cimgui)
 
 
