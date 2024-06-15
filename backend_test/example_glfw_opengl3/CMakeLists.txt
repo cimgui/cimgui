@@ -37,11 +37,6 @@ ${TABLES_SOURCE}
 
 set(IMGUI_LIBRARIES )
 
-if (WIN32)
-    add_definitions("-DIMGUI_IMPL_API=extern \"C\" __declspec\(dllexport\)")
-else(WIN32)
-    add_definitions("-DIMGUI_IMPL_API=extern \"C\" ")
-endif(WIN32)
 
 add_compile_definitions("IMGUI_IMPL_OPENGL_LOADER_GL3W")
 
@@ -67,7 +62,7 @@ endif(WIN32)
 # GLFW
 list(APPEND IMGUI_SOURCES ${BAKENDS_FOLDER}imgui_impl_glfw.cpp)
 
-set(GLFW_VERSION 3.3.8)
+set(GLFW_VERSION 3.4)
 include(FetchContent)
 	FetchContent_Declare(
     glfw
@@ -100,6 +95,11 @@ else()
   add_library(cimgui STATIC ${IMGUI_SOURCES})
 endif()
 
+if (WIN32)
+    target_compile_definitions(cimgui PUBLIC "-DIMGUI_IMPL_API=extern \"C\" __declspec\(dllexport\)")
+else(WIN32)
+    target_compile_definitions(cimgui PUBLIC "-DIMGUI_IMPL_API=extern \"C\" ")
+endif(WIN32)
 
 target_link_libraries(cimgui ${IMGUI_LIBRARIES} glfw)
 
