@@ -108,17 +108,20 @@ igCombo	3
 1	bool	igCombo_Str_arr (const char*,int*,const char* const[],int,int)
 2	bool	igCombo_Str (const char*,int*,const char*,int)
 3	bool	igCombo_FnStrPtr (const char*,int*,const char*(*)(void*,int),void*,int,int)
-igGetBackgroundDrawList	2
-1	ImDrawList*	igGetBackgroundDrawList_Nil ()
-2	ImDrawList*	igGetBackgroundDrawList_ViewportPtr (ImGuiViewport*)
 igGetColorU32	3
 1	ImU32	igGetColorU32_Col (ImGuiCol,float)
 2	ImU32	igGetColorU32_Vec4 (const ImVec4)
 3	ImU32	igGetColorU32_U32 (ImU32,float)
+<<<<<<< HEAD
 igGetForegroundDrawList	3
 1	ImDrawList*	igGetForegroundDrawList_Nil ()
 2	ImDrawList*	igGetForegroundDrawList_WindowPtr (ImGuiWindow*)
 3	ImDrawList*	igGetForegroundDrawList_ViewportPtr (ImGuiViewport*)
+=======
+igGetForegroundDrawList	2
+1	ImDrawList*	igGetForegroundDrawList_ViewportPtr (ImGuiViewport*)
+2	ImDrawList*	igGetForegroundDrawList_WindowPtr (ImGuiWindow*)
+>>>>>>> docking_inter
 igGetID	3
 1	ImGuiID	igGetID_Str (const char*)
 2	ImGuiID	igGetID_StrStr (const char*,const char*)
@@ -290,4 +293,4 @@ igValue	4
 2	void	igValue_Int (const char*,int)
 3	void	igValue_Uint (const char*,unsigned int)
 4	void	igValue_Float (const char*,float,const char*)
-203 overloaded
+200 overloaded
