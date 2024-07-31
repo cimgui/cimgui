@@ -89,7 +89,7 @@ CimguiStorage& GetCimguiStorage()
     ImGuiIO& io = ImGui::GetIO();
     if (io.BackendLanguageUserData == NULL)
     {
-        io.BackendLanguageUserData = new CimguiStorage();
+        io.BackendLanguageUserData = IM_NEW(CimguiStorage)();
     }
 
     return *(CimguiStorage*)io.BackendLanguageUserData;
