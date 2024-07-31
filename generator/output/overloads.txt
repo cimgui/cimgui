@@ -115,10 +115,11 @@ igGetColorU32	3
 igGetForegroundDrawList	2
 1	ImDrawList*	igGetForegroundDrawList_ViewportPtr (ImGuiViewport*)
 2	ImDrawList*	igGetForegroundDrawList_WindowPtr (ImGuiWindow*)
-igGetID	3
+igGetID	4
 1	ImGuiID	igGetID_Str (const char*)
 2	ImGuiID	igGetID_StrStr (const char*,const char*)
 3	ImGuiID	igGetID_Ptr (const void*)
+4	ImGuiID	igGetID_Int (int)
 igGetIDWithSeed	2
 1	ImGuiID	igGetIDWithSeed_Str (const char*,const char*,ImGuiID)
 2	ImGuiID	igGetIDWithSeed_Int (int,ImGuiID)
@@ -225,6 +226,9 @@ igRadioButton	2
 igSelectable	2
 1	bool	igSelectable_Bool (const char*,bool,ImGuiSelectableFlags,const ImVec2)
 2	bool	igSelectable_BoolPtr (const char*,bool*,ImGuiSelectableFlags,const ImVec2)
+igSetItemKeyOwner	2
+1	void	igSetItemKeyOwner_Nil (ImGuiKey)
+2	void	igSetItemKeyOwner_InputFlags (ImGuiKey,ImGuiInputFlags)
 igSetScrollFromPosX	2
 1	void	igSetScrollFromPosX_Float (float,float)
 2	void	igSetScrollFromPosX_WindowPtr (ImGuiWindow*,float,float)
@@ -286,4 +290,4 @@ igValue	4
 2	void	igValue_Int (const char*,int)
 3	void	igValue_Uint (const char*,unsigned int)
 4	void	igValue_Float (const char*,float,const char*)
-200 overloaded
+203 overloaded
