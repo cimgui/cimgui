@@ -372,6 +372,27 @@
       "stname": ""
     }
   ],
+  "ImGui_ImplGlfw_Sleep": [
+    {
+      "args": "(int milliseconds)",
+      "argsT": [
+        {
+          "name": "milliseconds",
+          "type": "int"
+        }
+      ],
+      "argsoriginal": "(int milliseconds)",
+      "call_args": "(milliseconds)",
+      "cimguiname": "ImGui_ImplGlfw_Sleep",
+      "defaults": {},
+      "funcname": "ImGui_ImplGlfw_Sleep",
+      "location": "imgui_impl_glfw:65",
+      "ov_cimguiname": "ImGui_ImplGlfw_Sleep",
+      "ret": "void",
+      "signature": "(int)",
+      "stname": ""
+    }
+  ],
   "ImGui_ImplGlfw_WindowFocusCallback": [
     {
       "args": "(GLFWwindow* window,int focused)",
