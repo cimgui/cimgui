@@ -107,6 +107,7 @@
   "ImGuiOldColumns": "struct ImGuiOldColumns",
   "ImGuiOnceUponAFrame": "struct ImGuiOnceUponAFrame",
   "ImGuiPayload": "struct ImGuiPayload",
+  "ImGuiPlatformIO": "struct ImGuiPlatformIO",
   "ImGuiPlatformImeData": "struct ImGuiPlatformImeData",
   "ImGuiPopupData": "struct ImGuiPopupData",
   "ImGuiPopupFlags": "int",

@@ -19,6 +19,7 @@ CIMGUI_API void ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window,double xoffset,
 CIMGUI_API void ImGui_ImplGlfw_KeyCallback(GLFWwindow* window,int key,int scancode,int action,int mods);
 CIMGUI_API void ImGui_ImplGlfw_CharCallback(GLFWwindow* window,unsigned int c);
 CIMGUI_API void ImGui_ImplGlfw_MonitorCallback(GLFWmonitor* monitor,int event);
+CIMGUI_API void ImGui_ImplGlfw_Sleep(int milliseconds);
 
 #endif
 #ifdef CIMGUI_USE_OPENGL3

@@ -202,6 +202,8 @@ local function parse_enum_value(value, allenums,dontpost)
 		if allenums[clean(value)] then return allenums[clean(value)] end
 		--must be several and operators
 		------------precedence order (hope not ())
+		--delete (int)
+		value = value:gsub("%(int%)","")
 		--first drop outer ()
 		value = value:gsub("^(%()",""):gsub("(%))$","")
 		assert(not value:match("[%(%)]"),value)
