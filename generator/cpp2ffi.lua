@@ -1595,6 +1595,9 @@ function M.Parser()
 
 							local tdt = self:gentemplatetypedef(ttype,template,te)
 							it2 = tdt..code2
+						elseif it2:match"%w+::" then
+							print("clean namespace typedef",it2)
+							it2 = it2:gsub("%w+::","")
 						end
 					elseif it.re_name == "functypedef_re" then
 						it2 = clean_functypedef(it2)
