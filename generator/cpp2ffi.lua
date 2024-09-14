@@ -1311,6 +1311,8 @@ function M.Parser()
 					end
 				elseif it.re_name == "namespace_re" then
 					it.name = it.item:match("namespace%s+(%S+)")
+				elseif it.re_name == "class_re" then
+					it.name = it.item:match("class%s+(%S+)")
 				end
 			end
 		end
