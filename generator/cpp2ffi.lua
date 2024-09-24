@@ -1289,6 +1289,14 @@ function M.Parser()
 	function par:parseItemsR2(txt, itparent)
 		local itsarr,its = parseItems(txt,self.linenumdict,itparent)
 		for i,it in ipairs(itsarr) do
+			--clean class
+			if it.re_name == "class_re" then
+				it.name = it.item:match("class%s+(%S+)")
+				print("cleaning class",it.name)
+				it.item = it.item:gsub("private:.+};$","};")
+				it.item = it.item:gsub("public:","")
+				it.item = it.item:gsub("enum%s*class","enum")
+			end
 			if not isLeaf(it.re_name) then
 				local inner = strip_end(it.item:match("%b{}"):sub(2,-2))
 				it.childs = par:parseItemsR2(inner, it)
@@ -1312,7 +1320,7 @@ function M.Parser()
 				elseif it.re_name == "namespace_re" then
 					it.name = it.item:match("namespace%s+(%S+)")
 				elseif it.re_name == "class_re" then
-					it.name = it.item:match("class%s+(%S+)")
+					--it.name = it.item:match("class%s+(%S+)")
 				end
 			end
 		end
@@ -1339,6 +1347,7 @@ function M.Parser()
 		self.linenumdict = {}
 		local cdefs2 = {}
 		for i,cdef in ipairs(cdefs) do
+			cdef[1] = cdef[1]:gsub("enum%s*class","enum") --clean class
 			local cdef1 = clean_comments(cdef[1])
 			if self.linenumdict[cdef1] then
 				--print("linenumdict already defined for", cdef[1],type(self.linenumdict[cdef[1]]))
@@ -1348,7 +1357,6 @@ function M.Parser()
 					table.insert(self.linenumdict[cdef1],cdef[2])
 				end
 			else
-				--print("nuevo linenumdict es",cdef[1],cdef[2])
 				self.linenumdict[cdef1]=cdef[2]
 			end
 			table.insert(cdefs2,cdef[1])
@@ -1431,7 +1439,11 @@ function M.Parser()
 			stname,derived = inistruct:match"struct%s*([^%s:]+):(.+)"
 			derived = derived:match"(%S+)$"
 		else
-			stname = inistruct:match"struct%s(%S+)"
+			if itst.re_name == "struct_re" then
+				stname = inistruct:match"struct%s(%S+)"
+			elseif itst.re_name == "class_re" then
+				stname = inistruct:match"class%s(%S+)"
+			end
 		end
 
 		if derived then print(stname,"derived from",derived) end
@@ -1440,6 +1452,7 @@ function M.Parser()
 		if not stname and stru:match("typedef struct") then
 			stname = stru:match("%b{}%s*(%S+)%s*;")
 		end
+		
 		
 		local is_nested
 		if not stname then
@@ -1654,6 +1667,8 @@ function M.Parser()
 						if it.parent.re_name == "namespace_re" then
 							local namespace = it.parent.item:match("namespace%s+(%S+)")
 							self.embeded_enums[enumname] = namespace.."::"..enumname
+						else
+							self.embeded_enums[enumname] = it.parent.name.."::"..enumname
 						end
 					end
 				else --unamed enum just repeat declaration
@@ -1661,7 +1676,7 @@ function M.Parser()
 					table.insert(outtab,cl_item)
 					print("unnamed enum",cl_item)
 				end
-			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" then
+			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" or it.re_name == "class_re" then
 				local cleanst,structname,strtab,comstab,predec = self:clean_structR1(it,true)
 				if not structname then print("NO NAME",cleanst,it.item) end
 				--if not void stname or templated
@@ -1698,7 +1713,7 @@ function M.Parser()
 				local stname = ""
 				local namespace
 				if it.parent then
-					if it.parent.re_name == "struct_re" or it.parent.re_name == "typedef_st_re" then
+					if it.parent.re_name == "struct_re" or it.parent.re_name == "typedef_st_re" or it.parent.re_name == "class_re" then
 						stname = it.parent.name
 					elseif it.parent.re_name == "namespace_re" then
 						namespace = get_parents_nameC(it) --it.parent.name
@@ -1875,7 +1890,7 @@ function M.Parser()
 				end
 			elseif it.re_name == "enum_re" then
 				enums_for_table(it, outtab, enumsordered)
-			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" then
+			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" or it.re_name == "class_re" then
 				local cleanst,structname,strtab,comstab = self:clean_structR1(it)
 				--if not void stname or templated
 				if not structname then print("NO NAME",cleanst,it.item) end
