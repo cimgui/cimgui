@@ -175,6 +175,7 @@ local function check_template(code)
 		te = te:gsub("%-","less")
 		te = te:gsub("%s","_")
 		te = te:gsub("%*","Ptr")
+		te = te:gsub("::","_")
 	
 		code2 = code:gsub("(<[%w_%*%s]+>)([^%s%*])","%1 %2")
 		code2 = code2:gsub("<([^<>]-)>","_"..te)
@@ -2484,7 +2485,8 @@ local function func_header_generate_structs(FP)
 	
 	table_do_sorted(FP.templates,function(ttype,v)
 		table_do_sorted(v,function(ttypein,te)
-			table.insert(outtab,"typedef "..ttype.."<"..ttypein.."> "..ttype.."_"..te..";\n")
+			local ttype2 = ttype:gsub("::","_") --std::string
+			table.insert(outtab,"typedef "..ttype.."<"..ttypein.."> "..ttype2.."_"..te..";\n")
 		end)
 	end)
 	return outtab
