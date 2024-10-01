@@ -188,6 +188,7 @@
   "ImS32": "signed int",
   "ImS64": "signed long long",
   "ImS8": "signed char",
+  "ImStbTexteditState": "ImStb::STB_TexteditState",
   "ImTextureID": "void*",
   "ImU16": "unsigned short",
   "ImU32": "unsigned int",
@@ -201,9 +202,6 @@
   "ImWchar16": "unsigned short",
   "ImWchar32": "unsigned int",
   "STB_TexteditState": "struct STB_TexteditState",
-  "StbTexteditRow": "struct StbTexteditRow",
-  "StbUndoRecord": "struct StbUndoRecord",
-  "StbUndoState": "struct StbUndoState",
   "const_iterator": "const value_type*",
   "iterator": "value_type*",
   "value_type": "T"
