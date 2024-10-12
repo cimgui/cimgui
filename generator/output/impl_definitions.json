@@ -909,5 +909,224 @@
       "signature": "()",
       "stname": ""
     }
+  ],
+  "ImGui_ImplSDL3_InitForD3D": [
+    {
+      "args": "(SDL_Window* window)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "SDL_Window*"
+        }
+      ],
+      "argsoriginal": "(SDL_Window* window)",
+      "call_args": "(window)",
+      "cimguiname": "ImGui_ImplSDL3_InitForD3D",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDL3_InitForD3D",
+      "location": "imgui_impl_sdl3:38",
+      "ov_cimguiname": "ImGui_ImplSDL3_InitForD3D",
+      "ret": "bool",
+      "signature": "(SDL_Window*)",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDL3_InitForMetal": [
+    {
+      "args": "(SDL_Window* window)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "SDL_Window*"
+        }
+      ],
+      "argsoriginal": "(SDL_Window* window)",
+      "call_args": "(window)",
+      "cimguiname": "ImGui_ImplSDL3_InitForMetal",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDL3_InitForMetal",
+      "location": "imgui_impl_sdl3:39",
+      "ov_cimguiname": "ImGui_ImplSDL3_InitForMetal",
+      "ret": "bool",
+      "signature": "(SDL_Window*)",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDL3_InitForOpenGL": [
+    {
+      "args": "(SDL_Window* window,void* sdl_gl_context)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "SDL_Window*"
+        },
+        {
+          "name": "sdl_gl_context",
+          "type": "void*"
+        }
+      ],
+      "argsoriginal": "(SDL_Window* window,void* sdl_gl_context)",
+      "call_args": "(window,sdl_gl_context)",
+      "cimguiname": "ImGui_ImplSDL3_InitForOpenGL",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDL3_InitForOpenGL",
+      "location": "imgui_impl_sdl3:36",
+      "ov_cimguiname": "ImGui_ImplSDL3_InitForOpenGL",
+      "ret": "bool",
+      "signature": "(SDL_Window*,void*)",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDL3_InitForOther": [
+    {
+      "args": "(SDL_Window* window)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "SDL_Window*"
+        }
+      ],
+      "argsoriginal": "(SDL_Window* window)",
+      "call_args": "(window)",
+      "cimguiname": "ImGui_ImplSDL3_InitForOther",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDL3_InitForOther",
+      "location": "imgui_impl_sdl3:41",
+      "ov_cimguiname": "ImGui_ImplSDL3_InitForOther",
+      "ret": "bool",
+      "signature": "(SDL_Window*)",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDL3_InitForSDLRenderer": [
+    {
+      "args": "(SDL_Window* window,SDL_Renderer* renderer)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "SDL_Window*"
+        },
+        {
+          "name": "renderer",
+          "type": "SDL_Renderer*"
+        }
+      ],
+      "argsoriginal": "(SDL_Window* window,SDL_Renderer* renderer)",
+      "call_args": "(window,renderer)",
+      "cimguiname": "ImGui_ImplSDL3_InitForSDLRenderer",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDL3_InitForSDLRenderer",
+      "location": "imgui_impl_sdl3:40",
+      "ov_cimguiname": "ImGui_ImplSDL3_InitForSDLRenderer",
+      "ret": "bool",
+      "signature": "(SDL_Window*,SDL_Renderer*)",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDL3_InitForVulkan": [
+    {
+      "args": "(SDL_Window* window)",
+      "argsT": [
+        {
+          "name": "window",
+          "type": "SDL_Window*"
+        }
+      ],
+      "argsoriginal": "(SDL_Window* window)",
+      "call_args": "(window)",
+      "cimguiname": "ImGui_ImplSDL3_InitForVulkan",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDL3_InitForVulkan",
+      "location": "imgui_impl_sdl3:37",
+      "ov_cimguiname": "ImGui_ImplSDL3_InitForVulkan",
+      "ret": "bool",
+      "signature": "(SDL_Window*)",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDL3_NewFrame": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGui_ImplSDL3_NewFrame",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDL3_NewFrame",
+      "location": "imgui_impl_sdl3:43",
+      "ov_cimguiname": "ImGui_ImplSDL3_NewFrame",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDL3_ProcessEvent": [
+    {
+      "args": "(const SDL_Event* event)",
+      "argsT": [
+        {
+          "name": "event",
+          "type": "const SDL_Event*"
+        }
+      ],
+      "argsoriginal": "(const SDL_Event* event)",
+      "call_args": "(event)",
+      "cimguiname": "ImGui_ImplSDL3_ProcessEvent",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDL3_ProcessEvent",
+      "location": "imgui_impl_sdl3:44",
+      "ov_cimguiname": "ImGui_ImplSDL3_ProcessEvent",
+      "ret": "bool",
+      "signature": "(const SDL_Event*)",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDL3_SetGamepadMode": [
+    {
+      "args": "(ImGui_ImplSDL3_GamepadMode mode,SDL_Gamepad** manual_gamepads_array,int manual_gamepads_count)",
+      "argsT": [
+        {
+          "name": "mode",
+          "type": "ImGui_ImplSDL3_GamepadMode"
+        },
+        {
+          "name": "manual_gamepads_array",
+          "type": "SDL_Gamepad**"
+        },
+        {
+          "name": "manual_gamepads_count",
+          "type": "int"
+        }
+      ],
+      "argsoriginal": "(ImGui_ImplSDL3_GamepadMode mode,SDL_Gamepad** manual_gamepads_array=((void*)0),int manual_gamepads_count=-1)",
+      "call_args": "(mode,manual_gamepads_array,manual_gamepads_count)",
+      "cimguiname": "ImGui_ImplSDL3_SetGamepadMode",
+      "defaults": {
+        "manual_gamepads_array": "NULL",
+        "manual_gamepads_count": "-1"
+      },
+      "funcname": "ImGui_ImplSDL3_SetGamepadMode",
+      "location": "imgui_impl_sdl3:49",
+      "ov_cimguiname": "ImGui_ImplSDL3_SetGamepadMode",
+      "ret": "void",
+      "signature": "(ImGui_ImplSDL3_GamepadMode,SDL_Gamepad**,int)",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDL3_Shutdown": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGui_ImplSDL3_Shutdown",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDL3_Shutdown",
+      "location": "imgui_impl_sdl3:42",
+      "ov_cimguiname": "ImGui_ImplSDL3_Shutdown",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
   ]
 }
