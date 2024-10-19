@@ -19,7 +19,7 @@ set PATH=%PATH%;C:\anima;C:\mingws\i686-7.2.0-release-posix-dwarf-rt_v5-rev1\min
 :: "constructors" adds the _Construct version of constructors
 :: examples: "" "internal" "internal freetype comments"
 :: arg[3..n] name of implementations to generate and/or CFLAGS (e.g. -DIMGUI_USER_CONFIG or -DIMGUI_USE_WCHAR32)
-luajit ./generator.lua gcc "internal noimstrv" glfw opengl3 opengl2 sdl2 %*
+luajit ./generator.lua gcc "internal noimstrv" glfw opengl3 opengl2 sdl2 sdl3 %*
 
 ::leave console open
 cmd /k
