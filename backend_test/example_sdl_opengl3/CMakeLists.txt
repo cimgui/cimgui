@@ -22,6 +22,7 @@ else()
 endif()
 
 include_directories(../../imgui)
+add_definitions("-DIMGUI_USER_CONFIG=\"../cimconfig.h\"")
 add_definitions("-DIMGUI_DISABLE_OBSOLETE_FUNCTIONS=1")
 
 include_directories(../../)
