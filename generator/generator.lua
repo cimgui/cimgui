@@ -318,7 +318,8 @@ local function parseImGuiHeader(header,names)
 		return pre..funcname
 	end
 	parser.cname_overloads = cimgui_overloads
-	parser.manuals = cimgui_manuals
+	--parser.manuals = cimgui_manuals
+	parser:set_manuals(cimgui_manuals, "cimgui")
 	parser.skipped = cimgui_skipped
 	parser.UDTs = {"ImVec2","ImVec4","ImColor","ImRect"}
 	--parser.gen_template_typedef = gen_template_typedef --use auto

@@ -673,14 +673,18 @@ local function CleanImU32(def)
 	for i=1,#bb do res = res + bb[i] end 
 	return res
 end
+local function moveptr(line)
+	line = line:gsub("%s*%*","%*")
+	line = line:gsub("%*([%w_])","%* %1")
+	line = line:gsub("(%(%*)%s","%1")
+	return line
+end
 local function parseFunction(self,stname,itt,namespace,locat)
 
 	local lineorig,comment = split_comment(itt.item)
 	line = clean_spaces(lineorig)
 	--move *
-	line = line:gsub("%s*%*","%*")
-	line = line:gsub("%*([%w_])","%* %1")
-	line = line:gsub("(%(%*)%s","%1")
+	line = moveptr(line)
 
 	--print(line)
     --clean implemetation
@@ -719,6 +723,21 @@ local function parseFunction(self,stname,itt,namespace,locat)
 		error"parseFunction not getting args"
     end
 	
+	--get manuals args and ret
+	local cname = self.getCname(stname,funcname, namespace) --cimguiname
+	local manpars = self.manuals[cname]
+	local ismanual
+    if manpars then
+		if type(manpars) == "boolean" then
+			print("warning: unable to get args and ret from "..cname)
+			print("did you forgot to use set_manuals? ")
+		else
+			ismanual = true
+			args, ret = manpars.args, manpars.ret
+			args = moveptr(args)
+			ret = moveptr(ret)
+		end
+	end
 	
 	local argsp = args:sub(2,-2)..","
 	local argsTa = {}
@@ -734,6 +753,8 @@ local function parseFunction(self,stname,itt,namespace,locat)
 			argsTa[#argsTa+1] = tynam
 		end
 	end
+	
+	
 	--- templates in args
 	for i,ar in ipairs(argsTa) do
 		--TODO several diferent templates
@@ -747,7 +768,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
 		end
 	    argsTa[i] = te and code2 or ar --ar:gsub("<([%w_%*%s]+)>",te) --ImVector
 	end
-	
+
 	--get typ, name and defaults
 	local functype_re =        "^%s*[%w%s%*]+%(%*%s*[%w_]+%)%([^%(%)]*%)"
     local functype_reex =     "^(%s*[%w%s%*]+)%(%*%s*([%w_]+)%)(%([^%(%)]*%))"
@@ -807,6 +828,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
         end
 	end
 	
+
 	local argsArr = argsTa2
 
 	--recreate argscsinpars, call_args and signature from argsArr
@@ -838,7 +860,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
 		caar = "()"
 		signat = "()" .. (extraconst or "")
 	end
-
+	--if ismanual then print("manual",asp, caar, signat) end
     ------------------------------
     
     if not ret and stname then --must be constructors
@@ -871,6 +893,9 @@ local function parseFunction(self,stname,itt,namespace,locat)
 			ar.default = nil
 		end
 	end
+	
+	--if ismanual then M.prtable(argsArr) end
+	
 	defT.templated = self.typenames[stname] and true
 	defT.namespace = namespace
     defT.cimguiname = cimguiname
@@ -901,6 +926,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
         -- end
     end
 	defsT[cimguiname][signat] = defT
+	
 end
 local function itemsCount(items)
 	print"------------items"
@@ -913,8 +939,8 @@ end
 
 local function AdjustArguments(FP)
     for fun,defs in pairs(FP.defsT) do
-        --struct function but no constructors or static functions
-        if defs[1].stname~="" and defs[1].ret and not defs[1].is_static_function then
+        --struct function but no constructors or static functions or manuals
+        if defs[1].stname~="" and defs[1].ret and not defs[1].is_static_function and not defs[1].manual then
             --print("adjusting",fun)
             for i,def in ipairs(defs) do
                 local empty = def.args:match("^%(%)") --no args
@@ -1407,6 +1433,20 @@ function M.Parser()
 	
 	function par:printItems()
 		printItems(items)
+	end
+	function par:set_manuals(manuals, modulen, erase)
+		erase = erase or {"CIMGUI_API"}
+		local moddata = read_data("./"..modulen.."_template.h")
+		for k,v in pairs(manuals) do
+			local ret = moddata:match("([^%(%):,\n;]+[%*%s])%s?~?"..k.."%b()")
+			for i,ww in ipairs(erase) do
+				ret = ret:gsub(ww,"")
+			end
+			local args = moddata:match(k.."%s*(%b())")
+			manuals[k] = {args = args, ret = ret}
+			--print(k,args,ret)
+		end
+		self.manuals = manuals
 	end
 	par.parseFunction = parseFunction
 	local uniques = {}

@@ -4989,7 +4989,7 @@ CIMGUI_API void igImFontAtlasBuildMultiplyRectAlpha8(const unsigned char table[2
 
 /////////////////////////hand written functions
 //no LogTextV
-CIMGUI_API void igLogText(CONST char *fmt, ...);
+CIMGUI_API void igLogText(const char *fmt, ...);
 //no appendfV
 CIMGUI_API void ImGuiTextBuffer_appendf(struct ImGuiTextBuffer *buffer, const char *fmt, ...);
 //for getting FLT_MAX in bindings

@@ -9773,23 +9773,23 @@
   ],
   "ImGuiTextBuffer_appendf": [
     {
-      "args": "(ImGuiTextBuffer* self,const char* fmt,...)",
+      "args": "(struct ImGuiTextBuffer* buffer, const char* fmt,...)",
       "argsT": [
         {
-          "name": "self",
-          "type": "ImGuiTextBuffer*"
+          "name": "buffer",
+          "type": "struct ImGuiTextBuffer*"
         },
         {
           "name": "fmt",
-          "type": "const char*"
+          "type": " const char*"
         },
         {
           "name": "...",
           "type": "..."
         }
       ],
-      "argsoriginal": "(const char* fmt,...)",
-      "call_args": "(fmt,...)",
+      "argsoriginal": "(struct ImGuiTextBuffer* buffer, const char* fmt, ...)",
+      "call_args": "(buffer,fmt,...)",
       "cimguiname": "ImGuiTextBuffer_appendf",
       "defaults": {},
       "funcname": "appendf",
@@ -9798,7 +9798,7 @@
       "manual": true,
       "ov_cimguiname": "ImGuiTextBuffer_appendf",
       "ret": "void",
-      "signature": "(const char*,...)",
+      "signature": "(struct ImGuiTextBuffer*, const char*,...)",
       "stname": "ImGuiTextBuffer"
     }
   ],
@@ -28904,7 +28904,7 @@
           "type": "..."
         }
       ],
-      "argsoriginal": "(const char* fmt,...)",
+      "argsoriginal": "(const char* fmt, ...)",
       "call_args": "(fmt,...)",
       "cimguiname": "igLogText",
       "defaults": {},
