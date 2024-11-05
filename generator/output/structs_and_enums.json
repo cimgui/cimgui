@@ -1499,6 +1499,58 @@
         "value": "ImGuiFocusedFlags_RootWindow | ImGuiFocusedFlags_ChildWindows"
       }
     ],
+    "ImGuiFreeTypeBuilderFlags": [
+      {
+        "calc_value": 1,
+        "name": "ImGuiFreeTypeBuilderFlags_NoHinting",
+        "value": "1 << 0"
+      },
+      {
+        "calc_value": 2,
+        "name": "ImGuiFreeTypeBuilderFlags_NoAutoHint",
+        "value": "1 << 1"
+      },
+      {
+        "calc_value": 4,
+        "name": "ImGuiFreeTypeBuilderFlags_ForceAutoHint",
+        "value": "1 << 2"
+      },
+      {
+        "calc_value": 8,
+        "name": "ImGuiFreeTypeBuilderFlags_LightHinting",
+        "value": "1 << 3"
+      },
+      {
+        "calc_value": 16,
+        "name": "ImGuiFreeTypeBuilderFlags_MonoHinting",
+        "value": "1 << 4"
+      },
+      {
+        "calc_value": 32,
+        "name": "ImGuiFreeTypeBuilderFlags_Bold",
+        "value": "1 << 5"
+      },
+      {
+        "calc_value": 64,
+        "name": "ImGuiFreeTypeBuilderFlags_Oblique",
+        "value": "1 << 6"
+      },
+      {
+        "calc_value": 128,
+        "name": "ImGuiFreeTypeBuilderFlags_Monochrome",
+        "value": "1 << 7"
+      },
+      {
+        "calc_value": 256,
+        "name": "ImGuiFreeTypeBuilderFlags_LoadColor",
+        "value": "1 << 8"
+      },
+      {
+        "calc_value": 512,
+        "name": "ImGuiFreeTypeBuilderFlags_Bitmap",
+        "value": "1 << 9"
+      }
+    ],
     "ImGuiHoveredFlagsPrivate_": [
       {
         "calc_value": 245760,
@@ -5120,6 +5172,7 @@
     "ImGuiFocusRequestFlags_": "imgui_internal:976",
     "ImGuiFocusScopeData": "imgui_internal:1632",
     "ImGuiFocusedFlags_": "imgui:1342",
+    "ImGuiFreeTypeBuilderFlags": "imgui_freetype:26",
     "ImGuiGroupData": "imgui_internal:1057",
     "ImGuiHoveredFlagsPrivate_": "imgui_internal:889",
     "ImGuiHoveredFlags_": "imgui:1356",

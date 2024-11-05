@@ -7,7 +7,7 @@ assert(bit,"Must use LuaJIT")
 local script_args = {...}
 local COMPILER = script_args[1]
 local INTERNAL_GENERATION = script_args[2]:match("internal") and true or false
-local FREETYPE_GENERATION = script_args[2]:match("freetype") and true or false
+local FREETYPE_GENERATION = true --script_args[2]:match("freetype") and true or false
 local COMMENTS_GENERATION = script_args[2]:match("comments") and true or false
 local CONSTRUCTORS_GENERATION = script_args[2]:match("constructors") and true or false
 local NOCHAR = script_args[2]:match("nochar") and true or false
@@ -19,6 +19,9 @@ local CPRE,CTEST
 local implementations = {}
 for i=3,#script_args do
     if script_args[i]:match(COMPILER == "cl" and "^/" or "^%-") then
+		if script_args[i]:match("IMGUI_USE_WCHAR32") then
+			script_args[i] = "" --dont use this define
+		end
         local key, value = script_args[i]:match("^(.+)=(.+)$")
         if key and value then
             CFLAGS = CFLAGS .. " " .. key .. "=\"" .. value:gsub("\"", "\\\"") .. "\"";
@@ -31,11 +34,11 @@ for i=3,#script_args do
 end
 
 if FREETYPE_GENERATION then
-	CFLAGS = CFLAGS .. " -DIMGUI_ENABLE_FREETYPE "
+	CFLAGS = CFLAGS .. " -DIMGUI_ENABLE_FREETYPE -DIMGUI_ENABLE_STB_TRUETYPE" --both builders
 end
 
 if COMPILER == "gcc" or COMPILER == "clang" or COMPILER == "zig cc" then
-    CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API="" ]] .. CFLAGS
+    CPRE = COMPILER..[[ -E -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS -DIMGUI_API="" -DIMGUI_IMPL_API=""  ]] .. CFLAGS
     CTEST = COMPILER.." --version"
 elseif COMPILER == "cl" then
     CPRE = COMPILER..[[ /E /DIMGUI_DISABLE_OBSOLETE_FUNCTIONS /DIMGUI_DEBUG_PARANOID /DIMGUI_API="" /DIMGUI_IMPL_API="" ]] .. CFLAGS
@@ -214,6 +217,25 @@ local function DefsByStruct(FP)
     FP.defsBystruct = structs
 end  
 
+local function colapse_defines(str, define)
+	local num = 1
+	while num > 0 do
+		str,num = str:gsub("(#ifdef "..define..".+)".."(#endif\n+#ifdef "..define.."\n)", "%1")
+	end
+	return str
+end
+local wchardefine =
+[[#ifdef IMGUI_USE_WCHAR32            
+typedef ImWchar32 ImWchar;
+#else
+typedef ImWchar16 ImWchar;
+#endif
+#ifdef IMGUI_USE_WCHAR32
+#define IM_UNICODE_CODEPOINT_MAX     0x10FFFF   
+#else
+#define IM_UNICODE_CODEPOINT_MAX     0xFFFF  
+#endif
+	]]
 
 --generate cimgui.cpp cimgui.h 
 local function cimgui_generation(parser)
@@ -261,18 +283,27 @@ local function cimgui_generation(parser)
 		end
 	end
 	
+	cstructsstr = colapse_defines(cstructsstr, "IMGUI_ENABLE_FREETYPE")
+	
     hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
     local cfuncsstr = func_header_generate(parser)
+	cfuncsstr = colapse_defines(cfuncsstr, "IMGUI_ENABLE_FREETYPE")
     hstrfile = hstrfile:gsub([[#include "auto_funcs%.h"]],cfuncsstr)
+	--patch hstrfile for ImWchar
+	local num
+	hstrfile, num = hstrfile:gsub("typedef ImWchar16 ImWchar;", wchardefine)
+	assert(num == 1)
+	hstrfile, num = hstrfile:gsub("Used4kPagesMap%[%(0xFFFF", "Used4kPagesMap[(IM_UNICODE_CODEPOINT_MAX")
+	assert(num == 1)
     save_data("./output/cimgui.h",cimgui_header,hstrfile)
     
     --merge it in cimgui_template.cpp to cimgui.cpp
     local cimplem = func_implementation(parser)
-
+	cimplem = colapse_defines(cimplem, "IMGUI_ENABLE_FREETYPE")
     local hstrfile = read_data"./cimgui_template.cpp"
 
     hstrfile = hstrfile:gsub([[#include "auto_funcs%.cpp"]],cimplem)
-	local ftdef = FREETYPE_GENERATION and "#define IMGUI_ENABLE_FREETYPE\n" or ""
+	local ftdef = "" --FREETYPE_GENERATION and "#define IMGUI_ENABLE_FREETYPE\n" or ""
     save_data("./output/cimgui.cpp",cimgui_header, ftdef, hstrfile)
 
 end
@@ -307,6 +338,20 @@ print("NOIMSTRV",NOIMSTRV)
 print("IMGUI_HAS_DOCK",gdefines.IMGUI_HAS_DOCK)
 print("IMGUI_VERSION",gdefines.IMGUI_VERSION)
 
+local function custom_function_post(self, outtab, def)
+	assert(def.location)
+	if def.location:match("imgui_freetype") then 
+		outtab[#outtab] = "#ifdef IMGUI_ENABLE_FREETYPE\n"..outtab[#outtab].."\n#endif\n"
+	end
+end
+local function header_text_insert(self, outtab, txt, it)
+	assert(it.locat)
+	if it.locat:match("imgui_freetype") then 
+		table.insert(outtab, "\n#ifdef IMGUI_ENABLE_FREETYPE"..txt.."\n#endif")
+	else
+		table.insert(outtab, txt)
+	end
+end
 
 --funtion for parsing imgui headers
 local function parseImGuiHeader(header,names)
@@ -327,6 +372,8 @@ local function parseImGuiHeader(header,names)
 	parser.CONSTRUCTORS_GENERATION = CONSTRUCTORS_GENERATION
 	parser.NOCHAR = NOCHAR
 	parser.NOIMSTRV = NOIMSTRV
+	parser.custom_function_post = custom_function_post
+	parser.header_text_insert = header_text_insert
 	local defines = parser:take_lines(CPRE..header,names,COMPILER)
 	
 	return parser
