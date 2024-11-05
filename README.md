@@ -24,7 +24,7 @@ Notes:
   * `git submodule update --init --recursive` (If already cloned)
 * compile 
   * using makefile on linux/macOS/mingw (Or use CMake to generate project)
-  * cmake options are IMGUI_STATIC (compiling as static library), IMGUI_FREETYPE (for using Freetype2) and FREETYPE_PATH (Freetype2 cmake install location) (only if cimgui is generated with freetype option)
+  * cmake options are IMGUI_STATIC (compiling as static library), IMGUI_FREETYPE (for using Freetype2) and FREETYPE_PATH (Freetype2 cmake install location) and IMGUI_WCHAR32
   * or as in https://github.com/sonoro1234/LuaJIT-ImGui/tree/master/build
   
   For compiling with backends there are now examples with SDL2 and opengl3/vulkan in folder backend_test.
@@ -37,12 +37,12 @@ Notes:
 * you will need LuaJIT (https://github.com/LuaJIT/LuaJIT.git better 2.1 branch) or precompiled for linux/macOS/windows in https://luapower.com/luajit/download
 * you need to use also a C++ compiler for doing preprocessing: gcc (In windows MinGW-W64-builds for example), clang or cl (MSVC). (this repo was done with gcc)
 * update `imgui` folder to the version you desire.
-* edit `generator/generator.bat` on windows, or `generator/generator.sh` on linux, to choose between gcc, clang, or cl and to choose desired backends and whether imgui_internal is generated or not, Freetype2 is used or not and comments are generated or not and if constructors are generated also with versions performing just initialization of structs provided by yourself (_Construct is added to the constructor names)
+* edit `generator/generator.bat` on windows, or `generator/generator.sh` on linux, to choose between gcc, clang, or cl and to choose desired backends and whether imgui_internal is generated or not, comments are generated or not and if constructors are generated also with versions performing just initialization of structs provided by yourself (_Construct is added to the constructor names)
 * the defaults of generator are gcc as compiler, imgui_internal included and sdl, glfw, vulkan, opengl2 and opengl3 as backends.
 * edit config_generator.lua for adding includes needed by your chosen backends (vulkan needs that).
 * Run generator.bat or generator.sh with gcc, clang or cl and LuaJIT on your PATH.
 * as a result some files are generated: `cimgui.cpp`, `cimgui.h` and `cimgui_impl.h` for compiling and some lua/json files with information about the binding: `definitions.json` with function info, `structs_and_enums.json` with struct and enum info, `impl_definitions.json` with functions from the backends info. 
-* You can pass compiler flags to generator.sh or generator.bat by editing them at the end of the call to further specify the compiler behavior. (e.g. -DIMGUI_USER_CONFIG or -DIMGUI_USE_WCHAR32)
+* You can pass compiler flags to generator.sh or generator.bat by editing them at the end of the call to further specify the compiler behavior. (e.g. -DIMGUI_USER_CONFIG)
 * You are able to pass any extra argument to generator.sh (.bat) in the command-line.
 * If you are using different options than cimgui repo and if you want to keep them after a cimgui update, you can keep them in a copy of generator.sh (.bat) outside of cimgui folder where `cd cimgui/generator` is used before luajit call. See https://github.com/cimgui/cimgui/issues/232#issuecomment-1497059497
 # generate binding
