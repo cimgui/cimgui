@@ -1292,7 +1292,7 @@ function M.Parser()
 							self.typedefs_dict[key] = linet
 						elseif not line:match"typedef%s*struct" then --discard typedef struct
 							print("typedef not found")
-							print(key,value,line)
+							print(key,value,line,cdef[1],cdef[2])
 						end
 					end
 				end
@@ -1366,7 +1366,7 @@ function M.Parser()
 		return table.concat(txtclean)
 	end
 	function par:parseItems()
-		self:initTypedefsDict()
+		--self:initTypedefsDict()
 		
 		self.linenumdict = {}
 		local cdefs2 = {}
@@ -1911,7 +1911,7 @@ function M.Parser()
 	function par:gen_structs_and_enums_table()
 		print"--------------gen_structs_and_enums_table"
 		local outtab = {enums={},structs={},locations={},enumtypes={},struct_comments={},enum_comments={}}
-		self.typedefs_table = {}
+		--self.typedefs_table = {}
 		local enumsordered = {}
 		unnamed_enum_counter = 0
 		self.templated_structs = {}
@@ -1934,7 +1934,31 @@ function M.Parser()
 				if it.re_name == "typedef_re" and not it.parent then
 					local typedefdef,typedefname = it.item:match"typedef(.+)%s([^%s;]+);$"
 					typedefname = strip(typedefname)
-					self.typedefs_table[typedefname] = strip(typedefdef)
+					--self.typedefs_table[typedefname] = strip(typedefdef)
+					self.typedefs_dict[typedefname] = strip(typedefdef)
+				elseif it.re_name == "functypedef_re" then
+					-- "^\n*%s*(typedef[%w%s%*_]+%([^*]*%*?%s*[%w_]+%s*%)%s*%b()%s*;)"
+					local key = it.item:match("%(%*([%w_]+)%)%([^%(%)]*%)")
+					if key then
+						local linet = it.item
+						linet = linet:gsub("[\n%s]+typedef ","")
+						linet = linet:gsub("%(%*("..key..")%)","(*)")
+						self.typedefs_dict[key] = linet
+						--print("functypedef_re",1,linet)--,clean_functypedef(line))
+					else
+						--try function typedef
+						key = it.item:match("%(([%w_]+)%)%([^%(%)]*%)")
+						if key then
+							local linet = it.item
+							linet = linet:gsub("typedef ","")
+							linet = linet:gsub("%(("..key..")%)","()")
+							self.typedefs_dict[key] = linet
+							print("functypedef_re",2, it.item)
+						else
+							print("func typedef not found")
+							print(it.item)
+						end
+					end
 				end
 			elseif it.re_name == "enum_re" then
 				enums_for_table(it, outtab, enumsordered)
