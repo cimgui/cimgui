@@ -432,20 +432,15 @@ local function parseItems(txt,linenumdict, itparent, dumpit)
 							loca = table.remove(loca,1)
 						end
 						if not loca then
-							print("not loca",string.format("%q , %q ",itemold,itemfirstline),#itemfirstline)
-							-- for k,v in pairs(linenumdict) do
-								-- if k:match(itemfirstline) then
-									-- print(string.format("%q",k),#k)
-								-- end
-							-- end
-							--error"no entry in linenumdict"
 							--take locat from parent
 							if itparent and itparent.locat then
 								loca = itparent.locat
+								print("parent loca",string.format("%q , %q ",itemold,itemfirstline),#itemfirstline,loca)
 							else
 								loca = 0
-								--error"no entry in linenumdict"
+								print("not loca",string.format("%q , %q ",itemold,itemfirstline),#itemfirstline,loca)
 							end
+							
 						end
 					else
 						error"no linenumdict"
@@ -481,7 +476,7 @@ local function parseItems(txt,linenumdict, itparent, dumpit)
 	end
 	return itemarr,items
 end
-M.parseItems = parseItems
+--M.parseItems = parseItems
 local function name_overloadsAlgo(v)
 
     local aa = {} -- args
@@ -673,14 +668,18 @@ local function CleanImU32(def)
 	for i=1,#bb do res = res + bb[i] end 
 	return res
 end
+local function moveptr(line)
+	line = line:gsub("%s*%*","%*")
+	line = line:gsub("%*([%w_])","%* %1")
+	line = line:gsub("(%(%*)%s","%1")
+	return line
+end
 local function parseFunction(self,stname,itt,namespace,locat)
 
 	local lineorig,comment = split_comment(itt.item)
 	line = clean_spaces(lineorig)
 	--move *
-	line = line:gsub("%s*%*","%*")
-	line = line:gsub("%*([%w_])","%* %1")
-	line = line:gsub("(%(%*)%s","%1")
+	line = moveptr(line)
 
 	--print(line)
     --clean implemetation
@@ -719,6 +718,21 @@ local function parseFunction(self,stname,itt,namespace,locat)
 		error"parseFunction not getting args"
     end
 	
+	--get manuals args and ret
+	local cname = self.getCname(stname,funcname, namespace) --cimguiname
+	local manpars = self.manuals[cname]
+	local ismanual
+    if manpars then
+		if type(manpars) == "boolean" then
+			print("warning: unable to get args and ret from "..cname)
+			print("did you forgot to use set_manuals? ")
+		else
+			ismanual = true
+			args, ret = manpars.args, manpars.ret
+			args = moveptr(args)
+			ret = moveptr(ret)
+		end
+	end
 	
 	local argsp = args:sub(2,-2)..","
 	local argsTa = {}
@@ -734,6 +748,8 @@ local function parseFunction(self,stname,itt,namespace,locat)
 			argsTa[#argsTa+1] = tynam
 		end
 	end
+	
+	
 	--- templates in args
 	for i,ar in ipairs(argsTa) do
 		--TODO several diferent templates
@@ -747,7 +763,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
 		end
 	    argsTa[i] = te and code2 or ar --ar:gsub("<([%w_%*%s]+)>",te) --ImVector
 	end
-	
+
 	--get typ, name and defaults
 	local functype_re =        "^%s*[%w%s%*]+%(%*%s*[%w_]+%)%([^%(%)]*%)"
     local functype_reex =     "^(%s*[%w%s%*]+)%(%*%s*([%w_]+)%)(%([^%(%)]*%))"
@@ -807,6 +823,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
         end
 	end
 	
+
 	local argsArr = argsTa2
 
 	--recreate argscsinpars, call_args and signature from argsArr
@@ -838,7 +855,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
 		caar = "()"
 		signat = "()" .. (extraconst or "")
 	end
-
+	--if ismanual then print("manual",asp, caar, signat) end
     ------------------------------
     
     if not ret and stname then --must be constructors
@@ -871,6 +888,9 @@ local function parseFunction(self,stname,itt,namespace,locat)
 			ar.default = nil
 		end
 	end
+	
+	--if ismanual then M.prtable(argsArr) end
+	
 	defT.templated = self.typenames[stname] and true
 	defT.namespace = namespace
     defT.cimguiname = cimguiname
@@ -901,6 +921,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
         -- end
     end
 	defsT[cimguiname][signat] = defT
+	
 end
 local function itemsCount(items)
 	print"------------items"
@@ -913,8 +934,8 @@ end
 
 local function AdjustArguments(FP)
     for fun,defs in pairs(FP.defsT) do
-        --struct function but no constructors or static functions
-        if defs[1].stname~="" and defs[1].ret and not defs[1].is_static_function then
+        --struct function but no constructors or static functions or manuals
+        if defs[1].stname~="" and defs[1].ret and not defs[1].is_static_function and not defs[1].manual then
             --print("adjusting",fun)
             for i,def in ipairs(defs) do
                 local empty = def.args:match("^%(%)") --no args
@@ -1111,14 +1132,15 @@ local function ADDdestructors(FP)
 					error"names should be equal"
 				end
 				local def = {}
+				local isrealdestructor = keep_dest_locat[defT[1].stname] and true
 				def.stname = defT[1].stname
 				def.templated = defT[1].templated
-				def.location = keep_dest_locat[defT[1].stname]
+				def.location = keep_dest_locat[defT[1].stname] or defT[1].location
 				def.ret = "void"
 				def.ov_cimguiname = def.stname.."_destroy"
 				def.cimguiname = def.ov_cimguiname
 				def.destructor = true
-				def.realdestructor = def.location and true
+				def.realdestructor = isrealdestructor
 				def.args = "("..def.stname.."* self)"
 				def.call_args = "(self)"
 				def.signature = "("..def.stname.."*)"
@@ -1270,7 +1292,7 @@ function M.Parser()
 							self.typedefs_dict[key] = linet
 						elseif not line:match"typedef%s*struct" then --discard typedef struct
 							print("typedef not found")
-							print(key,value,line)
+							print(key,value,line,cdef[1],cdef[2])
 						end
 					end
 				end
@@ -1295,6 +1317,7 @@ function M.Parser()
 				it.name = it.item:match("class%s+(%S+)")
 				print("cleaning class",it.name)
 				it.item = it.item:gsub("private:.+};$","};")
+				--it.item = it.item:gsub("private:","")
 				it.item = it.item:gsub("public:","")
 				it.item = it.item:gsub("enum%s*class","enum")
 			end
@@ -1343,7 +1366,7 @@ function M.Parser()
 		return table.concat(txtclean)
 	end
 	function par:parseItems()
-		self:initTypedefsDict()
+		--self:initTypedefsDict()
 		
 		self.linenumdict = {}
 		local cdefs2 = {}
@@ -1407,6 +1430,20 @@ function M.Parser()
 	
 	function par:printItems()
 		printItems(items)
+	end
+	function par:set_manuals(manuals, modulen, erase)
+		erase = erase or {"CIMGUI_API"}
+		local moddata = read_data("./"..modulen.."_template.h")
+		for k,v in pairs(manuals) do
+			local ret = moddata:match("([^%(%):,\n;]+[%*%s])%s?~?"..k.."%b()")
+			for i,ww in ipairs(erase) do
+				ret = ret:gsub(ww,"")
+			end
+			local args = moddata:match(k.."%s*(%b())")
+			manuals[k] = {args = args, ret = ret}
+			--print(k,args,ret)
+		end
+		self.manuals = manuals
 	end
 	par.parseFunction = parseFunction
 	local uniques = {}
@@ -1582,8 +1619,9 @@ function M.Parser()
 		if parnam~="" then parnam = parnam:sub(1,-3) end
 		return parnam
 	end
-	
-
+	function par:header_text_insert(tab,txt,it)
+		table.insert(tab, txt)
+	end
 	function par:gen_structs_and_enums()
 		print"--------------gen_structs_and_enums"
 		--M.prtable(self.typenames)
@@ -1625,14 +1663,16 @@ function M.Parser()
 						end
 					end
 					--table.insert(outtabpre,it2)
-					table.insert(outtab,it2)
+					--table.insert(outtab,it2)
+					self:header_text_insert(outtab, it2, it)
 					-- add typedef after struct name
 					if it.re_name == "vardef_re" and it.item:match"^%s*struct" then
 						local stname = it.item:match("struct%s*(%S+)%s*;")
 						--table.insert(typedefs_table,"typedef struct "..stname.." "..stname..";\n")
 						local tst = "\ntypedef struct "..stname.." "..stname..";"
 						if check_unique_typedefs(tst,uniques) then
-							table.insert(outtabpre,tst)
+							--table.insert(outtabpre,tst)
+							self:header_text_insert(outtabpre ,tst, it)
 						end
 						self.typedefs_dict[stname]="struct "..stname
 						if it.parent then --must be struct name; inside namespace
@@ -1658,11 +1698,15 @@ function M.Parser()
 							end
 						end
 						enumbody = "{"..enumbody.."\n}"
-						table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";"..extraenums)
+						--table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";"..extraenums)
+						local it2 = "\ntypedef enum ".. enumbody..enumname..";"..extraenums
+						self:header_text_insert(outtab, it2, it)
 					else
 						local enumbody = it.item:match"(%b{})"
 						enumbody = clean_comments(enumbody)
-						table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
+						--table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
+						local it2 = "\ntypedef enum ".. enumbody..enumname..";"
+						self:header_text_insert(outtab, it2, it)
 					end
 					if it.parent then
 						if it.parent.re_name == "namespace_re" then
@@ -1674,7 +1718,8 @@ function M.Parser()
 					end
 				else --unamed enum just repeat declaration
 					local cl_item = clean_comments(it.item)
-					table.insert(outtab,cl_item)
+					--table.insert(outtab,cl_item)
+					self:header_text_insert(outtab, cl_item, it)
 					print("unnamed enum",cl_item)
 				end
 			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" or it.re_name == "class_re" then
@@ -1686,12 +1731,14 @@ function M.Parser()
 					--table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
 					local tst = "\ntypedef struct "..structname.." "..structname..";"
 						if check_unique_typedefs(tst,uniques) then
-							table.insert(outtab,tst)
+							--table.insert(outtab,tst)
+							self:header_text_insert(outtab, tst, it)
 						end
 					self.typedefs_dict[structname]="struct "..structname
 					--dont insert child structs as they are inserted before parent struct
 					if not (it.parent and it.parent.re_name == "struct_re") then
-						table.insert(outtab,predec .. cleanst)
+						--table.insert(outtab,predec .. cleanst)
+						self:header_text_insert(outtab, predec .. cleanst, it)
 					end
 				end
 				if it.parent  then --and (it.parent.re_name == "struct_re" or it.parent.re_name == "typedef_st_re" then
@@ -1864,7 +1911,7 @@ function M.Parser()
 	function par:gen_structs_and_enums_table()
 		print"--------------gen_structs_and_enums_table"
 		local outtab = {enums={},structs={},locations={},enumtypes={},struct_comments={},enum_comments={}}
-		self.typedefs_table = {}
+		--self.typedefs_table = {}
 		local enumsordered = {}
 		unnamed_enum_counter = 0
 		self.templated_structs = {}
@@ -1887,7 +1934,31 @@ function M.Parser()
 				if it.re_name == "typedef_re" and not it.parent then
 					local typedefdef,typedefname = it.item:match"typedef(.+)%s([^%s;]+);$"
 					typedefname = strip(typedefname)
-					self.typedefs_table[typedefname] = strip(typedefdef)
+					--self.typedefs_table[typedefname] = strip(typedefdef)
+					self.typedefs_dict[typedefname] = strip(typedefdef)
+				elseif it.re_name == "functypedef_re" then
+					-- "^\n*%s*(typedef[%w%s%*_]+%([^*]*%*?%s*[%w_]+%s*%)%s*%b()%s*;)"
+					local key = it.item:match("%(%*([%w_]+)%)%([^%(%)]*%)")
+					if key then
+						local linet = it.item
+						linet = linet:gsub("[\n%s]+typedef ","")
+						linet = linet:gsub("%(%*("..key..")%)","(*)")
+						self.typedefs_dict[key] = linet
+						--print("functypedef_re",1,linet)--,clean_functypedef(line))
+					else
+						--try function typedef
+						key = it.item:match("%(([%w_]+)%)%([^%(%)]*%)")
+						if key then
+							local linet = it.item
+							linet = linet:gsub("typedef ","")
+							linet = linet:gsub("%(("..key..")%)","()")
+							self.typedefs_dict[key] = linet
+							print("functypedef_re",2, it.item)
+						else
+							print("func typedef not found")
+							print(it.item)
+						end
+					end
 				end
 			elseif it.re_name == "enum_re" then
 				enums_for_table(it, outtab, enumsordered)
@@ -2358,7 +2429,8 @@ local function location(file,locpathT,defines,COMPILER,keepemptylines)
 end
 M.location = location
 ---------------------- C writing functions
-local function ImGui_f_implementation(outtab,def)
+local function ImGui_f_implementation(def)
+	local outtab = {}
     local ptret = def.retref and "&" or ""
     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname..def.args.."\n")
     table.insert(outtab,"{\n")
@@ -2385,8 +2457,10 @@ local function ImGui_f_implementation(outtab,def)
         table.insert(outtab,"    return "..ptret..namespace..def.funcname..def.call_args..";\n")
     end
     table.insert(outtab,"}\n")
+	return table.concat(outtab, "")
 end
-local function struct_f_implementation(outtab,def)
+local function struct_f_implementation(def)
+	local outtab = {}
     local empty = def.args:match("^%(%)") --no args
     local ptret = def.retref and "&" or ""
 
@@ -2415,6 +2489,7 @@ local function struct_f_implementation(outtab,def)
         table.insert(outtab,"    return "..ptret.."self->"..def.funcname..def.call_args..";\n")
     end
     table.insert(outtab,"}\n")
+	return table.concat(outtab, "")
 end
 local function func_implementation(FP)
 
@@ -2432,31 +2507,38 @@ local function func_implementation(FP)
         local manual = FP.get_manuals(def)
         if not custom and not manual and not def.templated and not FP.get_skipped(def) then 
             if def.constructor then
+				local tab = {}
                 assert(def.stname ~= "","constructor without struct")
                 local empty = def.args:match("^%(%)") --no args
-                table.insert(outtab,"CIMGUI_API "..def.stname.."* "..def.ov_cimguiname..(empty and "(void)" or def.args).."\n")
-                table.insert(outtab,"{\n")
-                table.insert(outtab,"    return IM_NEW("..def.stname..")"..def.call_args..";\n")
-                table.insert(outtab,"}\n")
+                table.insert(tab,"CIMGUI_API "..def.stname.."* "..def.ov_cimguiname..(empty and "(void)" or def.args).."\n")
+                table.insert(tab,"{\n")
+                table.insert(tab,"    return IM_NEW("..def.stname..")"..def.call_args..";\n")
+                table.insert(tab,"}\n")
 				if FP.CONSTRUCTORS_GENERATION then
-					table.insert(outtab,"CIMGUI_API void "..def.ov_cimguiname.."_Construct("..def.stname.."* self"..(empty and "" or ","..def.args:sub(2,-2))..")\n")
-					table.insert(outtab,"{\n")
-					table.insert(outtab,"    IM_PLACEMENT_NEW(self)"..def.stname..def.call_args..";\n")
-					table.insert(outtab,"}\n")
+					table.insert(tab,"CIMGUI_API void "..def.ov_cimguiname.."_Construct("..def.stname.."* self"..(empty and "" or ","..def.args:sub(2,-2))..")\n")
+					table.insert(tab,"{\n")
+					table.insert(tab,"    IM_PLACEMENT_NEW(self)"..def.stname..def.call_args..";\n")
+					table.insert(tab,"}\n")
 				end
+				table.insert(outtab, table.concat(tab, ""))
             elseif def.destructor then
+				local tab = {}
                 local args = "("..def.stname.."* self)"
                 local fname = def.stname.."_destroy" 
-                table.insert(outtab,"CIMGUI_API void "..fname..args.."\n")
-                table.insert(outtab,"{\n")
-                table.insert(outtab,"    IM_DELETE(self);\n")
-                table.insert(outtab,"}\n")
+                table.insert(tab,"CIMGUI_API void "..fname..args.."\n")
+                table.insert(tab,"{\n")
+                table.insert(tab,"    IM_DELETE(self);\n")
+                table.insert(tab,"}\n")
+				table.insert(outtab, table.concat(tab, ""))
             elseif def.stname == "" or def.is_static_function then
-                ImGui_f_implementation(outtab,def)
+                table.insert(outtab, ImGui_f_implementation(def))
             else -- stname
-                struct_f_implementation(outtab,def)
+                table.insert(outtab, struct_f_implementation(def))
             end
         end
+		if FP.custom_function_post then
+			FP:custom_function_post(outtab, def)
+		end
         until true
     end
     return table.concat(outtab)
@@ -2479,7 +2561,9 @@ local function func_header_generate_structs(FP)
 
     local outtab = {}
 
-	table_do_sorted(FP.embeded_structs,function(k,v) table.insert(outtab,"typedef "..v.." "..k..";\n") end)
+	table_do_sorted(FP.embeded_structs,function(k,v) 
+		table.insert(outtab,"typedef "..v.." "..k..";\n") 
+	end)
 	
 	table_do_sorted(FP.embeded_enums,function(k,v) table.insert(outtab,"typedef "..v.." "..k..";\n") end)
 	
@@ -2516,7 +2600,7 @@ local function func_header_generate_funcs(FP)
                 assert(def.stname ~= "","constructor without struct")
                 table.insert(outtab,"CIMGUI_API "..def.stname.."* "..def.ov_cimguiname ..(empty and "(void)" or def.args)..";"..addcoment.."\n")
 				if FP.CONSTRUCTORS_GENERATION then
-					table.insert(outtab,"CIMGUI_API void "..def.ov_cimguiname.."_Construct("..def.stname.."* self"..(empty and "" or ","..def.args:sub(2,-2))..");\n")
+					outtab[#outtab] = outtab[#outtab].."\nCIMGUI_API void "..def.ov_cimguiname.."_Construct("..def.stname.."* self"..(empty and "" or ","..def.args:sub(2,-2))..");\n"
 				end
             elseif def.destructor then
                 table.insert(outtab,"CIMGUI_API void "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
@@ -2529,9 +2613,13 @@ local function func_header_generate_funcs(FP)
                 end
             end 
         end
+		if FP.custom_function_post then
+			FP:custom_function_post(outtab, def)
+		end
         else --not cimguiname
             table.insert(outtab,t.comment:gsub("%%","%%%%").."\n")-- %% substitution for gsub
         end
+		
     end
 
     return outtab

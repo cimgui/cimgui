@@ -13,10 +13,11 @@
 
 #process  files
 # arg[1] compiler name gcc, clang, or cl
-# arg[2] options as words in one string: internal for imgui_internal generation, freetype for freetype generation, comments for comments generation, nochar to skip char* function version, noimstrv to skip imstrv
+# arg[2] options as words in one string: internal for imgui_internal generation, comments for comments generation, nochar to skip char* function version, noimstrv to skip imstrv
 # "constructors" adds the _Construct version of constructors
-# examples: "" "internal" "internal freetype" "comments internal"
-# arg[3..n] name of implementations to generate and/or CLFLAGS (e.g. -DIMGUI_USER_CONFIG or -DIMGUI_USE_WCHAR32)
+# examples: "" "internal" "comments internal"
+# arg[3..n] name of implementations to generate and/or CLFLAGS (e.g. -DIMGUI_USER_CONFIG)
+# -DIMGUI_USE_WCHAR32 should not be used as it is generated for both ImWchar
 #
 
 # parse command line arguments
@@ -24,7 +25,7 @@
 POSITIONAL_ARGS=()
 
 TARGETS="internal noimstrv"
-CFLAGS="glfw opengl3 opengl2 sdl2"
+CFLAGS="glfw opengl3 opengl2 sdl2 sdl3"
 
 help() {
         cat <<EOF
