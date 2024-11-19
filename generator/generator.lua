@@ -225,7 +225,9 @@ local function colapse_defines(str, define)
 	return str
 end
 local wchardefine =
-[[#ifdef IMGUI_USE_WCHAR32            
+[[
+
+#ifdef IMGUI_USE_WCHAR32            
 typedef ImWchar32 ImWchar;
 #else
 typedef ImWchar16 ImWchar;

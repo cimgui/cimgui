@@ -216,6 +216,7 @@ typedef ImU64 ImTextureID;
 typedef unsigned short ImDrawIdx;
 typedef unsigned int ImWchar32;
 typedef unsigned short ImWchar16;
+
 #ifdef IMGUI_USE_WCHAR32            
 typedef ImWchar32 ImWchar;
 #else
