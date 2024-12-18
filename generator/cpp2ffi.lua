@@ -2277,7 +2277,102 @@ function M.Parser()
 	end
 	return par
 end
-
+-- more compact serialization
+local function basicSerialize (o)
+    if type(o) == "number" then
+		return string.format("%.17g", o)
+	elseif type(o)=="boolean" then
+        return tostring(o)
+    elseif type(o) == "string" then
+        return string.format("%q", o)
+	elseif pcall(function() return o.__serialize end) then
+		return o.__serialize(o)
+	elseif type(o)=="cdata" then
+		return cdataSerialize(o)
+	else
+		return tostring(o) --"nil"
+    end
+end
+local kw = {['and'] = true, ['break'] = true, ['do'] = true, ['else'] = true,
+	['elseif'] = true, ['end'] = true, ['false'] = true, ['for'] = true,
+	['function'] = true, ['goto'] = true, ['if'] = true, ['in'] = true,
+	['local'] = true, ['nil'] = true, ['not'] = true, ['or'] = true,
+	['repeat'] = true, ['return'] = true, ['then'] = true, ['true'] = true,
+	['until'] = true, ['while'] = true}
+function tb2st_serialize(t)
+	local function sorter(a,b)
+        if type(a)==type(b) then 
+            return a<b 
+        elseif type(a)=="number" then
+            return true
+        else
+            assert(type(b)=="number")
+            return false
+        end
+    end
+	local function serialize_key(val, dodot)
+		local dot = dodot and "." or ""
+		if type(val)=="string" then
+			if val:match '^[_%a][_%w]*$' and not kw[val] then
+				return dot..tostring(val)
+			else
+				return "['"..tostring(val).."']"
+			end
+		else
+			return "["..tostring(val).."]"
+		end
+	end
+	local function serialize_key_name(val)
+		return serialize_key(val, true)
+	end
+	local function _tb2st(t,saved,sref,level,name)
+		saved = saved or {}		-- initial value
+		level = level or 0
+		sref = sref or {}
+		name = name or "t["..level.."]"
+		--if kk then name = name .. serialize_key_name(kk) end
+		if type(t)=="table" then
+			if saved[t] then
+				sref[#sref+1] = {saved[t],name}
+				return"nil"
+			else
+				saved[t] = name
+				local str2="{"
+				---------------
+				local ordered_keys = {}
+				for k,v in pairs(t) do
+					table.insert(ordered_keys,k)
+				end
+            
+				table.sort(ordered_keys,sorter)
+				for _,k in ipairs(ordered_keys) do
+					local v = t[k]
+				---------------
+				--for k,v in pairs(t) do
+					if type(v)=="number" then
+						str2=str2 .. serialize_key(k) .."=".. string.format("%0.17g",v) ..","
+					else
+						local name2 = name .. serialize_key_name(k)
+						str2=str2 .. serialize_key(k) .."=".. _tb2st(v,saved,sref,level+1,name2) ..","
+					end
+				end
+				str2=str2.."}"
+				if level == 0 then
+					str2 = "local t={}; t[0]="..str2
+					for i,v in ipairs(sref) do 
+						str2 = str2.."\n"..v[2].."="..v[1]
+					end
+					str2 = str2.."\n return t[0]"
+				end
+				return str2
+			end
+		else
+			return basicSerialize(t)
+		end
+	end
+	return(_tb2st(t))
+end
+M.tb2st_serialize = tb2st_serialize
 ------serializeTable("anyname",table) gives a string that recreates the table with dofile(generated_string)
 local function serializeTable(name, value, saved)
     
@@ -2339,10 +2434,11 @@ local function serializeTable(name, value, saved)
     
     return table.concat(string_table)
 end
-M.serializeTable = serializeTable
-M.serializeTableF = function(t)
-	return M.serializeTable("defs",t).."\nreturn defs"
-end
+-- M.serializeTable = serializeTable
+-- M.serializeTableF = function(t)
+	-- return M.serializeTable("defs",t).."\nreturn defs"
+-- end
+M.serializeTableF = tb2st_serialize --new serialization more compact
 --iterates lines from a gcc/clang -E in a specific location
 local function location(file,locpathT,defines,COMPILER,keepemptylines)
 	local define_re = "^#define%s+([^%s]+)%s+(.+)$"
