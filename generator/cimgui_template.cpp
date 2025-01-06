@@ -26,7 +26,7 @@ CIMGUI_API void ImGuiTextBuffer_appendf(ImGuiTextBuffer *self, const char *fmt, 
 {
     va_list args;
     va_start(args, fmt);
-    buffer->appendfv(fmt, args);
+    self->appendfv(fmt, args);
     va_end(args);
 }
 
