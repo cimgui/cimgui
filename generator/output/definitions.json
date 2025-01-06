@@ -9883,11 +9883,11 @@
   ],
   "ImGuiTextBuffer_appendf": [
     {
-      "args": "(struct ImGuiTextBuffer* buffer, const char* fmt,...)",
+      "args": "(ImGuiTextBuffer* self, const char* fmt,...)",
       "argsT": [
         {
-          "name": "buffer",
-          "type": "struct ImGuiTextBuffer*"
+          "name": "self",
+          "type": "ImGuiTextBuffer*"
         },
         {
           "name": "fmt",
@@ -9898,8 +9898,8 @@
           "type": "..."
         }
       ],
-      "argsoriginal": "(struct ImGuiTextBuffer* buffer, const char* fmt, ...)",
-      "call_args": "(buffer,fmt,...)",
+      "argsoriginal": "(ImGuiTextBuffer* self, const char* fmt, ...)",
+      "call_args": "(self,fmt,...)",
       "cimguiname": "ImGuiTextBuffer_appendf",
       "defaults": {},
       "funcname": "appendf",
@@ -9908,7 +9908,7 @@
       "manual": true,
       "ov_cimguiname": "ImGuiTextBuffer_appendf",
       "ret": "void",
-      "signature": "(struct ImGuiTextBuffer*, const char*,...)",
+      "signature": "(ImGuiTextBuffer*, const char*,...)",
       "stname": "ImGuiTextBuffer"
     }
   ],

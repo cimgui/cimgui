@@ -5807,7 +5807,7 @@ CIMGUI_API void ImGuiFreeType_SetAllocatorFunctions(void*(*alloc_func)(size_t sz
 
 
 /////////////////////////////manual written functions
-CIMGUI_API void igLogText(CONST char *fmt, ...)
+CIMGUI_API void igLogText(const char *fmt, ...)
 {
     char buffer[256];
     va_list args;
@@ -5817,7 +5817,7 @@ CIMGUI_API void igLogText(CONST char *fmt, ...)
 
     ImGui::LogText("%s", buffer);
 }
-CIMGUI_API void ImGuiTextBuffer_appendf(struct ImGuiTextBuffer *buffer, const char *fmt, ...)
+CIMGUI_API void ImGuiTextBuffer_appendf(ImGuiTextBuffer *self, const char *fmt, ...)
 {
     va_list args;
     va_start(args, fmt);

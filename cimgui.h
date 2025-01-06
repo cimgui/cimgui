@@ -5027,7 +5027,7 @@ CIMGUI_API void ImGuiFreeType_SetAllocatorFunctions(void*(*alloc_func)(size_t sz
 //no LogTextV
 CIMGUI_API void igLogText(const char *fmt, ...);
 //no appendfV
-CIMGUI_API void ImGuiTextBuffer_appendf(struct ImGuiTextBuffer *buffer, const char *fmt, ...);
+CIMGUI_API void ImGuiTextBuffer_appendf(ImGuiTextBuffer *self, const char *fmt, ...);
 //for getting FLT_MAX in bindings
 CIMGUI_API float igGET_FLT_MAX(void);
 //for getting FLT_MIN in bindings
