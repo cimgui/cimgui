@@ -320,6 +320,9 @@ local function getRE()
 	function_re = "^([^;{}]+%b()[\n%s]*;)%s*",
 	function_re = "^([^;{}=]+%b()[\n%s%w]*;)", --const at the end
 	function_re = "^([^;{}=]+%b()[\n%s%w%(%)_]*;)", --attribute(deprecated)
+	--we need to skip = as function because of "var = f()" initialization in struct fields
+	-- but we don want operator== to appear as a var and as we should skip this kind of function solution is:
+	operator_re = "^([^;{}]+operator[^;{}]+%b()[\n%s%w%(%)_]*;)",
 	struct_re = "^([^;{}]-struct[^;{}]-%b{}[%s%w_%(%)]*;)",
 	enum_re = "^([^;{}]-enum[^;{}]-%b{}[%s%w_%(%)]*;)",
 	union_re = "^([^;{}]-union[^;{}]-%b{}[%s%w_%(%)]*;)",
@@ -344,7 +347,7 @@ local function getRE()
 	}
 	
 	local resN = {"comment2_re","comment_re","emptyline_re",
-	"functypedef_re","functype_re","function_re","functionD_re","typedef_st_re","struct_re","enum_re","union_re","namespace_re","class_re","typedef_re","vardef_re"}
+	"functypedef_re","functype_re","function_re","functionD_re","operator_re","typedef_st_re","struct_re","enum_re","union_re","namespace_re","class_re","typedef_re","vardef_re"}
 	
 	return res,resN
 end
@@ -1425,6 +1428,7 @@ function M.Parser()
 		--save_data("./preparse"..tostring(self):gsub("table: ","")..".c",txt)
 		--]]
 		self.itemsarr = par:parseItemsR2(txt)
+		--save_data("./itemsarr.lua",ToStr(self.itemsarr))
 		itemsarr = self.itemsarr
 	end
 	
@@ -1471,10 +1475,13 @@ function M.Parser()
 		local predeclare = ""
 		--local iner = strip_end(stru:match("%b{}"):sub(2,-2))
 		local inistruct = clean_spaces(stru:match("(.-)%b{}"))
+		--clean final:
+		inistruct = inistruct:gsub("%s*final%s*:",":")
 		--local stname = stru:match("struct%s*(%S+)%s*%b{}")
 		local stname, derived
 		if inistruct:match":" then
 			stname,derived = inistruct:match"struct%s*([^%s:]+):(.+)"
+			--print(inistruct,stname,derived)
 			derived = derived:match"(%S+)$"
 		else
 			if itst.re_name == "struct_re" then
@@ -1529,12 +1536,14 @@ function M.Parser()
 					--local ttype,template = it.item:match("([^%s,%(%)]+)%s*<(.+)>")
 					local ttype,template,te,code2 =  check_template(it2)  --it.item:match"([^%s,%(%)]+)%s*<(.+)>"
 					if template then
+						--print("not doheader",ttype,template,te)
 						if self.typenames[ttype] ~= template then --rule out T (template typename)
 							self.templates[ttype] = self.templates[ttype] or {}
 							self.templates[ttype][template] = te
 							it2=code2
 						end
 						if doheader then
+							
 							local templatetypedef = self:gentemplatetypedef(ttype, template,self.templates[ttype][template])
 							predeclare = predeclare .. templatetypedef
 						end
@@ -1590,7 +1599,7 @@ function M.Parser()
 				end
 			elseif it.re_name == "enum_re" then
 				--nop
-			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
+			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" and it.re_name ~= "operator_re" then
 				print(it.re_name,"not processed clean_struct in",stname,it.item:sub(1,24))
 				--M.prtable(it)
 			end
@@ -1779,7 +1788,9 @@ function M.Parser()
 					self:parseFunction(stname,it,namespace,it.locat)
 				end
 			else
+				if it.re_name~="operator_re" then
 				print("not processed gen",it.re_name,it.item:sub(1,20))
+				end
 			end
 		end
 		
@@ -1989,7 +2000,7 @@ function M.Parser()
 				end
 			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
 				--nop
-			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
+			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" and it.re_name ~= "operator_re" then
 				print("not processed gen table",it.re_name)
 			end
 		end
@@ -2234,6 +2245,7 @@ function M.Parser()
 		return self:gen_template_typedef_auto(ttype,te,newte)
 	end
 	function par:gen_template_typedef_auto(ttype,te,newte)
+		--M.prtable(self.templated_structs)
 		assert(self.templated_structs[ttype],ttype)
 		local defi = self.templated_structs[ttype]
 		local Targ = strsplit(self.typenames[ttype],",")
