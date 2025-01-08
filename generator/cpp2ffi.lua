@@ -1705,6 +1705,7 @@ function M.Parser()
 						it2 = clean_functypedef(it2)
 					else
 						assert(it.re_name == "vardef_re")
+						it2 = it2:gsub("constexpr","static const")
 						if it2:match"enum" then
 							print("--skip enum forward declaration:",it2)
 							it2 = ""
@@ -1819,7 +1820,8 @@ function M.Parser()
 					local ttype,fun = it.item:match"^%s*template%s+<%s*typename%s+([^>]+)%s*>%s*(.+)$"
 					if self.ftemplate_list and self.ftemplate_list[ttype] then
 						for iT,vT in ipairs(self.ftemplate_list[ttype]) do
-							local funT = fun:gsub(ttype,vT)
+							local funT = fun:gsub(" "..ttype," "..vT)
+							funT = funT:gsub("sizeof%("..ttype.."%)","sizeof("..vT..")")
 							self:parseFunction(stname,{item=funT},namespace,it.locat)
 						end
 					end
