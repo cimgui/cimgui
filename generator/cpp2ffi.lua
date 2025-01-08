@@ -1062,6 +1062,7 @@ local function ADDnonUDT(FP)
 		for _,udt_ret in ipairs(FP.UDTs) do
 			if udt_ret == defT.ret then isUDT=true;break end
 		end
+		--isUDT = FP.structs_and_enums_table.structs[defT.ret] and true or false
         --if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
 		if isUDT then
             --passing as a pointer arg
@@ -2305,13 +2306,15 @@ local function basicSerialize (o)
 		return tostring(o) --"nil"
     end
 end
+-- very readable and now suited for cyclic tables
 local kw = {['and'] = true, ['break'] = true, ['do'] = true, ['else'] = true,
 	['elseif'] = true, ['end'] = true, ['false'] = true, ['for'] = true,
 	['function'] = true, ['goto'] = true, ['if'] = true, ['in'] = true,
 	['local'] = true, ['nil'] = true, ['not'] = true, ['or'] = true,
 	['repeat'] = true, ['return'] = true, ['then'] = true, ['true'] = true,
 	['until'] = true, ['while'] = true}
-function tb2st_serialize(t)
+function tb2st_serialize(t,options)
+	options = options or {}
 	local function sorter(a,b)
         if type(a)==type(b) then 
             return a<b 
@@ -2322,14 +2325,16 @@ function tb2st_serialize(t)
             return false
         end
     end
-	local function serialize_key(val, dodot)
+	local function serialize_key(val, dodot, pretty)
 		local dot = dodot and "." or ""
 		if type(val)=="string" then
-			if val:match '^[_%a][_%w]*$' and not kw[val] then
+			if  val:match '^[_%a][_%w]*$' and not kw[val] then
 				return dot..tostring(val)
 			else
-				return "['"..tostring(val).."']"
+				return "[\""..tostring(val).."\"]"
 			end
+		elseif (not pretty) and (not dodot) and (type(val) == "number") and (math.floor(val)==val) then
+			return  --array index
 		else
 			return "["..tostring(val).."]"
 		end
@@ -2337,46 +2342,51 @@ function tb2st_serialize(t)
 	local function serialize_key_name(val)
 		return serialize_key(val, true)
 	end
+	local insert = table.insert
 	local function _tb2st(t,saved,sref,level,name)
 		saved = saved or {}		-- initial value
 		level = level or 0
 		sref = sref or {}
-		name = name or "t["..level.."]"
-		--if kk then name = name .. serialize_key_name(kk) end
+		name = name or "t"
 		if type(t)=="table" then
 			if saved[t] then
 				sref[#sref+1] = {saved[t],name}
 				return"nil"
 			else
 				saved[t] = name
-				local str2="{"
-				---------------
+
 				local ordered_keys = {}
 				for k,v in pairs(t) do
-					table.insert(ordered_keys,k)
+					insert(ordered_keys,k)
 				end
-            
 				table.sort(ordered_keys,sorter)
+				
+				local str2 = {}
+				insert(str2,"{")
+				if options.pretty then insert(str2,"\n") end
 				for _,k in ipairs(ordered_keys) do
+					if options.pretty then insert(str2,("  "):rep(level+1)) end
 					local v = t[k]
-				---------------
-				--for k,v in pairs(t) do
-					if type(v)=="number" then
-						str2=str2 .. serialize_key(k) .."=".. string.format("%0.17g",v) ..","
+					local kser = serialize_key(k, nil, options.pretty)
+					insert(str2, (kser and (kser .."=") or ""))
+					if type(v)~="table" then
+						insert(str2, basicSerialize(v))
 					else
 						local name2 = name .. serialize_key_name(k)
-						str2=str2 .. serialize_key(k) .."=".. _tb2st(v,saved,sref,level+1,name2) ..","
+						insert(str2,_tb2st(v,saved,sref,level+1,name2))
 					end
+					if options.pretty then insert(str2,",\n") else insert(str2, ",") end
 				end
-				str2=str2.."}"
+				str2[#str2] = "}"
 				if level == 0 then
-					str2 = "local t={}; t[0]="..str2
+					--insert(str2, 1,"local ffi = require'ffi'\nlocal t=")
+					insert(str2, 1,"local t=")
 					for i,v in ipairs(sref) do 
-						str2 = str2.."\n"..v[2].."="..v[1]
+						insert(str2, "\n"..v[2].."="..v[1])
 					end
-					str2 = str2.."\n return t[0]"
+					insert(str2,"\n return t")
 				end
-				return str2
+				return table.concat(str2)
 			end
 		else
 			return basicSerialize(t)
@@ -2450,7 +2460,7 @@ end
 -- M.serializeTableF = function(t)
 	-- return M.serializeTable("defs",t).."\nreturn defs"
 -- end
-M.serializeTableF = tb2st_serialize --new serialization more compact
+M.serializeTableF = function(t) return tb2st_serialize(t,{pretty=true}) end --new serialization more compact
 --iterates lines from a gcc/clang -E in a specific location
 local function location(file,locpathT,defines,COMPILER,keepemptylines)
 	local define_re = "^#define%s+([^%s]+)%s+(.+)$"
