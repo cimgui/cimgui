@@ -1045,7 +1045,39 @@ local function ADDIMSTR_S(FP)
     end
 	FP.funcdefs = newcdefs
 end
+--this creates defsBystruct in case you need to list by struct container
+local function DefsByStruct(FP)
+    local structs = {}
+    for fun,defs in pairs(FP.defsT) do
+        local stname = defs[1].stname
+        structs[stname] = structs[stname] or {}
+        table.insert(structs[stname],defs)--fun)
+    end
+    return structs
+end  
+local function get_nonPOD(FP)
+	local defbystruct = DefsByStruct(FP)
+	--M.prtable(defbystruct)
+	local nonPOD = {}
+	for k,defs in pairs(defbystruct) do 
+		if k~="" then
+		for i, ww in ipairs(defs) do
+			-- print(k,i,ww)
+			-- M.prtable(ww)
+			if not ww[1].ret then --constructor
+				nonPOD[k] = true
+				break;
+			end
+		end
+		end
+	end
+	FP.structs_and_enums_table.nonPOD = nonPOD
+	return nonPOD
+end
 local function ADDnonUDT(FP)
+	local nonPOD = get_nonPOD(FP)
+	--print"nonPOD"
+	--M.prtable(nonPOD)
     local defsT = FP.defsT
     --local newcdefs = {}
     for numcdef,t in ipairs(FP.funcdefs) do
@@ -1059,11 +1091,17 @@ local function ADDnonUDT(FP)
 		end
         --if UDT return generate nonUDT version
 		local isUDT = false
-		for _,udt_ret in ipairs(FP.UDTs) do
-			if udt_ret == defT.ret then isUDT=true;break end
-		end
 		--isUDT = FP.structs_and_enums_table.structs[defT.ret] and true or false
-        --if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
+		isUDT = nonPOD[defT.ret] and true or false
+		--inherited
+		if (not isUDT) and FP.cimgui_inherited and FP.cimgui_inherited.nonPOD[defT.ret] then
+			isUDT = true
+		end
+		for _,udt_ret in ipairs(FP.UDTs) do
+			if udt_ret == defT.ret then isUDT=true; break end
+		end
+
+
 		if isUDT then
             --passing as a pointer arg
             local defT2 = {}
