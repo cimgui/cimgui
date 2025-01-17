@@ -603,7 +603,7 @@ local function clean_names_from_signature(self,signat)
 	return result
 end
 local function clean_functypedef(line)
-	local first, args = line:match("(typedef .-%(%*[_%w]+%))%s*(%b())")
+	local first, args = line:match("(typedef .-%(%*%s*[_%w]+%))%s*(%b())")
 
 	if not args then
 		print"not getting args in"
@@ -1991,7 +1991,7 @@ function M.Parser()
 					self.typedefs_dict[typedefname] = strip(typedefdef)
 				elseif it.re_name == "functypedef_re" then
 					-- "^\n*%s*(typedef[%w%s%*_]+%([^*]*%*?%s*[%w_]+%s*%)%s*%b()%s*;)"
-					local key = it.item:match("%(%*([%w_]+)%)%([^%(%)]*%)")
+					local key = it.item:match("%(%*%s*([%w_]+)%)%s*%([^%(%)]*%)")
 					if key then
 						local linet = it.item
 						linet = linet:gsub("[\n%s]+typedef ","")
