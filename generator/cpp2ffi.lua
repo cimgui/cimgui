@@ -320,6 +320,9 @@ local function getRE()
 	function_re = "^([^;{}]+%b()[\n%s]*;)%s*",
 	function_re = "^([^;{}=]+%b()[\n%s%w]*;)", --const at the end
 	function_re = "^([^;{}=]+%b()[\n%s%w%(%)_]*;)", --attribute(deprecated)
+	--we need to skip = as function because of "var = f()" initialization in struct fields
+	-- but we don want operator== to appear as a var and as we should skip this kind of function solution is:
+	operator_re = "^([^;{}]+operator[^;{}]+%b()[\n%s%w%(%)_]*;)",
 	struct_re = "^([^;{}]-struct[^;{}]-%b{}[%s%w_%(%)]*;)",
 	enum_re = "^([^;{}]-enum[^;{}]-%b{}[%s%w_%(%)]*;)",
 	union_re = "^([^;{}]-union[^;{}]-%b{}[%s%w_%(%)]*;)",
@@ -344,7 +347,7 @@ local function getRE()
 	}
 	
 	local resN = {"comment2_re","comment_re","emptyline_re",
-	"functypedef_re","functype_re","function_re","functionD_re","typedef_st_re","struct_re","enum_re","union_re","namespace_re","class_re","typedef_re","vardef_re"}
+	"functypedef_re","functype_re","function_re","functionD_re","operator_re","typedef_st_re","struct_re","enum_re","union_re","namespace_re","class_re","typedef_re","vardef_re"}
 	
 	return res,resN
 end
@@ -600,7 +603,7 @@ local function clean_names_from_signature(self,signat)
 	return result
 end
 local function clean_functypedef(line)
-	local first, args = line:match("(typedef .-%(%*[_%w]+%))%s*(%b())")
+	local first, args = line:match("(typedef .-%(%*%s*[_%w]+%))%s*(%b())")
 
 	if not args then
 		print"not getting args in"
@@ -1042,7 +1045,39 @@ local function ADDIMSTR_S(FP)
     end
 	FP.funcdefs = newcdefs
 end
+--this creates defsBystruct in case you need to list by struct container
+local function DefsByStruct(FP)
+    local structs = {}
+    for fun,defs in pairs(FP.defsT) do
+        local stname = defs[1].stname
+        structs[stname] = structs[stname] or {}
+        table.insert(structs[stname],defs)--fun)
+    end
+    return structs
+end  
+local function get_nonPOD(FP)
+	local defbystruct = DefsByStruct(FP)
+	--M.prtable(defbystruct)
+	local nonPOD = {}
+	for k,defs in pairs(defbystruct) do 
+		if k~="" then
+		for i, ww in ipairs(defs) do
+			-- print(k,i,ww)
+			-- M.prtable(ww)
+			if not ww[1].ret then --constructor
+				nonPOD[k] = true
+				break;
+			end
+		end
+		end
+	end
+	FP.structs_and_enums_table.nonPOD = nonPOD
+	return nonPOD
+end
 local function ADDnonUDT(FP)
+	local nonPOD = get_nonPOD(FP)
+	--print"nonPOD"
+	--M.prtable(nonPOD)
     local defsT = FP.defsT
     --local newcdefs = {}
     for numcdef,t in ipairs(FP.funcdefs) do
@@ -1056,10 +1091,17 @@ local function ADDnonUDT(FP)
 		end
         --if UDT return generate nonUDT version
 		local isUDT = false
-		for _,udt_ret in ipairs(FP.UDTs) do
-			if udt_ret == defT.ret then isUDT=true;break end
+		--isUDT = FP.structs_and_enums_table.structs[defT.ret] and true or false
+		isUDT = nonPOD[defT.ret] and true or false
+		--inherited
+		if (not isUDT) and FP.cimgui_inherited and FP.cimgui_inherited.nonPOD[defT.ret] then
+			isUDT = true
 		end
-        --if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
+		for _,udt_ret in ipairs(FP.UDTs) do
+			if udt_ret == defT.ret then isUDT=true; break end
+		end
+
+
 		if isUDT then
             --passing as a pointer arg
             local defT2 = {}
@@ -1425,6 +1467,7 @@ function M.Parser()
 		--save_data("./preparse"..tostring(self):gsub("table: ","")..".c",txt)
 		--]]
 		self.itemsarr = par:parseItemsR2(txt)
+		--save_data("./itemsarr.lua",ToStr(self.itemsarr))
 		itemsarr = self.itemsarr
 	end
 	
@@ -1471,10 +1514,13 @@ function M.Parser()
 		local predeclare = ""
 		--local iner = strip_end(stru:match("%b{}"):sub(2,-2))
 		local inistruct = clean_spaces(stru:match("(.-)%b{}"))
+		--clean final:
+		inistruct = inistruct:gsub("%s*final%s*:",":")
 		--local stname = stru:match("struct%s*(%S+)%s*%b{}")
 		local stname, derived
 		if inistruct:match":" then
 			stname,derived = inistruct:match"struct%s*([^%s:]+):(.+)"
+			--print(inistruct,stname,derived)
 			derived = derived:match"(%S+)$"
 		else
 			if itst.re_name == "struct_re" then
@@ -1529,12 +1575,14 @@ function M.Parser()
 					--local ttype,template = it.item:match("([^%s,%(%)]+)%s*<(.+)>")
 					local ttype,template,te,code2 =  check_template(it2)  --it.item:match"([^%s,%(%)]+)%s*<(.+)>"
 					if template then
+						--print("not doheader",ttype,template,te)
 						if self.typenames[ttype] ~= template then --rule out T (template typename)
 							self.templates[ttype] = self.templates[ttype] or {}
 							self.templates[ttype][template] = te
 							it2=code2
 						end
 						if doheader then
+							
 							local templatetypedef = self:gentemplatetypedef(ttype, template,self.templates[ttype][template])
 							predeclare = predeclare .. templatetypedef
 						end
@@ -1590,7 +1638,7 @@ function M.Parser()
 				end
 			elseif it.re_name == "enum_re" then
 				--nop
-			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
+			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" and it.re_name ~= "operator_re" then
 				print(it.re_name,"not processed clean_struct in",stname,it.item:sub(1,24))
 				--M.prtable(it)
 			end
@@ -1657,6 +1705,7 @@ function M.Parser()
 						it2 = clean_functypedef(it2)
 					else
 						assert(it.re_name == "vardef_re")
+						it2 = it2:gsub("constexpr","static const")
 						if it2:match"enum" then
 							print("--skip enum forward declaration:",it2)
 							it2 = ""
@@ -1771,7 +1820,9 @@ function M.Parser()
 					local ttype,fun = it.item:match"^%s*template%s+<%s*typename%s+([^>]+)%s*>%s*(.+)$"
 					if self.ftemplate_list and self.ftemplate_list[ttype] then
 						for iT,vT in ipairs(self.ftemplate_list[ttype]) do
-							local funT = fun:gsub(ttype,vT)
+							local funT = fun:gsub("([< %(])"..ttype,"%1"..vT)
+							--funT = funT:gsub("sizeof%("..ttype.."%)","sizeof("..vT..")")
+							--local funT = fun:gsub(ttype,vT)
 							self:parseFunction(stname,{item=funT},namespace,it.locat)
 						end
 					end
@@ -1779,7 +1830,9 @@ function M.Parser()
 					self:parseFunction(stname,it,namespace,it.locat)
 				end
 			else
+				if it.re_name~="operator_re" then
 				print("not processed gen",it.re_name,it.item:sub(1,20))
+				end
 			end
 		end
 		
@@ -1938,7 +1991,7 @@ function M.Parser()
 					self.typedefs_dict[typedefname] = strip(typedefdef)
 				elseif it.re_name == "functypedef_re" then
 					-- "^\n*%s*(typedef[%w%s%*_]+%([^*]*%*?%s*[%w_]+%s*%)%s*%b()%s*;)"
-					local key = it.item:match("%(%*([%w_]+)%)%([^%(%)]*%)")
+					local key = it.item:match("%(%*%s*([%w_]+)%)%s*%([^%(%)]*%)")
 					if key then
 						local linet = it.item
 						linet = linet:gsub("[\n%s]+typedef ","")
@@ -1989,7 +2042,7 @@ function M.Parser()
 				end
 			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
 				--nop
-			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" then
+			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" and it.re_name ~= "operator_re" then
 				print("not processed gen table",it.re_name)
 			end
 		end
@@ -2234,6 +2287,7 @@ function M.Parser()
 		return self:gen_template_typedef_auto(ttype,te,newte)
 	end
 	function par:gen_template_typedef_auto(ttype,te,newte)
+		--M.prtable(self.templated_structs)
 		assert(self.templated_structs[ttype],ttype)
 		local defi = self.templated_structs[ttype]
 		local Targ = strsplit(self.typenames[ttype],",")
@@ -2277,7 +2331,111 @@ function M.Parser()
 	end
 	return par
 end
+-- more compact serialization
+local function basicSerialize (o)
+    if type(o) == "number" then
+		return string.format("%.17g", o)
+	elseif type(o)=="boolean" then
+        return tostring(o)
+    elseif type(o) == "string" then
+        return string.format("%q", o)
+	elseif pcall(function() return o.__serialize end) then
+		return o.__serialize(o)
+	elseif type(o)=="cdata" then
+		return cdataSerialize(o)
+	else
+		return tostring(o) --"nil"
+    end
+end
+-- very readable and now suited for cyclic tables
+local kw = {['and'] = true, ['break'] = true, ['do'] = true, ['else'] = true,
+	['elseif'] = true, ['end'] = true, ['false'] = true, ['for'] = true,
+	['function'] = true, ['goto'] = true, ['if'] = true, ['in'] = true,
+	['local'] = true, ['nil'] = true, ['not'] = true, ['or'] = true,
+	['repeat'] = true, ['return'] = true, ['then'] = true, ['true'] = true,
+	['until'] = true, ['while'] = true}
+function tb2st_serialize(t,options)
+	options = options or {}
+	local function sorter(a,b)
+        if type(a)==type(b) then 
+            return a<b 
+        elseif type(a)=="number" then
+            return true
+        else
+            assert(type(b)=="number")
+            return false
+        end
+    end
+	local function serialize_key(val, dodot, pretty)
+		local dot = dodot and "." or ""
+		if type(val)=="string" then
+			if  val:match '^[_%a][_%w]*$' and not kw[val] then
+				return dot..tostring(val)
+			else
+				return "[\""..tostring(val).."\"]"
+			end
+		elseif (not pretty) and (not dodot) and (type(val) == "number") and (math.floor(val)==val) then
+			return  --array index
+		else
+			return "["..tostring(val).."]"
+		end
+	end
+	local function serialize_key_name(val)
+		return serialize_key(val, true)
+	end
+	local insert = table.insert
+	local function _tb2st(t,saved,sref,level,name)
+		saved = saved or {}		-- initial value
+		level = level or 0
+		sref = sref or {}
+		name = name or "t"
+		if type(t)=="table" then
+			if saved[t] then
+				sref[#sref+1] = {saved[t],name}
+				return"nil"
+			else
+				saved[t] = name
 
+				local ordered_keys = {}
+				for k,v in pairs(t) do
+					insert(ordered_keys,k)
+				end
+				table.sort(ordered_keys,sorter)
+				
+				local str2 = {}
+				insert(str2,"{")
+				if options.pretty then insert(str2,"\n") end
+				for _,k in ipairs(ordered_keys) do
+					if options.pretty then insert(str2,("  "):rep(level+1)) end
+					local v = t[k]
+					local kser = serialize_key(k, nil, options.pretty)
+					insert(str2, (kser and (kser .."=") or ""))
+					if type(v)~="table" then
+						insert(str2, basicSerialize(v))
+					else
+						local name2 = name .. serialize_key_name(k)
+						insert(str2,_tb2st(v,saved,sref,level+1,name2))
+					end
+					if options.pretty then insert(str2,",\n") else insert(str2, ",") end
+				end
+				str2[#str2] = "}"
+				if level == 0 then
+					--insert(str2, 1,"local ffi = require'ffi'\nlocal t=")
+					insert(str2, 1,"local t=")
+					for i,v in ipairs(sref) do 
+						insert(str2, "\n"..v[2].."="..v[1])
+					end
+					insert(str2,"\n return t")
+				end
+				return table.concat(str2)
+			end
+		else
+			return basicSerialize(t)
+		end
+	end
+	return(_tb2st(t))
+end
+M.tb2st_serialize = tb2st_serialize
 ------serializeTable("anyname",table) gives a string that recreates the table with dofile(generated_string)
 local function serializeTable(name, value, saved)
     
@@ -2339,10 +2497,11 @@ local function serializeTable(name, value, saved)
     
     return table.concat(string_table)
 end
-M.serializeTable = serializeTable
-M.serializeTableF = function(t)
-	return M.serializeTable("defs",t).."\nreturn defs"
-end
+-- M.serializeTable = serializeTable
+-- M.serializeTableF = function(t)
+	-- return M.serializeTable("defs",t).."\nreturn defs"
+-- end
+M.serializeTableF = function(t) return tb2st_serialize(t,{pretty=true}) end --new serialization more compact
 --iterates lines from a gcc/clang -E in a specific location
 local function location(file,locpathT,defines,COMPILER,keepemptylines)
 	local define_re = "^#define%s+([^%s]+)%s+(.+)$"
