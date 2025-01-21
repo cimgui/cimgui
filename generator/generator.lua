@@ -295,8 +295,8 @@ local function cimgui_generation(parser)
 	local num
 	hstrfile, num = hstrfile:gsub("typedef ImWchar16 ImWchar;", wchardefine)
 	assert(num == 1)
-	hstrfile, num = hstrfile:gsub("Used4kPagesMap%[%(0xFFFF", "Used4kPagesMap[(IM_UNICODE_CODEPOINT_MAX")
-	assert(num == 1)
+	hstrfile, num = hstrfile:gsub("kPagesMap%[%(0xFFFF", "kPagesMap[(IM_UNICODE_CODEPOINT_MAX")
+	assert(num == 1, "kPagesMap[(IM_UNICODE_CODEPOINT_MAX not found or found more than once")
     save_data("./output/cimgui.h",cimgui_header,hstrfile)
     
     --merge it in cimgui_template.cpp to cimgui.cpp
