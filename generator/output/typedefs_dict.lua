@@ -45,6 +45,7 @@ local t={
   ImGuiDataTypeInfo="struct ImGuiDataTypeInfo",
   ImGuiDataTypeStorage="struct ImGuiDataTypeStorage",
   ImGuiDataVarInfo="struct ImGuiDataVarInfo",
+  ImGuiDeactivatedItemData="struct ImGuiDeactivatedItemData",
   ImGuiDebugAllocEntry="struct ImGuiDebugAllocEntry",
   ImGuiDebugAllocInfo="struct ImGuiDebugAllocInfo",
   ImGuiDebugLogFlags="int",
