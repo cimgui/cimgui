@@ -270,8 +270,8 @@ static void FrameRender(ImGui_ImplVulkanH_Window* wd, ImDrawData* draw_data)
 {
   VkResult err;
 
-  VkSemaphore image_acquired_semaphore  = wd->FrameSemaphores[wd->SemaphoreIndex].ImageAcquiredSemaphore;
-  VkSemaphore render_complete_semaphore = wd->FrameSemaphores[wd->SemaphoreIndex].RenderCompleteSemaphore;
+  VkSemaphore image_acquired_semaphore  = wd->FrameSemaphores.Data[wd->SemaphoreIndex].ImageAcquiredSemaphore;
+  VkSemaphore render_complete_semaphore = wd->FrameSemaphores.Data[wd->SemaphoreIndex].RenderCompleteSemaphore;
   err = vkAcquireNextImageKHR(g_Device, wd->Swapchain, UINT64_MAX, image_acquired_semaphore, VK_NULL_HANDLE, &wd->FrameIndex);
   if (err == VK_ERROR_OUT_OF_DATE_KHR || err == VK_SUBOPTIMAL_KHR)
   {
@@ -280,7 +280,7 @@ static void FrameRender(ImGui_ImplVulkanH_Window* wd, ImDrawData* draw_data)
   }
   check_vk_result(err);
 
-  ImGui_ImplVulkanH_Frame* fd = &wd->Frames[wd->FrameIndex];
+  ImGui_ImplVulkanH_Frame* fd = &wd->Frames.Data[wd->FrameIndex];
   err = vkWaitForFences(g_Device, 1, &fd->Fence, VK_TRUE, UINT64_MAX);    // wait indefinitely instead of periodically checking
   check_vk_result(err);
 
@@ -332,7 +332,7 @@ static void FrameRender(ImGui_ImplVulkanH_Window* wd, ImDrawData* draw_data)
 static void FramePresent(ImGui_ImplVulkanH_Window* wd)
 {
   if (g_SwapChainRebuild) return;
-  VkSemaphore render_complete_semaphore = wd->FrameSemaphores[wd->SemaphoreIndex].RenderCompleteSemaphore;
+  VkSemaphore render_complete_semaphore = wd->FrameSemaphores.Data[wd->SemaphoreIndex].RenderCompleteSemaphore;
   VkPresentInfoKHR info = {
     .sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
     .waitSemaphoreCount = 1,
@@ -410,6 +410,7 @@ int main(int argc, char* argv[])
     .Queue = g_Queue,
     .PipelineCache = g_PipelineCache,
     .DescriptorPool = g_DescriptorPool,
+    .RenderPass = wd->RenderPass,
     .Subpass = 0,
     .MinImageCount = g_MinImageCount,
     .ImageCount = wd->ImageCount,
@@ -417,14 +418,14 @@ int main(int argc, char* argv[])
     .Allocator = g_Allocator,
     .CheckVkResultFn = check_vk_result
   };
-  ImGui_ImplVulkan_Init(&init_info, wd->RenderPass);
+  ImGui_ImplVulkan_Init(&init_info);
 
   igStyleColorsDark(NULL);
 
   // Upload Fonts
   // Use any command queue
-  VkCommandPool command_pool = wd->Frames[wd->FrameIndex].CommandPool;
-  VkCommandBuffer command_buffer = wd->Frames[wd->FrameIndex].CommandBuffer;
+  VkCommandPool command_pool = wd->Frames.Data[wd->FrameIndex].CommandPool;
+  VkCommandBuffer command_buffer = wd->Frames.Data[wd->FrameIndex].CommandBuffer;
 
   err = vkResetCommandPool(g_Device, command_pool, 0);
   check_vk_result(err);
@@ -435,7 +436,7 @@ int main(int argc, char* argv[])
   err = vkBeginCommandBuffer(command_buffer, &begin_info);
   check_vk_result(err);
 
-  ImGui_ImplVulkan_CreateFontsTexture(command_buffer);
+  ImGui_ImplVulkan_CreateFontsTexture();
 
   VkSubmitInfo end_info = {
     .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
@@ -449,7 +450,6 @@ int main(int argc, char* argv[])
 
   err = vkDeviceWaitIdle(g_Device);
   check_vk_result(err);
-  ImGui_ImplVulkan_DestroyFontUploadObjects();
 
   bool showDemoWindow = true;
   bool showAnotherWindow = false;
