@@ -19,8 +19,7 @@ else()
 endif()
 
 include_directories(../../imgui)
-add_definitions("-DIMGUI_USER_CONFIG=\"../cimconfig.h\"")
-add_definitions("-DIMGUI_DISABLE_OBSOLETE_FUNCTIONS=1")
+
 
 include_directories(../../)
 set(IMGUI_SOURCES ../../cimgui.cpp
@@ -34,11 +33,6 @@ ${TABLES_SOURCE}
 set(IMGUI_SOURCES_sdl)
 set(IMGUI_LIBRARIES )
 
-if (WIN32)
-    add_definitions("-DIMGUI_IMPL_API=extern \"C\" __declspec\(dllexport\)")
-else(WIN32)
-    add_definitions("-DIMGUI_IMPL_API=extern \"C\" ")
-endif(WIN32)
 
 #optional adding freetype
 option(IMGUI_FREETYPE "add Freetype2" OFF)
@@ -57,38 +51,40 @@ list(APPEND IMGUI_SOURCES ${BACKENDS_FOLDER}imgui_impl_vulkan.cpp)
 
 #sdl2
 list(APPEND IMGUI_SOURCES ${BACKENDS_FOLDER}imgui_impl_sdl2.cpp)
-if(DEFINED SDL_PATH)
-	message(STATUS "SDL_PATH defined as " ${SDL_PATH})
-	FIND_PACKAGE(SDL2 PATHS ${SDL_PATH})
-else(DEFINED SDL_PATH)
-	# If SDL_PATH is not set, fallback and attempt to find SDL cmake script at a default location
-	find_package(SDL2)
-endif(DEFINED SDL_PATH)
+include(FetchContent)
+Set(FETCHCONTENT_QUIET FALSE)
 
-if(SDL2_FOUND)
-	get_target_property(SDL_INCLUDE SDL2::SDL2 INTERFACE_INCLUDE_DIRECTORIES)
-	message(STATUS "sdlinclude is " ${SDL_INCLUDE})
-	if ("${SDL_INCLUDE}" STREQUAL "" OR "${SDL_INCLUDE}" STREQUAL "SDL_INCLUDE-NOTFOUND") #if not found latest SDL2 cmake config use older
-		message(STATUS "sdlinclude2 is " ${SDL2_INCLUDE_DIRS})
-		include_directories(${SDL2_INCLUDE_DIRS})
-		set(IMGUI_SDL_LIBRARY ${SDL2_LIBRARIES})
-		message(STATUS IMGUI_SDL_LIBRARY ${SDL2_LIBRARIES})
-	else()#use new one SDL2 config
-		include_directories(${SDL_INCLUDE})
-		set(IMGUI_SDL_LIBRARY SDL2::SDL2)
-		set(SDL_MAIN SDL2::SDL2main)
-		message(STATUS ${SDL_MAIN} ${IMGUI_SDL_LIBRARY})
-	endif()
-else(SDL2_FOUND)
-	if(DEFINED SDL_PATH)
-		message(FATAL_ERROR "Cannot find SDL at SDL_PATH")
-	else(DEFINED SDL_PATH)
-		message(FATAL_ERROR "Cannot find SDL. Maybe try specifying SDL_PATH?")
-	endif(DEFINED SDL_PATH)
-endif(SDL2_FOUND)
+FetchContent_Declare(
+        SDL2
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+        GIT_TAG release-2.30.12
+        #GIT_SHALLOW TRUE
+        GIT_PROGRESS TRUE
+)
+FetchContent_GetProperties(SDL2)
+if (NOT sdl2_POPULATED)
+	set(FETCHCONTENT_QUIET NO)
+    FetchContent_Populate(SDL2)
+	set(SDL_TEST OFF CACHE BOOL "" FORCE)
+	set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
+	add_subdirectory(${sdl2_SOURCE_DIR} ${sdl2_BINARY_DIR})
+endif()
+include_directories(${SDL2_SOURCE_DIR}/include})
+
+#if dynamic SDL2 then install
+install(TARGETS SDL2 RUNTIME DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+					LIBRARY DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+)
 
 add_library(cimgui_sdl SHARED ${IMGUI_SOURCES})
-target_link_libraries(cimgui_sdl ${IMGUI_LIBRARIES} ${IMGUI_SDL_LIBRARY})
+target_compile_definitions(cimgui_sdl PUBLIC "-DIMGUI_USER_CONFIG=\"../cimconfig.h\"")
+target_compile_definitions(cimgui_sdl PUBLIC "-DIMGUI_DISABLE_OBSOLETE_FUNCTIONS=1")
+if (WIN32)
+    target_compile_definitions(cimgui_sdl PUBLIC "-DIMGUI_IMPL_API=extern \"C\" __declspec\(dllexport\)")
+else(WIN32)
+    target_compile_definitions(cimgui_sdl PUBLIC "-DIMGUI_IMPL_API=extern \"C\" ")
+endif(WIN32)
+target_link_libraries(cimgui_sdl ${IMGUI_LIBRARIES} SDL2)
 
 #using library
 include_directories(../../generator/output/)
@@ -97,5 +93,5 @@ target_compile_definitions(test_sdl PUBLIC -DCIMGUI_USE_VULKAN -DCIMGUI_USE_SDL2
 if (MINGW)
 target_link_options(test_sdl PRIVATE "-mconsole")
 endif()
-target_link_libraries(test_sdl ${IMGUI_SDL_LIBRARY} cimgui_sdl)
+target_link_libraries(test_sdl SDL2 cimgui_sdl)
 
