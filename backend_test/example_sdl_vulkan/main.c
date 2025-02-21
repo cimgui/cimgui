@@ -374,6 +374,7 @@ static void FramePresent(ImGui_ImplVulkanH_Window* wd)
 // Main code
 int main(int argc, char* argv[])
 {
+    g_MainWindowData.ClearEnable = true;
     // Setup SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
     {
