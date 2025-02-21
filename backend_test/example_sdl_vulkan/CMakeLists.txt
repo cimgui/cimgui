@@ -48,6 +48,7 @@ endif(IMGUI_FREETYPE)
 find_package(Vulkan REQUIRED FATAL_ERROR)
 list(APPEND IMGUI_LIBRARIES Vulkan::Vulkan)
 list(APPEND IMGUI_SOURCES ${BACKENDS_FOLDER}imgui_impl_vulkan.cpp)
+include_directories(${Vulkan_INCLUDE_DIRS})
 
 #sdl2
 list(APPEND IMGUI_SOURCES ${BACKENDS_FOLDER}imgui_impl_sdl2.cpp)
@@ -66,17 +67,18 @@ if (NOT sdl2_POPULATED)
 	set(FETCHCONTENT_QUIET NO)
     FetchContent_Populate(SDL2)
 	set(SDL_TEST OFF CACHE BOOL "" FORCE)
-	set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
+	set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 	add_subdirectory(${sdl2_SOURCE_DIR} ${sdl2_BINARY_DIR})
 endif()
-include_directories(${SDL2_SOURCE_DIR}/include})
+include_directories(${SDL2_SOURCE_DIR}/include)
+
 
 #if dynamic SDL2 then install
-install(TARGETS SDL2 RUNTIME DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
-					LIBRARY DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
-)
+# install(TARGETS SDL2 RUNTIME DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+					# LIBRARY DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+# )
 
-add_library(cimgui_sdl SHARED ${IMGUI_SOURCES})
+add_library(cimgui_sdl STATIC ${IMGUI_SOURCES})
 target_compile_definitions(cimgui_sdl PUBLIC "-DIMGUI_USER_CONFIG=\"../cimconfig.h\"")
 target_compile_definitions(cimgui_sdl PUBLIC "-DIMGUI_DISABLE_OBSOLETE_FUNCTIONS=1")
 if (WIN32)
@@ -84,7 +86,7 @@ if (WIN32)
 else(WIN32)
     target_compile_definitions(cimgui_sdl PUBLIC "-DIMGUI_IMPL_API=extern \"C\" ")
 endif(WIN32)
-target_link_libraries(cimgui_sdl ${IMGUI_LIBRARIES} SDL2)
+#target_link_libraries(cimgui_sdl ${IMGUI_LIBRARIES} SDL2-static)
 
 #using library
 include_directories(../../generator/output/)
@@ -93,5 +95,5 @@ target_compile_definitions(test_sdl PUBLIC -DCIMGUI_USE_VULKAN -DCIMGUI_USE_SDL2
 if (MINGW)
 target_link_options(test_sdl PRIVATE "-mconsole")
 endif()
-target_link_libraries(test_sdl SDL2 cimgui_sdl)
+target_link_libraries(test_sdl SDL2-static cimgui_sdl ${IMGUI_LIBRARIES})
 
