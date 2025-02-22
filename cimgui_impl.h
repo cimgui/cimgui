@@ -1,9 +1,12 @@
 #ifdef CIMGUI_USE_GLFW
+#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
 typedef struct GLFWwindow GLFWwindow;
 typedef struct GLFWmonitor GLFWmonitor;
 struct GLFWwindow;
-struct GLFWmonitor;CIMGUI_API bool ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window,bool install_callbacks);
+struct GLFWmonitor;
+#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+CIMGUI_API bool ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window,bool install_callbacks);
 CIMGUI_API bool ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window,bool install_callbacks);
 CIMGUI_API bool ImGui_ImplGlfw_InitForOther(GLFWwindow* window,bool install_callbacks);
 CIMGUI_API void ImGui_ImplGlfw_Shutdown(void);
@@ -45,6 +48,7 @@ CIMGUI_API void ImGui_ImplOpenGL2_DestroyDeviceObjects(void);
 
 #endif
 #ifdef CIMGUI_USE_SDL2
+#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
 typedef struct SDL_Window SDL_Window;
 typedef struct SDL_Renderer SDL_Renderer;
@@ -53,7 +57,9 @@ struct SDL_Window;
 struct SDL_Renderer;
 struct _SDL_GameController;
 typedef union SDL_Event SDL_Event;
-typedef enum { ImGui_ImplSDL2_GamepadMode_AutoFirst, ImGui_ImplSDL2_GamepadMode_AutoAll, ImGui_ImplSDL2_GamepadMode_Manual }ImGui_ImplSDL2_GamepadMode;CIMGUI_API bool ImGui_ImplSDL2_InitForOpenGL(SDL_Window* window,void* sdl_gl_context);
+typedef enum { ImGui_ImplSDL2_GamepadMode_AutoFirst, ImGui_ImplSDL2_GamepadMode_AutoAll, ImGui_ImplSDL2_GamepadMode_Manual }ImGui_ImplSDL2_GamepadMode;
+#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+CIMGUI_API bool ImGui_ImplSDL2_InitForOpenGL(SDL_Window* window,void* sdl_gl_context);
 CIMGUI_API bool ImGui_ImplSDL2_InitForVulkan(SDL_Window* window);
 CIMGUI_API bool ImGui_ImplSDL2_InitForD3D(SDL_Window* window);
 CIMGUI_API bool ImGui_ImplSDL2_InitForMetal(SDL_Window* window);
@@ -66,6 +72,7 @@ CIMGUI_API void ImGui_ImplSDL2_SetGamepadMode(ImGui_ImplSDL2_GamepadMode mode,st
 
 #endif
 #ifdef CIMGUI_USE_SDL3
+#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
 typedef struct SDL_Window SDL_Window;
 typedef struct SDL_Renderer SDL_Renderer;
@@ -74,7 +81,9 @@ struct SDL_Window;
 struct SDL_Renderer;
 struct SDL_Gamepad;
 typedef union SDL_Event SDL_Event;
-typedef enum { ImGui_ImplSDL3_GamepadMode_AutoFirst, ImGui_ImplSDL3_GamepadMode_AutoAll, ImGui_ImplSDL3_GamepadMode_Manual }ImGui_ImplSDL3_GamepadMode;CIMGUI_API bool ImGui_ImplSDL3_InitForOpenGL(SDL_Window* window,void* sdl_gl_context);
+typedef enum { ImGui_ImplSDL3_GamepadMode_AutoFirst, ImGui_ImplSDL3_GamepadMode_AutoAll, ImGui_ImplSDL3_GamepadMode_Manual }ImGui_ImplSDL3_GamepadMode;
+#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+CIMGUI_API bool ImGui_ImplSDL3_InitForOpenGL(SDL_Window* window,void* sdl_gl_context);
 CIMGUI_API bool ImGui_ImplSDL3_InitForVulkan(SDL_Window* window);
 CIMGUI_API bool ImGui_ImplSDL3_InitForD3D(SDL_Window* window);
 CIMGUI_API bool ImGui_ImplSDL3_InitForMetal(SDL_Window* window);
@@ -88,6 +97,7 @@ CIMGUI_API void ImGui_ImplSDL3_SetGamepadMode(ImGui_ImplSDL3_GamepadMode mode,SD
 
 #endif
 #ifdef CIMGUI_USE_VULKAN
+#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
 typedef struct ImGui_ImplVulkanH_Frame ImGui_ImplVulkanH_Frame;
 typedef struct ImGui_ImplVulkanH_Window ImGui_ImplVulkanH_Window;
@@ -159,7 +169,13 @@ struct ImGui_ImplVulkanH_Window
     uint32_t SemaphoreIndex;
     ImVector_ImGui_ImplVulkanH_Frame Frames;
     ImVector_ImGui_ImplVulkanH_FrameSemaphores FrameSemaphores;
-};CIMGUI_API bool ImGui_ImplVulkan_Init(ImGui_ImplVulkan_InitInfo* info);
+};
+#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+typedef ImVector<ImGui_ImplVulkanH_Frame> ImVector_ImGui_ImplVulkanH_Frame;
+typedef ImVector<ImGui_ImplVulkanH_FrameSemaphores> ImVector_ImGui_ImplVulkanH_FrameSemaphores;
+#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+CIMGUI_API bool ImGui_ImplVulkan_Init(ImGui_ImplVulkan_InitInfo* info);
 CIMGUI_API void ImGui_ImplVulkan_Shutdown(void);
 CIMGUI_API void ImGui_ImplVulkan_NewFrame(void);
 CIMGUI_API void ImGui_ImplVulkan_RenderDrawData(ImDrawData* draw_data,VkCommandBuffer command_buffer,VkPipeline pipeline);
@@ -176,5 +192,6 @@ CIMGUI_API VkPresentModeKHR ImGui_ImplVulkanH_SelectPresentMode(VkPhysicalDevice
 CIMGUI_API VkPhysicalDevice ImGui_ImplVulkanH_SelectPhysicalDevice(VkInstance instance);
 CIMGUI_API uint32_t ImGui_ImplVulkanH_SelectQueueFamilyIndex(VkPhysicalDevice physical_device);
 CIMGUI_API int ImGui_ImplVulkanH_GetMinImageCountFromPresentMode(VkPresentModeKHR present_mode);
+CIMGUI_API ImGui_ImplVulkanH_Window* ImGui_ImplVulkanH_Window_ImGui_ImplVulkanH_Window();
 
 #endif

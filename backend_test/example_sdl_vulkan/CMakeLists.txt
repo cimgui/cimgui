@@ -18,11 +18,12 @@ else()
 	set(TABLES_SOURCE "")
 endif()
 
-include_directories(../../imgui)
+include_directories(../../imgui ../../imgui/backends)
 
 
 include_directories(../../)
 set(IMGUI_SOURCES ../../cimgui.cpp
+../../cimgui_impl.cpp
 ../../imgui/imgui.cpp
 ../../imgui/imgui_draw.cpp
 ../../imgui/imgui_demo.cpp
@@ -81,6 +82,7 @@ include_directories(${SDL2_SOURCE_DIR}/include)
 add_library(cimgui_sdl STATIC ${IMGUI_SOURCES})
 target_compile_definitions(cimgui_sdl PUBLIC "-DIMGUI_USER_CONFIG=\"../cimconfig.h\"")
 target_compile_definitions(cimgui_sdl PUBLIC "-DIMGUI_DISABLE_OBSOLETE_FUNCTIONS=1")
+target_compile_definitions(cimgui_sdl PUBLIC -DCIMGUI_USE_VULKAN -DCIMGUI_USE_SDL2)
 if (WIN32)
     target_compile_definitions(cimgui_sdl PUBLIC "-DIMGUI_IMPL_API=extern \"C\" __declspec\(dllexport\)")
 else(WIN32)
@@ -89,7 +91,6 @@ endif(WIN32)
 #target_link_libraries(cimgui_sdl ${IMGUI_LIBRARIES} SDL2-static)
 
 #using library
-include_directories(../../generator/output/)
 add_executable(test_sdl main.c)
 target_compile_definitions(test_sdl PUBLIC -DCIMGUI_USE_VULKAN -DCIMGUI_USE_SDL2)
 if (MINGW)

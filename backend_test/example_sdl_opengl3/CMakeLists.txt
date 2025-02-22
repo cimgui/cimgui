@@ -97,7 +97,6 @@ endif(WIN32)
 target_link_libraries(cimgui_sdl ${IMGUI_LIBRARIES} SDL2)
 
 #using library
-include_directories(../../generator/output/)
 add_executable(test_sdl main.c)
 target_compile_definitions(test_sdl PUBLIC -DCIMGUI_USE_OPENGL3 -DCIMGUI_USE_SDL2)
 if (MINGW)

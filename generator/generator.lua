@@ -125,9 +125,11 @@ local function func_header_impl_generate(FP)
             local def = cimf[t.signature]
 			local addcoment = def.comment or ""
 			if def.constructor then
-				-- it happens with vulkan impl but constructor ImGui_ImplVulkanH_Window is not needed
-			    --assert(def.stname ~= "","constructor without struct")
-                --table.insert(outtab,"CIMGUI_API "..def.stname.."* "..def.ov_cimguiname ..(empty and "(void)" or --def.args)..";"..addcoment.."\n")
+				-- only vulkan is manually created
+				assert(def.ov_cimguiname=="ImGui_ImplVulkanH_Window_ImGui_ImplVulkanH_Window" or
+				def.ov_cimguiname=="ImGui_ImplVulkanH_Window_Construct", "not cpp for "..def.ov_cimguiname)
+			    assert(def.stname ~= "","constructor without struct")
+                table.insert(outtab,"CIMGUI_API "..def.stname.."* "..def.ov_cimguiname ..(empty and "(void)" or def.args)..";"..addcoment.."\n")
             elseif def.destructor then
                 --table.insert(outtab,"CIMGUI_API void "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
 			else
@@ -473,7 +475,17 @@ if #implementations > 0 then
 		parser3:do_parse()
 		local cfuncsstr = func_header_impl_generate(parser3) 
 		local cstructstr1,cstructstr2 = parser3.structs_and_enums[1], parser3.structs_and_enums[2]
-		impl_str = impl_str .. "#ifdef CIMGUI_USE_".. string.upper(impl).."\n" .. cstructstr1 .. cstructstr2 .. cfuncsstr .. "\n#endif\n"
+		local cstru = cstructstr1 .. cstructstr2
+		if cstru ~="" then
+			cstru = "#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n"..cstru .."\n#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n"
+		end
+		impl_str = impl_str .. "#ifdef CIMGUI_USE_".. string.upper(impl).."\n".. cstru
+		local outtab = cpp2ffi.func_header_generate_structs(parser3)
+		if #outtab > 0 then
+			table.insert(outtab, 1, "#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
+			table.insert(outtab,"#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
+		end
+		impl_str = impl_str.. table.concat(outtab)..cfuncsstr .. "\n#endif\n"
     end
 	
     parser2:do_parse()
@@ -517,7 +529,9 @@ end
 --]]
 -------------------copy C files to repo root
 copyfile("./output/cimgui.h", "../cimgui.h")
+copyfile("./output/cimgui_impl.h", "../cimgui_impl.h")
 copyfile("./output/cimgui.cpp", "../cimgui.cpp")
 os.remove("./output/cimgui.h")
+os.remove("./output/cimgui_impl.h")
 os.remove("./output/cimgui.cpp")
 print"all done!!"

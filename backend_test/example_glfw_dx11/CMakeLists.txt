@@ -102,7 +102,6 @@ target_link_libraries(cimgui ${IMGUI_LIBRARIES} glfw)
 
 
 # using library
-include_directories(../../generator/output/)
 add_executable(${PROJECT_NAME} main.c)
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DCIMGUI_USE_DX11 -DCIMGUI_USE_GLFW)
 target_link_libraries(${PROJECT_NAME} d3d11 d3dcompiler.lib cimgui)
