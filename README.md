@@ -92,10 +92,10 @@ Notes:
 * methods have the same parameter list and return values (where possible)
 * functions that belong to a struct have an extra first argument with a pointer to the struct.
 * where a function returns UDT (user defined type) by value some compilers complain so the function is generated accepting a pointer to the UDT type as the first argument (or second if belongs to a struct).
-
+* constructors return pointer to struct and has been named Struct_name_Struct_name
 # usage with backends
 
-* look at backend_test folder for a cmake module building with SDL and opengl3, glfw and opengl3, SDL and Vulkan
+* look at backend_test folder for a cmake module building with SDL and opengl3, glfw and opengl3, SDL and Vulkan, glfw and dx11
 * read [How can cimgui backends be used](https://github.com/cimgui/cimgui/issues/157)
 
 # example bindings based on cimgui
