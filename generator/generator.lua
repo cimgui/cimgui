@@ -91,6 +91,10 @@ local cimgui_skipped = {
 --desired name
 ---------------------------------------------------------------------------
 local cimgui_overloads = {
+	igGetIO = {
+		["()"] = "igGetIO",
+		["(ImGuiContext*)"] = "igGetIOEx",
+	},
     --igPushID = {
         --["(const char*)"] =           "igPushIDStr",
         --["(const char*,const char*)"] = "igPushIDRange",
@@ -316,8 +320,8 @@ end
 --------------------------------------------------------
 --get imgui.h version and IMGUI_HAS_DOCK--------------------------
 --defines for the cl compiler must be present in the print_defines.cpp file
-gdefines = get_defines{"IMGUI_VERSION","IMGUI_VERSION_NUM","FLT_MAX","FLT_MIN","IMGUI_HAS_DOCK","IMGUI_HAS_IMSTR","ImDrawCallback_ResetRenderState"}
---cpp2ffi.prtable(gdefines)
+gdefines = get_defines{"IMGUI_VERSION","IMGUI_VERSION_NUM","FLT_MAX","FLT_MIN","IMGUI_HAS_DOCK","IMGUI_HAS_IMSTR","ImDrawCallback_ResetRenderState","IMGUI_HAS_TEXTURES"}
+cpp2ffi.prtable(gdefines)
 if gdefines.IMGUI_HAS_DOCK then gdefines.IMGUI_HAS_DOCK = true end
 if gdefines.IMGUI_HAS_IMSTR then gdefines.IMGUI_HAS_IMSTR = true end
 
@@ -337,6 +341,7 @@ if gdefines.IMGUI_HAS_DOCK then
 end
 assert(not NOCHAR or not NOIMSTRV,"nochar and noimstrv cant be set at the same time")
 print("IMGUI_HAS_IMSTR",gdefines.IMGUI_HAS_IMSTR)
+print("IMGUI_HAS_TEXTURES",gdefines.IMGUI_HAS_TEXTURES and true)
 print("NOCHAR",NOCHAR)
 print("NOIMSTRV",NOIMSTRV)
 print("IMGUI_HAS_DOCK",gdefines.IMGUI_HAS_DOCK)
@@ -376,6 +381,7 @@ local function parseImGuiHeader(header,names)
 	parser.CONSTRUCTORS_GENERATION = CONSTRUCTORS_GENERATION
 	parser.NOCHAR = NOCHAR
 	parser.NOIMSTRV = NOIMSTRV
+	parser.IMGUI_HAS_TEXTURES = gdefines.IMGUI_HAS_TEXTURES
 	parser.custom_function_post = custom_function_post
 	parser.header_text_insert = header_text_insert
 	local defines = parser:take_lines(CPRE..header,names,COMPILER)
