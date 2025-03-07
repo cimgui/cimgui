@@ -1575,8 +1575,8 @@ function M.Parser()
 					--local ttype,template = it.item:match("([^%s,%(%)]+)%s*<(.+)>")
 					local ttype,template,te,code2 =  check_template(it2)  --it.item:match"([^%s,%(%)]+)%s*<(.+)>"
 					if template then
-						--print("not doheader",ttype,template,te)
-						if self.typenames[ttype] ~= template then --rule out T (template typename)
+						print("not doheader",ttype,template,te, self.typenames[ttype])
+						if self.typenames[ttype] ~= template and self.typenames[ttype].."*" ~= template then --rule out T (template typename)
 							self.templates[ttype] = self.templates[ttype] or {}
 							self.templates[ttype][template] = te
 							it2=code2
