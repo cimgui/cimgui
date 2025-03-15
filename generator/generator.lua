@@ -128,6 +128,7 @@ local function func_header_impl_generate(FP)
             local cimf = FP.defsT[t.cimguiname]
             local def = cimf[t.signature]
 			local addcoment = def.comment or ""
+			local empty = def.args:match("^%(%)") --no args
 			if def.constructor then
 				-- only vulkan is manually created
 				assert(def.ov_cimguiname=="ImGui_ImplVulkanH_Window_ImGui_ImplVulkanH_Window" or
@@ -139,7 +140,6 @@ local function func_header_impl_generate(FP)
 			else
                 
                 if def.stname == "" then --ImGui namespace or top level
-                    local empty = def.args:match("^%(%)") --no args
                     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname..(empty and "(void)" or def.args)..";"..addcoment.."\n")
                 else
 					cpp2ffi.prtable(def)
