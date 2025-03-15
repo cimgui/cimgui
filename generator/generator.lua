@@ -91,10 +91,10 @@ local cimgui_skipped = {
 --desired name
 ---------------------------------------------------------------------------
 local cimgui_overloads = {
-	igGetIO = {
-		["()"] = "igGetIO",
-		["(ImGuiContext*)"] = "igGetIOEx",
-	},
+	-- igGetIO = {
+		-- ["()"] = "igGetIO",
+		-- ["(ImGuiContext*)"] = "igGetIOEx",
+	-- },
     --igPushID = {
         --["(const char*)"] =           "igPushIDStr",
         --["(const char*,const char*)"] = "igPushIDRange",

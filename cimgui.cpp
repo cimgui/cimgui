@@ -53,7 +53,7 @@ CIMGUI_API void igSetCurrentContext(ImGuiContext* ctx)
 {
     return ImGui::SetCurrentContext(ctx);
 }
-CIMGUI_API ImGuiIO* igGetIO()
+CIMGUI_API ImGuiIO* igGetIO_Nil()
 {
     return &ImGui::GetIO();
 }
@@ -3999,7 +3999,7 @@ CIMGUI_API ImGuiTableColumnSettings* ImGuiTableSettings_GetColumnSettings(ImGuiT
 {
     return self->GetColumnSettings();
 }
-CIMGUI_API ImGuiIO* igGetIOEx(ImGuiContext* ctx)
+CIMGUI_API ImGuiIO* igGetIO_ContextPtr(ImGuiContext* ctx)
 {
     return &ImGui::GetIO(ctx);
 }

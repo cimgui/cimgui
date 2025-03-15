@@ -24,6 +24,8 @@
 #define igButton igButton_Str
 #endif
 
+#define igGetIO igGetIO_Nil
+
 GLFWwindow *window;
 
 // Data
