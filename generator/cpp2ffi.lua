@@ -949,6 +949,31 @@ local function AdjustArguments(FP)
         end
     end
 end
+local function REPLACE_TEXTUREID(FP)
+	local defsT = FP.defsT
+	for numcdef,t in ipairs(FP.funcdefs) do
+		assert(t.cimguiname)
+		local cimf = defsT[t.cimguiname]
+		local defT = cimf[t.signature]
+		local hasTextureID = false
+		for i,arg in ipairs(defT.argsT) do
+			if arg.type == "ImTextureID" then print(t.cimguiname,t.signature);hasTextureID = true; break end
+		end
+		if hasTextureID then
+			for i,v in ipairs(defT.argsT) do
+				v.type = (v.type == "ImTextureID") and "ImTextureUserID" or v.type
+            end
+			--defaults table
+			for k,v in pairs(defT.defaults) do
+				if v:match"ImTextureID" then
+					error"default ImTextureID not implemented"
+				end
+            end
+			defT.args = defT.args:gsub("ImTextureID","ImTextureUserID")
+			defT.signature = defT.signature:gsub("ImTextureID","ImTextureUserID")
+		end
+	end
+end
 local function ADDIMSTR_S(FP)
     local defsT = FP.defsT
     local newcdefs = {}
@@ -1575,8 +1600,8 @@ function M.Parser()
 					--local ttype,template = it.item:match("([^%s,%(%)]+)%s*<(.+)>")
 					local ttype,template,te,code2 =  check_template(it2)  --it.item:match"([^%s,%(%)]+)%s*<(.+)>"
 					if template then
-						--print("not doheader",ttype,template,te)
-						if self.typenames[ttype] ~= template then --rule out T (template typename)
+						--print("not doheader",ttype,template,te, self.typenames[ttype])
+						if self.typenames[ttype] ~= template and self.typenames[ttype].."*" ~= template then --rule out T (template typename)
 							self.templates[ttype] = self.templates[ttype] or {}
 							self.templates[ttype][template] = te
 							it2=code2
@@ -2115,6 +2140,11 @@ function M.Parser()
         for k,v in pairs(self.alltypes) do print(k, typetoStr(k) ) end
     end
     function par:compute_overloads()
+		if self.IMGUI_HAS_TEXTURES then
+			print"----------replacing ImTextureID with ImTextureUserID"
+			REPLACE_TEXTUREID(self)
+			print"----------end replacing ImTextureID with ImTextureUserID"
+		end
 		ADDIMSTR_S(self)
         local strt = {}
         local numoverloaded = 0

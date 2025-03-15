@@ -91,6 +91,10 @@ local cimgui_skipped = {
 --desired name
 ---------------------------------------------------------------------------
 local cimgui_overloads = {
+	igGetIO = {
+		["()"] = "igGetIO",
+		["(ImGuiContext*)"] = "igGetIOEx",
+	},
     --igPushID = {
         --["(const char*)"] =           "igPushIDStr",
         --["(const char*,const char*)"] = "igPushIDRange",
@@ -125,9 +129,11 @@ local function func_header_impl_generate(FP)
             local def = cimf[t.signature]
 			local addcoment = def.comment or ""
 			if def.constructor then
-				-- it happens with vulkan impl but constructor ImGui_ImplVulkanH_Window is not needed
-			    --assert(def.stname ~= "","constructor without struct")
-                --table.insert(outtab,"CIMGUI_API "..def.stname.."* "..def.ov_cimguiname ..(empty and "(void)" or --def.args)..";"..addcoment.."\n")
+				-- only vulkan is manually created
+				assert(def.ov_cimguiname=="ImGui_ImplVulkanH_Window_ImGui_ImplVulkanH_Window" or
+				def.ov_cimguiname=="ImGui_ImplVulkanH_Window_Construct", "not cpp for "..def.ov_cimguiname)
+			    assert(def.stname ~= "","constructor without struct")
+                table.insert(outtab,"CIMGUI_API "..def.stname.."* "..def.ov_cimguiname ..(empty and "(void)" or def.args)..";"..addcoment.."\n")
             elseif def.destructor then
                 --table.insert(outtab,"CIMGUI_API void "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
 			else
@@ -314,8 +320,8 @@ end
 --------------------------------------------------------
 --get imgui.h version and IMGUI_HAS_DOCK--------------------------
 --defines for the cl compiler must be present in the print_defines.cpp file
-gdefines = get_defines{"IMGUI_VERSION","IMGUI_VERSION_NUM","FLT_MAX","FLT_MIN","IMGUI_HAS_DOCK","IMGUI_HAS_IMSTR","ImDrawCallback_ResetRenderState"}
---cpp2ffi.prtable(gdefines)
+gdefines = get_defines{"IMGUI_VERSION","IMGUI_VERSION_NUM","FLT_MAX","FLT_MIN","IMGUI_HAS_DOCK","IMGUI_HAS_IMSTR","ImDrawCallback_ResetRenderState","IMGUI_HAS_TEXTURES"}
+cpp2ffi.prtable(gdefines)
 if gdefines.IMGUI_HAS_DOCK then gdefines.IMGUI_HAS_DOCK = true end
 if gdefines.IMGUI_HAS_IMSTR then gdefines.IMGUI_HAS_IMSTR = true end
 
@@ -335,6 +341,7 @@ if gdefines.IMGUI_HAS_DOCK then
 end
 assert(not NOCHAR or not NOIMSTRV,"nochar and noimstrv cant be set at the same time")
 print("IMGUI_HAS_IMSTR",gdefines.IMGUI_HAS_IMSTR)
+print("IMGUI_HAS_TEXTURES",gdefines.IMGUI_HAS_TEXTURES and true)
 print("NOCHAR",NOCHAR)
 print("NOIMSTRV",NOIMSTRV)
 print("IMGUI_HAS_DOCK",gdefines.IMGUI_HAS_DOCK)
@@ -374,6 +381,7 @@ local function parseImGuiHeader(header,names)
 	parser.CONSTRUCTORS_GENERATION = CONSTRUCTORS_GENERATION
 	parser.NOCHAR = NOCHAR
 	parser.NOIMSTRV = NOIMSTRV
+	parser.IMGUI_HAS_TEXTURES = gdefines.IMGUI_HAS_TEXTURES
 	parser.custom_function_post = custom_function_post
 	parser.header_text_insert = header_text_insert
 	local defines = parser:take_lines(CPRE..header,names,COMPILER)
@@ -464,15 +472,26 @@ if #implementations > 0 then
 				extra_includes = extra_includes .. include_cmd .. inc .. " "
 			end
 		end
-		
+		parser2.cimgui_inherited =  dofile([[../../cimgui/generator/output/structs_and_enums.lua]])
 		local defines = parser2:take_lines(CPRE..extra_defines..extra_includes..source, {locati}, COMPILER)
 		
 		local parser3 = cpp2ffi.Parser()
+		parser3.cimgui_inherited =  dofile([[../../cimgui/generator/output/structs_and_enums.lua]])
 		parser3:take_lines(CPRE..extra_defines..extra_includes..source, {locati}, COMPILER)
 		parser3:do_parse()
 		local cfuncsstr = func_header_impl_generate(parser3) 
 		local cstructstr1,cstructstr2 = parser3.structs_and_enums[1], parser3.structs_and_enums[2]
-		impl_str = impl_str .. "#ifdef CIMGUI_USE_".. string.upper(impl).."\n" .. cstructstr1 .. cstructstr2 .. cfuncsstr .. "\n#endif\n"
+		local cstru = cstructstr1 .. cstructstr2
+		if cstru ~="" then
+			cstru = "#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n"..cstru .."\n#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n"
+		end
+		impl_str = impl_str .. "#ifdef CIMGUI_USE_".. string.upper(impl).."\n".. cstru
+		local outtab = cpp2ffi.func_header_generate_structs(parser3)
+		if #outtab > 0 then
+			table.insert(outtab, 1, "#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
+			table.insert(outtab,"#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
+		end
+		impl_str = impl_str.. table.concat(outtab)..cfuncsstr .. "\n#endif\n"
     end
 	
     parser2:do_parse()
@@ -516,7 +535,9 @@ end
 --]]
 -------------------copy C files to repo root
 copyfile("./output/cimgui.h", "../cimgui.h")
+copyfile("./output/cimgui_impl.h", "../cimgui_impl.h")
 copyfile("./output/cimgui.cpp", "../cimgui.cpp")
 os.remove("./output/cimgui.h")
+os.remove("./output/cimgui_impl.h")
 os.remove("./output/cimgui.cpp")
 print"all done!!"
