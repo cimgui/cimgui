@@ -104,6 +104,7 @@ typedef struct ImGui_ImplVulkanH_Window ImGui_ImplVulkanH_Window;
 typedef struct ImGui_ImplVulkan_InitInfo ImGui_ImplVulkan_InitInfo;
 struct ImGui_ImplVulkan_InitInfo
 {
+    uint32_t ApiVersion;
     VkInstance Instance;
     VkPhysicalDevice PhysicalDevice;
     VkDevice Device;
@@ -184,7 +185,7 @@ CIMGUI_API void ImGui_ImplVulkan_DestroyFontsTexture(void);
 CIMGUI_API void ImGui_ImplVulkan_SetMinImageCount(uint32_t min_image_count);
 CIMGUI_API VkDescriptorSet ImGui_ImplVulkan_AddTexture(VkSampler sampler,VkImageView image_view,VkImageLayout image_layout);
 CIMGUI_API void ImGui_ImplVulkan_RemoveTexture(VkDescriptorSet descriptor_set);
-CIMGUI_API bool ImGui_ImplVulkan_LoadFunctions(PFN_vkVoidFunction(*loader_func)(const char* function_name,void* user_data),void* user_data);
+CIMGUI_API bool ImGui_ImplVulkan_LoadFunctions(uint32_t api_version,PFN_vkVoidFunction(*loader_func)(const char* function_name,void* user_data),void* user_data);
 CIMGUI_API void ImGui_ImplVulkanH_CreateOrResizeWindow(VkInstance instance,VkPhysicalDevice physical_device,VkDevice device,ImGui_ImplVulkanH_Window* wd,uint32_t queue_family,const VkAllocationCallbacks* allocator,int w,int h,uint32_t min_image_count);
 CIMGUI_API void ImGui_ImplVulkanH_DestroyWindow(VkInstance instance,VkDevice device,ImGui_ImplVulkanH_Window* wd,const VkAllocationCallbacks* allocator);
 CIMGUI_API VkSurfaceFormatKHR ImGui_ImplVulkanH_SelectSurfaceFormat(VkPhysicalDevice physical_device,VkSurfaceKHR surface,const VkFormat* request_formats,int request_formats_count,VkColorSpaceKHR request_color_space);

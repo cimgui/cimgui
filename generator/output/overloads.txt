@@ -123,9 +123,15 @@ igGetID	4
 igGetIDWithSeed	2
 1	ImGuiID	igGetIDWithSeed_Str (const char*,const char*,ImGuiID)
 2	ImGuiID	igGetIDWithSeed_Int (int,ImGuiID)
+igGetIO	2
+1	ImGuiIO*	igGetIO ()
+2	ImGuiIO*	igGetIOEx (ImGuiContext*)
 igGetKeyData	2
 1	ImGuiKeyData*	igGetKeyData_ContextPtr (ImGuiContext*,ImGuiKey)
 2	ImGuiKeyData*	igGetKeyData_Key (ImGuiKey)
+igGetPlatformIO	2
+1	ImGuiPlatformIO*	igGetPlatformIO_Nil ()
+2	ImGuiPlatformIO*	igGetPlatformIO_ContextPtr (ImGuiContext*)
 igImAbs	3
 1	int	igImAbs_Int (int)
 2	float	igImAbs_Float (float)
@@ -293,4 +299,4 @@ igValue	4
 2	void	igValue_Int (const char*,int)
 3	void	igValue_Uint (const char*,unsigned int)
 4	void	igValue_Float (const char*,float,const char*)
-205 overloaded
+209 overloaded
