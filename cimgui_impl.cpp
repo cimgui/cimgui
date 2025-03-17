@@ -41,6 +41,10 @@
 #include "imgui_impl_sdl3.h"
 #endif
 
+#ifdef CIMGUI_USE_SDLGPU3
+#include "imgui_impl_sdlgpu3.h"
+#endif
+
 #ifdef CIMGUI_USE_VULKAN
 #include "imgui_impl_vulkan.h"
 #endif

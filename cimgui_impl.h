@@ -196,3 +196,23 @@ CIMGUI_API int ImGui_ImplVulkanH_GetMinImageCountFromPresentMode(VkPresentModeKH
 CIMGUI_API ImGui_ImplVulkanH_Window* ImGui_ImplVulkanH_Window_ImGui_ImplVulkanH_Window(void);
 
 #endif
+#ifdef CIMGUI_USE_SDLGPU3
+#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+
+typedef struct ImGui_ImplSDLGPU3_InitInfo ImGui_ImplSDLGPU3_InitInfo;
+struct ImGui_ImplSDLGPU3_InitInfo {
+  SDL_GPUDevice *Device;
+  SDL_GPUTextureFormat ColorTargetFormat;
+  SDL_GPUSampleCount MSAASamples;
+};
+#endif // CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+CIMGUI_API _Bool ImGui_ImplSDLGPU3_Init(ImGui_ImplSDLGPU3_InitInfo *info);
+CIMGUI_API void ImGui_ImplSDLGPU3_Shutdown(void);
+CIMGUI_API void ImGui_ImplSDLGPU3_NewFrame(void);
+CIMGUI_API void Imgui_ImplSDLGPU3_PrepareDrawData(ImDrawData *draw_data, SDL_GPUCommandBuffer *command_buffer);
+CIMGUI_API void ImGui_ImplSDLGPU3_RenderDrawData(ImDrawData *draw_data, SDL_GPUCommandBuffer *command_buffer, SDL_GPURenderPass *render_pass, SDL_GPUGraphicsPipeline *pipeline); CIMGUI_API void ImGui_ImplSDLGPU3_CreateDeviceObjects(void);
+CIMGUI_API void ImGui_ImplSDLGPU3_DestroyDeviceObjects(void);
+CIMGUI_API void ImGui_ImplSDLGPU3_CreateFontsTexture(void);
+CIMGUI_API void ImGui_ImplSDLGPU3_DestroyFontsTexture(void);
+
+#endif

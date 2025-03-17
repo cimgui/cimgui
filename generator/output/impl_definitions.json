@@ -1622,5 +1622,182 @@
       "signature": "()",
       "stname": ""
     }
+  ],
+  "ImGui_ImplSDLGPU3_CreateDeviceObjects": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGui_ImplSDLGPU3_CreateDeviceObjects",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDLGPU3_CreateDeviceObjects",
+      "location": "imgui_impl_sdlgpu3:46",
+      "ov_cimguiname": "ImGui_ImplSDLGPU3_CreateDeviceObjects",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDLGPU3_CreateFontsTexture": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGui_ImplSDLGPU3_CreateFontsTexture",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDLGPU3_CreateFontsTexture",
+      "location": "imgui_impl_sdlgpu3:48",
+      "ov_cimguiname": "ImGui_ImplSDLGPU3_CreateFontsTexture",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDLGPU3_DestroyDeviceObjects": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGui_ImplSDLGPU3_DestroyDeviceObjects",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDLGPU3_DestroyDeviceObjects",
+      "location": "imgui_impl_sdlgpu3:47",
+      "ov_cimguiname": "ImGui_ImplSDLGPU3_DestroyDeviceObjects",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDLGPU3_DestroyFontsTexture": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGui_ImplSDLGPU3_DestroyFontsTexture",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDLGPU3_DestroyFontsTexture",
+      "location": "imgui_impl_sdlgpu3:49",
+      "ov_cimguiname": "ImGui_ImplSDLGPU3_DestroyFontsTexture",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDLGPU3_Init": [
+    {
+      "args": "(ImGui_ImplSDLGPU3_InitInfo* info)",
+      "argsT": [
+        {
+          "name": "info",
+          "type": "ImGui_ImplSDLGPU3_InitInfo*"
+        }
+      ],
+      "argsoriginal": "(ImGui_ImplSDLGPU3_InitInfo* info)",
+      "call_args": "(info)",
+      "cimguiname": "ImGui_ImplSDLGPU3_Init",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDLGPU3_Init",
+      "location": "imgui_impl_sdlgpu3:40",
+      "ov_cimguiname": "ImGui_ImplSDLGPU3_Init",
+      "ret": "_Bool",
+      "signature": "(ImGui_ImplSDLGPU3_InitInfo*)",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDLGPU3_NewFrame": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGui_ImplSDLGPU3_NewFrame",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDLGPU3_NewFrame",
+      "location": "imgui_impl_sdlgpu3:42",
+      "ov_cimguiname": "ImGui_ImplSDLGPU3_NewFrame",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDLGPU3_RenderDrawData": [
+    {
+      "args": "(ImDrawData* draw_data,SDL_GPUCommandBuffer* command_buffer,SDL_GPURenderPass* render_pass,SDL_GPUGraphicsPipeline* pipeline)",
+      "argsT": [
+        {
+          "name": "draw_data",
+          "type": "ImDrawData*"
+        },
+        {
+          "name": "command_buffer",
+          "type": "SDL_GPUCommandBuffer*"
+        },
+        {
+          "name": "render_pass",
+          "type": "SDL_GPURenderPass*"
+        },
+        {
+          "name": "pipeline",
+          "type": "SDL_GPUGraphicsPipeline*"
+        }
+      ],
+      "argsoriginal": "(ImDrawData* draw_data,SDL_GPUCommandBuffer* command_buffer,SDL_GPURenderPass* render_pass,SDL_GPUGraphicsPipeline* pipeline=nullptr)",
+      "call_args": "(draw_data,command_buffer,render_pass,pipeline)",
+      "cimguiname": "ImGui_ImplSDLGPU3_RenderDrawData",
+      "defaults": {
+        "pipeline": "nullptr"
+      },
+      "funcname": "ImGui_ImplSDLGPU3_RenderDrawData",
+      "location": "imgui_impl_sdlgpu3:44",
+      "ov_cimguiname": "ImGui_ImplSDLGPU3_RenderDrawData",
+      "ret": "void",
+      "signature": "(ImDrawData*,SDL_GPUCommandBuffer*,SDL_GPURenderPass*,SDL_GPUGraphicsPipeline*)",
+      "stname": ""
+    }
+  ],
+  "ImGui_ImplSDLGPU3_Shutdown": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "cimguiname": "ImGui_ImplSDLGPU3_Shutdown",
+      "defaults": {},
+      "funcname": "ImGui_ImplSDLGPU3_Shutdown",
+      "location": "imgui_impl_sdlgpu3:41",
+      "ov_cimguiname": "ImGui_ImplSDLGPU3_Shutdown",
+      "ret": "void",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
+  "Imgui_ImplSDLGPU3_PrepareDrawData": [
+    {
+      "args": "(ImDrawData* draw_data,SDL_GPUCommandBuffer* command_buffer)",
+      "argsT": [
+        {
+          "name": "draw_data",
+          "type": "ImDrawData*"
+        },
+        {
+          "name": "command_buffer",
+          "type": "SDL_GPUCommandBuffer*"
+        }
+      ],
+      "argsoriginal": "(ImDrawData* draw_data,SDL_GPUCommandBuffer* command_buffer)",
+      "call_args": "(draw_data,command_buffer)",
+      "cimguiname": "Imgui_ImplSDLGPU3_PrepareDrawData",
+      "defaults": {},
+      "funcname": "Imgui_ImplSDLGPU3_PrepareDrawData",
+      "location": "imgui_impl_sdlgpu3:43",
+      "ov_cimguiname": "Imgui_ImplSDLGPU3_PrepareDrawData",
+      "ret": "void",
+      "signature": "(ImDrawData*,SDL_GPUCommandBuffer*)",
+      "stname": ""
+    }
   ]
 }
