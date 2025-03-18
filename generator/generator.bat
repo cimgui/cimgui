@@ -20,7 +20,7 @@ set PATH=%PATH%;C:\anima;C:\mingws\i686-7.2.0-release-posix-dwarf-rt_v5-rev1\min
 :: examples: "" "internal" "internal comments"
 :: arg[3..n] name of implementations to generate and/or CFLAGS (e.g. -DIMGUI_USER_CONFIG) 
 ::-DIMGUI_USE_WCHAR32 should not be used (is discarded)
-luajit ./generator.lua gcc "internal noimstrv" glfw opengl3 opengl2 sdl2 sdl3 vulkan -DIMGUI_USE_WCHAR32 %*
+luajit ./generator.lua gcc "internal noimstrv" glfw opengl3 opengl2 sdl2 sdl3 vulkan %*
 
 ::leave console open
 cmd /k
