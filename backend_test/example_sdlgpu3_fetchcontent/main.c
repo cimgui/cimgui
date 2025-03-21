@@ -1,4 +1,3 @@
-#include "SDL3/SDL_pixels.h"
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -35,7 +34,9 @@ int main() {
   assert(window);
 
   SDL_GPUDevice *device =
-      SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_MSL, true, NULL);
+      SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_MSL | SDL_GPU_SHADERFORMAT_DXIL |
+                              SDL_GPU_SHADERFORMAT_SPIRV,
+                          true, NULL);
   assert(device);
 
   const char *device_driver = SDL_GetGPUDeviceDriver(device);
