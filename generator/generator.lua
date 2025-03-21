@@ -13,6 +13,7 @@ local CONSTRUCTORS_GENERATION = script_args[2]:match("constructors") and true or
 local NOCHAR = script_args[2]:match("nochar") and true or false
 local NOIMSTRV = script_args[2]:match("noimstrv") and true or false
 local IMGUI_PATH = os.getenv"IMGUI_PATH" or "../imgui"
+local CONFIG_GENERATOR_PATH = os.getenv"CONFIG_GENERATOR_PATH" or "./config_generator.lua"
 local CFLAGS = ""
 local CPRE,CTEST
 --get implementations
@@ -454,11 +455,18 @@ local parser2
 
 if #implementations > 0 then
 	print("------------------implementations generation with "..COMPILER.."------------------------")
+	--parser2 for function defs
+	--parser3 for separated structs and enums in cimgui_impl.h
     parser2 = cpp2ffi.Parser()
 	
-	local config = require"config_generator"
+	local config = dofile(CONFIG_GENERATOR_PATH) --"./config_generator.lua"
     local impl_str = ""
+	local impl_str_cpp = {}
     for i,impl in ipairs(implementations) do
+		table.insert(impl_str_cpp, "\n#ifdef CIMGUI_USE_" .. string.upper(impl))
+		table.insert(impl_str_cpp, [[#include "imgui_impl_]]..impl..[[.h"]])
+		table.insert(impl_str_cpp, "#endif")
+
         local source = backends_folder .. [[imgui_impl_]].. impl .. ".h "
         local locati = [[imgui_impl_]].. impl
 
@@ -495,15 +503,15 @@ if #implementations > 0 then
     end
 	
     parser2:do_parse()
-
-    -- save ./cimgui_impl.h
-    --local cfuncsstr = func_header_impl_generate(parser2) 
-	--local cstructstr1,cstructstr2 = parser2.structs_and_enums[1], parser2.structs_and_enums[2]
-    --save_data("./output/cimgui_impl.h",cstructstr1,cstructstr2,cfuncsstr)
 	save_data("./output/cimgui_impl.h",impl_str)
 
     ----------save fundefs in impl_definitions.lua for using in bindings
     save_data("./output/impl_definitions.lua",serializeTableF(parser2.defsT))
+	--impl cpp
+	impl_str_cpp = table.concat(impl_str_cpp, "\n")
+	local cppstr = read_data"./cimgui_impl_template.cpp"
+	cppstr = cppstr:gsub("GENERATED_PLACEHOLDER", impl_str_cpp)
+	save_data("./output/cimgui_impl.cpp",cppstr)
 
 end -- #implementations > 0 then
 
@@ -536,8 +544,10 @@ end
 -------------------copy C files to repo root
 copyfile("./output/cimgui.h", "../cimgui.h")
 copyfile("./output/cimgui_impl.h", "../cimgui_impl.h")
+copyfile("./output/cimgui_impl.cpp", "../cimgui_impl.cpp")
 copyfile("./output/cimgui.cpp", "../cimgui.cpp")
 os.remove("./output/cimgui.h")
 os.remove("./output/cimgui_impl.h")
+os.remove("./output/cimgui_impl.cpp")
 os.remove("./output/cimgui.cpp")
 print"all done!!"
