@@ -5,30 +5,7 @@
 #include "./imgui/imgui_internal.h"
 #include "cimgui.h"
 
-
-#ifdef CIMGUI_USE_GLFW
-#include "imgui_impl_glfw.h"
-#endif
-
-#ifdef CIMGUI_USE_OPENGL3
-#include "imgui_impl_opengl3.h"
-#endif
-
-#ifdef CIMGUI_USE_OPENGL2
-#include "imgui_impl_opengl2.h"
-#endif
-
-#ifdef CIMGUI_USE_SDL2
-#include "imgui_impl_sdl2.h"
-#endif
-
-#ifdef CIMGUI_USE_SDL3
-#include "imgui_impl_sdl3.h"
-#endif
-
-#ifdef CIMGUI_USE_VULKAN
-#include "imgui_impl_vulkan.h"
-#endif
+GENERATED_PLACEHOLDER
 
 #include "cimgui_impl.h"
 

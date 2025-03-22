@@ -128,8 +128,8 @@ igGetIDWithSeed	2
 1	ImGuiID	igGetIDWithSeed_Str (const char*,const char*,ImGuiID)
 2	ImGuiID	igGetIDWithSeed_Int (int,ImGuiID)
 igGetIO	2
-1	ImGuiIO*	igGetIO ()
-2	ImGuiIO*	igGetIOEx (ImGuiContext*)
+1	ImGuiIO*	igGetIO_Nil ()
+2	ImGuiIO*	igGetIO_ContextPtr (ImGuiContext*)
 igGetKeyData	2
 1	ImGuiKeyData*	igGetKeyData_ContextPtr (ImGuiContext*,ImGuiKey)
 2	ImGuiKeyData*	igGetKeyData_Key (ImGuiKey)

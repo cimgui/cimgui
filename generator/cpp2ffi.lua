@@ -2140,11 +2140,11 @@ function M.Parser()
         for k,v in pairs(self.alltypes) do print(k, typetoStr(k) ) end
     end
     function par:compute_overloads()
-		if self.IMGUI_HAS_TEXTURES then
-			print"----------replacing ImTextureID with ImTextureUserID"
-			REPLACE_TEXTUREID(self)
-			print"----------end replacing ImTextureID with ImTextureUserID"
-		end
+		-- if self.IMGUI_HAS_TEXTURES then
+			-- print"----------replacing ImTextureID with ImTextureUserID"
+			-- REPLACE_TEXTUREID(self)
+			-- print"----------end replacing ImTextureID with ImTextureUserID"
+		-- end
 		ADDIMSTR_S(self)
         local strt = {}
         local numoverloaded = 0

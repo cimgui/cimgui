@@ -26,6 +26,8 @@
 #define igButton igButton_Str
 #endif
 
+#define igGetIO igGetIO_Nil
+
 #define IM_UNUSED(_VAR)  ((void)(_VAR))
 #define IM_ASSERT(_EXPR) assert(_EXPR)
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR))))
