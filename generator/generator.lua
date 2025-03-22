@@ -480,11 +480,11 @@ if #implementations > 0 then
 				extra_includes = extra_includes .. include_cmd .. inc .. " "
 			end
 		end
-		parser2.cimgui_inherited =  dofile([[../../cimgui/generator/output/structs_and_enums.lua]])
+		parser2.cimgui_inherited =  dofile([[./output/structs_and_enums.lua]])
 		local defines = parser2:take_lines(CPRE..extra_defines..extra_includes..source, {locati}, COMPILER)
 		
 		local parser3 = cpp2ffi.Parser()
-		parser3.cimgui_inherited =  dofile([[../../cimgui/generator/output/structs_and_enums.lua]])
+		parser3.cimgui_inherited =  dofile([[./output/structs_and_enums.lua]])
 		parser3:take_lines(CPRE..extra_defines..extra_includes..source, {locati}, COMPILER)
 		parser3:do_parse()
 		local cfuncsstr = func_header_impl_generate(parser3) 
