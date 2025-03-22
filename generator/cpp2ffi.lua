@@ -1267,6 +1267,7 @@ local function printItems(items)
 	end
 end
 -------------
+local numerr = 0 --for popen error file
 function M.Parser()
 	local par = {}
 	local cdefs ={}
@@ -1310,7 +1311,9 @@ function M.Parser()
 		if self.COMMENTS_GENERATION then
 			cmd_line = cmd_line .. (compiler=="cl" and " /C " or " -C ")
 		end
-		local pipe,err = io.popen(cmd_line,"r")
+		numerr = numerr + 1
+		local errfile = "err"..numerr..".txt"
+		local pipe,err = io.popen(cmd_line.." 2>"..errfile,"r")
 		if not pipe then
 			error("could not execute COMPILER "..err)
 		end
@@ -1320,8 +1323,18 @@ function M.Parser()
 			self:insert(line, tostring(loca)..":"..tostring(loca2))
 			table.insert(preprocessed,line)--
 		end
-		save_data("preprocesed.h",table.concat(preprocessed,"\n"))
 		pipe:close()
+		--print(#preprocessed, "lines processed")
+		save_data("preprocesed.h",table.concat(preprocessed,"\n"))
+		
+		local f = assert(io.open(errfile,"r"))
+		local errstr = f:read"*a"
+		f:close()
+		--print(#errstr,"errstr")
+		print(errstr)
+		--try to guess a compiler error
+		assert(not errstr:match" error")
+		os.remove(errfile)
 		return defines
 	end
 	function par:do_parse()
