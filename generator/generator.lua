@@ -463,6 +463,7 @@ if #implementations > 0 then
     local impl_str = ""
 	local impl_str_cpp = {}
     for i,impl in ipairs(implementations) do
+		print("------------implementation:",impl)
 		table.insert(impl_str_cpp, "\n#ifdef CIMGUI_USE_" .. string.upper(impl))
 		table.insert(impl_str_cpp, [[#include "imgui_impl_]]..impl..[[.h"]])
 		table.insert(impl_str_cpp, "#endif")
