@@ -15,7 +15,9 @@ FetchContent_MakeAvailable(sdl3)
 
 include(GenerateCimguiBindings.cmake)
 
-GenerateCimguiBindings(cimgui_with_backend)
+set(inclist ${sdl3_SOURCE_DIR}/include)
+GenerateCimguiBindings(cimgui_with_backend sdl3 sdlgpu3 "${inclist}")
+target_link_libraries(cimgui_with_backend PRIVATE SDL3::SDL3)
 
 add_executable(${PROJECT_NAME} 
 	main.c

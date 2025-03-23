@@ -55,7 +55,7 @@ int main() {
 
     // Setup Platform/Renderer backends
     ImGui_ImplSDL3_InitForSDLGPU(window);
-    ImGui_ImplSDLGPU3_InitInfo init_info = {};
+    ImGui_ImplSDLGPU3_InitInfo init_info;//= {};
     init_info.Device = gpu_device;
     init_info.ColorTargetFormat = SDL_GetGPUSwapchainTextureFormat(gpu_device, window);
     init_info.MSAASamples = SDL_GPU_SAMPLECOUNT_1;
@@ -161,7 +161,7 @@ int main() {
             Imgui_ImplSDLGPU3_PrepareDrawData(draw_data, command_buffer);
 
             // Setup and start a render pass
-            SDL_GPUColorTargetInfo target_info = {};
+            SDL_GPUColorTargetInfo target_info ;//= {};
             target_info.texture = swapchain_texture;
             target_info.clear_color.r = clear_color.x;
 			target_info.clear_color.g = clear_color.y;
@@ -172,6 +172,12 @@ int main() {
             target_info.mip_level = 0;
             target_info.layer_or_depth_plane = 0;
             target_info.cycle = false;
+			target_info.resolve_texture = NULL;
+			target_info.resolve_mip_level = 0;
+			target_info.resolve_layer = 0;
+			target_info.cycle_resolve_texture = false;
+			target_info.padding1 = 0;
+			target_info.padding2 = 0;
             SDL_GPURenderPass* render_pass = SDL_BeginGPURenderPass(command_buffer, &target_info, 1, NULL);
 
             // Render ImGui
