@@ -1,8 +1,11 @@
 # This downloads cimgui, configures it to generate the SDL3 and SDLGPU3 bindings, 
 # and adds it as a cmake target for you to link to. Feel free to copy this file
 # into your project, or refit it to your needs.
+
+#include(CMakePrintHelpers)
+
 function(IncludesStr comp includes)
-	#message("includes is ${includes}")
+	#cmake_print_variables(includes)
 	if("${comp}" STREQUAL "cl")
 		set(Ist "/I")
 	else()
@@ -10,18 +13,18 @@ function(IncludesStr comp includes)
 	endif()
 	set(incstr "")
 	foreach(inc ${${includes}})
-		#message("inc is ${inc}")
-		set(incstr ${Ist}${inc} ${incstr})
+		set(incstr ${incstr} ${Ist}${inc})
 	endforeach()
 	set(incstr ${incstr} PARENT_SCOPE)
 endfunction()
 
-include(CMakePrintHelpers)
 
-function(GenerateCimguiBindings target platbk rendbk inclist)
+
+function(GenerateCimguiBindings target platbk rendbk _inclist)
 	include(FetchContent)
-	cmake_print_variables(inclist)
-	cmake_print_variables(${${inclist}})
+	#cmake_print_variables(_inclist)
+	set(__inclist ${${_inclist}})
+	#cmake_print_variables(__inclist)
 	# NOTE: In your own project, you may want to pin this project to a particular commit
 	FetchContent_Declare(
 		cimgui
@@ -41,16 +44,15 @@ function(GenerateCimguiBindings target platbk rendbk inclist)
 	# since this will be executed on each "configure" (whenever you run cmake)
 	string(TOUPPER ${platbk} PLATBK)
 	string(TOUPPER ${rendbk} RENDBK)
-	string(FIND "${cimgui_impl}" ${RENDBK} rendbk_position)
-	string(FIND "${cimgui_impl}" ${PLATBK} platbk_position)
+	string(FIND "${cimgui_impl}" CIMGUI_USE_${RENDBK} rendbk_position)
+	string(FIND "${cimgui_impl}" CIMGUI_USE_${PLATBK} platbk_position)
 	# If we don't find it, rendbk_position will be -1
 	if(rendbk_position EQUAL -1 OR platbk_position EQUAL -1)
 		#get compiler name
 		cmake_path(GET CMAKE_C_COMPILER FILENAME C_COMP)
 		cmake_path(REMOVE_EXTENSION C_COMP)
 		#get includes string
-		IncludesStr(${C_COMP} inclist)
-		#IncludesStr(${C_COMP} ${${inclist}})
+		IncludesStr(${C_COMP} __inclist)
 		message(STATUS "incstr is ${incstr}")
 		execute_process(
 		COMMAND luajit generator.lua ${C_COMP} "internal noimstrv" ${platbk} ${rendbk} ${incstr}
@@ -87,5 +89,4 @@ function(GenerateCimguiBindings target platbk rendbk inclist)
 		target_compile_definitions(${target} PUBLIC "-DIMGUI_IMPL_API=extern \"C\" ")
 	endif(WIN32)
 	target_compile_features(${target} PRIVATE cxx_std_11)
-	#target_link_libraries(${target} PRIVATE SDL3::SDL3)
 endfunction()
