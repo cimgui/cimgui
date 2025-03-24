@@ -22,6 +22,7 @@ endfunction()
 
 function(GenerateCimguiBindings target platbk rendbk _inclist)
 	include(FetchContent)
+	set(FETCHCONTENT_QUIET OFF)
 	#cmake_print_variables(_inclist)
 	set(__inclist ${${_inclist}})
 	#cmake_print_variables(__inclist)

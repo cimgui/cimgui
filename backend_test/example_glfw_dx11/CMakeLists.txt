@@ -8,6 +8,7 @@ include(FetchContent)
 set(GLFW_VERSION 3.3.8)
 FetchContent_Declare(
     glfw
+    EXCLUDE_FROM_ALL
     URL https://github.com/glfw/glfw/archive/refs/tags/${GLFW_VERSION}.tar.gz
     GIT_PROGRESS true)
 
@@ -17,7 +18,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 if (NOT STATIC_BUILD)
 	set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
 endif()
-#add_subdirectory(${glfw_SOURCE_DIR} ${glfw_BINARY_DIR} EXCLUDE_FROM_ALL)
+
 
 FetchContent_MakeAvailable(glfw)
 install(TARGETS glfw RUNTIME DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
