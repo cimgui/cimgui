@@ -61,6 +61,7 @@ function(GenerateCimguiBindings target platbk rendbk _inclist)
 		RESULT_VARIABLE build_command_result
 		)
 		if(NOT ${build_command_result} EQUAL 0)
+			message(STATUS "cimgui generation failed: Do you have LuaJIT?")
 			message(STATUS "cimgui generation failed: ${build_command_result}")
 			message(FATAL_ERROR "error_command: ${error_command}")
 		endif()

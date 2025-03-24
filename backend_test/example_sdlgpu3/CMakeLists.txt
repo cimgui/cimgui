@@ -13,7 +13,7 @@ FetchContent_Declare(
 set(SDL_TEST_LIBRARY OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(sdl3)
 
-include(GenerateCimguiBindings.cmake)
+include(../cmake/GenerateCimguiBindings.cmake)
 
 set(inclulist ${sdl3_SOURCE_DIR}/include)
 GenerateCimguiBindings(cimgui_with_backend sdl3 sdlgpu3 inclulist)
