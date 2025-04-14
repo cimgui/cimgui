@@ -9,11 +9,18 @@ OBJS += ./imgui/imgui_demo.o
 OBJS += ./imgui/imgui_tables.o
 OBJS += ./imgui/imgui_widgets.o
 
-CXXFLAGS=-O2 -fno-exceptions -fno-rtti
+CXXFLAGS=-o2 -fno-exceptions -fno-rtti
 
-UNAME_S := $(shell uname -s)
+UNAME_S ?= $(shell uname -s)
+
+ifeq ($(WASM),1)
+	UNAME_S := WASM
+endif
 
 AR := ar -rc
+
+LINKFLAGS =
+CFLAGS = $(CXXFLAGS)
 
 ifeq ($(UNAME_S), Linux) #LINUX
 	ECHO_MESSAGE = "Linux"
@@ -43,7 +50,20 @@ ifeq ($(OS), Windows_NT)
 	CXXFLAGS += -Wall
 	CXXFLAGS += -shared
 	LINKFLAGS = -limm32
+endif
+
+ifeq ($(UNAME_S), WASM)
+	ECHO_MESSAGE = "WASM (via musl-clang or wasi-clang)"
+
+	OUTPUTNAME = libcimgui.wasm
+	CXX ?= $(CC)
+	CXXFLAGS += --target=wasm32 -nostdlib -I./imgui/ -Wall -Wno-unused-command-line-argument
+	CXXFLAGS += -Wno-missing-prototypes -Wno-unused-variable
+	CXXFLAGS += -fvisibility=hidden
+	CXXFLAGS += -fno-threadsafe-statics
+	CXXFLAGS += -D__wasi__ -DIMGUI_DISABLE_FILE_FUNCTIONS
 	CFLAGS = $(CXXFLAGS)
+	LINKFLAGS += -Wl,--no-entry -Wl,--export-all
 endif
 
 .cpp.o:
