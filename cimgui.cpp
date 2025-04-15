@@ -11,6 +11,9 @@
 #include "./imgui/imgui_internal.h"
 #include "cimgui.h"
 
+#ifdef IMGUI_USE_STB_SPRINTF
+#include "imgui/stb_sprintf.h"
+#endif
 
 
 CIMGUI_API ImVec2* ImVec2_ImVec2_Nil(void)
@@ -5844,7 +5847,11 @@ CIMGUI_API void igLogText(const char *fmt, ...)
     char buffer[256];
     va_list args;
     va_start(args, fmt);
+#ifdef IMGUI_USE_STB_SPRINTF
+    stbsp_vsnprintf(buffer, 256, fmt, args);
+#else
     vsnprintf(buffer, 256, fmt, args);
+#endif
     va_end(args);
 
     ImGui::LogText("%s", buffer);
