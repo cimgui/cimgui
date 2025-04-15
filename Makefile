@@ -55,7 +55,7 @@ endif
 ifeq ($(UNAME_S), WASM)
 	ECHO_MESSAGE = "WASM (via musl-clang or wasi-clang)"
 
-	OUTPUTNAME = libcimgui.wasm
+	OUTPUTNAME = cimgui.so
 	CXX ?= $(CC)
 	CXXFLAGS += --target=wasm32 -nostdlib -I./imgui/ -Wall -Wno-unused-command-line-argument
 	CXXFLAGS += -Wno-missing-prototypes -Wno-unused-variable
