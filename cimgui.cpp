@@ -1329,6 +1329,13 @@ CIMGUI_API void igLogButtons()
 {
     return ImGui::LogButtons();
 }
+CIMGUI_API void igLogText(const char* fmt,...)
+{
+    va_list args;
+    va_start(args, fmt);
+    ImGui::LogTextV(fmt,args);
+    va_end(args);
+}
 CIMGUI_API void igLogTextV(const char* fmt,va_list args)
 {
     return ImGui::LogTextV(fmt,args);
@@ -5839,16 +5846,7 @@ CIMGUI_API void ImGuiFreeType_SetAllocatorFunctions(void*(*alloc_func)(size_t sz
 
 
 /////////////////////////////manual written functions
-CIMGUI_API void igLogText(const char *fmt, ...)
-{
-    char buffer[256];
-    va_list args;
-    va_start(args, fmt);
-    vsnprintf(buffer, 256, fmt, args);
-    va_end(args);
 
-    ImGui::LogText("%s", buffer);
-}
 CIMGUI_API void ImGuiTextBuffer_appendf(ImGuiTextBuffer *self, const char *fmt, ...)
 {
     va_list args;

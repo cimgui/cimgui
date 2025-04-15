@@ -78,7 +78,7 @@ print("CPRE",CPRE)
 --this table has the functions to be skipped in generation
 --------------------------------------------------------------------------
 local cimgui_manuals = {
-    igLogText = true,
+   -- igLogText = true,
     ImGuiTextBuffer_appendf = true,
     --igColorConvertRGBtoHSV = true,
     --igColorConvertHSVtoRGB = true

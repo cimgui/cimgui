@@ -29225,14 +29225,13 @@
           "type": "..."
         }
       ],
-      "argsoriginal": "(const char* fmt, ...)",
+      "argsoriginal": "(const char* fmt,...)",
       "call_args": "(fmt,...)",
       "cimguiname": "igLogText",
       "defaults": {},
       "funcname": "LogText",
       "isvararg": "...)",
       "location": "imgui:906",
-      "manual": true,
       "namespace": "ImGui",
       "ov_cimguiname": "igLogText",
       "ret": "void",

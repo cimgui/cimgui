@@ -3942,6 +3942,7 @@ CIMGUI_API void igLogToFile(int auto_open_depth,const char* filename);
 CIMGUI_API void igLogToClipboard(int auto_open_depth);
 CIMGUI_API void igLogFinish(void);
 CIMGUI_API void igLogButtons(void);
+CIMGUI_API void igLogText(const char* fmt,...);
 CIMGUI_API void igLogTextV(const char* fmt,va_list args);
 CIMGUI_API bool igBeginDragDropSource(ImGuiDragDropFlags flags);
 CIMGUI_API bool igSetDragDropPayload(const char* type,const void* data,size_t sz,ImGuiCond cond);
