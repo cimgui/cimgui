@@ -61,7 +61,7 @@ ifeq ($(UNAME_S), WASM)
 	CXXFLAGS += -Wno-missing-prototypes -Wno-unused-variable
 	CXXFLAGS += -fvisibility=hidden
 	CXXFLAGS += -fno-threadsafe-statics
-	CXXFLAGS += -D__wasi__ -DIMGUI_DISABLE_FILE_FUNCTIONS
+	CXXFLAGS += -D__wasi__ -DIMGUI_DISABLE_FILE_FUNCTIONS -DIMGUI_DISABLE_DEFAULT_SHELL_FUNCTIONS
 	CFLAGS = $(CXXFLAGS)
 	LINKFLAGS += -Wl,--no-entry -Wl,--export-all
 endif
