@@ -276,6 +276,35 @@ local function parse_enum_value(value, allenums,dontpost)
 	end
 end
 M.parse_enum_value = parse_enum_value
+
+--------------------------------------------------------------------------
+local function slice (tbl, s, e)
+    local pos, new = 1, {}
+    
+    for i = s, e do
+        new[pos] = tbl[i]
+        pos = pos + 1
+    end
+    
+    return new
+end
+
+local function paramListWithoutDots(params)
+	i, j = string.find(params, "%.%.%.")
+	while i > 1 do
+		i = i - 1
+		c = string.sub(params,i,i)
+		if c == "," then
+			return string.sub(params, 1, i-1) .. params:sub(j+1)
+		elseif c == "(" then
+			return string.sub(params, 1, i) .. params:sub(j+1)
+		end
+	end
+
+	error("paramListWithoutDots failed")
+	return "()"
+end
+
 --------------------------------------------------------------------------
 local function save_data(filename,...)
     local file,err = io.open(filename,"w")
@@ -924,6 +953,34 @@ local function parseFunction(self,stname,itt,namespace,locat)
         -- end
     end
 	defsT[cimguiname][signat] = defT
+
+	if defT.isvararg then
+		local name0 = cimguiname.."0"
+		defsT[name0] = defsT[name0] or {}
+		local signat0 = paramListWithoutDots(signat)
+
+		defsT[name0][1] = {
+			templated = defT.templated,
+			namespace = defT.namespace,
+			cimguiname = defT.cimguiname.."0",
+			ov_cimguiname = defT.cimguiname.."0",
+			stname = stname,
+			is_static_function = defT.is_static_function,
+			funcname = funcname,
+			argsoriginal = paramListWithoutDots(args),
+			args = paramListWithoutDots(asp),
+			signature = signat0,
+			call_args = paramListWithoutDots(caar),
+			location = locat,
+			comment = defT.comment,
+			argsT = slice(argsArr, 1, #argsArr-1),
+			manual = defT.manual,
+			skipped = defT.skipped,
+			ret = defT.ret,
+			defaults = defT.defaults,
+		}
+	end
+
 	
 end
 local function itemsCount(items)
@@ -2646,6 +2703,15 @@ local function ImGui_f_implementation(def)
         table.insert(outtab,"    return "..ptret..namespace..def.funcname..def.call_args..";\n")
     end
     table.insert(outtab,"}\n")
+
+	if def.isvararg then
+		-- For variadic functions we add a function implementation with zero argumets, for compatibility with languages such as C#.
+		table.insert(outtab, "CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname.."0"..paramListWithoutDots(def.args).."\n")
+		table.insert(outtab, "{\n")
+		table.insert(outtab, "    return "..def.ov_cimguiname..paramListWithoutDots(def.call_args)..";\n")
+		table.insert(outtab, "}\n")
+	end
+
 	return table.concat(outtab, "")
 end
 local function struct_f_implementation(def)
@@ -2796,7 +2862,11 @@ local function func_header_generate_funcs(FP)
             else --not constructor
 
                 if def.stname == "" or def.is_static_function then --ImGui namespace or top level
-                    table.insert(outtab,"CIMGUI_API "..def.ret.." ".. def.ov_cimguiname ..(empty and "(void)" or def.args)..";"..addcoment.."\n")
+                    table.insert(outtab, "CIMGUI_API "..def.ret.." ".. def.ov_cimguiname ..(empty and "(void)" or def.args)..";"..addcoment.."\n")
+					if def.isvararg then
+						-- For variadic functions we add a function implementation with zero argumets, for compatibility with languages such as C#.
+						table.insert(outtab, "CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname.."0"..paramListWithoutDots(def.args)..";\n")
+					end
                 else
                     table.insert(outtab,"CIMGUI_API "..def.ret.." "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
                 end

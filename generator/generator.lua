@@ -543,11 +543,13 @@ end
 --]]
 -------------------copy C files to repo root
 copyfile("./output/cimgui.h", "../cimgui.h")
-copyfile("./output/cimgui_impl.h", "../cimgui_impl.h")
-copyfile("./output/cimgui_impl.cpp", "../cimgui_impl.cpp")
 copyfile("./output/cimgui.cpp", "../cimgui.cpp")
 os.remove("./output/cimgui.h")
-os.remove("./output/cimgui_impl.h")
-os.remove("./output/cimgui_impl.cpp")
 os.remove("./output/cimgui.cpp")
+if #implementations > 0 then
+	copyfile("./output/cimgui_impl.h", "../cimgui_impl.h")
+	copyfile("./output/cimgui_impl.cpp", "../cimgui_impl.cpp")
+	os.remove("./output/cimgui_impl.h")
+	os.remove("./output/cimgui_impl.cpp")
+end
 print"all done!!"

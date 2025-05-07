@@ -539,6 +539,10 @@ CIMGUI_API void igText(const char* fmt,...)
     ImGui::TextV(fmt,args);
     va_end(args);
 }
+CIMGUI_API void igText0(const char* fmt)
+{
+    return igText(fmt);
+}
 CIMGUI_API void igTextV(const char* fmt,va_list args)
 {
     return ImGui::TextV(fmt,args);
@@ -549,6 +553,10 @@ CIMGUI_API void igTextColored(const ImVec4 col,const char* fmt,...)
     va_start(args, fmt);
     ImGui::TextColoredV(col,fmt,args);
     va_end(args);
+}
+CIMGUI_API void igTextColored0(const ImVec4 col,const char* fmt)
+{
+    return igTextColored(col,fmt);
 }
 CIMGUI_API void igTextColoredV(const ImVec4 col,const char* fmt,va_list args)
 {
@@ -561,6 +569,10 @@ CIMGUI_API void igTextDisabled(const char* fmt,...)
     ImGui::TextDisabledV(fmt,args);
     va_end(args);
 }
+CIMGUI_API void igTextDisabled0(const char* fmt)
+{
+    return igTextDisabled(fmt);
+}
 CIMGUI_API void igTextDisabledV(const char* fmt,va_list args)
 {
     return ImGui::TextDisabledV(fmt,args);
@@ -571,6 +583,10 @@ CIMGUI_API void igTextWrapped(const char* fmt,...)
     va_start(args, fmt);
     ImGui::TextWrappedV(fmt,args);
     va_end(args);
+}
+CIMGUI_API void igTextWrapped0(const char* fmt)
+{
+    return igTextWrapped(fmt);
 }
 CIMGUI_API void igTextWrappedV(const char* fmt,va_list args)
 {
@@ -583,6 +599,10 @@ CIMGUI_API void igLabelText(const char* label,const char* fmt,...)
     ImGui::LabelTextV(label,fmt,args);
     va_end(args);
 }
+CIMGUI_API void igLabelText0(const char* label,const char* fmt)
+{
+    return igLabelText(label,fmt);
+}
 CIMGUI_API void igLabelTextV(const char* label,const char* fmt,va_list args)
 {
     return ImGui::LabelTextV(label,fmt,args);
@@ -593,6 +613,10 @@ CIMGUI_API void igBulletText(const char* fmt,...)
     va_start(args, fmt);
     ImGui::BulletTextV(fmt,args);
     va_end(args);
+}
+CIMGUI_API void igBulletText0(const char* fmt)
+{
+    return igBulletText(fmt);
 }
 CIMGUI_API void igBulletTextV(const char* fmt,va_list args)
 {
@@ -882,6 +906,10 @@ CIMGUI_API bool igTreeNode_StrStr(const char* str_id,const char* fmt,...)
     va_end(args);
     return ret;
 }
+CIMGUI_API bool igTreeNode_StrStr0(const char* str_id,const char* fmt)
+{
+    return igTreeNode_StrStr(str_id,fmt);
+}
 CIMGUI_API bool igTreeNode_Ptr(const void* ptr_id,const char* fmt,...)
 {
     va_list args;
@@ -889,6 +917,10 @@ CIMGUI_API bool igTreeNode_Ptr(const void* ptr_id,const char* fmt,...)
     bool ret = ImGui::TreeNodeV(ptr_id,fmt,args);
     va_end(args);
     return ret;
+}
+CIMGUI_API bool igTreeNode_Ptr0(const void* ptr_id,const char* fmt)
+{
+    return igTreeNode_Ptr(ptr_id,fmt);
 }
 CIMGUI_API bool igTreeNodeV_Str(const char* str_id,const char* fmt,va_list args)
 {
@@ -910,6 +942,10 @@ CIMGUI_API bool igTreeNodeEx_StrStr(const char* str_id,ImGuiTreeNodeFlags flags,
     va_end(args);
     return ret;
 }
+CIMGUI_API bool igTreeNodeEx_StrStr0(const char* str_id,ImGuiTreeNodeFlags flags,const char* fmt)
+{
+    return igTreeNodeEx_StrStr(str_id,flags,fmt);
+}
 CIMGUI_API bool igTreeNodeEx_Ptr(const void* ptr_id,ImGuiTreeNodeFlags flags,const char* fmt,...)
 {
     va_list args;
@@ -917,6 +953,10 @@ CIMGUI_API bool igTreeNodeEx_Ptr(const void* ptr_id,ImGuiTreeNodeFlags flags,con
     bool ret = ImGui::TreeNodeExV(ptr_id,flags,fmt,args);
     va_end(args);
     return ret;
+}
+CIMGUI_API bool igTreeNodeEx_Ptr0(const void* ptr_id,ImGuiTreeNodeFlags flags,const char* fmt)
+{
+    return igTreeNodeEx_Ptr(ptr_id,flags,fmt);
 }
 CIMGUI_API bool igTreeNodeExV_Str(const char* str_id,ImGuiTreeNodeFlags flags,const char* fmt,va_list args)
 {
@@ -1077,6 +1117,10 @@ CIMGUI_API void igSetTooltip(const char* fmt,...)
     ImGui::SetTooltipV(fmt,args);
     va_end(args);
 }
+CIMGUI_API void igSetTooltip0(const char* fmt)
+{
+    return igSetTooltip(fmt);
+}
 CIMGUI_API void igSetTooltipV(const char* fmt,va_list args)
 {
     return ImGui::SetTooltipV(fmt,args);
@@ -1091,6 +1135,10 @@ CIMGUI_API void igSetItemTooltip(const char* fmt,...)
     va_start(args, fmt);
     ImGui::SetItemTooltipV(fmt,args);
     va_end(args);
+}
+CIMGUI_API void igSetItemTooltip0(const char* fmt)
+{
+    return igSetItemTooltip(fmt);
 }
 CIMGUI_API void igSetItemTooltipV(const char* fmt,va_list args)
 {
@@ -1642,6 +1690,10 @@ CIMGUI_API void igDebugLog(const char* fmt,...)
     va_start(args, fmt);
     ImGui::DebugLogV(fmt,args);
     va_end(args);
+}
+CIMGUI_API void igDebugLog0(const char* fmt)
+{
+    return igDebugLog(fmt);
 }
 CIMGUI_API void igDebugLogV(const char* fmt,va_list args)
 {
@@ -2827,6 +2879,10 @@ CIMGUI_API int igImFormatString(char* buf,size_t buf_size,const char* fmt,...)
     va_end(args);
     return ret;
 }
+CIMGUI_API int igImFormatString0(char* buf,size_t buf_size,const char* fmt)
+{
+    return igImFormatString(buf,buf_size,fmt);
+}
 CIMGUI_API int igImFormatStringV(char* buf,size_t buf_size,const char* fmt,va_list args)
 {
     return ImFormatStringV(buf,buf_size,fmt,args);
@@ -2837,6 +2893,10 @@ CIMGUI_API void igImFormatStringToTempBuffer(const char** out_buf,const char** o
     va_start(args, fmt);
     ImFormatStringToTempBufferV(out_buf,out_buf_end,fmt,args);
     va_end(args);
+}
+CIMGUI_API void igImFormatStringToTempBuffer0(const char** out_buf,const char** out_buf_end,const char* fmt)
+{
+    return igImFormatStringToTempBuffer(out_buf,out_buf_end,fmt);
 }
 CIMGUI_API void igImFormatStringToTempBufferV(const char** out_buf,const char** out_buf_end,const char* fmt,va_list args)
 {

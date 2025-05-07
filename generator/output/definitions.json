@@ -9442,6 +9442,32 @@
       "stname": "ImGuiTextBuffer"
     }
   ],
+  "ImGuiTextBuffer_appendf0": [
+    {
+      "args": "(ImGuiTextBuffer* self, const char* fmt)",
+      "argsT": [
+        {
+          "name": "self",
+          "type": "ImGuiTextBuffer*"
+        },
+        {
+          "name": "fmt",
+          "type": " const char*"
+        }
+      ],
+      "argsoriginal": "(ImGuiTextBuffer* self, const char* fmt)",
+      "call_args": "(self,fmt)",
+      "cimguiname": "ImGuiTextBuffer_appendf0",
+      "defaults": {},
+      "funcname": "appendf",
+      "location": "imgui:2610",
+      "manual": true,
+      "ov_cimguiname": "ImGuiTextBuffer_appendf0",
+      "ret": "void",
+      "signature": "(ImGuiTextBuffer*, const char*)",
+      "stname": "ImGuiTextBuffer"
+    }
+  ],
   "ImGuiTextBuffer_appendfv": [
     {
       "args": "(ImGuiTextBuffer* self,const char* fmt,va_list args)",
@@ -14975,6 +15001,28 @@
       "stname": ""
     }
   ],
+  "igBulletText0": [
+    {
+      "args": "(const char* fmt)",
+      "argsT": [
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const char* fmt)",
+      "call_args": "(fmt)",
+      "cimguiname": "igBulletText0",
+      "defaults": {},
+      "funcname": "BulletText",
+      "location": "imgui:543",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igBulletText0",
+      "ret": "void",
+      "signature": "(const char*)",
+      "stname": ""
+    }
+  ],
   "igBulletTextV": [
     {
       "args": "(const char* fmt,va_list args)",
@@ -16920,6 +16968,28 @@
       "ov_cimguiname": "igDebugLog",
       "ret": "void",
       "signature": "(const char*,...)",
+      "stname": ""
+    }
+  ],
+  "igDebugLog0": [
+    {
+      "args": "(const char* fmt)",
+      "argsT": [
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const char* fmt)",
+      "call_args": "(fmt)",
+      "cimguiname": "igDebugLog0",
+      "defaults": {},
+      "funcname": "DebugLog",
+      "location": "imgui:1048",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igDebugLog0",
+      "ret": "void",
+      "signature": "(const char*)",
       "stname": ""
     }
   ],
@@ -22670,6 +22740,35 @@
       "stname": ""
     }
   ],
+  "igImFormatString0": [
+    {
+      "args": "(char* buf,size_t buf_size,const char* fmt)",
+      "argsT": [
+        {
+          "name": "buf",
+          "type": "char*"
+        },
+        {
+          "name": "buf_size",
+          "type": "size_t"
+        },
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(char* buf,size_t buf_size,const char* fmt)",
+      "call_args": "(buf,buf_size,fmt)",
+      "cimguiname": "igImFormatString0",
+      "defaults": {},
+      "funcname": "ImFormatString",
+      "location": "imgui_internal:398",
+      "ov_cimguiname": "igImFormatString0",
+      "ret": "int",
+      "signature": "(char*,size_t,const char*)",
+      "stname": ""
+    }
+  ],
   "igImFormatStringToTempBuffer": [
     {
       "args": "(const char** out_buf,const char** out_buf_end,const char* fmt,...)",
@@ -22701,6 +22800,35 @@
       "ov_cimguiname": "igImFormatStringToTempBuffer",
       "ret": "void",
       "signature": "(const char**,const char**,const char*,...)",
+      "stname": ""
+    }
+  ],
+  "igImFormatStringToTempBuffer0": [
+    {
+      "args": "(const char** out_buf,const char** out_buf_end,const char* fmt)",
+      "argsT": [
+        {
+          "name": "out_buf",
+          "type": "const char**"
+        },
+        {
+          "name": "out_buf_end",
+          "type": "const char**"
+        },
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const char** out_buf,const char** out_buf_end,const char* fmt)",
+      "call_args": "(out_buf,out_buf_end,fmt)",
+      "cimguiname": "igImFormatStringToTempBuffer0",
+      "defaults": {},
+      "funcname": "ImFormatStringToTempBuffer",
+      "location": "imgui_internal:400",
+      "ov_cimguiname": "igImFormatStringToTempBuffer0",
+      "ret": "void",
+      "signature": "(const char**,const char**,const char*)",
       "stname": ""
     }
   ],
@@ -23626,7 +23754,7 @@
       "cimguiname": "igImRsqrt",
       "defaults": {},
       "funcname": "ImRsqrt",
-      "location": "imgui_internal:467",
+      "location": "imgui_internal:465",
       "ov_cimguiname": "igImRsqrt_Float",
       "ret": "float",
       "signature": "(float)",
@@ -27033,6 +27161,32 @@
       "stname": ""
     }
   ],
+  "igLabelText0": [
+    {
+      "args": "(const char* label,const char* fmt)",
+      "argsT": [
+        {
+          "name": "label",
+          "type": "const char*"
+        },
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const char* label,const char* fmt)",
+      "call_args": "(label,fmt)",
+      "cimguiname": "igLabelText0",
+      "defaults": {},
+      "funcname": "LabelText",
+      "location": "imgui:541",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igLabelText0",
+      "ret": "void",
+      "signature": "(const char*,const char*)",
+      "stname": ""
+    }
+  ],
   "igLabelTextV": [
     {
       "args": "(const char* label,const char* fmt,va_list args)",
@@ -27388,6 +27542,29 @@
       "ov_cimguiname": "igLogText",
       "ret": "void",
       "signature": "(const char*,...)",
+      "stname": ""
+    }
+  ],
+  "igLogText0": [
+    {
+      "args": "(const char* fmt)",
+      "argsT": [
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const char* fmt)",
+      "call_args": "(fmt)",
+      "cimguiname": "igLogText0",
+      "defaults": {},
+      "funcname": "LogText",
+      "location": "imgui:878",
+      "manual": true,
+      "namespace": "ImGui",
+      "ov_cimguiname": "igLogText0",
+      "ret": "void",
+      "signature": "(const char*)",
       "stname": ""
     }
   ],
@@ -31102,6 +31279,28 @@
       "stname": ""
     }
   ],
+  "igSetItemTooltip0": [
+    {
+      "args": "(const char* fmt)",
+      "argsT": [
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const char* fmt)",
+      "call_args": "(fmt)",
+      "cimguiname": "igSetItemTooltip0",
+      "defaults": {},
+      "funcname": "SetItemTooltip",
+      "location": "imgui:749",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igSetItemTooltip0",
+      "ret": "void",
+      "signature": "(const char*)",
+      "stname": ""
+    }
+  ],
   "igSetItemTooltipV": [
     {
       "args": "(const char* fmt,va_list args)",
@@ -32179,6 +32378,28 @@
       "ov_cimguiname": "igSetTooltip",
       "ret": "void",
       "signature": "(const char*,...)",
+      "stname": ""
+    }
+  ],
+  "igSetTooltip0": [
+    {
+      "args": "(const char* fmt)",
+      "argsT": [
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const char* fmt)",
+      "call_args": "(fmt)",
+      "cimguiname": "igSetTooltip0",
+      "defaults": {},
+      "funcname": "SetTooltip",
+      "location": "imgui:741",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igSetTooltip0",
+      "ret": "void",
+      "signature": "(const char*)",
       "stname": ""
     }
   ],
@@ -36152,6 +36373,28 @@
       "stname": ""
     }
   ],
+  "igText0": [
+    {
+      "args": "(const char* fmt)",
+      "argsT": [
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const char* fmt)",
+      "call_args": "(fmt)",
+      "cimguiname": "igText0",
+      "defaults": {},
+      "funcname": "Text",
+      "location": "imgui:533",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igText0",
+      "ret": "void",
+      "signature": "(const char*)",
+      "stname": ""
+    }
+  ],
   "igTextColored": [
     {
       "args": "(const ImVec4 col,const char* fmt,...)",
@@ -36180,6 +36423,32 @@
       "ov_cimguiname": "igTextColored",
       "ret": "void",
       "signature": "(const ImVec4,const char*,...)",
+      "stname": ""
+    }
+  ],
+  "igTextColored0": [
+    {
+      "args": "(const ImVec4 col,const char* fmt)",
+      "argsT": [
+        {
+          "name": "col",
+          "type": "const ImVec4"
+        },
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const ImVec4& col,const char* fmt)",
+      "call_args": "(col,fmt)",
+      "cimguiname": "igTextColored0",
+      "defaults": {},
+      "funcname": "TextColored",
+      "location": "imgui:535",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igTextColored0",
+      "ret": "void",
+      "signature": "(const ImVec4,const char*)",
       "stname": ""
     }
   ],
@@ -36237,6 +36506,28 @@
       "ov_cimguiname": "igTextDisabled",
       "ret": "void",
       "signature": "(const char*,...)",
+      "stname": ""
+    }
+  ],
+  "igTextDisabled0": [
+    {
+      "args": "(const char* fmt)",
+      "argsT": [
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const char* fmt)",
+      "call_args": "(fmt)",
+      "cimguiname": "igTextDisabled0",
+      "defaults": {},
+      "funcname": "TextDisabled",
+      "location": "imgui:537",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igTextDisabled0",
+      "ret": "void",
+      "signature": "(const char*)",
       "stname": ""
     }
   ],
@@ -36430,6 +36721,28 @@
       "stname": ""
     }
   ],
+  "igTextWrapped0": [
+    {
+      "args": "(const char* fmt)",
+      "argsT": [
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const char* fmt)",
+      "call_args": "(fmt)",
+      "cimguiname": "igTextWrapped0",
+      "defaults": {},
+      "funcname": "TextWrapped",
+      "location": "imgui:539",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igTextWrapped0",
+      "ret": "void",
+      "signature": "(const char*)",
+      "stname": ""
+    }
+  ],
   "igTextWrappedV": [
     {
       "args": "(const char* fmt,va_list args)",
@@ -36533,6 +36846,32 @@
       "ov_cimguiname": "igTreeNode_Ptr",
       "ret": "bool",
       "signature": "(const void*,const char*,...)",
+      "stname": ""
+    }
+  ],
+  "igTreeNode0": [
+    {
+      "args": "(const void* ptr_id,const char* fmt)",
+      "argsT": [
+        {
+          "name": "ptr_id",
+          "type": "const void*"
+        },
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const void* ptr_id,const char* fmt)",
+      "call_args": "(ptr_id,fmt)",
+      "cimguiname": "igTreeNode0",
+      "defaults": {},
+      "funcname": "TreeNode",
+      "location": "imgui:660",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igTreeNode0",
+      "ret": "bool",
+      "signature": "(const void*,const char*)",
       "stname": ""
     }
   ],
@@ -36663,6 +37002,36 @@
       "ov_cimguiname": "igTreeNodeEx_Ptr",
       "ret": "bool",
       "signature": "(const void*,ImGuiTreeNodeFlags,const char*,...)",
+      "stname": ""
+    }
+  ],
+  "igTreeNodeEx0": [
+    {
+      "args": "(const void* ptr_id,ImGuiTreeNodeFlags flags,const char* fmt)",
+      "argsT": [
+        {
+          "name": "ptr_id",
+          "type": "const void*"
+        },
+        {
+          "name": "flags",
+          "type": "ImGuiTreeNodeFlags"
+        },
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const void* ptr_id,ImGuiTreeNodeFlags flags,const char* fmt)",
+      "call_args": "(ptr_id,flags,fmt)",
+      "cimguiname": "igTreeNodeEx0",
+      "defaults": {},
+      "funcname": "TreeNodeEx",
+      "location": "imgui:665",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igTreeNodeEx0",
+      "ret": "bool",
+      "signature": "(const void*,ImGuiTreeNodeFlags,const char*)",
       "stname": ""
     }
   ],
