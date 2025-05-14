@@ -513,6 +513,11 @@ if #implementations > 0 then
 	local cppstr = read_data"./cimgui_impl_template.cpp"
 	cppstr = cppstr:gsub("GENERATED_PLACEHOLDER", impl_str_cpp)
 	save_data("./output/cimgui_impl.cpp",cppstr)
+	
+	copyfile("./output/cimgui_impl.h", "../cimgui_impl.h")
+	copyfile("./output/cimgui_impl.cpp", "../cimgui_impl.cpp")
+	os.remove("./output/cimgui_impl.h")
+	os.remove("./output/cimgui_impl.cpp")
 
 end -- #implementations > 0 then
 
@@ -544,11 +549,7 @@ end
 --]]
 -------------------copy C files to repo root
 copyfile("./output/cimgui.h", "../cimgui.h")
-copyfile("./output/cimgui_impl.h", "../cimgui_impl.h")
-copyfile("./output/cimgui_impl.cpp", "../cimgui_impl.cpp")
 copyfile("./output/cimgui.cpp", "../cimgui.cpp")
 os.remove("./output/cimgui.h")
-os.remove("./output/cimgui_impl.h")
-os.remove("./output/cimgui_impl.cpp")
 os.remove("./output/cimgui.cpp")
 print"all done!!"
