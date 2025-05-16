@@ -3757,16 +3757,34 @@ CIMGUI_API ImGuiID igGetID_Ptr(const void* ptr_id);
 CIMGUI_API ImGuiID igGetID_Int(int int_id);
 CIMGUI_API void igTextUnformatted(const char* text,const char* text_end);
 CIMGUI_API void igText(const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API void igText0(const char* fmt);
+#endif
 CIMGUI_API void igTextV(const char* fmt,va_list args);
 CIMGUI_API void igTextColored(const ImVec4 col,const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API void igTextColored0(const ImVec4 col,const char* fmt);
+#endif
 CIMGUI_API void igTextColoredV(const ImVec4 col,const char* fmt,va_list args);
 CIMGUI_API void igTextDisabled(const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API void igTextDisabled0(const char* fmt);
+#endif
 CIMGUI_API void igTextDisabledV(const char* fmt,va_list args);
 CIMGUI_API void igTextWrapped(const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API void igTextWrapped0(const char* fmt);
+#endif
 CIMGUI_API void igTextWrappedV(const char* fmt,va_list args);
 CIMGUI_API void igLabelText(const char* label,const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API void igLabelText0(const char* label,const char* fmt);
+#endif
 CIMGUI_API void igLabelTextV(const char* label,const char* fmt,va_list args);
 CIMGUI_API void igBulletText(const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API void igBulletText0(const char* fmt);
+#endif
 CIMGUI_API void igBulletTextV(const char* fmt,va_list args);
 CIMGUI_API void igSeparatorText(const char* label);
 CIMGUI_API bool igButton(const char* label,const ImVec2 size);
@@ -3838,12 +3856,24 @@ CIMGUI_API bool igColorButton(const char* desc_id,const ImVec4 col,ImGuiColorEdi
 CIMGUI_API void igSetColorEditOptions(ImGuiColorEditFlags flags);
 CIMGUI_API bool igTreeNode_Str(const char* label);
 CIMGUI_API bool igTreeNode_StrStr(const char* str_id,const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API bool igTreeNode_StrStr0(const char* str_id,const char* fmt);
+#endif
 CIMGUI_API bool igTreeNode_Ptr(const void* ptr_id,const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API bool igTreeNode_Ptr0(const void* ptr_id,const char* fmt);
+#endif
 CIMGUI_API bool igTreeNodeV_Str(const char* str_id,const char* fmt,va_list args);
 CIMGUI_API bool igTreeNodeV_Ptr(const void* ptr_id,const char* fmt,va_list args);
 CIMGUI_API bool igTreeNodeEx_Str(const char* label,ImGuiTreeNodeFlags flags);
 CIMGUI_API bool igTreeNodeEx_StrStr(const char* str_id,ImGuiTreeNodeFlags flags,const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API bool igTreeNodeEx_StrStr0(const char* str_id,ImGuiTreeNodeFlags flags,const char* fmt);
+#endif
 CIMGUI_API bool igTreeNodeEx_Ptr(const void* ptr_id,ImGuiTreeNodeFlags flags,const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API bool igTreeNodeEx_Ptr0(const void* ptr_id,ImGuiTreeNodeFlags flags,const char* fmt);
+#endif
 CIMGUI_API bool igTreeNodeExV_Str(const char* str_id,ImGuiTreeNodeFlags flags,const char* fmt,va_list args);
 CIMGUI_API bool igTreeNodeExV_Ptr(const void* ptr_id,ImGuiTreeNodeFlags flags,const char* fmt,va_list args);
 CIMGUI_API void igTreePush_Str(const char* str_id);
@@ -3883,9 +3913,15 @@ CIMGUI_API bool igMenuItem_BoolPtr(const char* label,const char* shortcut,bool* 
 CIMGUI_API bool igBeginTooltip(void);
 CIMGUI_API void igEndTooltip(void);
 CIMGUI_API void igSetTooltip(const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API void igSetTooltip0(const char* fmt);
+#endif
 CIMGUI_API void igSetTooltipV(const char* fmt,va_list args);
 CIMGUI_API bool igBeginItemTooltip(void);
 CIMGUI_API void igSetItemTooltip(const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API void igSetItemTooltip0(const char* fmt);
+#endif
 CIMGUI_API void igSetItemTooltipV(const char* fmt,va_list args);
 CIMGUI_API bool igBeginPopup(const char* str_id,ImGuiWindowFlags flags);
 CIMGUI_API bool igBeginPopupModal(const char* name,bool* p_open,ImGuiWindowFlags flags);
@@ -3943,6 +3979,9 @@ CIMGUI_API void igLogToClipboard(int auto_open_depth);
 CIMGUI_API void igLogFinish(void);
 CIMGUI_API void igLogButtons(void);
 CIMGUI_API void igLogText(const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API void igLogText0(const char* fmt);
+#endif
 CIMGUI_API void igLogTextV(const char* fmt,va_list args);
 CIMGUI_API bool igBeginDragDropSource(ImGuiDragDropFlags flags);
 CIMGUI_API bool igSetDragDropPayload(const char* type,const void* data,size_t sz,ImGuiCond cond);
@@ -4030,6 +4069,9 @@ CIMGUI_API void igDebugFlashStyleColor(ImGuiCol idx);
 CIMGUI_API void igDebugStartItemPicker(void);
 CIMGUI_API bool igDebugCheckVersionAndDataLayout(const char* version_str,size_t sz_io,size_t sz_style,size_t sz_vec2,size_t sz_vec4,size_t sz_drawvert,size_t sz_drawidx);
 CIMGUI_API void igDebugLog(const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API void igDebugLog0(const char* fmt);
+#endif
 CIMGUI_API void igDebugLogV(const char* fmt,va_list args);
 CIMGUI_API void igSetAllocatorFunctions(ImGuiMemAllocFunc alloc_func,ImGuiMemFreeFunc free_func,void* user_data);
 CIMGUI_API void igGetAllocatorFunctions(ImGuiMemAllocFunc* p_alloc_func,ImGuiMemFreeFunc* p_free_func,void** p_user_data);
@@ -4335,8 +4377,14 @@ CIMGUI_API bool igImCharIsBlankA(char c);
 CIMGUI_API bool igImCharIsBlankW(unsigned int c);
 CIMGUI_API bool igImCharIsXdigitA(char c);
 CIMGUI_API int igImFormatString(char* buf,size_t buf_size,const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API int igImFormatString0(char* buf,size_t buf_size,const char* fmt);
+#endif
 CIMGUI_API int igImFormatStringV(char* buf,size_t buf_size,const char* fmt,va_list args);
 CIMGUI_API void igImFormatStringToTempBuffer(const char** out_buf,const char** out_buf_end,const char* fmt,...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API void igImFormatStringToTempBuffer0(const char** out_buf,const char** out_buf_end,const char* fmt);
+#endif
 CIMGUI_API void igImFormatStringToTempBufferV(const char** out_buf,const char** out_buf_end,const char* fmt,va_list args);
 CIMGUI_API const char* igImParseFormatFindStart(const char* format);
 CIMGUI_API const char* igImParseFormatFindEnd(const char* format);

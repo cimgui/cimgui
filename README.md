@@ -24,7 +24,7 @@ Notes:
   * `git submodule update --init --recursive` (If already cloned)
 * compile 
   * using makefile on linux/macOS/mingw (Or use CMake to generate project)
-  * cmake options are IMGUI_STATIC (compiling as static library), IMGUI_FREETYPE (for using Freetype2) and FREETYPE_PATH (Freetype2 cmake install location) and IMGUI_WCHAR32
+  * cmake options are IMGUI_STATIC (compiling as static library), IMGUI_FREETYPE (for using Freetype2) and FREETYPE_PATH (Freetype2 cmake install location), IMGUI_WCHAR32 and CIMGUI_VARGS0 for compiling a function version without varargs for vararg functions (function name with 0 sufix)
   * or as in https://github.com/sonoro1234/LuaJIT-ImGui/tree/master/build
   
   For compiling with backends there are now examples with SDL2 and opengl3/vulkan in folder backend_test.
