@@ -8,4 +8,4 @@ set_property(TARGET cimgui_test PROPERTY C_STANDARD 99)
 
 target_compile_definitions(cimgui_test
                            PRIVATE CIMGUI_DEFINE_ENUMS_AND_STRUCTS=1)
-target_link_libraries(cimgui_test PRIVATE cimgui)
+target_link_libraries(cimgui_test PRIVATE cimgui-Static)
