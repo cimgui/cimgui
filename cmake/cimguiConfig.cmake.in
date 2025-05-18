@@ -1,0 +1,15 @@
+@PACKAGE_INIT@
+
+# ----------------------------------------------------------------
+# define a single “public” alias so clients can do this:
+# target_link_libraries(foo PRIVATE cimgui::cimgui) without worrying which
+# actual target (Static vs Shared) exists
+# ----------------------------------------------------------------
+include(${CMAKE_CURRENT_LIST_DIR}/cimguiDependencies.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/cimguiTargets.cmake)
+
+if(TARGET cimgui::cimgui-Shared)
+  add_library(cimgui::cimgui ALIAS cimgui::cimgui-Shared)
+elseif(TARGET cimgui::cimgui-Static)
+  add_library(cimgui::cimgui ALIAS cimgui::cimgui-Static)
+endif()
