@@ -21,7 +21,7 @@ jobs:
       env:
         GITHUB_OS: ${{ matrix.os }}
       run: |
-        if [ "$GITHUB_OS" != "windows-latest" ]; then
+        if [ "$GITHUB_OS" == "ubuntu-latest" ]; then
           sudo apt-get update
           sudo apt-get install -y luajit build-essential cmake git libudev-dev libasound2-dev libpulse-dev libwayland-dev libx11-dev libxext-dev libxrandr-dev libxrender-dev libxfixes-dev libxcursor-dev libxi-dev libxinerama-dev libxss-dev libxkbcommon-dev libdrm-dev
           git clone https://github.com/libsdl-org/SDL.git SDL3
@@ -31,6 +31,14 @@ jobs:
           make
           sudo make install
           sudo ldconfig
+        elif [ "$GITHUB_OS" == "macOS-latest" ]; then
+          brew install luajit cmake ninja git
+          git clone https://github.com/libsdl-org/SDL.git SDL3
+          cd SDL3
+          mkdir build && cd build
+          cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDL_STATIC=OFF
+          ninja
+          sudo ninja install
         else
           vcpkg install luajit:x64-windows sdl3:x64-windows
           echo "/C/vcpkg/installed/x64-windows/tools/luajit" >> $GITHUB_PATH
