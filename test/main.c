@@ -22,10 +22,6 @@ int main(void)
   igCreateContext(NULL);
   ImGuiIO *io = igGetIO();
 
-  unsigned char *text_pixels = NULL;
-  int text_w, text_h;
-  ImFontAtlas_GetTexDataAsRGBA32(io->Fonts, &text_pixels, &text_w, &text_h, NULL);
-
   for (int n = 0; n < 20; n++) {
     printf("NewFrame() %d\n", n);
 
@@ -46,8 +42,8 @@ int main(void)
 
     igRender();
   }
-  printf("%llu\n",ImGuiWindowFlags_NoTitleBar);
-  printf("size: %d\n",sizeof(ImGuiWindowFlags_NoTitleBar));
+  printf("%d\n",ImGuiWindowFlags_NoTitleBar);
+  printf("size: %zu\n",sizeof(ImGuiWindowFlags_NoTitleBar));
   printf("DestroyContext()\n");
   igDestroyContext(NULL);
 
