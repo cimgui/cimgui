@@ -31,7 +31,7 @@ jobs:
           make
           sudo make install
           sudo ldconfig
-        elif
+        else
           vcpkg install luajit:x64-windows sdl3:x64-windows
           echo "/C/vcpkg/installed/x64-windows/tools/luajit" >> $GITHUB_PATH
           echo "/C/vcpkg/installed/x64-windows/bin" >> $GITHUB_PATH
