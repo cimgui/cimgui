@@ -1,51 +1,80 @@
-#include <stdio.h>
-#include <assert.h>
-#include "../cimgui.h"
+#define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#define CIMGUI_USE_SDL3
+#define CIMGUI_USE_SDLRENDERER3
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
+#include <cimgui/cimgui.h>
+#include <cimgui/cimgui_impl.h>
 
-#ifdef IMGUI_HAS_IMSTR
-#define igBegin igBegin_Str
-#define igSliderFloat igSliderFloat_Str
-#define igCheckbox igCheckbox_Str
-#define igColorEdit3 igColorEdit3_Str
-#define igButton igButton_Str
-#define igDebugCheckVersionAndDataLayout igDebugCheckVersionAndDataLayout_Str
-#endif
-
-#define igGetIO igGetIO_Nil
-
-int main(void)
+int main(int argc, char **argv)
 {
-  /*assert(igDebugCheckVersionAndDataLayout(igGetVersion(), sizeof(ImGuiIO), sizeof(ImGuiStyle),
-                                          sizeof(ImVec2), sizeof(ImVec4), sizeof(ImDrawVert),
-                                          sizeof(ImDrawIdx)));*/
-  printf("CreateContext() - v%s\n", igGetVersion());
-  igCreateContext(NULL);
-  ImGuiIO *io = igGetIO();
-
-  for (int n = 0; n < 20; n++) {
-    printf("NewFrame() %d\n", n);
-
-    ImVec2 display_size;
-    display_size.x = 1920;
-    display_size.y = 1080;
-    io->DisplaySize = display_size;
-    io->DeltaTime = 1.0f / 60.0f;
-    igNewFrame();
-    
-    igBegin("mainwindow",NULL,ImGuiWindowFlags_NoTitleBar);
-    static float f = 0.0f;
-    igText("Hello World!");
-    igSliderFloat("float", &f, 0.0f, 1.0f, "%.3f", 0);
-    igText("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io->Framerate, io->Framerate);
-    igEnd();
-    igShowDemoWindow(NULL);
-
-    igRender();
+  // Initialize SDL3
+  if (SDL_Init(SDL_INIT_VIDEO) == 0)
+  {
+    SDL_Log("SDL_Init failed: %s\n", SDL_GetError());
+    return 1;
   }
-  printf("%d\n",ImGuiWindowFlags_NoTitleBar);
-  printf("size: %zu\n",sizeof(ImGuiWindowFlags_NoTitleBar));
-  printf("DestroyContext()\n");
-  igDestroyContext(NULL);
+
+  // Create SDL3 window and renderer
+  SDL_Window *window = SDL_CreateWindow(
+    "SDL3 + cimgui Demo", 800, 600, SDL_WINDOW_RESIZABLE);
+  if (!window)
+  {
+    SDL_Log(
+      "Failed to create window: %s\n", SDL_GetError());
+    SDL_Quit();
+    return 1;
+  }
+
+  SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
+  if (!renderer)
+  {
+    SDL_Log(
+      "Failed to create renderer: %s\n", SDL_GetError());
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    return 1;
+  }
+
+  // Setup Dear ImGui context
+  ImGuiContext *context = igCreateContext(NULL);
+  ImGuiIO      *io      = igGetIO_ContextPtr(context);
+  io->IniFilename = NULL; // Skip saving/loading settings
+
+  // Initialize ImGui SDL3 + SDL_Renderer backends
+  ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
+  ImGui_ImplSDLRenderer3_Init(renderer);
+
+  // --- Render a single frame ---
+  SDL_Event event;
+  while (SDL_PollEvent(&event))
+  {
+    ImGui_ImplSDL3_ProcessEvent(&event);
+  }
+
+  ImGui_ImplSDL3_NewFrame();
+  ImGui_ImplSDLRenderer3_NewFrame();
+  igNewFrame();
+
+  // Show the built-in demo window
+  igShowDemoWindow(NULL);
+
+  igRender();
+  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+  SDL_RenderClear(renderer);
+  ImGui_ImplSDLRenderer3_RenderDrawData(
+    igGetDrawData(), renderer);
+  SDL_RenderPresent(renderer);
+
+  SDL_Delay(1000); // Optional: let the user see the frame
+
+  // --- Cleanup ---
+  ImGui_ImplSDLRenderer3_Shutdown();
+  ImGui_ImplSDL3_Shutdown();
+  igDestroyContext(context);
+  SDL_DestroyRenderer(renderer);
+  SDL_DestroyWindow(window);
+  SDL_Quit();
 
   return 0;
 }
