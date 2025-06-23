@@ -21,19 +21,17 @@ jobs:
       env:
         GITHUB_OS: ${{ matrix.os }}
       run: |
-        if [ "$GITHUB_OS" == "macOS-latest" ]; then
-          brew install luajit sdl3
-        elif [ "$GITHUB_OS" == "ubuntu-latest" ]; then
-        sudo apt-get update
-        sudo apt-get install -y luajit build-essential cmake git libudev-dev libasound2-dev libpulse-dev libwayland-dev libx11-dev libxext-dev libxrandr-dev libxrender-dev libxfixes-dev libxcursor-dev libxi-dev libxinerama-dev libxss-dev libxkbcommon-dev libdrm-dev
-        git clone https://github.com/libsdl-org/SDL.git SDL3
-        cd SDL3
-        mkdir build && cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Release -DSDL_STATIC=OFF
-        make
-        sudo make install
-        sudo ldconfig
-        elif [ "$GITHUB_OS" == "windows-latest" ]; then
+        if [ "$GITHUB_OS" != "windows-latest" ]; then
+          sudo apt-get update
+          sudo apt-get install -y luajit build-essential cmake git libudev-dev libasound2-dev libpulse-dev libwayland-dev libx11-dev libxext-dev libxrandr-dev libxrender-dev libxfixes-dev libxcursor-dev libxi-dev libxinerama-dev libxss-dev libxkbcommon-dev libdrm-dev
+          git clone https://github.com/libsdl-org/SDL.git SDL3
+          cd SDL3
+          mkdir build && cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DSDL_STATIC=OFF
+          make
+          sudo make install
+          sudo ldconfig
+        elif
           vcpkg install luajit:x64-windows sdl3:x64-windows
           echo "/C/vcpkg/installed/x64-windows/tools/luajit" >> $GITHUB_PATH
           echo "/C/vcpkg/installed/x64-windows/bin" >> $GITHUB_PATH
@@ -54,8 +52,8 @@ jobs:
     - name: Generate Bindings
       shell: bash
       run: |
-        cd ./generator -c "sdl2 sdlrenderer2 sdl3 sdlrenderer3 sdlgpu3 glfw opengl2 opengl3 vulkan"
-        bash ./generator.sh
+        cd ./generator
+        bash ./generator.sh -c "sdl2 sdlrenderer2 sdl3 sdlrenderer3 sdlgpu3 glfw opengl2 opengl3 vulkan"
 
     - name: CMake
       run: |
