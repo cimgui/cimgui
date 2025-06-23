@@ -3,8 +3,8 @@
 #define CIMGUI_USE_SDLRENDERER3
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
-#include <cimgui/cimgui.h>
-#include <cimgui/cimgui_impl.h>
+#include "../cimgui.h"
+#include "../cimgui_impl.h"
 
 int main(int argc, char **argv)
 {
