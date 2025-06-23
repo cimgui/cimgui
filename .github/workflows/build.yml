@@ -61,7 +61,7 @@ jobs:
       shell: bash
       run: |
         cd ./generator
-        bash ./generator.sh -c "sdl2 sdlrenderer2 sdl3 sdlrenderer3 sdlgpu3 glfw opengl2 opengl3 vulkan"
+        bash ./generator.sh -c "sdl2 sdlrenderer2 sdl3 sdlrenderer3 sdlgpu3 glfw opengl2 opengl3"
 
     - name: CMake
       run: |
