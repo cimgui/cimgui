@@ -4,7 +4,7 @@ on:
   push: {}
   pull_request: {}
   schedule:
-    - cron:  '0 9 * * 1'
+    - cron: '0 9 * * 1'
 
 jobs:
   build:
@@ -16,22 +16,20 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Install Dependencies
+    - name: Install Dependencies (LuaJIT + SDL3)
       shell: bash
       env:
         GITHUB_OS: ${{ matrix.os }}
       run: |
-        if [ "$GITHUB_OS" == "macOS-latest" ];
-        then
-          brew install luajit
-        elif [ "$GITHUB_OS" == "ubuntu-latest" ];
-        then
-          sudo apt-get install -y luajit
-        elif [ "$GITHUB_OS" == "windows-latest" ];
-        then
-          vcpkg install luajit:x64-windows
+        if [ "$GITHUB_OS" == "macOS-latest" ]; then
+          brew install luajit sdl3
+        elif [ "$GITHUB_OS" == "ubuntu-latest" ]; then
+          sudo apt-get update
+          sudo apt-get install -y luajit libsdl3-dev
+        elif [ "$GITHUB_OS" == "windows-latest" ]; then
+          vcpkg install luajit:x64-windows sdl3:x64-windows
           echo "/C/vcpkg/installed/x64-windows/tools/luajit" >> $GITHUB_PATH
-          echo "/C/vcpkg/installed/x64-windows/bin"   >> $GITHUB_PATH
+          echo "/C/vcpkg/installed/x64-windows/bin" >> $GITHUB_PATH
         fi
 
     - name: Download Submodules
@@ -49,7 +47,7 @@ jobs:
     - name: Generate Bindings
       shell: bash
       run: |
-        cd ./generator
+        cd ./generator -c "sdl2 sdlrenderer2 sdl3 sdlrenderer3 sdlgpu3 glfw opengl2 opengl3 vulkan"
         bash ./generator.sh
 
     - name: CMake
@@ -69,9 +67,8 @@ jobs:
         GITHUB_OS: ${{ matrix.os }}
       working-directory: cmake-build
       run: |
-        if [ "$GITHUB_OS" == "windows-latest" ];
-        then
+        if [ "$GITHUB_OS" == "windows-latest" ]; then
+          set SDL_VIDEODRIVER=dummy
           ./Debug/cimgui_test.exe
         else
-          ./cimgui_test
-        fi
+          SDL_VIDEODRIVER=dummy ./cimgui_test
