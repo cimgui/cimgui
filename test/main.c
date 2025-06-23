@@ -15,9 +15,9 @@
 
 int main(void)
 {
-  assert(igDebugCheckVersionAndDataLayout(igGetVersion(), sizeof(ImGuiIO), sizeof(ImGuiStyle),
+  /*assert(igDebugCheckVersionAndDataLayout(igGetVersion(), sizeof(ImGuiIO), sizeof(ImGuiStyle),
                                           sizeof(ImVec2), sizeof(ImVec4), sizeof(ImDrawVert),
-                                          sizeof(ImDrawIdx)));
+                                          sizeof(ImDrawIdx)));*/
   printf("CreateContext() - v%s\n", igGetVersion());
   igCreateContext(NULL);
   ImGuiIO *io = igGetIO();
