@@ -32,7 +32,7 @@ jobs:
           sudo make install
           sudo ldconfig
         elif [ "$GITHUB_OS" == "macOS-latest" ]; then
-          brew install luajit cmake ninja git
+          brew install luajit cmake ninja git vulkan
           git clone https://github.com/libsdl-org/SDL.git SDL3
           cd SDL3
           mkdir build && cd build
