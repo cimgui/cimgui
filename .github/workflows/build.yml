@@ -79,4 +79,4 @@ jobs:
           ./Debug/cimgui_test.exe
         else
           SDL_VIDEODRIVER=dummy ./cimgui_test
-          
+        fi
