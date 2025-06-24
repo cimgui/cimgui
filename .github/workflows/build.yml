@@ -68,7 +68,7 @@ jobs:
         mkdir cmake-build
         cd cmake-build
         if [ "$GITHUB_OS" = "windows-latest" ]; then
-          cmake -DCIMGUI_TEST=1 -DCIMGUI_BACKEND_SDLRENDERER3=1 -DCIMGUI_BACKEND_SDL3=1 -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake" ..
+          cmake -DCIMGUI_TEST=1 -DCIMGUI_BACKEND_SDLRENDERER3=1 -DCIMGUI_BACKEND_SDL3=1 "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" ..
         else
           cmake -DCIMGUI_TEST=1 -DCIMGUI_BACKEND_SDLRENDERER3=1 -DCIMGUI_BACKEND_SDL3=1 ..
         fi
