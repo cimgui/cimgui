@@ -64,6 +64,7 @@ jobs:
         bash ./generator.sh -c "sdl3 sdlrenderer3 opengl2 opengl3"
 
     - name: CMake
+      shell: bash
       run: |
         mkdir cmake-build
         cd cmake-build
