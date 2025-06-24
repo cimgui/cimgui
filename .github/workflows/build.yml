@@ -32,7 +32,13 @@ jobs:
           sudo make install
           sudo ldconfig
         elif [ "$GITHUB_OS" == "macOS-latest" ]; then
-          brew install luajit cmake ninja git vulkan-headers sdl3
+          brew install luajit cmake ninja git
+          git clone https://github.com/libsdl-org/SDL.git SDL3
+          cd SDL3
+          mkdir build && cd build
+          cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDL_STATIC=OFF -DCMAKE_INSTALL_PREFIX=/usr/local
+          ninja
+          sudo ninja install
         else
           vcpkg install luajit:x64-windows sdl3:x64-windows
           echo "/C/vcpkg/installed/x64-windows/tools/luajit" >> $GITHUB_PATH
