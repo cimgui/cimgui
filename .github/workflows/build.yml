@@ -61,7 +61,7 @@ jobs:
       run: |
         mkdir cmake-build
         cd cmake-build
-        cmake -DCIMGUI_TEST=1 ..
+        cmake -DCIMGUI_TEST=1 -DCIMGUI_BACKEND_SDLRENDERER3=1 -DCIMGUI_BACKEND_SDL3=1 ..
 
     - name: Build
       working-directory: cmake-build
