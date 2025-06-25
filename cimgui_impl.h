@@ -1,3 +1,5 @@
+#ifndef CIMGUI_IMPL_DEFINED
+#define CIMGUI_IMPL_DEFINED
 #ifdef CIMGUI_USE_GLFW
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
@@ -196,3 +198,4 @@ CIMGUI_API int ImGui_ImplVulkanH_GetMinImageCountFromPresentMode(VkPresentModeKH
 CIMGUI_API ImGui_ImplVulkanH_Window* ImGui_ImplVulkanH_Window_ImGui_ImplVulkanH_Window(void);
 
 #endif
+#endif //CIMGUI_IMPL_DEFINED

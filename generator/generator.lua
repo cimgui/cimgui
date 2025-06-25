@@ -460,7 +460,7 @@ if #implementations > 0 then
     parser2 = cpp2ffi.Parser()
 	
 	local config = dofile(CONFIG_GENERATOR_PATH) --"./config_generator.lua"
-    local impl_str = ""
+    local impl_str = "#ifndef CIMGUI_IMPL_DEFINED\n#define CIMGUI_IMPL_DEFINED\n"
 	local impl_str_cpp = {}
     for i,impl in ipairs(implementations) do
 		print("------------implementation:",impl)
@@ -502,7 +502,7 @@ if #implementations > 0 then
 		end
 		impl_str = impl_str.. table.concat(outtab)..cfuncsstr .. "\n#endif\n"
     end
-	
+	impl_str = impl_str .. "#endif //CIMGUI_IMPL_DEFINED\n"
     parser2:do_parse()
 	save_data("./output/cimgui_impl.h",impl_str)
 
