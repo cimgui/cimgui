@@ -18,8 +18,9 @@ int main() {
       return 1;
     };
     
-    SDL_Window *window = NULL;
-    window = SDL_CreateWindow("cimgui SDL3+SDL_GPU example", 1280, 720, SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY);
+    float main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
+    SDL_WindowFlags window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
+    SDL_Window* window = SDL_CreateWindow("Dear ImGui SDL3+SDL_GPU example", (int)(1280 * main_scale), (int)(720 * main_scale), window_flags);
     if (window == NULL)
     {
         printf("Error: SDL_CreateWindow(): %s\n", SDL_GetError());
@@ -52,6 +53,12 @@ int main() {
     // Setup Dear ImGui style
     igStyleColorsDark(NULL);
     //igStyleColorsLight(NULL);
+    // Setup scaling
+    ImGuiStyle* style = igGetStyle();
+    ImGuiStyle_ScaleAllSizes(style, main_scale);        // Bake a fixed style scale. (until we have a solution for dynamic style scaling, changing this requires resetting Style + calling this again)
+    style->FontScaleDpi = main_scale;        // Set initial font scale. (using io.ConfigDpiScaleFonts=true makes this unnecessary. We leave both here for documentation purpose)
+    io->ConfigDpiScaleFonts = true;          // [Experimental] Automatically overwrite style.FontScaleDpi in Begin() when Monitor DPI changes. This will scale fonts but _NOT_ scale sizes/padding for now.
+    io->ConfigDpiScaleViewports = true;      // [Experimental] Scale Dear ImGui and Platform Windows when Monitor DPI changes.
 
     // Setup Platform/Renderer backends
     ImGui_ImplSDL3_InitForSDLGPU(window);

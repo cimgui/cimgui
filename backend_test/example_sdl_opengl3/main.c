@@ -10,6 +10,10 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#ifdef _WIN32
+#include <windows.h>        // SetProcessDPIAware()
+#endif
+
 #ifdef IMGUI_HAS_IMSTR
 #define igBegin igBegin_Str
 #define igSliderFloat igSliderFloat_Str
@@ -24,6 +28,9 @@ SDL_Window *window = NULL;
 
 int main(int argc, char* argv[])
 {
+#ifdef _WIN32
+    SetProcessDPIAware();
+#endif
 
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     SDL_Log("failed to init: %s", SDL_GetError());
@@ -54,11 +61,10 @@ int main(int argc, char* argv[])
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   SDL_DisplayMode current;
   SDL_GetCurrentDisplayMode(0, &current);
-  
-  window = SDL_CreateWindow(
-      "Hello", 0, 0, 1024, 768,
-      SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
-      );
+  float main_scale = ImGui_ImplSDL2_GetContentScaleForDisplay(0);
+  SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+  window = SDL_CreateWindow("Dear ImGui SDL2+OpenGL3 example", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, (int)(1280 * main_scale), (int)(720 * main_scale), window_flags);
+ 
   if (window == NULL) {
     SDL_Log("Failed to create window: %s", SDL_GetError());
     return -1;
@@ -83,6 +89,14 @@ int main(int argc, char* argv[])
   ioptr->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 #endif
   
+    // Setup scaling
+    ImGuiStyle* style = igGetStyle();
+    ImGuiStyle_ScaleAllSizes(style, main_scale);        // Bake a fixed style scale. (until we have a solution for dynamic style scaling, changing this requires resetting Style + calling this again)
+    style->FontScaleDpi = main_scale;        // Set initial font scale. (using io.ConfigDpiScaleFonts=true makes this unnecessary. We leave both here for documentation purpose)
+    ioptr->ConfigDpiScaleFonts = true;          // [Experimental] Automatically overwrite style.FontScaleDpi in Begin() when Monitor DPI changes. This will scale fonts but _NOT_ scale sizes/padding for now.
+    ioptr->ConfigDpiScaleViewports = true;      // [Experimental] Scale Dear ImGui and Platform Windows when Monitor DPI changes.
+
+
   ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
   ImGui_ImplOpenGL3_Init(glsl_version);
 
