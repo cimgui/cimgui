@@ -78,7 +78,7 @@ print("CPRE",CPRE)
 --this table has the functions to be skipped in generation
 --------------------------------------------------------------------------
 local cimgui_manuals = {
-    igLogText = true,
+   -- igLogText = true,
     ImGuiTextBuffer_appendf = true,
     --igColorConvertRGBtoHSV = true,
     --igColorConvertHSVtoRGB = true
@@ -460,9 +460,10 @@ if #implementations > 0 then
     parser2 = cpp2ffi.Parser()
 	
 	local config = dofile(CONFIG_GENERATOR_PATH) --"./config_generator.lua"
-    local impl_str = ""
+    local impl_str = "#ifndef CIMGUI_IMPL_DEFINED\n#define CIMGUI_IMPL_DEFINED\n"
 	local impl_str_cpp = {}
     for i,impl in ipairs(implementations) do
+		print("------------implementation:",impl)
 		table.insert(impl_str_cpp, "\n#ifdef CIMGUI_USE_" .. string.upper(impl))
 		table.insert(impl_str_cpp, [[#include "imgui_impl_]]..impl..[[.h"]])
 		table.insert(impl_str_cpp, "#endif")
@@ -480,11 +481,11 @@ if #implementations > 0 then
 				extra_includes = extra_includes .. include_cmd .. inc .. " "
 			end
 		end
-		parser2.cimgui_inherited =  dofile([[../../cimgui/generator/output/structs_and_enums.lua]])
+		parser2.cimgui_inherited =  dofile([[./output/structs_and_enums.lua]])
 		local defines = parser2:take_lines(CPRE..extra_defines..extra_includes..source, {locati}, COMPILER)
 		
 		local parser3 = cpp2ffi.Parser()
-		parser3.cimgui_inherited =  dofile([[../../cimgui/generator/output/structs_and_enums.lua]])
+		parser3.cimgui_inherited =  dofile([[./output/structs_and_enums.lua]])
 		parser3:take_lines(CPRE..extra_defines..extra_includes..source, {locati}, COMPILER)
 		parser3:do_parse()
 		local cfuncsstr = func_header_impl_generate(parser3) 
@@ -501,7 +502,7 @@ if #implementations > 0 then
 		end
 		impl_str = impl_str.. table.concat(outtab)..cfuncsstr .. "\n#endif\n"
     end
-	
+	impl_str = impl_str .. "#endif //CIMGUI_IMPL_DEFINED\n"
     parser2:do_parse()
 	save_data("./output/cimgui_impl.h",impl_str)
 
@@ -512,6 +513,11 @@ if #implementations > 0 then
 	local cppstr = read_data"./cimgui_impl_template.cpp"
 	cppstr = cppstr:gsub("GENERATED_PLACEHOLDER", impl_str_cpp)
 	save_data("./output/cimgui_impl.cpp",cppstr)
+	
+	copyfile("./output/cimgui_impl.h", "../cimgui_impl.h")
+	copyfile("./output/cimgui_impl.cpp", "../cimgui_impl.cpp")
+	os.remove("./output/cimgui_impl.h")
+	os.remove("./output/cimgui_impl.cpp")
 
 end -- #implementations > 0 then
 
@@ -543,11 +549,7 @@ end
 --]]
 -------------------copy C files to repo root
 copyfile("./output/cimgui.h", "../cimgui.h")
-copyfile("./output/cimgui_impl.h", "../cimgui_impl.h")
-copyfile("./output/cimgui_impl.cpp", "../cimgui_impl.cpp")
 copyfile("./output/cimgui.cpp", "../cimgui.cpp")
 os.remove("./output/cimgui.h")
-os.remove("./output/cimgui_impl.h")
-os.remove("./output/cimgui_impl.cpp")
 os.remove("./output/cimgui.cpp")
 print"all done!!"

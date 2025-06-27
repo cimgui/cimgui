@@ -56,12 +56,18 @@ ImSpan_end	2
 ImSpan_set	2
 1	void	ImSpan_set_Int (T*,int)
 2	void	ImSpan_set_TPtr (T*,T*)
+ImTextureRef_ImTextureRef	2
+1	nil	ImTextureRef_ImTextureRef_Nil ()
+2	nil	ImTextureRef_ImTextureRef_TextureID (ImTextureID)
 ImVec1_ImVec1	2
 1	nil	ImVec1_ImVec1_Nil ()
 2	nil	ImVec1_ImVec1_Float (float)
 ImVec2_ImVec2	2
 1	nil	ImVec2_ImVec2_Nil ()
 2	nil	ImVec2_ImVec2_Float (float,float)
+ImVec2i_ImVec2i	2
+1	nil	ImVec2i_ImVec2i_Nil ()
+2	nil	ImVec2i_ImVec2i_Int (int,int)
 ImVec2ih_ImVec2ih	3
 1	nil	ImVec2ih_ImVec2ih_Nil ()
 2	nil	ImVec2ih_ImVec2ih_short (short,short)
@@ -303,4 +309,4 @@ igValue	4
 2	void	igValue_Int (const char*,int)
 3	void	igValue_Uint (const char*,unsigned int)
 4	void	igValue_Float (const char*,float,const char*)
-212 overloaded
+216 overloaded

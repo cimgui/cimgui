@@ -43,8 +43,9 @@ int main(int argc, char *argv[])
 
   // just an extra window hint for resize
   glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+  float main_scale = ImGui_ImplGlfw_GetContentScaleForMonitor(glfwGetPrimaryMonitor()); // Valid on GLFW 3.3+ only
+  window = glfwCreateWindow((int)(1280 * main_scale), (int)(800 * main_scale), "Dear ImGui GLFW+OpenGL3 example", NULL, NULL);
 
-  window = glfwCreateWindow(1024, 768, "Hello World!", NULL, NULL);
   if (!window) 
   {
     printf("Failed to create window! Terminating!\n");
@@ -72,6 +73,15 @@ int main(int argc, char *argv[])
   ioptr->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;     // Enable Multi-Viewport / Platform Windows
 #endif
 
+
+    // Setup scaling
+    ImGuiStyle* style = igGetStyle();
+    ImGuiStyle_ScaleAllSizes(style, main_scale);        // Bake a fixed style scale. (until we have a solution for dynamic style scaling, changing this requires resetting Style + calling this again)
+    style->FontScaleDpi = main_scale;        // Set initial font scale. (using io.ConfigDpiScaleFonts=true makes this unnecessary. We leave both here for documentation purpose)
+#if GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 3
+    ioptr->ConfigDpiScaleFonts = true;          // [Experimental] Automatically overwrite style.FontScaleDpi in Begin() when Monitor DPI changes. This will scale fonts but _NOT_ scale sizes/padding for now.
+    ioptr->ConfigDpiScaleViewports = true;      // [Experimental] Scale Dear ImGui and Platform Windows when Monitor DPI changes.
+#endif
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
 

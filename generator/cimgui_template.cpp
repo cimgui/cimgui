@@ -12,16 +12,7 @@
 
 
 /////////////////////////////manual written functions
-CIMGUI_API void igLogText(const char *fmt, ...)
-{
-    char buffer[256];
-    va_list args;
-    va_start(args, fmt);
-    vsnprintf(buffer, 256, fmt, args);
-    va_end(args);
 
-    ImGui::LogText("%s", buffer);
-}
 CIMGUI_API void ImGuiTextBuffer_appendf(ImGuiTextBuffer *self, const char *fmt, ...)
 {
     va_list args;
