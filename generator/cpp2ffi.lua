@@ -1475,6 +1475,8 @@ function M.Parser()
 				txt = txt:gsub(k,v)
 			end
 		end
+		--clean = default in constructor (implot3d)
+		txt = txt:gsub("=%s*default","")
 		--save_data("./preprocode"..tostring(self):gsub("table: ","")..".c",txt)
 		--clean bad positioned comments inside functionD_re
 		if self.COMMENTS_GENERATION then
@@ -1557,6 +1559,7 @@ function M.Parser()
 		local inistruct = clean_spaces(stru:match("(.-)%b{}"))
 		--clean final:
 		inistruct = inistruct:gsub("%s*final%s*:",":")
+
 		--local stname = stru:match("struct%s*(%S+)%s*%b{}")
 		local stname, derived
 		if inistruct:match":" then
