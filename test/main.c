@@ -22,9 +22,10 @@ int main(void)
   igCreateContext(NULL);
   ImGuiIO *io = igGetIO();
 
-  unsigned char *text_pixels = NULL;
-  int text_w, text_h;
-  ImFontAtlas_GetTexDataAsRGBA32(io->Fonts, &text_pixels, &text_w, &text_h, NULL);
+  // unsigned char *text_pixels = NULL;
+  // int text_w, text_h;
+  // ImFontAtlas_GetTexDataAsRGBA32(io->Fonts, &text_pixels, &text_w, &text_h, NULL);
+  io->BackendFlags |= ImGuiBackendFlags_RendererHasTextures;
 
   for (int n = 0; n < 20; n++) {
     printf("NewFrame() %d\n", n);
