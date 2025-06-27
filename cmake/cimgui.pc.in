@@ -1,0 +1,12 @@
+# cimgui.pc.in - pkg-config template file
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+
+Name: cimgui
+Description: C wrapper for Dear ImGui
+Version: @CIMGUI_VERSION@
+Requires: @CIMGUI_PC_LIBRARIES@
+Libs: -L${libdir} -lcimgui
+Cflags: -I${includedir}
