@@ -39,6 +39,12 @@ typedef unsigned __int64 ImU64;
 //typedef unsigned long long ImU64;
 #endif
 
+#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#ifdef IMGUI_ENABLE_FREETYPE
+#include "./imgui/misc/freetype/imgui_freetype.h"
+#endif
+#endif
+
 
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 
