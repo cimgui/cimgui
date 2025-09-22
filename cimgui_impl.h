@@ -115,18 +115,26 @@ struct ImGui_ImplVulkan_InitInfo
     uint32_t QueueFamily;
     VkQueue Queue;
     VkDescriptorPool DescriptorPool;
-    VkRenderPass RenderPass;
+    uint32_t DescriptorPoolSize;
     uint32_t MinImageCount;
     uint32_t ImageCount;
-    VkSampleCountFlagBits MSAASamples;
     VkPipelineCache PipelineCache;
+    VkRenderPass RenderPass;
     uint32_t Subpass;
-    uint32_t DescriptorPoolSize;
+    VkSampleCountFlagBits MSAASamples;
     bool UseDynamicRendering;
     VkPipelineRenderingCreateInfoKHR PipelineRenderingCreateInfo;
     const VkAllocationCallbacks* Allocator;
     void (*CheckVkResultFn)(VkResult err);
     VkDeviceSize MinAllocationSize;
+};
+typedef struct ImGui_ImplVulkan_MainPipelineCreateInfo ImGui_ImplVulkan_MainPipelineCreateInfo;
+struct ImGui_ImplVulkan_MainPipelineCreateInfo
+{
+    VkRenderPass RenderPass;
+    uint32_t Subpass;
+    VkSampleCountFlagBits MSAASamples;
+    VkPipelineRenderingCreateInfoKHR PipelineRenderingCreateInfo;
 };
 typedef struct ImGui_ImplVulkan_RenderState ImGui_ImplVulkan_RenderState;
 struct ImGui_ImplVulkan_RenderState
@@ -186,6 +194,7 @@ CIMGUI_API void ImGui_ImplVulkan_Shutdown(void);
 CIMGUI_API void ImGui_ImplVulkan_NewFrame(void);
 CIMGUI_API void ImGui_ImplVulkan_RenderDrawData(ImDrawData* draw_data,VkCommandBuffer command_buffer,VkPipeline pipeline);
 CIMGUI_API void ImGui_ImplVulkan_SetMinImageCount(uint32_t min_image_count);
+CIMGUI_API void ImGui_ImplVulkan_CreateMainPipeline(const ImGui_ImplVulkan_MainPipelineCreateInfo info);
 CIMGUI_API void ImGui_ImplVulkan_UpdateTexture(ImTextureData* tex);
 CIMGUI_API VkDescriptorSet ImGui_ImplVulkan_AddTexture(VkSampler sampler,VkImageView image_view,VkImageLayout image_layout);
 CIMGUI_API void ImGui_ImplVulkan_RemoveTexture(VkDescriptorSet descriptor_set);
