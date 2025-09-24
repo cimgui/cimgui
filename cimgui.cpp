@@ -4,8 +4,9 @@
 //with imgui_freetype.h api
 //docking branch
 
-#include "./imgui/imgui.h"
-#include "./imgui/imgui_internal.h"
+// Updated to IntricateEngine include path for ImGui
+// #include <imgui.h>
+#include <imgui_internal.h>
 #include "cimgui.h"
 
 
@@ -6339,7 +6340,7 @@ CIMGUI_API float igGET_FLT_MIN()
 
 CIMGUI_API ImVector_ImWchar* ImVector_ImWchar_create()
 {
-	return IM_NEW(ImVector<ImWchar>) ();
+    return IM_NEW(ImVector<ImWchar>) ();
 }
 
 CIMGUI_API void ImVector_ImWchar_destroy(ImVector_ImWchar* self)
@@ -6349,11 +6350,11 @@ CIMGUI_API void ImVector_ImWchar_destroy(ImVector_ImWchar* self)
 
 CIMGUI_API void ImVector_ImWchar_Init(ImVector_ImWchar* p)
 {
-	IM_PLACEMENT_NEW(p) ImVector<ImWchar>();
+    IM_PLACEMENT_NEW(p) ImVector<ImWchar>();
 }
 CIMGUI_API void ImVector_ImWchar_UnInit(ImVector_ImWchar* p)
 {
-	p->~ImVector<ImWchar>();
+    p->~ImVector<ImWchar>();
 }
 
 

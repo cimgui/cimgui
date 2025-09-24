@@ -40,8 +40,9 @@ typedef unsigned __int64 ImU64;
 #endif
 
 #ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#include <imgui.h>
 #ifdef IMGUI_ENABLE_FREETYPE
-#include "./imgui/misc/freetype/imgui_freetype.h"
+#include <misc/freetype/imgui_freetype.h>   // Updated include paths to IntricateEngine include paths for ImGui
 #endif
 #endif
 
@@ -249,7 +250,7 @@ typedef ImWchar16 ImWchar;
 #else
 #define IM_UNICODE_CODEPOINT_MAX     0xFFFF  
 #endif
-	
+    
 typedef ImS64 ImGuiSelectionUserData;
 typedef int (*ImGuiInputTextCallback)(ImGuiInputTextCallbackData* data);
 typedef void (*ImGuiSizeCallback)(ImGuiSizeCallbackData* data);
@@ -5498,7 +5499,3 @@ CIMGUI_API void ImGuiPlatformIO_Set_Platform_GetWindowSize(ImGuiPlatformIO* plat
 #endif
 
 #endif //CIMGUI_INCLUDED
-
-
-
-

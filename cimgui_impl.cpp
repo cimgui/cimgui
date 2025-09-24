@@ -1,10 +1,12 @@
-#include "./imgui/imgui.h"
-#ifdef IMGUI_ENABLE_FREETYPE
-#include "./imgui/misc/freetype/imgui_freetype.h"
-#endif
-#include "./imgui/imgui_internal.h"
-#include "cimgui.h"
+// Updated include paths to IntricateEngine include paths for ImGui
 
+#include <imgui.h>
+#ifdef IMGUI_ENABLE_FREETYPE
+#include <misc/freetype/imgui_freetype.h>
+#endif
+
+#include <imgui_internal.h>
+#include "cimgui.h"
 
 #ifdef CIMGUI_USE_GLFW
 #include "imgui_impl_glfw.h"
@@ -36,11 +38,12 @@
 
 CIMGUI_API ImGui_ImplVulkanH_Window* ImGui_ImplVulkanH_Window_ImGui_ImplVulkanH_Window()
 {
-	return IM_NEW(ImGui_ImplVulkanH_Window)();
+    return IM_NEW(ImGui_ImplVulkanH_Window)();
 }
+
 CIMGUI_API void ImGui_ImplVulkanH_Window_Construct(ImGui_ImplVulkanH_Window* self)
 {
-	IM_PLACEMENT_NEW(self) ImGui_ImplVulkanH_Window();
+    IM_PLACEMENT_NEW(self) ImGui_ImplVulkanH_Window();
 }
 
 #endif
