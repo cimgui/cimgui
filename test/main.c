@@ -34,6 +34,7 @@ int main(void)
     display_size.x = 1920;
     display_size.y = 1080;
     io->DisplaySize = display_size;
+	printf("DisplaySice %f, %f\n", io->DisplaySize.x, io->DisplaySize.y);
     io->DeltaTime = 1.0f / 60.0f;
     igNewFrame();
     

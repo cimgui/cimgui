@@ -35,3 +35,7 @@
 #ifdef IMGUI_HAS_TEXTURES
 #pragma message(CIMGUI_DEFSTRING(IMGUI_HAS_TEXTURES))
 #endif
+
+#ifdef ImTextureID_Invalid
+#pragma message(CIMGUI_DEFSTRING(ImTextureID_Invalid))
+#endif

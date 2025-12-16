@@ -124,10 +124,14 @@ local function func_header_impl_generate(FP)
 
     local outtab = {}
     
-    for _,t in ipairs(FP.funcdefs) do
-        if t.cimguiname then
-            local cimf = FP.defsT[t.cimguiname]
-            local def = cimf[t.signature]
+    -- for _,t in ipairs(FP.funcdefs) do
+        -- if t.cimguiname then
+            -- local cimf = FP.defsT[t.cimguiname]
+            -- local def = cimf[t.signature]
+		--for k,defs in pairs(FP.defsT) do
+		cpp2ffi.table_do_sorted(FP.defsT, function(i,defs)
+		   if true then
+		   for i, def in ipairs(defs) do
 			local addcoment = def.comment or ""
 			local empty = def.args:match("^%(%)") --no args
 			if def.constructor then
@@ -147,10 +151,11 @@ local function func_header_impl_generate(FP)
                     error("class function in implementations")
                 end
             end
+		end
         else --not cimguiname
             table.insert(outtab,t.comment:gsub("%%","%%%%").."\n")-- %% substitution for gsub
         end
-    end
+    end)
     local cfuncsstr = table.concat(outtab)
     cfuncsstr = cfuncsstr:gsub("\n+","\n") --several empty lines to one empty line
     return cfuncsstr
@@ -181,7 +186,7 @@ local function get_defines(t)
     end
     pipe:close()
     --require"anima.utils"
-    --prtable(defines)
+    --cpp2ffi.prtable(defines)
 	assert(next(defines), table.concat(compiler_output, "\n"))
     local ret = {}
     for i,v in ipairs(t) do
@@ -271,7 +276,10 @@ local function cimgui_generation(parser)
 --]]
 	--------------------------------------------------
     local hstrfile = read_data"./cimgui_template.h"
-
+	
+	
+	--hstrfile = hstrfile:gsub([[PLACE_STRUCTS_C]],parser:gen_structs_c())
+	
 	local outpre,outpost = parser.structs_and_enums[1],parser.structs_and_enums[2]
 	cpp2ffi.prtable(parser.templates)
 	cpp2ffi.prtable(parser.typenames)
@@ -286,6 +294,9 @@ local function cimgui_generation(parser)
 	if gdefines.ImDrawCallback_ResetRenderState then
 		cstructsstr = cstructsstr.."\n#define ImDrawCallback_ResetRenderState       "..gdefines.ImDrawCallback_ResetRenderState.."\n"
 	end
+	if gdefines.ImTextureID_Invalid then
+		cstructsstr = cstructsstr.."\n#define ImTextureID_Invalid       "..gdefines.ImTextureID_Invalid.."\n"
+	end
 	if gdefines.IMGUI_HAS_IMSTR then
 		if not (NOCHAR or NOIMSTRV) then
 		cstructsstr = cstructsstr.."\n#define IMGUI_HAS_IMSTR       1\n"
@@ -295,6 +306,7 @@ local function cimgui_generation(parser)
 	cstructsstr = colapse_defines(cstructsstr, "IMGUI_ENABLE_FREETYPE")
 	
     hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
+	hstrfile = hstrfile:gsub([[PLACE_STRUCTS_C]],parser:gen_structs_c())
     local cfuncsstr = func_header_generate(parser)
 	cfuncsstr = colapse_defines(cfuncsstr, "IMGUI_ENABLE_FREETYPE")
     hstrfile = hstrfile:gsub([[#include "auto_funcs%.h"]],cfuncsstr)
@@ -310,7 +322,7 @@ local function cimgui_generation(parser)
     local cimplem = func_implementation(parser)
 	cimplem = colapse_defines(cimplem, "IMGUI_ENABLE_FREETYPE")
     local hstrfile = read_data"./cimgui_template.cpp"
-
+	
     hstrfile = hstrfile:gsub([[#include "auto_funcs%.cpp"]],cimplem)
 	local ftdef = "" --FREETYPE_GENERATION and "#define IMGUI_ENABLE_FREETYPE\n" or ""
     save_data("./output/cimgui.cpp",cimgui_header, ftdef, hstrfile)
@@ -321,7 +333,7 @@ end
 --------------------------------------------------------
 --get imgui.h version and IMGUI_HAS_DOCK--------------------------
 --defines for the cl compiler must be present in the print_defines.cpp file
-gdefines = get_defines{"IMGUI_VERSION","IMGUI_VERSION_NUM","FLT_MAX","FLT_MIN","IMGUI_HAS_DOCK","IMGUI_HAS_IMSTR","ImDrawCallback_ResetRenderState","IMGUI_HAS_TEXTURES"}
+gdefines = get_defines{"IMGUI_VERSION","IMGUI_VERSION_NUM","FLT_MAX","FLT_MIN","IMGUI_HAS_DOCK","IMGUI_HAS_IMSTR","ImDrawCallback_ResetRenderState","IMGUI_HAS_TEXTURES","ImTextureID_Invalid"}
 cpp2ffi.prtable(gdefines)
 if gdefines.IMGUI_HAS_DOCK then gdefines.IMGUI_HAS_DOCK = true end
 if gdefines.IMGUI_HAS_IMSTR then gdefines.IMGUI_HAS_IMSTR = true end
@@ -425,6 +437,7 @@ local structs_and_enums_table = parser1.structs_and_enums_table
 structs_and_enums_table.templated_structs = parser1.templated_structs
 structs_and_enums_table.typenames = parser1.typenames
 structs_and_enums_table.templates_done = parser1.templates_done
+--structs_and_enums_table.nonPOD_used = parser1.nP_used
 
 save_data("./output/structs_and_enums.lua",serializeTableF(structs_and_enums_table))
 save_data("./output/typedefs_dict.lua",serializeTableF(parser1.typedefs_dict))

@@ -1,5 +1,5 @@
 local M = {}
-
+local insert = table.insert
 local function ToStr(t,dometatables)
 	local function basicToStr (o)
 		if type(o) == "number" or type(o)=="boolean" then
@@ -936,7 +936,7 @@ local function itemsCount(items)
 		print(v,its and #its or 0)
 	end
 end
-
+--adding self argument for struct functions
 local function AdjustArguments(FP)
     for fun,defs in pairs(FP.defsT) do
         --struct function but no constructors or static functions or manuals
@@ -1083,6 +1083,7 @@ local function DefsByStruct(FP)
     end
     return structs
 end  
+M.DefsByStruct = DefsByStruct
 local function get_nonPOD(FP)
 	local defbystruct = DefsByStruct(FP)
 	--M.prtable(defbystruct)
@@ -1102,8 +1103,260 @@ local function get_nonPOD(FP)
 	FP.structs_and_enums_table.nonPOD = nonPOD
 	return nonPOD
 end
+local function recur_calc_depth(FP, structs, k,n)
+	--print("recur_calc_depth",k,n)
+	local struct = structs[k] or FP.cimgui_inherited.structs[k]
+	local n1 = n
+	for i,field in ipairs(struct) do
+		local typ = field.type:gsub("const ","") 
+		typ = typ:gsub("*","")
+		if k~=typ and FP.nP_used[typ] then
+			n1 = math.max(n1,recur_calc_depth(FP, structs, typ,n+1))
+		end
+	end
+	return n1
+end
+local function gen_structs_c(FP)
+	local structs = FP.structs_and_enums_table.structs
+	local nonPOD = FP.structs_and_enums_table.nonPOD
+	--sort nP_used by dependencies and name
+	nP_used_sorted = {}
+	for k,v in pairs(FP.nP_used) do
+		nP_used_sorted[k] = recur_calc_depth(FP, structs, k, 1)
+	end
+	--M.prtable(nP_used_sorted)
+	local npsorted ={}
+	for k,n in pairs(nP_used_sorted) do insert(npsorted,k) end
+	table.sort(npsorted, function(a,b) return (nP_used_sorted[a] < nP_used_sorted[b]) or ((nP_used_sorted[a] == nP_used_sorted[b]) and (a<b)) end)
+	--M.prtable(npsorted)
+	--error"DEUG"
+	----------
+	local tabs = {}
+	local tabs_c = {}
+	--for k,v in pairs(FP.nP_used) do
+	--M.table_do_sorted(FP.nP_used, function(k,v)
+	for _,k in ipairs(npsorted) do
+		if nonPOD[k]~="inherited" then
+		insert(tabs,"typedef struct "..k.."_c "..k.."_c;")
+		insert(tabs_c,"typedef struct "..k.."_c "..k..";")
+		insert(tabs,"struct "..k.."_c {")
+		local struct = structs[k] or FP.cimgui_inherited.structs[k]
+		for i,field in ipairs(struct) do
+			local typ = field.type:gsub("const ","") 
+			typ = typ:gsub("*","")
+			if FP.nP_used[typ] then
+				local ftype = field.type:gsub(typ,typ.."_c")
+				insert(tabs,"    "..ftype.." "..field.name..";")
+			else
+				insert(tabs,"    "..field.type.." "..field.name..";")
+			end
+		end
+		insert(tabs,"};")
+		end
+	end --)
+	if #tabs > 0 then
+		insert(tabs,1,"#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS")
+		insert(tabs,"#endif")
+	end
+	if #tabs_c > 0 then
+		insert(tabs_c,1,"#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS")
+		insert(tabs_c,"#endif")
+	end
+	--print(table.concat(tabs_c,"\n"))
+	--print(table.concat(tabs,"\n"))
+	return table.concat(tabs_c,"\n").."\n"..table.concat(tabs,"\n")
+	--return table.concat(tabs,"\n")
+end
+local function gen_field_conversion(tab, struct,structs, FP, to,prefix)
+	--M.prtable("gen_field_conversion",struct)
+	prefix = prefix or ""
+	--local structs = FP.structs_and_enums_table.structs
+	for i,field in ipairs(struct) do
+		local ftype = field.type:gsub("*","")
+		if FP.nP_used[field.type] then
+			gen_field_conversion(tab, structs[field.type],structs,FP, to,prefix..field.name..".")
+		elseif FP.nP_used[ftype] then
+			local ftypec = field.type:gsub(ftype,not to and (ftype.."_c") or ftype)
+			insert(tab, "    dest."..prefix..field.name.." = reinterpret_cast<"..ftypec..">(src."..prefix..field.name..");")
+		else
+			insert(tab,"    dest."..prefix..field.name.." = src."..prefix..field.name..";")
+		end
+	end
+end
+local function genConversions(FP)
+	local structs = FP.structs_and_enums_table.structs
+	if FP.cimgui_inherited then
+		structs = {}
+		for k,v in pairs(FP.cimgui_inherited.structs) do
+			assert(not structs[k])
+			structs[k] = v
+		end
+		for k,v in pairs(FP.structs_and_enums_table.structs) do
+			structs[k] = v
+		end
+	end
+	local convers = {}
+	--for k,v in pairs(FP.nP_used) do
+	M.table_do_sorted(FP.nP_used, function(k,v)
+		--print("genConversions",k)
+		insert(convers,"static inline "..k.." ConvertToCPP_"..k.."(const "..k.."_c& src)")
+		insert(convers,"{")
+		insert(convers,"    "..k.." dest;")
+		local struct = structs[k]
+		gen_field_conversion(convers,struct,structs,FP, true)
+		insert(convers,"    return dest;")
+		insert(convers,"}")
+		insert(convers,"static inline "..k.."_c ConvertFromCPP_"..k.."(const "..k.."& src)")
+		insert(convers,"{")
+		insert(convers,"    "..k.."_c dest;")
+		local struct = structs[k]
+		gen_field_conversion(convers,struct,structs,FP,  false)
+		insert(convers,"    return dest;")
+		insert(convers,"}")
+	end)
+	--print(table.concat(convers,"\n"))
+	return table.concat(convers,"\n")
+end
+local function get_nonPODused(FP)
+	--print("get_nonPODused-----------------------------")
+	local nonPOD = FP.structs_and_enums_table.nonPOD
+	if FP.cimgui_inherited then
+		for k,v in pairs(FP.cimgui_inherited.nonPOD) do
+			nonPOD[k] = "inherited"
+		end
+	end
+	--M.prtable(nonPOD)
+	local typeargs = {}
+	local typeargs_ret = {}
+	for k,defs in pairs(FP.defsT) do 
+		--print(k)
+		for i, w in ipairs(defs) do
+			if not w.templated then --and not w.location:match"internal" then
+			for ii,arg in ipairs(w.argsT) do
+				local typ = (arg.type):gsub("&","")
+				--typ = (typ):gsub("*","")
+				typ = (typ):gsub("const ","")
+				if nonPOD[typ] then
+					--print(arg.type,w.ov_cimguiname,w.location)
+					typeargs[arg.type] = (arg.type):gsub(typ,typ.."_c")
+				end
+			end
+			local typret = (w.ret or ""):gsub("&","")
+			--typret = (typret):gsub("*","")
+			typret = (typret):gsub("const ","")
+			--print(typret)
+			if nonPOD[typret] then
+				--print(w.ret,w.ov_cimguiname,w.location)
+				typeargs_ret[w.ret] = (w.ret):gsub(typret,typret.."_c")
+			end
+			end
+		end
+	end
+	--M.prtable(nonPOD)
+	local all_type_nP = {}
+	for k,v in pairs(typeargs) do 
+		local k2 = k:gsub("const ","")
+		all_type_nP[k2] = nonPOD[k2]--true
+	end
+	for k,v in pairs(typeargs_ret) do 
+		local k2 = k:gsub("const ","")
+		all_type_nP[k2] = nonPOD[k2]--true
+	end
+	FP.nP_used = all_type_nP
+	--M.prtable("FP.nP_used",FP.nP_used)
+	FP.structs_and_enums_table.nonPOD_used = FP.nP_used
+	FP.nP_args = typeargs
+	FP.nP_ret = typeargs_ret
+	--genConversions(FP)
+	--M.prtable(typeargs,typeargs_ret,all_type_nP)
+	-- local typeargs2 = {}
+	-- for k,v in pairs(typeargs) do table.insert(typeargs2,k) end
+	-- table.sort(typeargs2)
+	-- print"------------typeargs2----------------"
+	-- M.prtable(typeargs2)
+	
+	-- local typeargs2_ret = {}
+	-- for k,v in pairs(typeargs_ret) do table.insert(typeargs2_ret,k) end
+	-- table.sort(typeargs2_ret)
+	-- print"------------typeargs2_ret----------------"
+	-- M.prtable(typeargs2_ret)
+
+end
+local function header_subs_nonPOD(FP,txt)
+	--print("----------header_subs_nonPOD")
+	--M.prtable(FP.nP_used)
+	for k,v in pairs(FP.nP_used) do
+		--txt = txt:gsub("([%s;])"..k,"%1"..k.."_c")
+		for i=1,2 do
+		txt = txt:gsub("([%s;])"..k.."([%s;%*])", "%1"..k.."_c%2")
+		end
+		--txt = txt:gsub("%s"..k..";", " "..k.."_c;")
+		--txt = txt:gsub("%s"..k.."%*", " "..k.."_c*")
+	end
+	return txt
+end
+M.header_subs_nonPOD = header_subs_nonPOD
 local function ADDnonUDT(FP)
 	local nonPOD = get_nonPOD(FP)
+	get_nonPODused(FP)
+	for k,defs in pairs(FP.defsT) do
+		for i, def in ipairs(defs) do 
+			--ret
+			local rets = (def.ret or ""):gsub("const ","")
+			rets = rets:gsub("*","")
+			if FP.nP_ret[def.ret] then
+				def.conv = (def.ret):gsub("const ","")
+				def.ret = FP.nP_ret[def.ret]
+				def.nonUDT = 1
+			elseif FP.nP_ret[rets] then
+				def.ret = def.ret:gsub(rets, FP.nP_ret[rets])
+				def.nonUDT = 2
+			end
+			--args
+			local caar,asp
+			if #def.argsT > 0 then
+				caar = "("
+				asp = "("
+				for i,v in ipairs(def.argsT) do
+					local name = v.name 
+					if v.ret then --function pointer
+						local f_ = v.has_cdecl and "(__cdecl*" or "(*"
+						asp = asp .. v.ret .. f_ .. v.name .. ")" .. v.signature .. ","
+						caar = caar .. name .. ","
+					else
+						local typ = v.type:gsub("const ","")
+						local typ2 = typ:gsub("*","")
+						if FP.nP_args[v.type] then
+							caar = caar .. "ConvertToCPP_"..typ.."("..name.."),"
+							asp = asp .. v.type:gsub(typ,typ.."_c").." "..v.name..","
+						elseif FP.nP_args[typ2] then
+							local typ3 = v.type:gsub(typ2,typ2.."_c")
+							caar = caar .. "reinterpret_cast<"..v.type..">("..name.."),"
+							asp = asp .. typ3 .." "..v.name..","
+						else
+							local siz = v.type:match("(%[%d*%])") or ""
+							local typ = v.type:gsub("(%[%d*%])","")
+							asp = asp .. typ .. (v.name~="..." and " "..v.name or "") .. siz .. ","
+							local callname = v.reftoptr and "*"..name or name 
+							caar = caar .. callname .. ","
+						end
+					end
+				end
+				caar = caar:sub(1,-2)..")"
+				asp = asp:sub(1,-2)..")"
+			else
+				caar = "()"
+				asp = "()"
+			end
+			def.call_args_old = def.call_args
+			def.call_args = caar
+			def.args = asp
+		end
+	end
+end
+local function ADDnonUDT_OLD(FP)
+	local nonPOD = get_nonPOD(FP)
+	get_nonPODused(FP)
 	--print"nonPOD"
 	--M.prtable(nonPOD)
     local defsT = FP.defsT
@@ -1125,6 +1378,7 @@ local function ADDnonUDT(FP)
 		if (not isUDT) and FP.cimgui_inherited and FP.cimgui_inherited.nonPOD[defT.ret] then
 			isUDT = true
 		end
+		--given in generator.lua , could be skipped
 		for _,udt_ret in ipairs(FP.UDTs) do
 			if udt_ret == defT.ret then isUDT=true; break end
 		end
@@ -1288,7 +1542,9 @@ function M.Parser()
 	par.manuals = {}
 	par.skipped = {}
 	par.UDTs = {}
-
+	
+	par.genConversors = genConversions
+	par.gen_structs_c = gen_structs_c
 	function par:insert(line,loca)
 		--table.insert(cdefs,{line,loca})
 		--table.insert(cdefs,{line:gsub("^%s*(.-)%s*$", "%1"),loca})
@@ -1343,8 +1599,9 @@ function M.Parser()
 	function par:do_parse()
 		self:parseItems()
 		self:gen_structs_and_enums_table()
-		self:gen_structs_and_enums()
 		self:compute_overloads()
+		self:gen_structs_and_enums()
+		--self:compute_overloads()
 		--self:compute_templated()
 		ADDdestructors(self)
 	end
@@ -1714,6 +1971,30 @@ function M.Parser()
 	function par:header_text_insert(tab,txt,it)
 		table.insert(tab, txt)
 	end
+	local function function_parse(self,it)
+		local stname = ""
+		local namespace
+		if it.parent then
+			if it.parent.re_name == "struct_re" or it.parent.re_name == "typedef_st_re" or it.parent.re_name == "class_re" then
+				stname = it.parent.name
+			elseif it.parent.re_name == "namespace_re" then
+				namespace = get_parents_nameC(it) --it.parent.name
+			end
+		end
+		if it.item:match"^%s*template%s+<" then
+			local ttype,fun = it.item:match"^%s*template%s+<%s*typename%s+([^>]+)%s*>%s*(.+)$"
+			if self.ftemplate_list and self.ftemplate_list[ttype] then
+				for iT,vT in ipairs(self.ftemplate_list[ttype]) do
+					local funT = fun:gsub("([< %(])"..ttype,"%1"..vT)
+					--funT = funT:gsub("sizeof%("..ttype.."%)","sizeof("..vT..")")
+					--local funT = fun:gsub(ttype,vT)
+					self:parseFunction(stname,{item=funT},namespace,it.locat)
+				end
+			end
+		else
+			self:parseFunction(stname,it,namespace,it.locat)
+		end
+	end
 	function par:gen_structs_and_enums()
 		print"--------------gen_structs_and_enums"
 		--M.prtable(self.typenames)
@@ -1820,13 +2101,15 @@ function M.Parser()
 				if not structname then print("NO NAME",cleanst,it.item) end
 				--if not void stname or templated
 				if structname and not self.typenames[structname] then
-					
-					--table.insert(typedefs_table,"typedef struct "..structname.." "..structname..";\n")
-					local tst = "\ntypedef struct "..structname.." "..structname..";"
-						if check_unique_typedefs(tst,uniques) then
-							--table.insert(outtab,tst)
-							self:header_text_insert(outtab, tst, it)
-						end
+					--dont add typedef to non POD
+					local tst = ""
+					--if not self.nP_used[structname] then
+						tst = "\ntypedef struct "..structname.." "..structname..";"
+					--end
+					if check_unique_typedefs(tst,uniques) then
+						--table.insert(outtab,tst)
+						self:header_text_insert(outtab, tst, it)
+					end
 					self.typedefs_dict[structname]="struct "..structname
 					--dont insert child structs as they are inserted before parent struct
 					if not (it.parent and it.parent.re_name == "struct_re") then
@@ -1851,28 +2134,7 @@ function M.Parser()
 			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
 				--nop
 			elseif it.re_name == "functionD_re" or it.re_name == "function_re" then
-				local stname = ""
-				local namespace
-				if it.parent then
-					if it.parent.re_name == "struct_re" or it.parent.re_name == "typedef_st_re" or it.parent.re_name == "class_re" then
-						stname = it.parent.name
-					elseif it.parent.re_name == "namespace_re" then
-						namespace = get_parents_nameC(it) --it.parent.name
-					end
-				end
-				if it.item:match"^%s*template%s+<" then
-					local ttype,fun = it.item:match"^%s*template%s+<%s*typename%s+([^>]+)%s*>%s*(.+)$"
-					if self.ftemplate_list and self.ftemplate_list[ttype] then
-						for iT,vT in ipairs(self.ftemplate_list[ttype]) do
-							local funT = fun:gsub("([< %(])"..ttype,"%1"..vT)
-							--funT = funT:gsub("sizeof%("..ttype.."%)","sizeof("..vT..")")
-							--local funT = fun:gsub(ttype,vT)
-							self:parseFunction(stname,{item=funT},namespace,it.locat)
-						end
-					end
-				else
-					self:parseFunction(stname,it,namespace,it.locat)
-				end
+				--function_parse(self,it)
 			else
 				if it.re_name~="operator_re" then
 				print("not processed gen",it.re_name,it.item:sub(1,20))
@@ -1892,7 +2154,10 @@ function M.Parser()
 		--check arg detection failure if no name in function declaration
 		check_arg_detection(self.defsT,self.typedefs_dict)
 		local outtabprest, outtabst = table.concat(outtabpre,""),table.concat(outtab,"")
+		outtabprest = M.header_subs_nonPOD(self,outtabprest)
+		outtabst = M.header_subs_nonPOD(self,outtabst)
 		self.structs_and_enums = {outtabprest, outtabst or ""}
+		
 		return outtabprest, outtabst
 	end
 	-----------
@@ -2086,7 +2351,9 @@ function M.Parser()
 				end
 			elseif it.re_name == "namespace_re" or it.re_name == "union_re" or it.re_name == "functype_re" then
 				--nop
-			elseif it.re_name ~= "functionD_re" and it.re_name ~= "function_re" and it.re_name ~= "operator_re" then
+			elseif it.re_name ~= "functionD_re" or it.re_name ~= "function_re" then
+				function_parse(self,it)
+			elseif it.re_name ~= "operator_re" then
 				print("not processed gen table",it.re_name)
 			end
 		end
@@ -2215,9 +2482,9 @@ function M.Parser()
 		end)
         --print(numoverloaded, "overloaded")
         table.insert(strt,string.format("%d overloaded",numoverloaded))
-		--ADDIMSTR_S(self)
-		AdjustArguments(self)
 		ADDnonUDT(self)
+		AdjustArguments(self)
+		--ADDnonUDT(self)
 
 		--ADDdestructors(self)
         self.overloadstxt  = table.concat(strt,"\n")
@@ -2678,12 +2945,15 @@ local function ImGui_f_implementation(def)
 		table.insert(outtab, "#ifdef CIMGUI_VARGS0\n")
 		table.insert(outtab, "CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname.."0"..paramListWithoutDots(def.args).."\n")
 		table.insert(outtab, "{\n")
-		table.insert(outtab, "    return "..def.ov_cimguiname..paramListWithoutDots(def.call_args)..";\n")
+		table.insert(outtab, "    return "..def.ov_cimguiname..paramListWithoutDots(def.call_args_old)..";\n")
 		table.insert(outtab, "}\n")
 		table.insert(outtab, "#endif\n")
     elseif def.nonUDT then
         if def.nonUDT == 1 then
-            table.insert(outtab,"    *pOut = "..namespace..def.funcname..def.call_args..";\n")
+            --table.insert(outtab,"    *pOut = "..namespace..def.funcname..def.call_args..";\n")
+			insert(outtab,"    return ConvertFromCPP_"..def.conv.."("..namespace..def.funcname..def.call_args..");\n")
+		elseif def.nonUDT == 2 then
+			insert(outtab,"    return reinterpret_cast<"..def.ret..">("..ptret..namespace..def.funcname..def.call_args..");\n")
         end
 		table.insert(outtab,"}\n")
     else --standard ImGui
@@ -2717,7 +2987,11 @@ local function struct_f_implementation(def)
         end
     elseif def.nonUDT then
         if def.nonUDT == 1 then
-            table.insert(outtab,"    *pOut = self->"..def.funcname..def.call_args..";\n")
+            --table.insert(outtab,"    *pOut = self->"..def.funcname..def.call_args..";\n")
+			--local typret = (def.ret):gsub("const ","")
+			insert(outtab,"    return ConvertFromCPP_"..def.conv.."(self->"..def.funcname..def.call_args..");\n")
+		elseif def.nonUDT == 2 then
+			insert(outtab,"    return reinterpret_cast<"..def.ret..">("..ptret.."self->"..def.funcname..def.call_args..");\n")
         end
     else --standard struct
         table.insert(outtab,"    return "..ptret.."self->"..def.funcname..def.call_args..";\n")
@@ -2775,7 +3049,9 @@ local function func_implementation(FP)
 		end
         until true
     end
-    return table.concat(outtab)
+	local conversors = FP:genConversors()
+	local cimplem = conversors .. table.concat(outtab)
+    return cimplem
 end
 
 M.func_implementation = func_implementation
@@ -2793,7 +3069,7 @@ M.table_do_sorted = table_do_sorted
 
 local function func_header_generate_structs(FP)
 
-    local outtab = {}
+    local outtab = {}--"\n/////func_header_generate_structs\n"}
 
 	table_do_sorted(FP.embeded_structs,function(k,v) 
 		table.insert(outtab,"typedef "..v.." "..k..";\n") 
@@ -2810,6 +3086,7 @@ local function func_header_generate_structs(FP)
 	return outtab
 end
 M.func_header_generate_structs = func_header_generate_structs
+
 
 local function func_header_generate_funcs(FP)
 
@@ -2839,17 +3116,18 @@ local function func_header_generate_funcs(FP)
             elseif def.destructor then
                 table.insert(outtab,"CIMGUI_API void "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
             else --not constructor
-
+				--local ret = FP.nP_ret[def.ret] or def.ret
+				local ret = def.ret
                 if def.stname == "" or def.is_static_function then --ImGui namespace or top level
-                    table.insert(outtab,"CIMGUI_API "..def.ret.." ".. def.ov_cimguiname ..(empty and "(void)" or def.args)..";"..addcoment.."\n")
+                    table.insert(outtab,"CIMGUI_API "..ret.." ".. def.ov_cimguiname ..(empty and "(void)" or def.args)..";"..addcoment.."\n")
 					if def.isvararg then
 						-- For variadic functions we add a function implementation with zero argumets, for compatibility with languages such as C#.
 						table.insert(outtab, "#ifdef CIMGUI_VARGS0\n")
-						table.insert(outtab, "CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname.."0"..paramListWithoutDots(def.args)..";\n")
+						table.insert(outtab, "CIMGUI_API".." "..ret.." "..def.ov_cimguiname.."0"..paramListWithoutDots(def.args)..";\n")
 						table.insert(outtab, "#endif\n")
 					end
                 else
-                    table.insert(outtab,"CIMGUI_API "..def.ret.." "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
+                    table.insert(outtab,"CIMGUI_API "..ret.." "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
                 end
             end 
         end
@@ -2869,13 +3147,16 @@ M.func_header_generate_funcs = func_header_generate_funcs
 local function func_header_generate(FP)
 
     local outtab = func_header_generate_structs(FP)
-    table.insert(outtab, 1, "#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
+    table.insert(outtab, 1, "\n#ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
     table.insert(outtab,"#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS\n")
     
     local outtabf = func_header_generate_funcs(FP)
-    
-    local cfuncsstr = table.concat(outtab)..table.concat(outtabf)
+	outtabf = table.concat(outtabf)
+	assert(type(outtabf)=="string")
+    --outtabf = M.header_subs_nonPOD(FP,outtabf)
+    local cfuncsstr = table.concat(outtab)..outtabf
     cfuncsstr = cfuncsstr:gsub("\n+","\n") --several empty lines to one empty line
+
     return cfuncsstr
 end
 

@@ -11,11 +11,15 @@ History:
 Initially cimgui was developed by Stephan Dilly as hand-written code but lately turned into an auto-generated version by sonoro1234 in order to keep up with imgui more easily (letting the user select the desired branch and commit)
 
 Notes:
-* currently this wrapper is based on version [1.92.3 of Dear ImGui with internal api]
+* currently this wrapper is based on version [1.92.4 of Dear ImGui with internal api]
 * only functions, structs and enums from imgui.h (an optionally imgui_internal.h) are wrapped.
 * if you are interested in imgui backends you should look [LuaJIT-ImGui](https://github.com/sonoro1234/LuaJIT-ImGui) project.
 * All naming is algorithmic except for those names that were coded in cimgui_overloads table (https://github.com/cimgui/cimgui/blob/master/generator/generator.lua#L60). In the official version this table is empty.
 * Current overloaded function names can be found in (https://github.com/cimgui/cimgui/blob/master/generator/output/overloads.txt)
+
+# changes
+
+* 10/11/2025: Functions returning and taking as argument no POD structs is now doing a conversion internally to allow ARM64 compilation. In structs_and_enums.json under key nonPOD_used we get a collection where keys are types non usable from C that appear as returns or args to funtions. value can be true or "inherited" when type comes from cimgui and appears in a cimgui extension (cimplot ...). The C names have suffix _c.
 
 # compilation
 
@@ -60,7 +64,8 @@ Notes:
   * retref : is set if original return type is a reference. (will be a pointer in cimgui)
   * argsT : an array of collections (each one with type: argument type and name: the argument name, when the argument is a function pointer also ret: return type and signature: the function signature)
   * args : a string of argsT concatenated and separated by commas
-  * call_args : a string with the argument names separated by commas for calling imgui function
+  * call_args_old : a string with the argument names separated by commas for calling imgui function
+  * call_args : call_args_old with conversion added.
   * defaults : a collection in which key is argument name and value is the default value.
   * manual : will be true if this function is hand-written (not generated)
   * skipped : will be true if this function is not generated (and not hand-written)
@@ -70,7 +75,7 @@ Notes:
   * realdestructor : is set if the function is a destructor for a class
   * templated : is set if the function belongs to a templated class (ImVector)
   * templatedgen: is set if the function belongs to a struct generated from template (ImVector_ImWchar)
-  * nonUDT : if present the original function was returning a user defined type so that signature has been changed to accept a pointer to the UDT as first argument.
+  * nonUDT : if present the original function was returning a user defined type.
   * location : name of the header file and linenumber this function comes from. (imgui:000, internal:123, imgui_impl_xxx:123)
   * is_static_function : is setted when it is an struct static function.
 ### structs_and_enums description
@@ -86,12 +91,12 @@ Notes:
     * size : the number of array elements (when it is an array)
     * bitfield : the bitfield width (in case it is a bitfield)
   * under key locations we get the locations collection in which each key is the enum tagname or the struct name and the value is the name of the header file and line number this comes from.
+  * under key nonPOD_used we get a collection where keys are types non usable from C that appear as returns or args to funtions. value can be true or "inherited" when type comes from cimgui and appears in a cimgui extension (cimplot ...). The C names have suffix _c.
 # usage
 
 * use whatever method is in ImGui c++ namespace in the original [imgui.h](https://github.com/ocornut/imgui/blob/master/imgui.h) by prepending `ig`
 * methods have the same parameter list and return values (where possible)
 * functions that belong to a struct have an extra first argument with a pointer to the struct.
-* where a function returns UDT (user defined type) by value some compilers complain so the function is generated accepting a pointer to the UDT type as the first argument (or second if belongs to a struct).
 * constructors return pointer to struct and has been named Struct_name_Struct_name
 # usage with backends
 
