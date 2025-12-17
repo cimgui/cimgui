@@ -5769,7 +5769,7 @@ CIMGUI_API void igRenderArrowDockMenu(ImDrawList* draw_list,ImVec2_c p_min,float
 }
 CIMGUI_API void igRenderRectFilledRangeH(ImDrawList* draw_list,const ImRect_c rect,ImU32 col,float x_start_norm,float x_end_norm,float rounding)
 {
-    return ImGui::RenderRectFilledRangeH(draw_list,ConvertToCPP_ImRect(rect),col,x_start_norm,x_end_norm,rounding);
+    return ImGui::RenderRectFilledInRangeH(draw_list,ConvertToCPP_ImRect(rect),col,x_start_norm,x_end_norm,rounding);
 }
 CIMGUI_API void igRenderRectFilledWithHole(ImDrawList* draw_list,const ImRect_c outer,const ImRect_c inner,ImU32 col,float rounding)
 {
