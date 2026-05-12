@@ -1241,14 +1241,19 @@ local function gen_field_conversion(tab, struct,structs, FP, to,prefix)
 	prefix = prefix or ""
 	--local structs = FP.structs_and_enums_table.structs
 	for i,field in ipairs(struct) do
-		local ftype = field.type:gsub("*","")
-		if FP.nP_used[field.type] then
-			gen_field_conversion(tab, structs[field.type],structs,FP, to,prefix..field.name..".")
-		elseif FP.nP_used[ftype] then
-			local ftypec = field.type:gsub(ftype,not to and (ftype.."_c") or ftype)
-			insert(tab, "    dest."..prefix..field.name.." = reinterpret_cast<"..ftypec..">(src."..prefix..field.name..");")
+		local array_name, array_size = field.name:match("^([%w_]+)%[(%d+)%]$")
+		if array_name then
+			insert(tab,"    for (int i = 0; i < "..array_size.."; ++i) dest."..prefix..array_name.."[i] = src."..prefix..array_name.."[i];")
 		else
-			insert(tab,"    dest."..prefix..field.name.." = src."..prefix..field.name..";")
+			local ftype = field.type:gsub("*","")
+			if FP.nP_used[field.type] then
+				gen_field_conversion(tab, structs[field.type],structs,FP, to,prefix..field.name..".")
+			elseif FP.nP_used[ftype] then
+				local ftypec = field.type:gsub(ftype,not to and (ftype.."_c") or ftype)
+				insert(tab, "    dest."..prefix..field.name.." = reinterpret_cast<"..ftypec..">(src."..prefix..field.name..");")
+			else
+				insert(tab,"    dest."..prefix..field.name.." = src."..prefix..field.name..";")
+			end
 		end
 	end
 end
