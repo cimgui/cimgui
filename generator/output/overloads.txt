@@ -239,8 +239,8 @@ igSelectable	2
 1	bool	igSelectable_Bool (const char*,bool,ImGuiSelectableFlags,const ImVec2)
 2	bool	igSelectable_BoolPtr (const char*,bool*,ImGuiSelectableFlags,const ImVec2)
 igSetItemKeyOwner	2
-1	void	igSetItemKeyOwner_Nil (ImGuiKey)
-2	void	igSetItemKeyOwner_InputFlags (ImGuiKey,ImGuiInputFlags)
+1	bool	igSetItemKeyOwner_Nil (ImGuiKey)
+2	bool	igSetItemKeyOwner_InputFlags (ImGuiKey,ImGuiInputFlags)
 igSetScrollFromPosX	2
 1	void	igSetScrollFromPosX_Float (float,float)
 2	void	igSetScrollFromPosX_WindowPtr (ImGuiWindow*,float,float)
