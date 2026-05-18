@@ -207,6 +207,26 @@ local function check_template(code)
 	return ttype,template,te,code2
 end
 ----------------------------------------
+local CCCnum = 0
+local function getffiint32val(val)
+	local str = [[
+	local ffi = require"ffi"
+	ffi.cdef("static const int32_t CCC]]..CCCnum..[[ = ]]..val..[[;") return ffi.C.CCC]]..CCCnum
+	local f,err = loadstring(str)
+	assert(f,err)
+	CCCnum = CCCnum + 1
+	return f()
+end
+local function getffival(name,val)
+	local str = [[
+	local ffi = require"ffi"
+	ffi.cdef("static const int32_t ]]..name..[[ = ]]..val..[[;") return ffi.C.]]..name
+	print(str)
+	local f,err = loadstring(str)
+	assert(f,err)
+	return f()
+end
+
 local function parse_enum_value(value, allenums,dontpost)
 	local function clean(val)
 		if type(val)=="string" then
@@ -235,6 +255,13 @@ local function parse_enum_value(value, allenums,dontpost)
 		assert(not value:match("[%(%)]"),value)
 		
 		local numval = tonumber(value)
+		--check int32_t
+		-- if numval then
+			-- local ok,numval2 = pcall(getffiint32val,value)
+			-- if ok and numval~=numval2 then
+				-- print("===========",value,numval,numval2)
+			-- end
+		-- end
 		if numval then return numval end 
 		
 		local several,seps = strsplit(value,"([<>&|~%+%-]+)") 
@@ -1169,7 +1196,9 @@ local function get_nonPOD(FP)
 		end
 	end
 	FP.structs_and_enums_table.nonPOD = nonPOD
+	if next(nonPOD) then
 	M.prtable("nonPOD",nonPOD)
+	end
 	return nonPOD
 end
 local function recur_calc_depth(FP, structs, k,n)
@@ -1336,7 +1365,9 @@ local function get_nonPODused(FP)
 	FP.structs_and_enums_table.nonPOD_used = FP.nP_used
 	FP.nP_args = typeargs
 	FP.nP_ret = typeargs_ret
+	if next(FP.nP_ret) then
 	M.prtable("np_ret",FP.nP_ret)
+	end
 
 end
 local function header_subs_nonPOD(FP,txt)
@@ -1801,6 +1832,8 @@ function M.Parser()
 		return par.skipped[def.ov_cimguiname] or par.skipped[def.cimguiname]
 	end
 	function par:take_lines(cmd_line,names,compiler)
+		assert(compiler)
+		self.COMPILER = compiler
 		if self.COMMENTS_GENERATION then
 			cmd_line = cmd_line .. (compiler=="cl" and " /C " or " -C ")
 		end
@@ -1831,13 +1864,90 @@ function M.Parser()
 		self.constants = defines
 		return defines
 	end
+	--------------------------------------------------------------------
+	local function get_cdefs(gccline,locat,cdef)
+		--print("get_cdefs",gccline,locat,cdef)
+		cdef = cdef or {}
+		numerr = numerr + 1
+		local errfile = "err_cdefs"..numerr..".txt"
+		local pipe,err = io.popen(gccline.." 2>"..errfile,"r")
+		--local pipe,err = io.popen(gccline,"r")
+		if not pipe then error("could not execute gcc "..err) end
+		local skip
+		for line in M.location(pipe,{locat}) do
+			--print(line)
+			line = line:gsub("extern __attribute__%(%(dllexport%)%)%s*","")
+			line = line:gsub("extern __declspec%(dllexport%)%s*","")
+			skip = false
+			if line~="" then 
+				if line:match("^%s*static const") and not line:match("static const int") then skip=true end
+				if not skip then
+					table.insert(cdef,line) 
+				end
+			end
+		end
+		pipe:close()
+		
+		local f = assert(io.open(errfile,"r"))
+		local errstr = f:read"*a"
+		f:close()
+		print(#errstr,"errstr")
+		print(errstr)
+		--try to guess a compiler error
+		assert(not errstr:match" error")
+		os.remove(errfile)
+		return cdef
+	end
+	local ffi = require"ffi"
+	--utility functions
+	local ffi_cdef = function(code)
+		local ret,err = pcall(ffi.cdef,code)
+		if not ret then
+			local lineN = 1
+			for line in code:gmatch("([^\n\r]*)\r?\n") do
+				print(lineN, line)
+				lineN = lineN + 1
+			end
+			print(err)
+			error"bad cdef"
+		end
+	end
+
+	function par:get_cal_value_ffi()
+		local COMPILER, CPRE = self.COMPILER
+		if COMPILER == "cl" then
+			CPRE = COMPILER..[[ /E /DCIMGUI_DEFINE_ENUMS_AND_STRUCTS -DIMGUI_ENABLE_FREETYPE ./ccode.h]]
+		else
+			CPRE = COMPILER..[[ -E -DCIMGUI_DEFINE_ENUMS_AND_STRUCTS -DIMGUI_ENABLE_FREETYPE ./ccode.h]]
+		end
+		local cdefs = "typedef void FILE;"
+		cdefs = cdefs..self.structs_and_enums[1]..self.structs_and_enums[2]
+		save_data("ccode.h", cdefs)
+		
+		local cdefs = get_cdefs(CPRE,"ccode")
+		--M.prtable(cdefs)
+		cdefs = table.concat(cdefs,"\n")
+		--print("===================================",cdefs)
+		save_data("ccode.h.lua", cdefs)
+		local ffi = require"ffi"
+		ffi_cdef(cdefs)
+		for k,enum in pairs(self.structs_and_enums_table.enums) do
+			for i,field in ipairs(enum) do
+				--print(field.calc_value)
+				if field.calc_value ~= ffi.C[field.name] then
+					print(field.name,field.calc_value , ffi.C[field.name])
+				end
+			end
+		end
+	end
 	function par:do_parse()
 		self:parseItems()
 		self:gen_structs_and_enums_table()
 		self:compute_overloads()
 		self:gen_structs_and_enums()
-		--self:compute_overloads()
 		--self:compute_templated()
+		--check int32_t and others
+		--self:get_cal_value_ffi()
 		ADDdestructors(self)
 	end
 	function par:initTypedefsDict()
@@ -2806,8 +2916,8 @@ function M.Parser()
 						-- M.prtable(outtab.structs[structname])
 					-- end
 				else --self.typenames[structname]
-					M.prtable("--self.typenames",structname,self.typenames[structname])
-					M.prtable("strtab 3, -1",strtab)
+					--M.prtable("--self.typenames",structname,self.typenames[structname])
+					--M.prtable("strtab 3, -1",strtab)
 					--templated struct
 					if structname then
 						print("saving templated struct",structname)
@@ -2817,7 +2927,7 @@ function M.Parser()
 							self:parse_struct_line(strtab[j],self.templated_structs[structname],comstab[j])
 						end
 						end
-						M.prtable("--template_structs",structname,self.templated_structs[structname])
+						--M.prtable("--template_structs",structname,self.templated_structs[structname])
 					else
 						print("skipped unnamed struct",structname)
 					end
@@ -3363,10 +3473,12 @@ local function location(file,locpathT,defines,COMPILER,keepemptylines)
                 -- Is this a location pragma?
                 local loc_num_t,location_match = line:match(location_re)
                 if location_match then
+					--print(location_match)
                     in_location = false
                     for i,path_re in ipairs(path_reT) do
 						local locpath = location_match:match(path_re)
-                        if locpath then 
+                        if locpath then
+							--print("locpath",locpath)
                             in_location = true;
                             loc_num = loc_num_t
                             loc_num_incr = 0
