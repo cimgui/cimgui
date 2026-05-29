@@ -995,7 +995,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
     defT.call_args = caar --call_args
     defT.isvararg = signat:match("%.%.%.%)$")
     defT.location = locat
-    local comentario = (itt.comments or "")..(comment or "")
+    local comentario = (itt.prevcomments or "")..(itt.comments or "")..(comment or "")
 	if comentario=="" then comentario=nil end
     defT.comment = comentario
     defT.argsT = argsArr
@@ -2233,9 +2233,9 @@ function M.Parser()
 		table.insert(txtclean,txt:sub(ini))
 		print("end cleaning ------------------------------",nn)
 		txt = table.concat(txtclean)
+		--]]
 		end
 		--save_data("./preparse"..tostring(self):gsub("table: ","")..".c",txt)
-		--]]
 		self.itemsarr = par:parseItemsR2(txt)
 		save_data("./itemsarr.lua",M.serializeTableF(self.itemsarr))--ToStr(self.itemsarr))
 		itemsarr = self.itemsarr
