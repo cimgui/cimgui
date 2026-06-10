@@ -106,10 +106,13 @@ Notes:
 # example bindings based on cimgui
 
 * [LuaJIT-ImGui](https://github.com/sonoro1234/LuaJIT-ImGui)
+* [Hexa.NET.ImGui](https://github.com/HexaEngine/Hexa.NET.ImGui)
+* [dear-imgui-rs](https://github.com/Latias94/dear-imgui-rs)
+* [CImGui.jl](https://github.com/Gnimuc/CImGui.jl)
 * [ImGui.NET](https://github.com/mellinoe/ImGui.NET)
+* [Zig-ImGui](https://github.com/SpexGuy/Zig-ImGui)
 * [nimgl/imgui](https://github.com/nimgl/imgui)
 * [kotlin-imgui](https://github.com/Dominaezzz/kotlin-imgui)
-* [CImGui.jl](https://github.com/Gnimuc/CImGui.jl)
 * [odin-imgui](https://github.com/ThisDrunkDane/odin-imgui)
 * [DerelictImgui](https://github.com/Extrawurst/DerelictImgui)
 * [BindBC-CimGui](https://github.com/MrcSnm/bindbc-cimgui)
