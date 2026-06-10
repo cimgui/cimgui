@@ -106,6 +106,7 @@ Notes:
 # example bindings based on cimgui
 
 * [LuaJIT-ImGui](https://github.com/sonoro1234/LuaJIT-ImGui)
+* [cimgui-go](https://github.com/AllenDang/cimgui-go)
 * [Hexa.NET.ImGui](https://github.com/HexaEngine/Hexa.NET.ImGui)
 * [dear-imgui-rs](https://github.com/Latias94/dear-imgui-rs)
 * [CImGui.jl](https://github.com/Gnimuc/CImGui.jl)
