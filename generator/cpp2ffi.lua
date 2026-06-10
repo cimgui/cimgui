@@ -379,7 +379,7 @@ local function getRE()
 	-- but we don want operator== to appear as a var and as we should skip this kind of function solution is:
 	operator_re = "^([^;{}]+operator[^;{}]+%b()[\n%s%w%(%)_]*;)",
 	struct_re = "^([^;{}]-struct[^;{}]-%b{}[%s%w_%(%)]*;)",
-	class_re   = "^([^;{}]-class[^;{}]-%b{}[%s%w_%(%)]*;)",
+	class_re  = "^([^;{}]-class[^;{}]-%b{}[%s%w_%(%)]*;)",
 	--class_re   = "^([^;{}]-class[^;{}]-%b{}%s*;)",
 	enum_re = "^([^;{}]-enum[^;{}]-%b{}[%s%w_%(%)]*;)",
 	union_re = "^([^;{}]-union[^;{}]-%b{}[%s%w_%(%)]*;)",
@@ -2198,9 +2198,13 @@ function M.Parser()
 		local txt = table.concat(cdefs2,"\n")
 		--string substitution
 		if self.str_subst then
+			print("========== str_subst")
+			local nn
 			for k,v in pairs(self.str_subst) do
-				txt = txt:gsub(k,v)
+				txt,nn = txt:gsub(k,v)
+				print(k,"done times:",nn)
 			end
+			print("========== str_subst end")
 		end
 		--clean = default in constructor (implot3d)
 		txt = txt:gsub("=%s*default","")
