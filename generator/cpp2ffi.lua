@@ -1593,6 +1593,10 @@ local function ADDnonUDT(FP)
 			end
 		end
 	end
+	if next(FP.skipped) then
+		print("    =======skipped functions=====")
+		M.prtable(FP.skipped)
+	end
 end
 local function ADDnonUDT_OLD(FP)
 	local nonPOD = get_nonPOD(FP)
