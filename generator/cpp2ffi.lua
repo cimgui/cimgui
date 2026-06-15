@@ -913,6 +913,15 @@ local function parseFunction(self,stname,itt,namespace,locat)
                 name = name:gsub("(%[%d*%])","")
             end
 		end
+		
+		if typ:match"::" then  
+			local const,typsimp,ptr = typ:match("(const )([^%*&]+)([%*&]*)")
+			print("= = = = 0 = =typ",typ,const,typsimp,ptr)
+			if self.opaque_structs_inv and self.opaque_structs_inv[typsimp] then 
+				print("(((())))))=======self.opaque",const,typsimp,ptr); 
+				typ = (const or "")..self.opaque_structs_inv[typsimp]..(ptr or "") 
+			end
+		end
 		argsTa2[i] = {type=typ,name=name,default=defa,reftoptr=reftoptr,ret=retf,signature=sigf,has_cdecl=has_cdecl,template_orig=template_orig}
 		if ar:match("&") and not ar:match("const") then
             --only post error if not manual
@@ -1436,6 +1445,10 @@ local function get_std_function(ar,def)
 			skip = true
 		else
 			print("    get_std_function found type",v.type)
+			if v.type:match"&$" then
+				typ = v.type:gsub("&","*")
+				conv = "&"..v.name
+			end
 			-- require"anima.utils"
 			-- prtable(ar)
 		end
@@ -2280,7 +2293,13 @@ function M.Parser()
 				end
 			end
 		end)
-		if next(self.opaque_structs) then M.prtable("opaque_structs:",self.opaque_structs) end
+		if next(self.opaque_structs) then 
+			M.prtable("opaque_structs:",self.opaque_structs) 
+			self.opaque_structs_inv = {}
+			for k,v in pairs(self.opaque_structs) do
+				self.opaque_structs_inv[v]=k
+			end
+		end
 	end
 	
 	function par:printItems()
@@ -3301,7 +3320,16 @@ function M.Parser()
 	
 		hstrfile = hstrfile:gsub([[#include "auto_funcs%.cpp"]],cimplem)
 		save_data("./output/"..name..".cpp",cimgui_header,hstrfile)
-	
+		------------------------test header----------
+		local COMPILER, CPRE = self.COMPILER
+		COMPILER = COMPILER=="g++" and "gcc" or COMPILER
+		if COMPILER=="gcc" then
+		local include_cmd = COMPILER=="cl" and [[ /I ]] or [[ -I ]]
+		local extra_includes = include_cmd.." ../../cimgui "
+		local CPRE = COMPILER..[[ -std=c99 -DCIMGUI_DEFINE_ENUMS_AND_STRUCTS -DIMGUI_ENABLE_FREETYPE ]] ..extra_includes.. "./output/"..name..".h"
+		print(CPRE)
+		get_cdefs(CPRE,"name")
+		end
 	end
 	return par
 end
@@ -3685,8 +3713,7 @@ local function func_implementation(FP)
 			custom = FP.custom_implementation(outtab, def, FP)
 		end
         local manual = FP.get_manuals(def)
-        if not custom and not manual and not def.templated and not FP.get_skipped(def) 
-		and not (FP.opaque_structs[def.stname] and not def.is_static_function) 
+        if not custom and not manual and not def.templated and not FP.get_skipped(def) --and not (FP.opaque_structs[def.stname] and not def.is_static_function)
 		then
             if def.constructor then
 				local tab = {}
@@ -3744,7 +3771,7 @@ M.table_do_sorted = table_do_sorted
 local function func_header_generate_structs(FP)
 
     local outtab = {}--"\n/////func_header_generate_structs\n"}
-
+	M.prtable("embeded_structs",FP.embeded_structs)
 	table_do_sorted(FP.embeded_structs,function(k,v) 
 		if not FP.typenames[k] then
 			print("embeded",k,v)
@@ -3763,7 +3790,7 @@ local function func_header_generate_structs(FP)
 			end)
 		end
 	end)
-	--M.prtable(FP.typenames)
+	--M.prtable("typenames",FP.typenames)
 	table_do_sorted(FP.opaque_structs,function(k,v)
 		if not FP.typenames[k] then
 			table.insert(outtab,"typedef "..v.." "..k..";\n") 
@@ -3792,8 +3819,8 @@ local function func_header_generate_funcs(FP)
 			custom = FP.custom_header(outtab, def)
 		end
         local manual = FP.get_manuals(def)
-        if not custom and not manual and not def.templated and not FP.get_skipped(def) and 
-		not (FP.opaque_structs[def.stname] and not def.is_static_function) then
+        if not custom and not manual and not def.templated and not FP.get_skipped(def) --and not (FP.opaque_structs[def.stname] and not def.is_static_function)
+		then
 
             local addcoment = "" --def.comment or ""
             local empty = def.args:match("^%(%)") --no args
