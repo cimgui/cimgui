@@ -1518,6 +1518,7 @@ local function ADDnonUDT(FP)
 					--assert(def.ret:match"%*","return opaque struct without pointer")
 					--M.prtable(def)
 					--error"return opaque struct without pointer"
+					print("opaque in return================")
 					def.nonUDT = "opaque"
 					def.ret = def.ret.."*" --def.ret:gsub(rets,rets.."_opq")
 				else
@@ -3643,7 +3644,8 @@ local function ImGui_f_implementation(def)
 		elseif def.nonUDT == 2 then
 			insert(outtab,"    return reinterpret_cast<"..def.ret..">("..ptret..namespace..def.funcname..def.call_args..");\n")
 		elseif def.nonUDT == "string" then
-			insert(outtab,"    static std::string str = "..ptret..namespace..def.funcname..def.call_args..";\n")
+			insert(outtab,"    static std::string str;\n")
+			insert(outtab,"    str.assign("..ptret.."self->"..def.funcname..def.call_args..");\n")
 			insert(outtab,"    return str.c_str();\n")
 		elseif def.nonUDT == "opaque" then
 			insert(outtab,"    static auto opq = "..ptret..namespace..def.funcname..def.call_args..";\n")
@@ -3687,7 +3689,8 @@ local function struct_f_implementation(def)
 		elseif def.nonUDT == 2 then
 			insert(outtab,"    return reinterpret_cast<"..def.ret..">("..ptret.."self->"..def.funcname..def.call_args..");\n")
 		elseif def.nonUDT == "string" then
-			insert(outtab,"    static std::string str = "..ptret.."self->"..def.funcname..def.call_args..";\n")
+			insert(outtab,"    static std::string str;\n")
+			insert(outtab,"    str.assign("..ptret.."self->"..def.funcname..def.call_args..");\n")
 			insert(outtab,"    return str.c_str();\n")
 		elseif def.nonUDT == "opaque" then
 			insert(outtab,"    static auto opq = "..ptret.."self->"..def.funcname..def.call_args..";\n")
