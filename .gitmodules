@@ -1,4 +1,3 @@
 [submodule "imgui"]
 	path = imgui
-	url = https://github.com/ocornut/imgui.git
-	branch = docking
+	url = https://github.com/DnA-IntRicate/imgui.git
