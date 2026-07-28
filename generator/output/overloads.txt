@@ -8,6 +8,9 @@ ImColor_ImColor	5
 ImDrawList_AddText	2
 1	void	ImDrawList_AddText_Vec2 (const ImVec2,ImU32,const char*,const char*)
 2	void	ImDrawList_AddText_FontPtr (ImFont*,float,const ImVec2,ImU32,const char*,const char*,float,const ImVec4*)
+ImGuiPackedDate_ImGuiPackedDate	2
+1	nil	ImGuiPackedDate_ImGuiPackedDate_Nil ()
+2	nil	ImGuiPackedDate_ImGuiPackedDate_Int (int)
 ImGuiPtrOrIndex_ImGuiPtrOrIndex	2
 1	nil	ImGuiPtrOrIndex_ImGuiPtrOrIndex_Ptr (void*)
 2	nil	ImGuiPtrOrIndex_ImGuiPtrOrIndex_Int (int)
@@ -213,8 +216,8 @@ igMenuItem	2
 1	bool	igMenuItem_Bool (const char*,const char*,bool,bool)
 2	bool	igMenuItem_BoolPtr (const char*,const char*,bool*,bool)
 igOpenPopup	2
-1	void	igOpenPopup_Str (const char*,ImGuiPopupFlags)
-2	void	igOpenPopup_ID (ImGuiID,ImGuiPopupFlags)
+1	bool	igOpenPopup_Str (const char*,ImGuiPopupFlags)
+2	bool	igOpenPopup_ID (ImGuiID,ImGuiPopupFlags)
 igPlotHistogram	2
 1	void	igPlotHistogram_FloatPtr (const char*,const float*,int,int,const char*,float,float,ImVec2,int)
 2	void	igPlotHistogram_FnFloatPtr (const char*,float(*)(void*,int),void*,int,int,const char*,float,float,ImVec2)
@@ -305,4 +308,4 @@ igValue	4
 2	void	igValue_Int (const char*,int)
 3	void	igValue_Uint (const char*,unsigned int)
 4	void	igValue_Float (const char*,float,const char*)
-213 overloaded
+215 overloaded
