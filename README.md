@@ -11,7 +11,7 @@ History:
 Initially cimgui was developed by Stephan Dilly as hand-written code but lately turned into an auto-generated version by sonoro1234 in order to keep up with imgui more easily (letting the user select the desired branch and commit)
 
 Notes:
-* currently this wrapper is based on version [1.92.8 of Dear ImGui with internal api]
+* currently this wrapper is based on version [1.92.9 of Dear ImGui with internal api]
 * only functions, structs and enums from imgui.h (an optionally imgui_internal.h) are wrapped.
 * if you are interested in imgui backends you should look [LuaJIT-ImGui](https://github.com/sonoro1234/LuaJIT-ImGui) project.
 * All naming is algorithmic except for those names that were coded in cimgui_overloads table (https://github.com/cimgui/cimgui/blob/master/generator/generator.lua#L60). In the official version this table is empty.
@@ -106,10 +106,14 @@ Notes:
 # example bindings based on cimgui
 
 * [LuaJIT-ImGui](https://github.com/sonoro1234/LuaJIT-ImGui)
+* [cimgui-go](https://github.com/AllenDang/cimgui-go)
+* [Hexa.NET.ImGui](https://github.com/HexaEngine/Hexa.NET.ImGui)
+* [dear-imgui-rs](https://github.com/Latias94/dear-imgui-rs)
+* [CImGui.jl](https://github.com/Gnimuc/CImGui.jl)
 * [ImGui.NET](https://github.com/mellinoe/ImGui.NET)
+* [Zig-ImGui](https://github.com/SpexGuy/Zig-ImGui)
 * [nimgl/imgui](https://github.com/nimgl/imgui)
 * [kotlin-imgui](https://github.com/Dominaezzz/kotlin-imgui)
-* [CImGui.jl](https://github.com/Gnimuc/CImGui.jl)
 * [odin-imgui](https://github.com/ThisDrunkDane/odin-imgui)
 * [DerelictImgui](https://github.com/Extrawurst/DerelictImgui)
 * [BindBC-CimGui](https://github.com/MrcSnm/bindbc-cimgui)

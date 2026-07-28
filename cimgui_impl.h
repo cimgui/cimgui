@@ -30,8 +30,20 @@ CIMGUI_API void ImGui_ImplGlfw_WindowFocusCallback(GLFWwindow* window,int focuse
 
 #endif
 #ifdef CIMGUI_USE_OPENGL3
+#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+
+typedef struct ImGui_ImplOpenGL3_RenderState ImGui_ImplOpenGL3_RenderState;
+struct ImGui_ImplOpenGL3_RenderState
+{
+    bool UseBindSampler;
+    bool UseTexParameterFilter;
+    unsigned int CurrentSampler;
+    unsigned int CurrentTexParameterFilter;
+};
+#endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 CIMGUI_API bool ImGui_ImplOpenGL3_CreateDeviceObjects(void);
 CIMGUI_API void ImGui_ImplOpenGL3_DestroyDeviceObjects(void);
+CIMGUI_API ImGui_ImplOpenGL3_RenderState* ImGui_ImplOpenGL3_GetRenderState(void);
 CIMGUI_API bool ImGui_ImplOpenGL3_Init(const char* glsl_version);
 CIMGUI_API void ImGui_ImplOpenGL3_NewFrame(void);
 CIMGUI_API void ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data);
