@@ -1550,13 +1550,13 @@ local function ADDnonUDT(FP)
 							local typ3 = v.type:gsub(typ,typ.."_c")
 							caar = caar .. "ConvertToCPP_"..typ.."("..name.."),"
 							asp = asp .. typ3 .." "..v.name..","
-							argsTN[i].type = typ3
+							--argsTN[i].type = typ3
 						--nonPOD* arg -> reinterpret_cast
 						elseif FP.nP_args[typ2] then
 							local typ3 = v.type:gsub(typ2,typ2.."_c")
 							caar = caar .. "reinterpret_cast<"..v.type..">("..name.."),"
 							asp = asp .. typ3 .." "..v.name..","
-							argsTN[i].type = typ3
+							--argsTN[i].type = typ3
 						elseif v.type:match("std::string_view") then
 							argsTN[i].type = "const char*"
 							caar = caar ..name..","
@@ -1597,7 +1597,7 @@ local function ADDnonUDT(FP)
 							asp = asp .. typ .. (v.name~="..." and " "..v.name or "") .. siz .. ","
 							local callname = v.reftoptr and "*"..name or name 
 							caar = caar .. callname .. ","
-							argsTN[i].type = typ
+							argsTN[i].type = typ .. siz
 						end
 					end
 				end
