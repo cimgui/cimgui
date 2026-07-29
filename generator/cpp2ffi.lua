@@ -1531,11 +1531,13 @@ local function ADDnonUDT(FP)
 			end
 			--args
 			local caar,asp
+			local argsTN = {}
 			if #def.argsT > 0 then
 				caar = "("
 				asp = "("
 				for i,v in ipairs(def.argsT) do
 					local name = v.name 
+					argsTN[i] = deepcopy(v)
 					if v.ret then --function pointer
 						local f_ = v.has_cdecl and "(__cdecl*" or "(*"
 						asp = asp .. v.ret .. f_ .. v.name .. ")" .. v.signature .. ","
@@ -1545,23 +1547,29 @@ local function ADDnonUDT(FP)
 						local typ2 = typ:gsub("*","")
 						--nonPOD arg -> convert
 						if FP.nP_args[v.type] then
+							local typ3 = v.type:gsub(typ,typ.."_c")
 							caar = caar .. "ConvertToCPP_"..typ.."("..name.."),"
-							asp = asp .. v.type:gsub(typ,typ.."_c").." "..v.name..","
+							asp = asp .. typ3 .." "..v.name..","
+							argsTN[i].type = typ3
 						--nonPOD* arg -> reinterpret_cast
 						elseif FP.nP_args[typ2] then
 							local typ3 = v.type:gsub(typ2,typ2.."_c")
 							caar = caar .. "reinterpret_cast<"..v.type..">("..name.."),"
 							asp = asp .. typ3 .." "..v.name..","
+							argsTN[i].type = typ3
 						elseif v.type:match("std::string_view") then
+							argsTN[i].type = "const char*"
 							caar = caar ..name..","
 							asp = asp .. "const char* "..v.name..","
 						elseif v.type:match("std::string") then
+							argsTN[i].type = "const char*"
 							caar = caar .. "std::string("..name.."),"
 							asp = asp .. "const char* "..v.name..","
 						elseif v.type:match"std::function" then
 							local ca2,asp2,skip2 = get_std_function(v,def)
 							caar = caar .. ca2..","
 							asp = asp .. asp2..","
+							argsTN[i].type = asp2
 							if skip2 then skip = true end
 							--skip = true
 						elseif v.type:match("std::") then
@@ -1575,11 +1583,13 @@ local function ADDnonUDT(FP)
 								local callname = "*"..name
 								caar = caar .. callname .. ","
 								asp = asp .. newt.." "..name .. ","
+								argsTN[i].type = newt
 							else
 								local newt = v.type --v.type:gsub(typ2.."%s*%*",typ2.."_opq")
 								local callname = v.reftoptr and "*"..name or name
 								caar = caar .. callname .. ","
 								asp = asp .. newt.." "..name .. ","
+								argsTN[i].type = newt
 							end
 						else
 							local siz = v.type:match("(%[%d*%])") or ""
@@ -1587,6 +1597,7 @@ local function ADDnonUDT(FP)
 							asp = asp .. typ .. (v.name~="..." and " "..v.name or "") .. siz .. ","
 							local callname = v.reftoptr and "*"..name or name 
 							caar = caar .. callname .. ","
+							argsTN[i].type = typ
 						end
 					end
 				end
@@ -1604,6 +1615,7 @@ local function ADDnonUDT(FP)
 				def.call_args_old = def.call_args
 				def.call_args = caar
 				def.args = asp
+				def.argsT = argsTN
 			end
 		end
 	end
