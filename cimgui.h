@@ -3926,6 +3926,45 @@ struct ImFontAtlasBuilder
     ImFontAtlasRectId PackIdMouseCursors;
     ImFontAtlasRectId PackIdLinesTexData;
 };
+typedef struct StbUndoRecord StbUndoRecord;
+struct StbUndoRecord
+{
+   int where;
+   int insert_length;
+   int delete_length;
+   int char_storage;
+};
+typedef struct StbUndoState StbUndoState;
+struct StbUndoState
+{
+   StbUndoRecord undo_rec [99];
+   char undo_char[999];
+   short undo_point, redo_point;
+   int undo_char_point, redo_char_point;
+};
+struct STB_TexteditState
+{
+   int cursor;
+   int select_start;
+   int select_end;
+   unsigned char insert_mode;
+   int row_count_per_page;
+   unsigned char cursor_at_end_of_line;
+   unsigned char initialized;
+   unsigned char has_preferred_x;
+   unsigned char single_line;
+   unsigned char padding1, padding2, padding3;
+   float preferred_x;
+   StbUndoState undostate;
+};
+typedef struct StbTexteditRow StbTexteditRow;
+struct StbTexteditRow
+{
+   float x0,x1;
+   float baseline_y_delta;
+   float ymin,ymax;
+   int num_chars;
+};
 #ifdef IMGUI_ENABLE_FREETYPE
 struct ImFontAtlas;
 struct ImFontLoader;

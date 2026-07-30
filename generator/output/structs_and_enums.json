@@ -5736,6 +5736,10 @@
     "ImVec2ih": "imgui_internal:592",
     "ImVec4": "imgui:313",
     "ImWcharClass": "imgui_internal:463",
+    "STB_TexteditState": "imstb_textedit:342",
+    "StbTexteditRow": "imstb_textedit:389",
+    "StbUndoRecord": "imstb_textedit:324",
+    "StbUndoState": "imstb_textedit:333",
     "stbrp_context_opaque": "imgui_internal:4281"
   },
   "nonPOD": {
@@ -13538,6 +13542,136 @@
       {
         "name": "w",
         "type": "float"
+      }
+    ],
+    "STB_TexteditState": [
+      {
+        "name": "cursor",
+        "type": "int"
+      },
+      {
+        "name": "select_start",
+        "type": "int"
+      },
+      {
+        "name": "select_end",
+        "type": "int"
+      },
+      {
+        "name": "insert_mode",
+        "type": "unsigned char"
+      },
+      {
+        "name": "row_count_per_page",
+        "type": "int"
+      },
+      {
+        "name": "cursor_at_end_of_line",
+        "type": "unsigned char"
+      },
+      {
+        "name": "initialized",
+        "type": "unsigned char"
+      },
+      {
+        "name": "has_preferred_x",
+        "type": "unsigned char"
+      },
+      {
+        "name": "single_line",
+        "type": "unsigned char"
+      },
+      {
+        "name": "padding1",
+        "type": "unsigned char"
+      },
+      {
+        "name": "padding2",
+        "type": "unsigned char"
+      },
+      {
+        "name": "padding3",
+        "type": "unsigned char"
+      },
+      {
+        "name": "preferred_x",
+        "type": "float"
+      },
+      {
+        "name": "undostate",
+        "type": "StbUndoState"
+      }
+    ],
+    "StbTexteditRow": [
+      {
+        "name": "x0",
+        "type": "float"
+      },
+      {
+        "name": "x1",
+        "type": "float"
+      },
+      {
+        "name": "baseline_y_delta",
+        "type": "float"
+      },
+      {
+        "name": "ymin",
+        "type": "float"
+      },
+      {
+        "name": "ymax",
+        "type": "float"
+      },
+      {
+        "name": "num_chars",
+        "type": "int"
+      }
+    ],
+    "StbUndoRecord": [
+      {
+        "name": "where",
+        "type": "int"
+      },
+      {
+        "name": "insert_length",
+        "type": "int"
+      },
+      {
+        "name": "delete_length",
+        "type": "int"
+      },
+      {
+        "name": "char_storage",
+        "type": "int"
+      }
+    ],
+    "StbUndoState": [
+      {
+        "name": "undo_rec[99]",
+        "size": 99,
+        "type": "StbUndoRecord"
+      },
+      {
+        "name": "undo_char[999]",
+        "size": 999,
+        "type": "char"
+      },
+      {
+        "name": "undo_point",
+        "type": "short"
+      },
+      {
+        "name": "redo_point",
+        "type": "short"
+      },
+      {
+        "name": "undo_char_point",
+        "type": "int"
+      },
+      {
+        "name": "redo_char_point",
+        "type": "int"
       }
     ],
     "stbrp_context_opaque": [

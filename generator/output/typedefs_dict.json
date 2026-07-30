@@ -224,6 +224,9 @@
   "ImWchar16": "unsigned short",
   "ImWchar32": "unsigned int",
   "STB_TexteditState": "struct STB_TexteditState",
+  "StbTexteditRow": "struct StbTexteditRow",
+  "StbUndoRecord": "struct StbUndoRecord",
+  "StbUndoState": "struct StbUndoState",
   "stbrp_context_opaque": "struct stbrp_context_opaque",
   "stbrp_node": "struct stbrp_node",
   "stbrp_node_im": "stbrp_node"
