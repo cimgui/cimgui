@@ -1290,12 +1290,27 @@ local function gen_field_conversion(tab, struct,structs, FP, to,prefix)
 	for i,field in ipairs(struct) do
 		local ftype = field.type:gsub("*","")
 		if FP.nP_used[field.type] then
-			gen_field_conversion(tab, structs[field.type],structs,FP, to,prefix..field.name..".")
+			if not field.size then
+				gen_field_conversion(tab, structs[field.type],structs,FP, to,prefix..field.name..".")
+			else
+				local fname = field.name:match("(.+)%[[^%[%]]+%]")
+				for j = 0,field.size-1 do
+					gen_field_conversion(tab, structs[field.type],structs,FP, to,prefix..fname.."["..tostring(j).."].")
+				end
+			end
 		elseif FP.nP_used[ftype] then
+			assert(not field.size, "size not worked in Convert")
 			local ftypec = field.type:gsub(ftype,not to and (ftype.."_c") or ftype)
 			insert(tab, "    dest."..prefix..field.name.." = reinterpret_cast<"..ftypec..">(src."..prefix..field.name..");")
 		else
-			insert(tab,"    dest."..prefix..field.name.." = src."..prefix..field.name..";")
+			if not field.size then
+				insert(tab,"    dest."..prefix..field.name.." = src."..prefix..field.name..";")
+			else
+				local fname = field.name:match("(.+)%[%d+%]")
+				for j = 0,field.size-1 do
+					insert(tab,"    dest."..prefix..fname.."["..tostring(j).."] = src."..prefix..fname.."["..tostring(j).."];")
+				end
+			end
 		end
 	end
 end
