@@ -1846,21 +1846,23 @@ end
 local function save_output(self)
 	--add VARGS0
 	local defsVARG = {}
-	for k,def in pairs(self.defsT) do
-		if def[1].isvararg then
-			assert(#def==1,"varargs in overloads still not worked")
-			--print("vararg",k,#def)
-			local def1 = deepcopy(def[1])
-			def1.isvararg = nil
-			def1.isVARG0 = true
-			def1.argsT[#def1.argsT] = nil
-			def1.args = paramListWithoutDots(def1.args)
-			def1.call_args_old = paramListWithoutDots(def1.call_args_old)
-			def1.call_args = paramListWithoutDots(def1.call_args)
-			def1.signature = paramListWithoutDots(def1.signature)
-			def1.cimguiname = def1.cimguiname.."0"
-			def1.ov_cimguiname = def1.ov_cimguiname.."0"
-			defsVARG[k.."0"] = {def1}
+	for k,defs in pairs(self.defsT) do
+		for i, def in ipairs(defs) do
+			if def.isvararg then
+				--print("vararg",k,#def)
+				local def1 = deepcopy(def)
+				def1.isvararg = nil
+				def1.isVARG0 = true
+				def1.argsT[#def1.argsT] = nil
+				def1.args = paramListWithoutDots(def1.args)
+				def1.call_args_old = paramListWithoutDots(def1.call_args_old)
+				def1.call_args = paramListWithoutDots(def1.call_args)
+				def1.signature = paramListWithoutDots(def1.signature)
+				def1.cimguiname = def1.cimguiname.."0"
+				def1.ov_cimguiname = def1.ov_cimguiname.."0"
+				defsVARG[k.."0"] = defsVARG[k.."0"] or {}
+				table.insert(defsVARG[k.."0"], def1)
+			end
 		end
 	end
 	for k,def in pairs(defsVARG) do

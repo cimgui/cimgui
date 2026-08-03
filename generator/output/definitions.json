@@ -44651,6 +44651,60 @@
       "stname": ""
     }
   ],
+  "igTreeNode0": [
+    {
+      "args": "(const char* str_id,const char* fmt)",
+      "argsT": [
+        {
+          "name": "str_id",
+          "type": "const char*"
+        },
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const char* str_id,const char* fmt,...)",
+      "call_args": "(str_id,fmt)",
+      "call_args_old": "(str_id,fmt)",
+      "cimguiname": "igTreeNode0",
+      "defaults": {},
+      "funcname": "TreeNode",
+      "isVARG0": true,
+      "location": "imgui:752",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igTreeNode_StrStr0",
+      "ret": "bool",
+      "signature": "(const char*,const char*)",
+      "stname": ""
+    },
+    {
+      "args": "(const void* ptr_id,const char* fmt)",
+      "argsT": [
+        {
+          "name": "ptr_id",
+          "type": "const void*"
+        },
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const void* ptr_id,const char* fmt,...)",
+      "call_args": "(ptr_id,fmt)",
+      "call_args_old": "(ptr_id,fmt)",
+      "cimguiname": "igTreeNode0",
+      "defaults": {},
+      "funcname": "TreeNode",
+      "isVARG0": true,
+      "location": "imgui:753",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igTreeNode_Ptr0",
+      "ret": "bool",
+      "signature": "(const void*,const char*)",
+      "stname": ""
+    }
+  ],
   "igTreeNodeBehavior": [
     {
       "args": "(ImGuiID id,ImGuiTreeNodeFlags flags,const char* label,const char* label_end)",
@@ -44828,6 +44882,68 @@
       "ov_cimguiname": "igTreeNodeEx_Ptr",
       "ret": "bool",
       "signature": "(const void*,ImGuiTreeNodeFlags,const char*,...)",
+      "stname": ""
+    }
+  ],
+  "igTreeNodeEx0": [
+    {
+      "args": "(const char* str_id,ImGuiTreeNodeFlags flags,const char* fmt)",
+      "argsT": [
+        {
+          "name": "str_id",
+          "type": "const char*"
+        },
+        {
+          "name": "flags",
+          "type": "ImGuiTreeNodeFlags"
+        },
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const char* str_id,ImGuiTreeNodeFlags flags,const char* fmt,...)",
+      "call_args": "(str_id,flags,fmt)",
+      "call_args_old": "(str_id,flags,fmt)",
+      "cimguiname": "igTreeNodeEx0",
+      "defaults": {},
+      "funcname": "TreeNodeEx",
+      "isVARG0": true,
+      "location": "imgui:757",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igTreeNodeEx_StrStr0",
+      "ret": "bool",
+      "signature": "(const char*,ImGuiTreeNodeFlags,const char*)",
+      "stname": ""
+    },
+    {
+      "args": "(const void* ptr_id,ImGuiTreeNodeFlags flags,const char* fmt)",
+      "argsT": [
+        {
+          "name": "ptr_id",
+          "type": "const void*"
+        },
+        {
+          "name": "flags",
+          "type": "ImGuiTreeNodeFlags"
+        },
+        {
+          "name": "fmt",
+          "type": "const char*"
+        }
+      ],
+      "argsoriginal": "(const void* ptr_id,ImGuiTreeNodeFlags flags,const char* fmt,...)",
+      "call_args": "(ptr_id,flags,fmt)",
+      "call_args_old": "(ptr_id,flags,fmt)",
+      "cimguiname": "igTreeNodeEx0",
+      "defaults": {},
+      "funcname": "TreeNodeEx",
+      "isVARG0": true,
+      "location": "imgui:758",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igTreeNodeEx_Ptr0",
+      "ret": "bool",
+      "signature": "(const void*,ImGuiTreeNodeFlags,const char*)",
       "stname": ""
     }
   ],
