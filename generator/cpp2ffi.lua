@@ -998,7 +998,8 @@ local function parseFunction(self,stname,itt,namespace,locat)
 		end
 	end
 	
-	--if ismanual then M.prtable(argsArr) end
+	-- print(cimguiname)
+	-- if ismanual then M.prtable("===================================\n",argsArr) end
 	
 	defT.templated = self.typenames[stname] and true
 	defT.namespace = namespace
@@ -1813,6 +1814,16 @@ end
 
 
 local function save_output(self)
+	--add manual not present in module
+	for k,v in pairs(self.manuals) do
+		if not self.defsT[k] then
+			print("add manual",k)
+			self.defsT[k] = {v}
+		else
+			print("skipped manual",k)
+		end
+	end
+	----------------------
 	save_data("./output/overloads.txt",self.overloadstxt)
 	save_data("./output/definitions.lua",M.serializeTableF(self.defsT))
 	save_data("./output/structs_and_enums.lua",M.serializeTableF(self.structs_and_enums_table))
@@ -2318,6 +2329,235 @@ function M.Parser()
 	function par:printItems()
 		printItems(items)
 	end
+	-- for manuals not present in original module
+	-- copied from parseFuncion
+	local function split_args(self, funcname, stname, args, ret)
+		print("split args",funcname, stname, args, ret)
+		args = clean_spaces(args)
+		args = moveptr(args)
+		ret = clean_spaces(ret)
+		ret = moveptr(ret)
+		if stname==true then stname="" end
+		local constructor = ret:match(stname) and true or nil
+
+		local argsp = args:sub(2,-2)..","
+		local argsTa = {}
+		for tynam in argsp:gmatch("([^,]+),") do
+			if tynam:match("%)") and not tynam:match("%b()") then
+				error"split_args"
+				--patenthesis not closed are merged in previous (happens in some defaults)
+				argsTa[#argsTa] = argsTa[#argsTa]..","..tynam
+				while argsTa[#argsTa]:match("%)") and not argsTa[#argsTa]:match("%b()") do
+					argsTa[#argsTa-1] = argsTa[#argsTa-1] .. "," .. argsTa[#argsTa]
+					argsTa[#argsTa] = nil
+				end
+			else
+				argsTa[#argsTa+1] = tynam
+			end
+		end
+		----------------------------
+		--get typ, name and defaults
+	local functype_re =        "^%s*[%w%s%*]+%(%*%s*[%w_]+%)%([^%(%)]*%)"
+    local functype_reex =     "^(%s*[%w%s%*]+)%(%*%s*([%w_]+)%)(%([^%(%)]*%))"
+	local argsTa2 = {}
+	local noname_counter = 0
+	for i,ar in ipairs(argsTa) do
+		local ttype,template,te,code2 = check_template(ar) --ar:match("([^%s,%(%)]+)%s*<(.-)>")
+		if template then
+			if self.typenames[stname] ~= template then --rule out template typename
+				self.templates[ttype] = self.templates[ttype] or {}
+				self.templates[ttype][template] = te
+			end
+		end
+	    argsTa[i] = te and code2 or ar 
+		local template_orig = te and ar or nil
+		ar = argsTa[i]
+		--avoid var name without space type&name -> type& name
+		-- also do type &name -> type& name
+		--ar = ar:gsub("(%S)&(%S)","%1& %2")
+		ar = ar:gsub("(%S)%s*&(%S)","%1& %2")
+		local typ,name,retf,sigf,reftoptr,defa,ar1
+		local has_cdecl = ar:match"__cdecl"
+		if has_cdecl then ar = ar:gsub("__cdecl","") end
+		if ar:match(functype_re) then
+			local t1,namef,t2 = ar:match(functype_reex)
+			local f_ = has_cdecl and "(__cdecl*)" or "(*)"
+            typ, name = t1..f_..t2, namef
+            retf = t1
+            sigf = t2
+		else
+			reftoptr = nil
+			if ar:match("&") then
+				ar1,defa = ar:match"([^=]+)=([^=]+)"
+				ar1 = ar1 or ar
+				local typ11,name11 = ar1:match("(.+)%s([^%s]+)")
+				typ11 = typ11:gsub("const ","")
+				typ11 = typ11:gsub("&","")
+				if ar:match("const") and not self.opaque_structs[typ11] then
+					--if ar:match"Palette" then print("--w---w--w",ar,typ11,name11) end
+					--print("--w---w--w",ar,cname)
+					ar = ar:gsub("&","")
+				else
+					ar = ar:gsub("&","*")
+					reftoptr = true
+				end
+            end
+			if ar:match("%.%.%.") then 
+				typ, name = "...", "..."
+			else
+				ar1,defa = ar:match"([^=]+)=([^=]+)"
+				ar1 = ar1 or ar
+				typ,name = ar1:match("(.+)%s([^%s]+)")
+			end
+			if not typ or not name or name:match"%*" or M.c_types[name]  or self.typedefs_dict[name] then
+				print("argument without name",funcname,typ,name,ar)
+				ar1,defa = ar:match"([^=]+)=([^=]+)"
+				ar1 = ar1 or ar
+				typ = ar1
+				noname_counter = noname_counter + 1
+				name = "noname"..noname_counter
+			end
+			--float name[2] to float[2] name
+            local siz = name:match("(%[%d*%])")
+            if siz then
+                typ = typ..siz
+                name = name:gsub("(%[%d*%])","")
+            end
+		end
+		
+		if typ:match"::" then  
+			local const,typsimp,ptr = typ:match("(const )([^%*&]+)([%*&]*)")
+			print("= = = = 0 = =typ",typ,const,typsimp,ptr)
+			if self.opaque_structs_inv and self.opaque_structs_inv[typsimp] then 
+				print("(((())))))=======self.opaque",const,typsimp,ptr); 
+				typ = (const or "")..self.opaque_structs_inv[typsimp]..(ptr or "") 
+			end
+		end
+		argsTa2[i] = {type=typ,name=name,default=defa,reftoptr=reftoptr,ret=retf,signature=sigf,has_cdecl=has_cdecl,template_orig=template_orig}
+		if ar:match("&") and not ar:match("const") then
+            --only post error if not manual
+            local cname = self.getCname(stname,funcname, namespace) --cimguiname
+            if not self.manuals[cname] then
+                print("reference to no const arg in",funcname,argscsinpars,ar)
+            end
+        end
+	end
+	
+	local argsArr = argsTa2
+
+	--recreate argscsinpars, call_args and signature from argsArr
+	local asp, caar,signat
+	if #argsArr > 0 then
+		asp = "("
+		caar = "("
+		signat = "("
+		for i,v in ipairs(argsArr) do
+			if v.ret then --function pointer
+				local f_ = v.has_cdecl and "(__cdecl*" or "(*"
+				asp = asp .. v.ret .. f_ .. v.name .. ")" .. v.signature .. ","
+				caar = caar .. v.name .. ","
+				signat = signat .. v.ret .. f_..")" .. clean_names_from_signature(self,v.signature) .. ","
+			else
+				local siz = v.type:match("(%[%d*%])") or ""
+				local typ = v.type:gsub("(%[%d*%])","")
+				asp = asp .. typ .. (v.name~="..." and " "..v.name or "") .. siz .. ","
+				local callname = v.reftoptr and "*"..v.name or v.name 
+				caar = caar .. callname .. ","
+				signat = signat .. typ .. siz .. ","
+			end
+		end
+		asp = asp:sub(1,-2)..")"
+		caar = caar:sub(1,-2)..")"
+		signat = signat:sub(1,-2)..")" .. (extraconst or "")
+	else
+		asp = "()"
+		caar = "()"
+		signat = "()" .. (extraconst or "")
+	end
+	--if ismanual then print("manual",asp, caar, signat) end
+		----------------------------
+	--[[
+	if not ret and stname then --must be constructors
+        if not (stname == funcname or "~"..stname==funcname) then --break end
+            print("false constructor:",line);
+            print("b2:",ret,stname,funcname,args)
+            return --are function defs
+        end
+    end
+    --]]
+    local cimguiname = funcname --self.getCname(stname,funcname, namespace)
+   -- table.insert(self.funcdefs,{stname=stname,funcname=funcname,args=args,signature=signat,cimguiname=cimguiname,call_args=caar,ret =ret})
+   local funcdef = {stname=stname,funcname=funcname,args=args,signature=signat,cimguiname=cimguiname,call_args=caar,ret =ret}
+	-- local defsT = self.defsT
+	            -- defsT[cimguiname] = defsT[cimguiname] or {}
+                -- table.insert(defsT[cimguiname],{})
+                -- local defT = defsT[cimguiname][#defsT[cimguiname]] 
+	local defT = {constructor = constructor}
+    defT.defaults = {}
+	for i,ar in ipairs(argsArr) do
+		if ar.default then
+			--clean defaults
+			--do only if not a c string
+				local is_cstring = ar.default:sub(1,1)=='"' and ar.default:sub(-1,-1) =='"'
+				if not is_cstring then
+					ar.default = ar.default:gsub("%(%(void%s*%*%)0%)","NULL")
+					if ar.default:match"%(ImU32%)" and not ar.default:match"sizeof" then
+						ar.default = tostring(CleanImU32(ar.default))
+					end
+				end
+			defT.defaults[ar.name] = ar.default
+			ar.default = nil
+		end
+	end
+	
+	-- print(cimguiname)
+	-- if ismanual then M.prtable("===================================\n",argsArr) end
+	
+	defT.templated = self.typenames[stname] and true
+	defT.namespace = namespace
+    defT.cimguiname = cimguiname
+	defT.ov_cimguiname = cimguiname
+    defT.stname = stname
+    defT.is_static_function = is_static_function
+    defT.funcname = funcname
+    defT.argsoriginal = args
+    defT.args= asp 
+    defT.signature = signat --signature
+    defT.call_args = caar --call_args
+    defT.isvararg = signat:match("%.%.%.%)$")
+    defT.location = locat
+    --local comentario = (itt.prevcomments or "")..(itt.comments or "")..(comment or "")
+	--if comentario=="" then comentario=nil end
+    --defT.comment = comentario
+    defT.argsT = argsArr
+    if self.get_manuals(defT) then
+        defT.manual = true
+    end
+    if self.get_skipped(defT) then
+        defT.skipped = true
+    end
+	---[[
+    if ret then
+		--defT.stdret = line:match("^\n*%s*std::")
+		--if ret:match"string" then print("parsefunction",defT.cimguiname, ret, line) end
+        defT.ret = clean_spaces(ret:gsub("&","*"))
+		--name_conversion
+		local rr = defT.ret:gsub("*","")
+		rr = rr:gsub("const ","")
+		if self.name_conversion and self.name_conversion[rr] then
+			defT.ret = defT.ret:gsub(rr,self.name_conversion[rr])
+		end
+        defT.retref = ret:match("&")
+        -- if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
+            -- defT.ret = defT.ret.."_Simple"
+        -- end
+    end
+	--]]
+	--defsT[cimguiname][signat] = defT
+		--M.prtable(defT)
+		defT.call_args_old = defT.call_args
+		return defT --, funcdef
+	end
 	function par:set_manuals(manuals, modulen, erase)
 		erase = erase or {"CIMGUI_API"}
 		local moddata = read_data("./"..modulen.."_template.h")
@@ -2327,10 +2567,12 @@ function M.Parser()
 				ret = ret:gsub(ww,"")
 			end
 			local args = moddata:match(k.."%s*(%b())")
-			manuals[k] = {args = args, ret = ret}
+			manuals[k] = split_args(self,k,v,args,ret)
+			--manuals[k] = {args = args, ret = ret, argsT = split_args(self,args), manual = true, stname = ""}
 			--print(k,args,ret)
 		end
 		self.manuals = manuals
+		M.prtable("manuals",manuals)
 	end
 	par.parseFunction = parseFunction
 	local uniques = {}
