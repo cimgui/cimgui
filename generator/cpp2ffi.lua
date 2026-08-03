@@ -1827,17 +1827,55 @@ local function json_prepare(defs)
     return defs
 end
 
+local function paramListWithoutDots(params)
+	i, j = string.find(params, "%.%.%.")
+	while i > 1 do
+		i = i - 1
+		c = string.sub(params,i,i)
+		if c == "," then
+			return string.sub(params, 1, i-1) .. params:sub(j+1)
+		elseif c == "(" then
+			return string.sub(params, 1, i) .. params:sub(j+1)
+		end
+	end
+
+	error("paramListWithoutDots failed")
+	return "()"
+end
 
 local function save_output(self)
+	--add VARGS0
+	local defsVARG = {}
+	for k,def in pairs(self.defsT) do
+		if def[1].isvararg then
+			assert(#def==1,"varargs in overloads still not worked")
+			--print("vararg",k,#def)
+			local def1 = deepcopy(def[1])
+			def1.isvararg = nil
+			def1.isVARG0 = true
+			def1.argsT[#def1.argsT] = nil
+			def1.args = paramListWithoutDots(def1.args)
+			def1.call_args_old = paramListWithoutDots(def1.call_args_old)
+			def1.call_args = paramListWithoutDots(def1.call_args)
+			def1.signature = paramListWithoutDots(def1.signature)
+			def1.cimguiname = def1.cimguiname.."0"
+			def1.ov_cimguiname = def1.ov_cimguiname.."0"
+			defsVARG[k.."0"] = {def1}
+		end
+	end
+	for k,def in pairs(defsVARG) do
+		self.defsT[k] = def
+	end
 	--add manual not present in module
 	for k,v in pairs(self.manuals) do
 		if not self.defsT[k] then
-			print("add manual",k)
+			--print("add manual",k)
 			self.defsT[k] = {v}
 		else
-			print("skipped manual",k)
+			--print("skipped manual",k)
 		end
 	end
+
 	----------------------
 	save_data("./output/overloads.txt",self.overloadstxt)
 	save_data("./output/definitions.lua",M.serializeTableF(self.defsT))
@@ -3863,21 +3901,7 @@ local function location(file,locpathT,defines,COMPILER,keepemptylines)
 end
 M.location = location
 ---------------------- C writing functions
-local function paramListWithoutDots(params)
-	i, j = string.find(params, "%.%.%.")
-	while i > 1 do
-		i = i - 1
-		c = string.sub(params,i,i)
-		if c == "," then
-			return string.sub(params, 1, i-1) .. params:sub(j+1)
-		elseif c == "(" then
-			return string.sub(params, 1, i) .. params:sub(j+1)
-		end
-	end
 
-	error("paramListWithoutDots failed")
-	return "()"
-end
 local function ImGui_f_implementation(def)
 	local outtab = {}
     local ptret = def.retref and "&" or ""

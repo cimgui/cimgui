@@ -5758,6 +5758,9 @@ CIMGUI_API bool ImGuiFreeType_DebugEditFontLoaderFlags(ImGuiFreeTypeLoaderFlags*
 /////////////////////////hand written functions
 //no appendfV
 CIMGUI_API void ImGuiTextBuffer_appendf(ImGuiTextBuffer *self, const char *fmt, ...);
+#ifdef CIMGUI_VARGS0
+CIMGUI_API void ImGuiTextBuffer_appendf0(ImGuiTextBuffer *self, const char *fmt);
+#endif
 //for getting FLT_MAX in bindings
 CIMGUI_API float igGET_FLT_MAX(void);
 //for getting FLT_MIN in bindings

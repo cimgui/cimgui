@@ -17,6 +17,12 @@ CIMGUI_API void ImGuiTextBuffer_appendf(ImGuiTextBuffer *self, const char *fmt, 
     self->appendfv(fmt, args);
     va_end(args);
 }
+#ifdef CIMGUI_VARGS0
+CIMGUI_API void ImGuiTextBuffer_appendf0(ImGuiTextBuffer *self, const char *fmt)
+{
+    ImGuiTextBuffer_appendf(self,fmd)
+}
+#endif
 
 CIMGUI_API float igGET_FLT_MAX()
 {
