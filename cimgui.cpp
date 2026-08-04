@@ -663,7 +663,7 @@ CIMGUI_API void igText(const char* fmt,...)
 #ifdef CIMGUI_VARGS0
 CIMGUI_API void igText0(const char* fmt)
 {
-    return igText(fmt);
+    igText(fmt);
 }
 #endif
 CIMGUI_API void igTextV(const char* fmt,va_list args)
@@ -680,7 +680,7 @@ CIMGUI_API void igTextColored(const ImVec4_c col,const char* fmt,...)
 #ifdef CIMGUI_VARGS0
 CIMGUI_API void igTextColored0(const ImVec4_c col,const char* fmt)
 {
-    return igTextColored(col,fmt);
+    igTextColored(col,fmt);
 }
 #endif
 CIMGUI_API void igTextColoredV(const ImVec4_c col,const char* fmt,va_list args)
@@ -697,7 +697,7 @@ CIMGUI_API void igTextDisabled(const char* fmt,...)
 #ifdef CIMGUI_VARGS0
 CIMGUI_API void igTextDisabled0(const char* fmt)
 {
-    return igTextDisabled(fmt);
+    igTextDisabled(fmt);
 }
 #endif
 CIMGUI_API void igTextDisabledV(const char* fmt,va_list args)
@@ -714,7 +714,7 @@ CIMGUI_API void igTextWrapped(const char* fmt,...)
 #ifdef CIMGUI_VARGS0
 CIMGUI_API void igTextWrapped0(const char* fmt)
 {
-    return igTextWrapped(fmt);
+    igTextWrapped(fmt);
 }
 #endif
 CIMGUI_API void igTextWrappedV(const char* fmt,va_list args)
@@ -731,7 +731,7 @@ CIMGUI_API void igLabelText(const char* label,const char* fmt,...)
 #ifdef CIMGUI_VARGS0
 CIMGUI_API void igLabelText0(const char* label,const char* fmt)
 {
-    return igLabelText(label,fmt);
+    igLabelText(label,fmt);
 }
 #endif
 CIMGUI_API void igLabelTextV(const char* label,const char* fmt,va_list args)
@@ -748,7 +748,7 @@ CIMGUI_API void igBulletText(const char* fmt,...)
 #ifdef CIMGUI_VARGS0
 CIMGUI_API void igBulletText0(const char* fmt)
 {
-    return igBulletText(fmt);
+    igBulletText(fmt);
 }
 #endif
 CIMGUI_API void igBulletTextV(const char* fmt,va_list args)
@@ -1261,7 +1261,7 @@ CIMGUI_API void igSetTooltip(const char* fmt,...)
 #ifdef CIMGUI_VARGS0
 CIMGUI_API void igSetTooltip0(const char* fmt)
 {
-    return igSetTooltip(fmt);
+    igSetTooltip(fmt);
 }
 #endif
 CIMGUI_API void igSetTooltipV(const char* fmt,va_list args)
@@ -1282,7 +1282,7 @@ CIMGUI_API void igSetItemTooltip(const char* fmt,...)
 #ifdef CIMGUI_VARGS0
 CIMGUI_API void igSetItemTooltip0(const char* fmt)
 {
-    return igSetItemTooltip(fmt);
+    igSetItemTooltip(fmt);
 }
 #endif
 CIMGUI_API void igSetItemTooltipV(const char* fmt,va_list args)
@@ -1519,7 +1519,7 @@ CIMGUI_API void igLogText(const char* fmt,...)
 #ifdef CIMGUI_VARGS0
 CIMGUI_API void igLogText0(const char* fmt)
 {
-    return igLogText(fmt);
+    igLogText(fmt);
 }
 #endif
 CIMGUI_API void igLogTextV(const char* fmt,va_list args)
@@ -1884,7 +1884,7 @@ CIMGUI_API void igDebugLog(const char* fmt,...)
 #ifdef CIMGUI_VARGS0
 CIMGUI_API void igDebugLog0(const char* fmt)
 {
-    return igDebugLog(fmt);
+    igDebugLog(fmt);
 }
 #endif
 CIMGUI_API void igDebugLogV(const char* fmt,va_list args)
@@ -3195,7 +3195,7 @@ CIMGUI_API void igImFormatStringToTempBuffer(const char** out_buf,const char** o
 #ifdef CIMGUI_VARGS0
 CIMGUI_API void igImFormatStringToTempBuffer0(const char** out_buf,const char** out_buf_end,const char* fmt)
 {
-    return igImFormatStringToTempBuffer(out_buf,out_buf_end,fmt);
+    igImFormatStringToTempBuffer(out_buf,out_buf_end,fmt);
 }
 #endif
 CIMGUI_API void igImFormatStringToTempBufferV(const char** out_buf,const char** out_buf_end,const char* fmt,va_list args)
@@ -5944,7 +5944,7 @@ CIMGUI_API void igTextAligned(float align_x,float size_x,const char* fmt,...)
 #ifdef CIMGUI_VARGS0
 CIMGUI_API void igTextAligned0(float align_x,float size_x,const char* fmt)
 {
-    return igTextAligned(align_x,size_x,fmt);
+    igTextAligned(align_x,size_x,fmt);
 }
 #endif
 CIMGUI_API void igTextAlignedV(float align_x,float size_x,const char* fmt,va_list args)

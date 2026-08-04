@@ -3929,7 +3929,9 @@ local function ImGui_f_implementation(def)
 		table.insert(outtab, "#ifdef CIMGUI_VARGS0\n")
 		table.insert(outtab, "CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname.."0"..paramListWithoutDots(def.args).."\n")
 		table.insert(outtab, "{\n")
-		table.insert(outtab, "    return "..def.ov_cimguiname..paramListWithoutDots(def.call_args_old)..";\n")
+		local returnword = "return "
+		if def.ret=="void" then returnword = "" end
+		table.insert(outtab, "    "..returnword..def.ov_cimguiname..paramListWithoutDots(def.call_args_old)..";\n")
 		table.insert(outtab, "}\n")
 		table.insert(outtab, "#endif\n")
     elseif def.nonUDT then
@@ -3976,6 +3978,16 @@ local function struct_f_implementation(def)
         if def.ret~="void" then
             table.insert(outtab,"    return ret;\n")
         end
+	    table.insert(outtab,"}\n")
+		-- For variadic functions we add a function implementation with zero argumets, for compatibility with languages such as C#.
+		table.insert(outtab, "#ifdef CIMGUI_VARGS0\n")
+		table.insert(outtab, "CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname.."0"..paramListWithoutDots(def.args).."\n")
+		table.insert(outtab, "{\n")
+		local returnword = "return "
+		if def.ret=="void" then returnword = "" end
+		table.insert(outtab, "    "..returnword..def.ov_cimguiname.."(self,"..paramListWithoutDots(def.call_args_old):sub(2,-1)..";\n")
+		table.insert(outtab, "}\n")
+		table.insert(outtab, "#endif\n")
     elseif def.nonUDT then
         if def.nonUDT == 1 then
             --table.insert(outtab,"    *pOut = self->"..def.funcname..def.call_args..";\n")
@@ -3991,10 +4003,12 @@ local function struct_f_implementation(def)
 			insert(outtab,"    static auto opq = "..ptret.."self->"..def.funcname..def.call_args..";\n")
 			insert(outtab,"    return &opq;\n")
         end
+	    table.insert(outtab,"}\n")
     else --standard struct
         table.insert(outtab,"    return "..ptret.."self->"..def.funcname..def.call_args..";\n")
+	    table.insert(outtab,"}\n")
     end
-    table.insert(outtab,"}\n")
+
 	return table.concat(outtab, "")
 end
 local function func_implementation(FP)
@@ -4107,7 +4121,6 @@ local function func_header_generate_funcs(FP)
     local outtab = {}
    
     for _,t in ipairs(FP.funcdefs) do
-
         if t.cimguiname then
         local cimf = FP.defsT[t.cimguiname]
         local def = cimf[t.signature]
@@ -4119,7 +4132,6 @@ local function func_header_generate_funcs(FP)
         local manual = FP.get_manuals(def)
         if not custom and not manual and not def.templated and not FP.get_skipped(def) --and not (FP.opaque_structs[def.stname] and not def.is_static_function)
 		then
-
             local addcoment = "" --def.comment or ""
             local empty = def.args:match("^%(%)") --no args
             if def.constructor then
@@ -4143,6 +4155,12 @@ local function func_header_generate_funcs(FP)
 					end
                 else
                     table.insert(outtab,"CIMGUI_API "..ret.." "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
+					if def.isvararg then
+						-- For variadic functions we add a function implementation with zero argumets, for compatibility with languages such as C#.
+						table.insert(outtab, "#ifdef CIMGUI_VARGS0\n")
+						table.insert(outtab, "CIMGUI_API".." "..ret.." "..def.ov_cimguiname.."0"..paramListWithoutDots(def.args)..";\n")
+						table.insert(outtab, "#endif\n")
+					end
                 end
             end 
         end
