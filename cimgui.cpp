@@ -6635,7 +6635,7 @@ CIMGUI_API void ImGuiTextBuffer_appendf(ImGuiTextBuffer *self, const char *fmt, 
 #ifdef CIMGUI_VARGS0
 CIMGUI_API void ImGuiTextBuffer_appendf0(ImGuiTextBuffer *self, const char *fmt)
 {
-    ImGuiTextBuffer_appendf(self,fmt)
+    ImGuiTextBuffer_appendf(self,fmt);
 }
 #endif
 
