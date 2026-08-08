@@ -3946,6 +3946,7 @@ local function ImGui_f_implementation(def)
 			insert(outtab,"    return str.c_str();\n")
 		elseif def.nonUDT == "opaque" then
 			insert(outtab,"    static auto opq = "..ptret..namespace..def.funcname..def.call_args..";\n")
+			insert(outtab,"    opq = "..ptret..namespace..def.funcname..def.call_args..";\n")
 			insert(outtab,"    return &opq;\n")
         end
 		table.insert(outtab,"}\n")
@@ -4001,6 +4002,7 @@ local function struct_f_implementation(def)
 			insert(outtab,"    return str.c_str();\n")
 		elseif def.nonUDT == "opaque" then
 			insert(outtab,"    static auto opq = "..ptret.."self->"..def.funcname..def.call_args..";\n")
+			insert(outtab,"    opq = "..ptret.."self->"..def.funcname..def.call_args..";\n")
 			insert(outtab,"    return &opq;\n")
         end
 	    table.insert(outtab,"}\n")
