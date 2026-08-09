@@ -47,6 +47,12 @@ typedef unsigned __int64 ImU64;
 
 
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+typedef struct ImColor_c ImColor;
+typedef struct ImRect_c ImRect;
+typedef struct ImTextureRef_c ImTextureRef;
+typedef struct ImVec2_c ImVec2;
+typedef struct ImVec2i_c ImVec2i;
+typedef struct ImVec4_c ImVec4;
 
 typedef struct ImDrawChannel ImDrawChannel;
 typedef struct ImDrawCmd ImDrawCmd;

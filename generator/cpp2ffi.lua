@@ -852,7 +852,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
 	local noname_counter = 0
 	for i,ar in ipairs(argsTa) do
 		local ttype,template,te,code2 = check_template(ar) --ar:match("([^%s,%(%)]+)%s*<(.-)>")
-		if template then
+		if template and not self.skip_template[ttype] then
 			if self.typenames[stname] ~= template then --rule out template typename
 				self.templates[ttype] = self.templates[ttype] or {}
 				self.templates[ttype][template] = te
@@ -1213,6 +1213,11 @@ local function get_nonPOD(FP)
 		end
 		end
 	end
+	if FP.forced_nonPOD then
+		for k,v in pairs(FP.forced_nonPOD) do
+			nonPOD[k] = true
+		end
+	end
 	FP.structs_and_enums_table.nonPOD = nonPOD
 	if next(nonPOD) then
 	M.prtable("nonPOD",nonPOD)
@@ -1329,6 +1334,7 @@ local function genConversions(FP)
 	local convers = {}
 	--for k,v in pairs(FP.nP_used) do
 	M.table_do_sorted(FP.nP_used, function(k,v)
+		if not FP.skip_convert_gen[k] then
 		--print("genConversions",k)
 		insert(convers,"static inline "..k.." ConvertToCPP_"..k.."(const "..k.."_c& src)")
 		insert(convers,"{")
@@ -1344,6 +1350,7 @@ local function genConversions(FP)
 		gen_field_conversion(convers,struct,structs,FP,  false)
 		insert(convers,"    return dest;")
 		insert(convers,"}")
+		end --skip_convert_gen
 	end)
 	--print(table.concat(convers,"\n"))
 	return table.concat(convers,"\n")
@@ -1919,6 +1926,9 @@ function M.Parser()
 	par.UDTs = {}
 	par.opaque_structs = {}
 	par.forced_opaque = {}
+	par.forced_nonPOD = {}
+	par.skip_template = {}
+	par.skip_convert_gen = {}
 	
 	par.save_output = save_output
 	par.genConversors = genConversions
@@ -2419,6 +2429,7 @@ function M.Parser()
 	for i,ar in ipairs(argsTa) do
 		local ttype,template,te,code2 = check_template(ar) --ar:match("([^%s,%(%)]+)%s*<(.-)>")
 		if template then
+			error"manuals should not have templates"
 			if self.typenames[stname] ~= template then --rule out template typename
 				self.templates[ttype] = self.templates[ttype] or {}
 				self.templates[ttype][template] = te
@@ -2732,9 +2743,11 @@ function M.Parser()
 						--print("not doheader",ttype,template,te, self.typenames[ttype])
 						--M.prtable(self.typenames)
 						if self.typenames[ttype] and self.typenames[ttype] ~= template and self.typenames[ttype].."*" ~= template then --rule out T (template typename)
+							if not self.skip_template[ttype] then
 							self.templates[ttype] = self.templates[ttype] or {}
 							self.templates[ttype][template] = te
 							it2=code2
+							end
 						end
 						if doheader and self.templates[ttype] then
 							local templatetypedef = self:gentemplatetypedef(ttype, template,self.templates[ttype][template])
@@ -2743,7 +2756,7 @@ function M.Parser()
 					end
 					--clean using
 					if it.re_name == "vardef_re" and it.item:match("using%s+([^=%s]+)%s*=%s*([^;]+);") then
-						print("===using",it.item)
+						print("===using clean",it.item)
 						local typedef, assign = it2:match("using%s+([^=%s]+)%s*=%s*([^;]+);")
 						print(typedef,assign)
 						assign = assign:gsub("%w+::","")
@@ -2966,7 +2979,7 @@ function M.Parser()
 						end
 						if it2:match("using") then
 							local typedef, assign = it2:match("using%s+([^=%s]+)%s*=%s*([^;]+);")
-							print("====using",string.format("%q %q",typedef, assign))
+							print("====using as typedef",string.format("%q %q",typedef, assign))
 							if assign and assign:match"%(%s*%*%s*%)" then --function typedef
 								it2 = "\ntypedef "..assign:gsub("%(%s*%*%s*%)","(*"..typedef..")")..";"
 							end
@@ -3025,9 +3038,19 @@ function M.Parser()
 						self:header_text_insert(outtab, tst, it)
 					end
 					self.typedefs_dict[structname]="struct "..structname
-					--dont insert child structs as they are inserted before parent struct
-					if not (it.parent and (it.parent.re_name == "struct_re" or it.parent.re_name == "class_re")) then
-						--table.insert(outtab,predec .. cleanst)
+					if not self.forced_nonPOD[structname] then
+						--dont insert child structs as they are inserted before parent struct
+						if not (it.parent and (it.parent.re_name == "struct_re" or it.parent.re_name == "class_re")) then
+							--table.insert(outtab,predec .. cleanst)
+							self:header_text_insert(outtab, predec .. cleanst, it)
+						end
+					else
+						local tab = self.forced_nonPOD[structname]
+						local cleanst = "\nstruct "..structname.."\n{\n"
+						for i,v in ipairs(tab) do
+							cleanst = cleanst.."    "..v.type.." "..v.name..";\n"
+						end
+						cleanst = cleanst .. "};"
 						self:header_text_insert(outtab, predec .. cleanst, it)
 					end
 				end
@@ -3078,6 +3101,13 @@ function M.Parser()
 		--table.insert(outtab,"\n/////outtab end\n")
 		local outtabprest, outtabst = table.concat(outtabpre,""),table.concat(outtab,"")
 		outtabprest = M.header_subs_nonPOD(self,outtabprest)
+		local txt2 = ""
+		M.table_do_sorted(self.nP_used, function(k,v)
+			if v~="inherited" then
+				txt2 = txt2.."typedef struct "..k.."_c "..k..";\n"
+			end
+		end)
+		outtabprest = txt2..outtabprest
 		outtabst = M.header_subs_nonPOD(self,outtabst)
 		self.structs_and_enums = {outtabprest, outtabst or ""}
 		
@@ -3268,14 +3298,18 @@ function M.Parser()
 				--if not void stname or templated
 				if not structname then print("NO NAME",cleanst,it.item) end
 				if structname and not self.typenames[structname] then
-					outtab.structs[structname] = {}
-					outtab.struct_comments[structname] = {sameline=it.comments,above=it.prevcomments}
-					outtab.struct_comments[structname] = next(outtab.struct_comments[structname]) and outtab.struct_comments[structname] or nil
-					outtab.locations[structname] = it.locat
-					if strtab then
-					for j=3,#strtab-1 do
-						self:parse_struct_line(strtab[j],outtab.structs[structname],comstab[j])
-					end
+					if self.forced_nonPOD[structname] then
+						outtab.structs[structname] = self.forced_nonPOD[structname]
+					else
+						outtab.structs[structname] = {}
+						outtab.struct_comments[structname] = {sameline=it.comments,above=it.prevcomments}
+						outtab.struct_comments[structname] = next(outtab.struct_comments[structname]) and outtab.struct_comments[structname] or nil
+						outtab.locations[structname] = it.locat
+						if strtab then
+						for j=3,#strtab-1 do
+							self:parse_struct_line(strtab[j],outtab.structs[structname],comstab[j])
+						end
+						end
 					end
 					-- if structname == "Change" then
 						-- print(it.item)
@@ -3614,7 +3648,7 @@ function M.Parser()
 		M.prtable("typenames",self.typenames)
 		local outpre,outpost = self.structs_and_enums[1], self.structs_and_enums[2]
 		local tdt = self:generate_templates()
-		M.prtable("generate_templates",tdt)
+		--M.prtable("generate_templates",tdt)
 		local cstructsstr = outpre..tdt..outpost 
 	
 		hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
