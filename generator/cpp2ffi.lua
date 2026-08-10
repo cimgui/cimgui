@@ -852,7 +852,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
 	local noname_counter = 0
 	for i,ar in ipairs(argsTa) do
 		local ttype,template,te,code2 = check_template(ar) --ar:match("([^%s,%(%)]+)%s*<(.-)>")
-		if template then
+		if template and not self.skip_template[ttype] then
 			if self.typenames[stname] ~= template then --rule out template typename
 				self.templates[ttype] = self.templates[ttype] or {}
 				self.templates[ttype][template] = te
@@ -998,7 +998,8 @@ local function parseFunction(self,stname,itt,namespace,locat)
 		end
 	end
 	
-	--if ismanual then M.prtable(argsArr) end
+	-- print(cimguiname)
+	-- if ismanual then M.prtable("===================================\n",argsArr) end
 	
 	defT.templated = self.typenames[stname] and true
 	defT.namespace = namespace
@@ -1212,6 +1213,11 @@ local function get_nonPOD(FP)
 		end
 		end
 	end
+	if FP.forced_nonPOD then
+		for k,v in pairs(FP.forced_nonPOD) do
+			nonPOD[k] = true
+		end
+	end
 	FP.structs_and_enums_table.nonPOD = nonPOD
 	if next(nonPOD) then
 	M.prtable("nonPOD",nonPOD)
@@ -1289,12 +1295,27 @@ local function gen_field_conversion(tab, struct,structs, FP, to,prefix)
 	for i,field in ipairs(struct) do
 		local ftype = field.type:gsub("*","")
 		if FP.nP_used[field.type] then
-			gen_field_conversion(tab, structs[field.type],structs,FP, to,prefix..field.name..".")
+			if not field.size then
+				gen_field_conversion(tab, structs[field.type],structs,FP, to,prefix..field.name..".")
+			else
+				local fname = field.name:match("(.+)%[[^%[%]]+%]")
+				for j = 0,field.size-1 do
+					gen_field_conversion(tab, structs[field.type],structs,FP, to,prefix..fname.."["..tostring(j).."].")
+				end
+			end
 		elseif FP.nP_used[ftype] then
+			assert(not field.size, "size not worked in Convert")
 			local ftypec = field.type:gsub(ftype,not to and (ftype.."_c") or ftype)
 			insert(tab, "    dest."..prefix..field.name.." = reinterpret_cast<"..ftypec..">(src."..prefix..field.name..");")
 		else
-			insert(tab,"    dest."..prefix..field.name.." = src."..prefix..field.name..";")
+			if not field.size then
+				insert(tab,"    dest."..prefix..field.name.." = src."..prefix..field.name..";")
+			else
+				local fname = field.name:match("(.+)%[%d+%]")
+				for j = 0,field.size-1 do
+					insert(tab,"    dest."..prefix..fname.."["..tostring(j).."] = src."..prefix..fname.."["..tostring(j).."];")
+				end
+			end
 		end
 	end
 end
@@ -1313,6 +1334,7 @@ local function genConversions(FP)
 	local convers = {}
 	--for k,v in pairs(FP.nP_used) do
 	M.table_do_sorted(FP.nP_used, function(k,v)
+		if not FP.skip_convert_gen[k] then
 		--print("genConversions",k)
 		insert(convers,"static inline "..k.." ConvertToCPP_"..k.."(const "..k.."_c& src)")
 		insert(convers,"{")
@@ -1328,6 +1350,7 @@ local function genConversions(FP)
 		gen_field_conversion(convers,struct,structs,FP,  false)
 		insert(convers,"    return dest;")
 		insert(convers,"}")
+		end --skip_convert_gen
 	end)
 	--print(table.concat(convers,"\n"))
 	return table.concat(convers,"\n")
@@ -1531,11 +1554,13 @@ local function ADDnonUDT(FP)
 			end
 			--args
 			local caar,asp
+			local argsTN = {}
 			if #def.argsT > 0 then
 				caar = "("
 				asp = "("
 				for i,v in ipairs(def.argsT) do
 					local name = v.name 
+					argsTN[i] = deepcopy(v)
 					if v.ret then --function pointer
 						local f_ = v.has_cdecl and "(__cdecl*" or "(*"
 						asp = asp .. v.ret .. f_ .. v.name .. ")" .. v.signature .. ","
@@ -1545,23 +1570,29 @@ local function ADDnonUDT(FP)
 						local typ2 = typ:gsub("*","")
 						--nonPOD arg -> convert
 						if FP.nP_args[v.type] then
+							local typ3 = v.type:gsub(typ,typ.."_c")
 							caar = caar .. "ConvertToCPP_"..typ.."("..name.."),"
-							asp = asp .. v.type:gsub(typ,typ.."_c").." "..v.name..","
+							asp = asp .. typ3 .." "..v.name..","
+							--argsTN[i].type = typ3
 						--nonPOD* arg -> reinterpret_cast
 						elseif FP.nP_args[typ2] then
 							local typ3 = v.type:gsub(typ2,typ2.."_c")
 							caar = caar .. "reinterpret_cast<"..v.type..">("..name.."),"
 							asp = asp .. typ3 .." "..v.name..","
+							--argsTN[i].type = typ3
 						elseif v.type:match("std::string_view") then
+							argsTN[i].type = "const char*"
 							caar = caar ..name..","
 							asp = asp .. "const char* "..v.name..","
 						elseif v.type:match("std::string") then
+							argsTN[i].type = "const char*"
 							caar = caar .. "std::string("..name.."),"
 							asp = asp .. "const char* "..v.name..","
 						elseif v.type:match"std::function" then
 							local ca2,asp2,skip2 = get_std_function(v,def)
 							caar = caar .. ca2..","
 							asp = asp .. asp2..","
+							argsTN[i].type = asp2
 							if skip2 then skip = true end
 							--skip = true
 						elseif v.type:match("std::") then
@@ -1575,11 +1606,13 @@ local function ADDnonUDT(FP)
 								local callname = "*"..name
 								caar = caar .. callname .. ","
 								asp = asp .. newt.." "..name .. ","
+								argsTN[i].type = newt
 							else
 								local newt = v.type --v.type:gsub(typ2.."%s*%*",typ2.."_opq")
 								local callname = v.reftoptr and "*"..name or name
 								caar = caar .. callname .. ","
 								asp = asp .. newt.." "..name .. ","
+								argsTN[i].type = newt
 							end
 						else
 							local siz = v.type:match("(%[%d*%])") or ""
@@ -1587,6 +1620,7 @@ local function ADDnonUDT(FP)
 							asp = asp .. typ .. (v.name~="..." and " "..v.name or "") .. siz .. ","
 							local callname = v.reftoptr and "*"..name or name 
 							caar = caar .. callname .. ","
+							argsTN[i].type = typ .. siz
 						end
 					end
 				end
@@ -1604,6 +1638,7 @@ local function ADDnonUDT(FP)
 				def.call_args_old = def.call_args
 				def.call_args = caar
 				def.args = asp
+				def.argsT = argsTN
 			end
 		end
 	end
@@ -1799,8 +1834,58 @@ local function json_prepare(defs)
     return defs
 end
 
+local function paramListWithoutDots(params)
+	i, j = string.find(params, "%.%.%.")
+	while i > 1 do
+		i = i - 1
+		c = string.sub(params,i,i)
+		if c == "," then
+			return string.sub(params, 1, i-1) .. params:sub(j+1)
+		elseif c == "(" then
+			return string.sub(params, 1, i) .. params:sub(j+1)
+		end
+	end
+
+	error("paramListWithoutDots failed")
+	return "()"
+end
 
 local function save_output(self)
+	--add VARGS0
+	local defsVARG = {}
+	for k,defs in pairs(self.defsT) do
+		for i, def in ipairs(defs) do
+			if def.isvararg then
+				--print("vararg",k,#def)
+				local def1 = deepcopy(def)
+				def1.isvararg = nil
+				def1.isVARG0 = true
+				def1.argsT[#def1.argsT] = nil
+				def1.args = paramListWithoutDots(def1.args)
+				def1.call_args_old = paramListWithoutDots(def1.call_args_old)
+				def1.call_args = paramListWithoutDots(def1.call_args)
+				def1.signature = paramListWithoutDots(def1.signature)
+				def1.cimguiname = def1.cimguiname.."0"
+				def1.ov_cimguiname = def1.ov_cimguiname.."0"
+				defsVARG[k.."0"] = defsVARG[k.."0"] or {}
+				table.insert(defsVARG[k.."0"], def1)
+			end
+		end
+	end
+	for k,def in pairs(defsVARG) do
+		self.defsT[k] = def
+	end
+	--add manual not present in module
+	for k,v in pairs(self.manuals) do
+		if not self.defsT[k] then
+			--print("add manual",k)
+			self.defsT[k] = {v}
+		else
+			--print("skipped manual",k)
+		end
+	end
+
+	----------------------
 	save_data("./output/overloads.txt",self.overloadstxt)
 	save_data("./output/definitions.lua",M.serializeTableF(self.defsT))
 	save_data("./output/structs_and_enums.lua",M.serializeTableF(self.structs_and_enums_table))
@@ -1841,6 +1926,9 @@ function M.Parser()
 	par.UDTs = {}
 	par.opaque_structs = {}
 	par.forced_opaque = {}
+	par.forced_nonPOD = {}
+	par.skip_template = {}
+	par.skip_convert_gen = {}
 	
 	par.save_output = save_output
 	par.genConversors = genConversions
@@ -2306,6 +2394,236 @@ function M.Parser()
 	function par:printItems()
 		printItems(items)
 	end
+	-- for manuals not present in original module
+	-- copied from parseFuncion
+	local function split_args(self, funcname, stname, args, ret)
+		print("split args",funcname, stname, args, ret)
+		args = clean_spaces(args)
+		args = moveptr(args)
+		ret = clean_spaces(ret)
+		ret = moveptr(ret)
+		if stname==true then stname="" end
+		local constructor = ret:match(stname) and true or nil
+
+		local argsp = args:sub(2,-2)..","
+		local argsTa = {}
+		for tynam in argsp:gmatch("([^,]+),") do
+			if tynam:match("%)") and not tynam:match("%b()") then
+				error"split_args"
+				--patenthesis not closed are merged in previous (happens in some defaults)
+				argsTa[#argsTa] = argsTa[#argsTa]..","..tynam
+				while argsTa[#argsTa]:match("%)") and not argsTa[#argsTa]:match("%b()") do
+					argsTa[#argsTa-1] = argsTa[#argsTa-1] .. "," .. argsTa[#argsTa]
+					argsTa[#argsTa] = nil
+				end
+			else
+				argsTa[#argsTa+1] = tynam
+			end
+		end
+		----------------------------
+		--get typ, name and defaults
+	local functype_re =        "^%s*[%w%s%*]+%(%*%s*[%w_]+%)%([^%(%)]*%)"
+    local functype_reex =     "^(%s*[%w%s%*]+)%(%*%s*([%w_]+)%)(%([^%(%)]*%))"
+	local argsTa2 = {}
+	local noname_counter = 0
+	for i,ar in ipairs(argsTa) do
+		local ttype,template,te,code2 = check_template(ar) --ar:match("([^%s,%(%)]+)%s*<(.-)>")
+		if template then
+			error"manuals should not have templates"
+			if self.typenames[stname] ~= template then --rule out template typename
+				self.templates[ttype] = self.templates[ttype] or {}
+				self.templates[ttype][template] = te
+			end
+		end
+	    argsTa[i] = te and code2 or ar 
+		local template_orig = te and ar or nil
+		ar = argsTa[i]
+		--avoid var name without space type&name -> type& name
+		-- also do type &name -> type& name
+		--ar = ar:gsub("(%S)&(%S)","%1& %2")
+		ar = ar:gsub("(%S)%s*&(%S)","%1& %2")
+		local typ,name,retf,sigf,reftoptr,defa,ar1
+		local has_cdecl = ar:match"__cdecl"
+		if has_cdecl then ar = ar:gsub("__cdecl","") end
+		if ar:match(functype_re) then
+			local t1,namef,t2 = ar:match(functype_reex)
+			local f_ = has_cdecl and "(__cdecl*)" or "(*)"
+            typ, name = t1..f_..t2, namef
+            retf = t1
+            sigf = t2
+		else
+			reftoptr = nil
+			if ar:match("&") then
+				ar1,defa = ar:match"([^=]+)=([^=]+)"
+				ar1 = ar1 or ar
+				local typ11,name11 = ar1:match("(.+)%s([^%s]+)")
+				typ11 = typ11:gsub("const ","")
+				typ11 = typ11:gsub("&","")
+				if ar:match("const") and not self.opaque_structs[typ11] then
+					--if ar:match"Palette" then print("--w---w--w",ar,typ11,name11) end
+					--print("--w---w--w",ar,cname)
+					ar = ar:gsub("&","")
+				else
+					ar = ar:gsub("&","*")
+					reftoptr = true
+				end
+            end
+			if ar:match("%.%.%.") then 
+				typ, name = "...", "..."
+			else
+				ar1,defa = ar:match"([^=]+)=([^=]+)"
+				ar1 = ar1 or ar
+				typ,name = ar1:match("(.+)%s([^%s]+)")
+			end
+			if not typ or not name or name:match"%*" or M.c_types[name]  or self.typedefs_dict[name] then
+				print("argument without name",funcname,typ,name,ar)
+				ar1,defa = ar:match"([^=]+)=([^=]+)"
+				ar1 = ar1 or ar
+				typ = ar1
+				noname_counter = noname_counter + 1
+				name = "noname"..noname_counter
+			end
+			--float name[2] to float[2] name
+            local siz = name:match("(%[%d*%])")
+            if siz then
+                typ = typ..siz
+                name = name:gsub("(%[%d*%])","")
+            end
+		end
+		
+		if typ:match"::" then  
+			local const,typsimp,ptr = typ:match("(const )([^%*&]+)([%*&]*)")
+			print("= = = = 0 = =typ",typ,const,typsimp,ptr)
+			if self.opaque_structs_inv and self.opaque_structs_inv[typsimp] then 
+				print("(((())))))=======self.opaque",const,typsimp,ptr); 
+				typ = (const or "")..self.opaque_structs_inv[typsimp]..(ptr or "") 
+			end
+		end
+		argsTa2[i] = {type=typ,name=name,default=defa,reftoptr=reftoptr,ret=retf,signature=sigf,has_cdecl=has_cdecl,template_orig=template_orig}
+		if ar:match("&") and not ar:match("const") then
+            --only post error if not manual
+            local cname = self.getCname(stname,funcname, namespace) --cimguiname
+            if not self.manuals[cname] then
+                print("reference to no const arg in",funcname,argscsinpars,ar)
+            end
+        end
+	end
+	
+	local argsArr = argsTa2
+
+	--recreate argscsinpars, call_args and signature from argsArr
+	local asp, caar,signat
+	if #argsArr > 0 then
+		asp = "("
+		caar = "("
+		signat = "("
+		for i,v in ipairs(argsArr) do
+			if v.ret then --function pointer
+				local f_ = v.has_cdecl and "(__cdecl*" or "(*"
+				asp = asp .. v.ret .. f_ .. v.name .. ")" .. v.signature .. ","
+				caar = caar .. v.name .. ","
+				signat = signat .. v.ret .. f_..")" .. clean_names_from_signature(self,v.signature) .. ","
+			else
+				local siz = v.type:match("(%[%d*%])") or ""
+				local typ = v.type:gsub("(%[%d*%])","")
+				asp = asp .. typ .. (v.name~="..." and " "..v.name or "") .. siz .. ","
+				local callname = v.reftoptr and "*"..v.name or v.name 
+				caar = caar .. callname .. ","
+				signat = signat .. typ .. siz .. ","
+			end
+		end
+		asp = asp:sub(1,-2)..")"
+		caar = caar:sub(1,-2)..")"
+		signat = signat:sub(1,-2)..")" .. (extraconst or "")
+	else
+		asp = "()"
+		caar = "()"
+		signat = "()" .. (extraconst or "")
+	end
+	--if ismanual then print("manual",asp, caar, signat) end
+		----------------------------
+	--[[
+	if not ret and stname then --must be constructors
+        if not (stname == funcname or "~"..stname==funcname) then --break end
+            print("false constructor:",line);
+            print("b2:",ret,stname,funcname,args)
+            return --are function defs
+        end
+    end
+    --]]
+    local cimguiname = funcname --self.getCname(stname,funcname, namespace)
+   -- table.insert(self.funcdefs,{stname=stname,funcname=funcname,args=args,signature=signat,cimguiname=cimguiname,call_args=caar,ret =ret})
+   local funcdef = {stname=stname,funcname=funcname,args=args,signature=signat,cimguiname=cimguiname,call_args=caar,ret =ret}
+	-- local defsT = self.defsT
+	            -- defsT[cimguiname] = defsT[cimguiname] or {}
+                -- table.insert(defsT[cimguiname],{})
+                -- local defT = defsT[cimguiname][#defsT[cimguiname]] 
+	local defT = {constructor = constructor}
+    defT.defaults = {}
+	for i,ar in ipairs(argsArr) do
+		if ar.default then
+			--clean defaults
+			--do only if not a c string
+				local is_cstring = ar.default:sub(1,1)=='"' and ar.default:sub(-1,-1) =='"'
+				if not is_cstring then
+					ar.default = ar.default:gsub("%(%(void%s*%*%)0%)","NULL")
+					if ar.default:match"%(ImU32%)" and not ar.default:match"sizeof" then
+						ar.default = tostring(CleanImU32(ar.default))
+					end
+				end
+			defT.defaults[ar.name] = ar.default
+			ar.default = nil
+		end
+	end
+	
+	-- print(cimguiname)
+	-- if ismanual then M.prtable("===================================\n",argsArr) end
+	
+	defT.templated = self.typenames[stname] and true
+	defT.namespace = namespace
+    defT.cimguiname = cimguiname
+	defT.ov_cimguiname = cimguiname
+    defT.stname = stname
+    defT.is_static_function = is_static_function
+    defT.funcname = funcname
+    defT.argsoriginal = args
+    defT.args= asp 
+    defT.signature = signat --signature
+    defT.call_args = caar --call_args
+    defT.isvararg = signat:match("%.%.%.%)$")
+    defT.location = locat
+    --local comentario = (itt.prevcomments or "")..(itt.comments or "")..(comment or "")
+	--if comentario=="" then comentario=nil end
+    --defT.comment = comentario
+    defT.argsT = argsArr
+    if self.get_manuals(defT) then
+        defT.manual = true
+    end
+    if self.get_skipped(defT) then
+        defT.skipped = true
+    end
+	---[[
+    if ret then
+		--defT.stdret = line:match("^\n*%s*std::")
+		--if ret:match"string" then print("parsefunction",defT.cimguiname, ret, line) end
+        defT.ret = clean_spaces(ret:gsub("&","*"))
+		--name_conversion
+		local rr = defT.ret:gsub("*","")
+		rr = rr:gsub("const ","")
+		if self.name_conversion and self.name_conversion[rr] then
+			defT.ret = defT.ret:gsub(rr,self.name_conversion[rr])
+		end
+        defT.retref = ret:match("&")
+        -- if defT.ret=="ImVec2" or defT.ret=="ImVec4" or defT.ret=="ImColor" then
+            -- defT.ret = defT.ret.."_Simple"
+        -- end
+    end
+	--]]
+	--defsT[cimguiname][signat] = defT
+		--M.prtable(defT)
+		defT.call_args_old = defT.call_args
+		return defT --, funcdef
+	end
 	function par:set_manuals(manuals, modulen, erase)
 		erase = erase or {"CIMGUI_API"}
 		local moddata = read_data("./"..modulen.."_template.h")
@@ -2315,10 +2633,12 @@ function M.Parser()
 				ret = ret:gsub(ww,"")
 			end
 			local args = moddata:match(k.."%s*(%b())")
-			manuals[k] = {args = args, ret = ret}
+			manuals[k] = split_args(self,k,v,args,ret)
+			--manuals[k] = {args = args, ret = ret, argsT = split_args(self,args), manual = true, stname = ""}
 			--print(k,args,ret)
 		end
 		self.manuals = manuals
+		M.prtable("manuals",manuals)
 	end
 	par.parseFunction = parseFunction
 	local uniques = {}
@@ -2423,9 +2743,11 @@ function M.Parser()
 						--print("not doheader",ttype,template,te, self.typenames[ttype])
 						--M.prtable(self.typenames)
 						if self.typenames[ttype] and self.typenames[ttype] ~= template and self.typenames[ttype].."*" ~= template then --rule out T (template typename)
+							if not self.skip_template[ttype] then
 							self.templates[ttype] = self.templates[ttype] or {}
 							self.templates[ttype][template] = te
 							it2=code2
+							end
 						end
 						if doheader and self.templates[ttype] then
 							local templatetypedef = self:gentemplatetypedef(ttype, template,self.templates[ttype][template])
@@ -2434,7 +2756,7 @@ function M.Parser()
 					end
 					--clean using
 					if it.re_name == "vardef_re" and it.item:match("using%s+([^=%s]+)%s*=%s*([^;]+);") then
-						print("===using",it.item)
+						print("===using clean",it.item)
 						local typedef, assign = it2:match("using%s+([^=%s]+)%s*=%s*([^;]+);")
 						print(typedef,assign)
 						assign = assign:gsub("%w+::","")
@@ -2657,7 +2979,7 @@ function M.Parser()
 						end
 						if it2:match("using") then
 							local typedef, assign = it2:match("using%s+([^=%s]+)%s*=%s*([^;]+);")
-							print("====using",string.format("%q %q",typedef, assign))
+							print("====using as typedef",string.format("%q %q",typedef, assign))
 							if assign and assign:match"%(%s*%*%s*%)" then --function typedef
 								it2 = "\ntypedef "..assign:gsub("%(%s*%*%s*%)","(*"..typedef..")")..";"
 							end
@@ -2716,9 +3038,19 @@ function M.Parser()
 						self:header_text_insert(outtab, tst, it)
 					end
 					self.typedefs_dict[structname]="struct "..structname
-					--dont insert child structs as they are inserted before parent struct
-					if not (it.parent and (it.parent.re_name == "struct_re" or it.parent.re_name == "class_re")) then
-						--table.insert(outtab,predec .. cleanst)
+					if not self.forced_nonPOD[structname] then
+						--dont insert child structs as they are inserted before parent struct
+						if not (it.parent and (it.parent.re_name == "struct_re" or it.parent.re_name == "class_re")) then
+							--table.insert(outtab,predec .. cleanst)
+							self:header_text_insert(outtab, predec .. cleanst, it)
+						end
+					else
+						local tab = self.forced_nonPOD[structname]
+						local cleanst = "\nstruct "..structname.."\n{\n"
+						for i,v in ipairs(tab) do
+							cleanst = cleanst.."    "..v.type.." "..v.name..";\n"
+						end
+						cleanst = cleanst .. "};"
 						self:header_text_insert(outtab, predec .. cleanst, it)
 					end
 				end
@@ -2769,6 +3101,13 @@ function M.Parser()
 		--table.insert(outtab,"\n/////outtab end\n")
 		local outtabprest, outtabst = table.concat(outtabpre,""),table.concat(outtab,"")
 		outtabprest = M.header_subs_nonPOD(self,outtabprest)
+		local txt2 = ""
+		M.table_do_sorted(self.nP_used, function(k,v)
+			if v~="inherited" then
+				txt2 = txt2.."typedef struct "..k.."_c "..k..";\n"
+			end
+		end)
+		outtabprest = txt2..outtabprest
 		outtabst = M.header_subs_nonPOD(self,outtabst)
 		self.structs_and_enums = {outtabprest, outtabst or ""}
 		
@@ -2959,14 +3298,18 @@ function M.Parser()
 				--if not void stname or templated
 				if not structname then print("NO NAME",cleanst,it.item) end
 				if structname and not self.typenames[structname] then
-					outtab.structs[structname] = {}
-					outtab.struct_comments[structname] = {sameline=it.comments,above=it.prevcomments}
-					outtab.struct_comments[structname] = next(outtab.struct_comments[structname]) and outtab.struct_comments[structname] or nil
-					outtab.locations[structname] = it.locat
-					if strtab then
-					for j=3,#strtab-1 do
-						self:parse_struct_line(strtab[j],outtab.structs[structname],comstab[j])
-					end
+					if self.forced_nonPOD[structname] then
+						outtab.structs[structname] = self.forced_nonPOD[structname]
+					else
+						outtab.structs[structname] = {}
+						outtab.struct_comments[structname] = {sameline=it.comments,above=it.prevcomments}
+						outtab.struct_comments[structname] = next(outtab.struct_comments[structname]) and outtab.struct_comments[structname] or nil
+						outtab.locations[structname] = it.locat
+						if strtab then
+						for j=3,#strtab-1 do
+							self:parse_struct_line(strtab[j],outtab.structs[structname],comstab[j])
+						end
+						end
 					end
 					-- if structname == "Change" then
 						-- print(it.item)
@@ -3305,7 +3648,7 @@ function M.Parser()
 		M.prtable("typenames",self.typenames)
 		local outpre,outpost = self.structs_and_enums[1], self.structs_and_enums[2]
 		local tdt = self:generate_templates()
-		M.prtable("generate_templates",tdt)
+		--M.prtable("generate_templates",tdt)
 		local cstructsstr = outpre..tdt..outpost 
 	
 		hstrfile = hstrfile:gsub([[#include "imgui_structs%.h"]],cstructsstr)
@@ -3594,21 +3937,7 @@ local function location(file,locpathT,defines,COMPILER,keepemptylines)
 end
 M.location = location
 ---------------------- C writing functions
-local function paramListWithoutDots(params)
-	i, j = string.find(params, "%.%.%.")
-	while i > 1 do
-		i = i - 1
-		c = string.sub(params,i,i)
-		if c == "," then
-			return string.sub(params, 1, i-1) .. params:sub(j+1)
-		elseif c == "(" then
-			return string.sub(params, 1, i) .. params:sub(j+1)
-		end
-	end
 
-	error("paramListWithoutDots failed")
-	return "()"
-end
 local function ImGui_f_implementation(def)
 	local outtab = {}
     local ptret = def.retref and "&" or ""
@@ -3634,7 +3963,9 @@ local function ImGui_f_implementation(def)
 		table.insert(outtab, "#ifdef CIMGUI_VARGS0\n")
 		table.insert(outtab, "CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname.."0"..paramListWithoutDots(def.args).."\n")
 		table.insert(outtab, "{\n")
-		table.insert(outtab, "    return "..def.ov_cimguiname..paramListWithoutDots(def.call_args_old)..";\n")
+		local returnword = "return "
+		if def.ret=="void" then returnword = "" end
+		table.insert(outtab, "    "..returnword..def.ov_cimguiname..paramListWithoutDots(def.call_args_old)..";\n")
 		table.insert(outtab, "}\n")
 		table.insert(outtab, "#endif\n")
     elseif def.nonUDT then
@@ -3649,6 +3980,7 @@ local function ImGui_f_implementation(def)
 			insert(outtab,"    return str.c_str();\n")
 		elseif def.nonUDT == "opaque" then
 			insert(outtab,"    static auto opq = "..ptret..namespace..def.funcname..def.call_args..";\n")
+			insert(outtab,"    opq = "..ptret..namespace..def.funcname..def.call_args..";\n")
 			insert(outtab,"    return &opq;\n")
         end
 		table.insert(outtab,"}\n")
@@ -3681,6 +4013,16 @@ local function struct_f_implementation(def)
         if def.ret~="void" then
             table.insert(outtab,"    return ret;\n")
         end
+	    table.insert(outtab,"}\n")
+		-- For variadic functions we add a function implementation with zero argumets, for compatibility with languages such as C#.
+		table.insert(outtab, "#ifdef CIMGUI_VARGS0\n")
+		table.insert(outtab, "CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname.."0"..paramListWithoutDots(def.args).."\n")
+		table.insert(outtab, "{\n")
+		local returnword = "return "
+		if def.ret=="void" then returnword = "" end
+		table.insert(outtab, "    "..returnword..def.ov_cimguiname.."(self,"..paramListWithoutDots(def.call_args_old):sub(2,-1)..";\n")
+		table.insert(outtab, "}\n")
+		table.insert(outtab, "#endif\n")
     elseif def.nonUDT then
         if def.nonUDT == 1 then
             --table.insert(outtab,"    *pOut = self->"..def.funcname..def.call_args..";\n")
@@ -3694,12 +4036,15 @@ local function struct_f_implementation(def)
 			insert(outtab,"    return str.c_str();\n")
 		elseif def.nonUDT == "opaque" then
 			insert(outtab,"    static auto opq = "..ptret.."self->"..def.funcname..def.call_args..";\n")
+			insert(outtab,"    opq = "..ptret.."self->"..def.funcname..def.call_args..";\n")
 			insert(outtab,"    return &opq;\n")
         end
+	    table.insert(outtab,"}\n")
     else --standard struct
         table.insert(outtab,"    return "..ptret.."self->"..def.funcname..def.call_args..";\n")
+	    table.insert(outtab,"}\n")
     end
-    table.insert(outtab,"}\n")
+
 	return table.concat(outtab, "")
 end
 local function func_implementation(FP)
@@ -3812,7 +4157,6 @@ local function func_header_generate_funcs(FP)
     local outtab = {}
    
     for _,t in ipairs(FP.funcdefs) do
-
         if t.cimguiname then
         local cimf = FP.defsT[t.cimguiname]
         local def = cimf[t.signature]
@@ -3824,7 +4168,6 @@ local function func_header_generate_funcs(FP)
         local manual = FP.get_manuals(def)
         if not custom and not manual and not def.templated and not FP.get_skipped(def) --and not (FP.opaque_structs[def.stname] and not def.is_static_function)
 		then
-
             local addcoment = "" --def.comment or ""
             local empty = def.args:match("^%(%)") --no args
             if def.constructor then
@@ -3848,6 +4191,12 @@ local function func_header_generate_funcs(FP)
 					end
                 else
                     table.insert(outtab,"CIMGUI_API "..ret.." "..def.ov_cimguiname..def.args..";"..addcoment.."\n")
+					if def.isvararg then
+						-- For variadic functions we add a function implementation with zero argumets, for compatibility with languages such as C#.
+						table.insert(outtab, "#ifdef CIMGUI_VARGS0\n")
+						table.insert(outtab, "CIMGUI_API".." "..ret.." "..def.ov_cimguiname.."0"..paramListWithoutDots(def.args)..";\n")
+						table.insert(outtab, "#endif\n")
+					end
                 end
             end 
         end

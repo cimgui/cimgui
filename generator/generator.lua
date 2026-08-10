@@ -407,19 +407,20 @@ end
 --generation
 print("------------------generation with "..COMPILER.."------------------------")
 local parser1
-local headers = [[#include "]]..IMGUI_PATH..[[/imgui.h" 
+local headers = [[#include "]]..IMGUI_PATH..[[/imgui.h"
 ]]
 local headersT = {[[imgui]]}
 if INTERNAL_GENERATION then
 	headers = headers .. [[#include "]]..IMGUI_PATH..[[/imgui_internal.h"
-	]]
+]]
+	headers = headers .. [[#include "]]..IMGUI_PATH..[[/imstb_textedit.h"
+]]
 	headersT[#headersT + 1] = [[imgui_internal]]
 	headersT[#headersT + 1] = [[imstb_textedit]]
 end
 if FREETYPE_GENERATION then
-	headers = headers .. [[
-	#include "]]..IMGUI_PATH..[[/misc/freetype/imgui_freetype.h"
-	]]
+	headers = headers .. [[#include "]]..IMGUI_PATH..[[/misc/freetype/imgui_freetype.h"
+]]
 	headersT[#headersT + 1] = [[imgui_freetype]]
 end
 save_data("headers.h",headers)
