@@ -747,7 +747,7 @@ end
 local function parseFunction(self,stname,itt,namespace,locat)
 
 	local lineorig,comment = split_comment(itt.item)
-	line = clean_spaces(lineorig)
+	local line = clean_spaces(lineorig)
 	--move *
 	line = moveptr(line)
 
@@ -1835,10 +1835,10 @@ local function json_prepare(defs)
 end
 
 local function paramListWithoutDots(params)
-	i, j = string.find(params, "%.%.%.")
+	local i, j = string.find(params, "%.%.%.")
 	while i > 1 do
 		i = i - 1
-		c = string.sub(params,i,i)
+		local c = string.sub(params,i,i)
 		if c == "," then
 			return string.sub(params, 1, i-1) .. params:sub(j+1)
 		elseif c == "(" then
