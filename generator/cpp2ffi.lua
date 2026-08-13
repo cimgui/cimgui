@@ -1521,8 +1521,10 @@ local function ADDnonUDT(FP)
 				def.skipped = skip
 				FP.skipped[def.ov_cimguiname] = true
 			else
-				def.call_args_old = def.call_args
-				def.call_args = caar
+				--def.call_args_old = def.call_args
+				if caar~=def.call_args then
+					def.call_args_conv = caar
+				end
 				def.args = asp
 				def.argsT = argsTN
 			end

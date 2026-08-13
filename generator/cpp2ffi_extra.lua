@@ -249,6 +249,7 @@ local function copyfile(src,dst,blocksize)
 end
 
 local function paramListWithoutDots(params)
+    if not params then return nil end
     local i, j = string.find(params, "%.%.%.")
     while i > 1 do
         i = i - 1
@@ -290,8 +291,8 @@ local function save_output(self)
                 def1.isVARG0 = true
                 def1.argsT[#def1.argsT] = nil
                 def1.args = paramListWithoutDots(def1.args)
-                def1.call_args_old = paramListWithoutDots(def1.call_args_old)
                 def1.call_args = paramListWithoutDots(def1.call_args)
+                def1.call_args_conv = paramListWithoutDots(def1.call_args_conv)
                 def1.signature = paramListWithoutDots(def1.signature)
                 def1.cimguiname = def1.cimguiname.."0"
                 def1.ov_cimguiname = def1.ov_cimguiname.."0"
@@ -312,7 +313,12 @@ local function save_output(self)
             --print("skipped manual",k)
         end
     end
-
+    ---------- delete call_args_conv
+    -- for k,defs in pairs(self.defsT) do
+        -- for i, def in ipairs(defs) do
+            -- def.call_args_conv = nil
+        -- end
+    -- end
     ----------------------
     save_data("./output/overloads.txt",self.overloadstxt)
     save_data("./output/definitions.lua",serializeTableF(self.defsT))
@@ -451,14 +457,15 @@ local function ImGui_f_implementation(def)
     table.insert(outtab,"{\n")
     local namespace = def.namespace and def.namespace.."::" or ""
     --namespace = def.is_static_function and namespace..def.stname.."::" or namespace
+	local call_args_conv = def.call_args_conv or def.call_args
     if def.isvararg then
-        local call_args = def.call_args:gsub("%.%.%.","args")
+        local call_args_conv = call_args_conv:gsub("%.%.%.","args")
         table.insert(outtab,"    va_list args;\n")
         table.insert(outtab,"    va_start(args, fmt);\n")
         if def.ret~="void" then
-            table.insert(outtab,"    "..def.ret.." ret = "..namespace..def.funcname.."V"..call_args..";\n")
+            table.insert(outtab,"    "..def.ret.." ret = "..namespace..def.funcname.."V"..call_args_conv..";\n")
         else
-            table.insert(outtab,"    "..namespace..def.funcname.."V"..call_args..";\n")
+            table.insert(outtab,"    "..namespace..def.funcname.."V"..call_args_conv..";\n")
         end
         table.insert(outtab,"    va_end(args);\n")
         if def.ret~="void" then
@@ -471,27 +478,26 @@ local function ImGui_f_implementation(def)
         table.insert(outtab, "{\n")
         local returnword = "return "
         if def.ret=="void" then returnword = "" end
-        table.insert(outtab, "    "..returnword..def.ov_cimguiname..paramListWithoutDots(def.call_args_old)..";\n")
+        table.insert(outtab, "    "..returnword..def.ov_cimguiname..paramListWithoutDots(def.call_args)..";\n")
         table.insert(outtab, "}\n")
         table.insert(outtab, "#endif\n")
     elseif def.nonUDT then
         if def.nonUDT == 1 then
-            --table.insert(outtab,"    *pOut = "..namespace..def.funcname..def.call_args..";\n")
-            insert(outtab,"    return ConvertFromCPP_"..def.conv.."("..namespace..def.funcname..def.call_args..");\n")
+            insert(outtab,"    return ConvertFromCPP_"..def.conv.."("..namespace..def.funcname..call_args_conv..");\n")
         elseif def.nonUDT == 2 then
-            insert(outtab,"    return reinterpret_cast<"..def.ret..">("..ptret..namespace..def.funcname..def.call_args..");\n")
+            insert(outtab,"    return reinterpret_cast<"..def.ret..">("..ptret..namespace..def.funcname..call_args_conv..");\n")
         elseif def.nonUDT == "string" then
             insert(outtab,"    static std::string str;\n")
-            insert(outtab,"    str.assign("..ptret.."self->"..def.funcname..def.call_args..");\n")
+            insert(outtab,"    str.assign("..ptret.."self->"..def.funcname..call_args_conv..");\n")
             insert(outtab,"    return str.c_str();\n")
         elseif def.nonUDT == "opaque" then
-            insert(outtab,"    static auto opq = "..ptret..namespace..def.funcname..def.call_args..";\n")
-            insert(outtab,"    opq = "..ptret..namespace..def.funcname..def.call_args..";\n")
+            insert(outtab,"    static auto opq = "..ptret..namespace..def.funcname..call_args_conv..";\n")
+            insert(outtab,"    opq = "..ptret..namespace..def.funcname..call_args_conv..";\n")
             insert(outtab,"    return &opq;\n")
         end
         table.insert(outtab,"}\n")
     else --standard ImGui
-        table.insert(outtab,"    return "..ptret..namespace..def.funcname..def.call_args..";\n")
+        table.insert(outtab,"    return "..ptret..namespace..def.funcname..call_args_conv..";\n")
         table.insert(outtab,"}\n")
     end
     --table.insert(outtab,"}\n")
@@ -506,14 +512,15 @@ local function struct_f_implementation(def)
 
     table.insert(outtab,"CIMGUI_API".." "..def.ret.." "..def.ov_cimguiname..def.args.."\n")
     table.insert(outtab,"{\n")
+	local call_args_conv = def.call_args_conv or def.call_args 
     if def.isvararg then
-        local call_args = def.call_args:gsub("%.%.%.","args")
+        local call_args_conv = call_args_conv:gsub("%.%.%.","args")
         table.insert(outtab,"    va_list args;\n")
         table.insert(outtab,"    va_start(args, fmt);\n")
         if def.ret~="void" then
-            table.insert(outtab,"    "..def.ret.." ret = self->"..def.funcname.."V"..call_args..";\n")
+            table.insert(outtab,"    "..def.ret.." ret = self->"..def.funcname.."V"..call_args_conv..";\n")
         else
-            table.insert(outtab,"    self->"..def.funcname.."V"..call_args..";\n")
+            table.insert(outtab,"    self->"..def.funcname.."V"..call_args_conv..";\n")
         end
         table.insert(outtab,"    va_end(args);\n")
         if def.ret~="void" then
@@ -526,28 +533,26 @@ local function struct_f_implementation(def)
         table.insert(outtab, "{\n")
         local returnword = "return "
         if def.ret=="void" then returnword = "" end
-        table.insert(outtab, "    "..returnword..def.ov_cimguiname.."(self,"..paramListWithoutDots(def.call_args_old):sub(2,-1)..";\n")
+        table.insert(outtab, "    "..returnword..def.ov_cimguiname.."(self,"..paramListWithoutDots(def.call_args):sub(2,-1)..";\n")
         table.insert(outtab, "}\n")
         table.insert(outtab, "#endif\n")
     elseif def.nonUDT then
         if def.nonUDT == 1 then
-            --table.insert(outtab,"    *pOut = self->"..def.funcname..def.call_args..";\n")
-            --local typret = (def.ret):gsub("const ","")
-            insert(outtab,"    return ConvertFromCPP_"..def.conv.."(self->"..def.funcname..def.call_args..");\n")
+            insert(outtab,"    return ConvertFromCPP_"..def.conv.."(self->"..def.funcname..call_args_conv..");\n")
         elseif def.nonUDT == 2 then
-            insert(outtab,"    return reinterpret_cast<"..def.ret..">("..ptret.."self->"..def.funcname..def.call_args..");\n")
+            insert(outtab,"    return reinterpret_cast<"..def.ret..">("..ptret.."self->"..def.funcname..call_args_conv..");\n")
         elseif def.nonUDT == "string" then
             insert(outtab,"    static std::string str;\n")
-            insert(outtab,"    str.assign("..ptret.."self->"..def.funcname..def.call_args..");\n")
+            insert(outtab,"    str.assign("..ptret.."self->"..def.funcname..call_args_conv..");\n")
             insert(outtab,"    return str.c_str();\n")
         elseif def.nonUDT == "opaque" then
-            insert(outtab,"    static auto opq = "..ptret.."self->"..def.funcname..def.call_args..";\n")
-            insert(outtab,"    opq = "..ptret.."self->"..def.funcname..def.call_args..";\n")
+            insert(outtab,"    static auto opq = "..ptret.."self->"..def.funcname..call_args_conv..";\n")
+            insert(outtab,"    opq = "..ptret.."self->"..def.funcname..call_args_conv..";\n")
             insert(outtab,"    return &opq;\n")
         end
         table.insert(outtab,"}\n")
     else --standard struct
-        table.insert(outtab,"    return "..ptret.."self->"..def.funcname..def.call_args..";\n")
+        table.insert(outtab,"    return "..ptret.."self->"..def.funcname..call_args_conv..";\n")
         table.insert(outtab,"}\n")
     end
 
@@ -570,18 +575,19 @@ local function func_implementation(FP)
         local manual = FP.get_manuals(def)
         if not custom and not manual and not def.templated and not FP.get_skipped(def) --and not (FP.opaque_structs[def.stname] and not def.is_static_function)
         then
+			local call_args_conv = def.call_args_conv or def.call_args
             if def.constructor then
                 local tab = {}
                 assert(def.stname ~= "","constructor without struct")
                 local empty = def.args:match("^%(%)") --no args
                 table.insert(tab,"CIMGUI_API "..def.stname.."* "..def.ov_cimguiname..(empty and "(void)" or def.args).."\n")
                 table.insert(tab,"{\n")
-                table.insert(tab,"    return IM_NEW("..def.stname..")"..def.call_args..";\n")
+                table.insert(tab,"    return IM_NEW("..def.stname..")"..call_args_conv..";\n")
                 table.insert(tab,"}\n")
                 if FP.CONSTRUCTORS_GENERATION then
                     table.insert(tab,"CIMGUI_API void "..def.ov_cimguiname.."_Construct("..def.stname.."* self"..(empty and "" or ","..def.args:sub(2,-2))..")\n")
                     table.insert(tab,"{\n")
-                    table.insert(tab,"    IM_PLACEMENT_NEW(self)"..def.stname..def.call_args..";\n")
+                    table.insert(tab,"    IM_PLACEMENT_NEW(self)"..def.stname..call_args_conv..";\n")
                     table.insert(tab,"}\n")
                 end
                 table.insert(outtab, table.concat(tab, ""))
