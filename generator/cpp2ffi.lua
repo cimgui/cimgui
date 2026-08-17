@@ -916,7 +916,7 @@ local function parseFunction(self,stname,itt,namespace,locat)
 		--name_conversion
 		local rr = defT.ret:gsub("*","")
 		rr = rr:gsub("const ","")
-		if self.name_conversion and self.name_conversion[rr] then
+		if self.name_conversion[rr] then
 			defT.ret = defT.ret:gsub(rr,self.name_conversion[rr])
 		end
         defT.retref = ret:match("&")
@@ -1734,6 +1734,7 @@ function M.Parser()
 	par.forced_nonPOD = {}
 	par.skip_template = {}
 	par.skip_convert_gen = {}
+	par.name_conversion = {}
 	
 	par.save_output = extra.save_output
 	par.genConversors = genConversions
@@ -1996,7 +1997,7 @@ function M.Parser()
 				it.item = it.item:gsub("enum%s*class","enum")
 			elseif it.re_name == "struct_re" then
 				it.name = it.item:match("struct%s+([^%s{]+)")
-				if self.name_conversion and self.name_conversion[it.name] then
+				if self.name_conversion[it.name] then
 					it.name = self.name_conversion[it.name]
 					print("=========conversion",it.name)
 				end
@@ -2415,7 +2416,7 @@ function M.Parser()
 		--name_conversion
 		local rr = defT.ret:gsub("*","")
 		rr = rr:gsub("const ","")
-		if self.name_conversion and self.name_conversion[rr] then
+		if self.name_conversion[rr] then
 			defT.ret = defT.ret:gsub(rr,self.name_conversion[rr])
 		end
         defT.retref = ret:match("&")
@@ -2510,11 +2511,11 @@ function M.Parser()
 			end
 		end
 		
-		if self.name_conversion and self.name_conversion[stname] then
+		if self.name_conversion[stname] then
 			itst.or_name = stname
 			stname = self.name_conversion[stname]
 		end
-		--stname = self.name_conversion and self.name_conversion[stname] or stname
+
 		--initial
 
 		table.insert(outtab,"\nstruct "..stname.."\n")
