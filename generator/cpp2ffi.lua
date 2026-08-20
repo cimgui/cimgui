@@ -3476,7 +3476,7 @@ function M.Parser()
 		if COMPILER=="gcc" then
 		local include_cmd = COMPILER=="cl" and [[ /I ]] or [[ -I ]]
 		local extra_includes = include_cmd.." ../../cimgui "
-		local CPRE = COMPILER..[[ -std=c99 -DCIMGUI_DEFINE_ENUMS_AND_STRUCTS -DIMGUI_ENABLE_FREETYPE ]] ..extra_includes.. "./output/"..name..".h"
+		local CPRE = COMPILER..[[ -fsyntax-only -x c -std=c99 -DCIMGUI_DEFINE_ENUMS_AND_STRUCTS -DIMGUI_ENABLE_FREETYPE ]] ..extra_includes.. "./output/"..name..".h"
 		print(CPRE)
 		get_cdefs(CPRE,"name")
 		end
