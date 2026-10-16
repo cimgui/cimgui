@@ -1737,6 +1737,7 @@ function M.Parser()
 	par.skip_template = {}
 	par.skip_convert_gen = {}
 	par.name_conversion = {}
+	par.enum_prepend = {}
 	
 	par.save_output = extra.save_output
 	par.genConversors = genConversions
@@ -2702,11 +2703,23 @@ function M.Parser()
 						enumbody = "{"..enumbody.."\n}"
 						--table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";"..extraenums)
 						local it2 = "\ntypedef enum ".. enumbody..enumname..";"..extraenums
+						-- print(it2)
+						-- print("extraenums",extraenums)
+						-- error"debug2"
 						self:header_text_insert(outtab, it2, it)
 					else
-						local enumbody = it.item:match"(%b{})"
-						enumbody = clean_comments(enumbody)
-						--table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
+						local enumbody = ""
+						if self.enum_prepend[enumname] then 
+							for i,v in ipairs(self.structs_and_enums_table.enums[enumname]) do
+								--print("========",enumname,v.name,v.value,v.calc_value);
+								enumbody = enumbody .. "\n" ..v.name .."="..v.value..","
+							end
+							enumbody = "{"..enumbody.."\n}"
+						else
+							enumbody = it.item:match"(%b{})"
+							enumbody = clean_comments(enumbody)
+							--table.insert(outtab,"\ntypedef enum ".. enumbody..enumname..";")
+						end
 						local it2 = "\ntypedef enum ".. enumbody..enumname..";"
 						self:header_text_insert(outtab, it2, it)
 					end
@@ -2972,7 +2985,7 @@ function M.Parser()
 	end
 	
 	local unnamed_enum_counter = 0
-	local function enums_for_table(it, outtab, enumsordered)
+	local function enums_for_table(self, it, outtab, enumsordered)
 		--local enumname = it.item:match"^%s*enum%s+([^%s;{}]+)"
 		--local enumname = it.item:match"^[^;{}]-enum%s+([^%s;{}]+)"
 		local enumname = it.item:match"^%s*enum%s+([^%s;{}:]+)"
@@ -3012,11 +3025,20 @@ function M.Parser()
 			comment = comment and comment:gsub("^[^\n%S]*(//.-)$","%1") or nil
 			assert(line~="")
 			local name,value = line:match("%s*([%w_]+)%s*=%s*([^,]+)")
+
 			if value then
+				if self.enum_prepend[enumname] then
+					--print("enum_prepend",enumname,name,value)
+					name = enumname.."_"..name
+				end
 				table.insert(outtab.enums[enumname],{name=name,value=value,comment=comment})
 				outtab.locations[enumname] = it.locat
 			else --increment by one
 				local name = line:match("%s*([^,]+)")
+				if self.enum_prepend[enumname] then
+					--print("enum_prepend",enumname,name,value)
+					name = enumname.."_"..name
+				end
 				local enum_table = outtab.enums[enumname]
 				local prevvalue = enum_table[#enum_table] and enum_table[#enum_table].value
 				local value --= enum_table[#enum_table] and (enum_table[#enum_table].value + 1) or 0
@@ -3033,6 +3055,7 @@ function M.Parser()
 				end
 			end
 		end
+		--if self.enum_prepend[enumname] then M.prtable(outtab.enums[enumname]) end
 	end
 	par.enums_for_table = enums_for_table
 	function par:gen_structs_and_enums_table()
@@ -3099,7 +3122,7 @@ function M.Parser()
 					end
 				end
 			elseif it.re_name == "enum_re" then
-				enums_for_table(it, outtab, enumsordered)
+				self:enums_for_table(it, outtab, enumsordered)
 			elseif it.re_name == "struct_re" or it.re_name == "typedef_st_re" or it.re_name == "class_re" then
 				local cleanst,structname,strtab,comstab = self:clean_structR1(it)
 				if it.name then outtab.opaque_structs[it.name] = it.opaque_struct end
