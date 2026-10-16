@@ -2461,7 +2461,6 @@ function M.Parser()
 	function par:generate_templates()
 		local ttd = {}
 		M.table_do_sorted(self.templates , function (ttype, v)
-			--print("generate_templates",ttype,v)
 			M.table_do_sorted(v, function(te,newte) 
 				table.insert(ttd,self:gentemplatetypedef(ttype,te,newte))
 			end)
@@ -3424,8 +3423,11 @@ function M.Parser()
 		return self:gen_template_typedef_auto(ttype,te,newte)
 	end
 	function par:gen_template_typedef_auto(ttype,te,newte)
+		--print("gen_template_typedef_auto",ttype,te,newte)
+		--if te=="T" then M.prtable("TTTT",debug.getinfo(2));error"debug" end
 		--M.prtable(self.templated_structs)
 		--assert(self.templated_structs[ttype],ttype)
+		local ttype_watched = nil --"ImPool"
 		if not self.templated_structs[ttype] then
 			print("----gentemplatetypedef failed for", ttype)
 			return ""
@@ -3442,32 +3444,43 @@ function M.Parser()
 			Targ[i] = Targ[i]:gsub("%s*=.+","")
 			Targ[i] = Targ[i]:match"%S+$"
 		end
-
+		if ttype==ttype_watched then M.prtable(ttype_watched,"Targ",Targ,"defa",defa,"defi",defi,"tes",tes) end
 		--assert(not Targ:match",") --still not several
 		local code = {}
 		local precode = {}
 		for i,v in ipairs(defi) do
 			local typ = v.type  --:gsub(Targ,te)
 			local nam = v.name  --:gsub(Targ,te)
+			if ttype==ttype_watched then  print(ttype_watched,"typ nam1",typ,nam) end
 			for j,w in ipairs(Targ) do
 				local subs = tes[j] or defa[j]
-				typ = typ:gsub(w,subs)
+				if ttype==ttype_watched then  print(ttype_watched,"subs",string.format("%q %q %q %q",typ,nam,w,subs)) end
+				if w==subs then print("w is subs")end
+				if typ==w or typ==w.."*" or typ==w.."**" or typ:match("<"..w..">") or typ:match("<"..w.."%*>") then 
+					typ = typ:gsub(w,subs) 
+				elseif typ:match(w) then
+					print("=========no subs",string.format("%q %q %q %q",typ,nam,w,subs))
+				end
 				nam = nam:gsub(w,subs)
 			end
+			if ttype==ttype_watched then  print(ttype_watched,"typ nam2",typ,nam) end
 			--if typ still has template
 			local ttypet,templatet,tet,code2t =  check_template(typ)
 			if templatet then
+				print("templatet typ",typ,ttypet,templatet,tet,code2t)
 				typ = code2t
 				table.insert(precode, self:gentemplatetypedef(ttypet,templatet,tet))
 			end
 			--if name still has template
 			local ttypet,templatet,tet,code2t =  check_template(nam)
 			if templatet then
+				print("templatet nam",nam,ttypet,templatet,tet,code2t)
 				nam = code2t
 				table.insert(precode, self:gentemplatetypedef(ttypet,templatet,tet))
 			end
 			table.insert(code, typ.." "..nam..";")
 		end
+		if ttype==ttype_watched then  M.prtable(ttype_watched,code) end
 		return table.concat(precode).."\ntypedef struct "..ttype.."_"..newte.." {"..table.concat(code).."} "..ttype.."_"..newte..";\n"
 	end
 	--generate cimgui.cpp cimgui.h 
