@@ -132,7 +132,6 @@ struct ImGui_ImplVulkan_PipelineInfo
     VkSampleCountFlagBits MSAASamples;
     ImVector_VkDynamicState ExtraDynamicStates;
     VkPipelineRenderingCreateInfoKHR PipelineRenderingCreateInfo;
-    VkImageUsageFlags SwapChainImageUsage;
 };
 typedef struct ImGui_ImplVulkan_InitInfo ImGui_ImplVulkan_InitInfo;
 struct ImGui_ImplVulkan_InitInfo
@@ -149,7 +148,6 @@ struct ImGui_ImplVulkan_InitInfo
     uint32_t ImageCount;
     VkPipelineCache PipelineCache;
     ImGui_ImplVulkan_PipelineInfo PipelineInfoMain;
-    ImGui_ImplVulkan_PipelineInfo PipelineInfoForViewports;
     bool UseDynamicRendering;
     const VkAllocationCallbacks* Allocator;
     void (*CheckVkResultFn)(VkResult err);
@@ -197,6 +195,7 @@ struct ImGui_ImplVulkanH_Window
     int Height;
     VkSwapchainKHR Swapchain;
     VkRenderPass RenderPass;
+    VkPipeline Pipeline;
     uint32_t FrameIndex;
     uint32_t ImageCount;
     uint32_t SemaphoreCount;
@@ -215,7 +214,6 @@ typedef ImVector<VkDynamicState> ImVector_VkDynamicState;
 CIMGUI_API void ImGui_ImplVulkanH_CreateOrResizeWindow(VkInstance instance,VkPhysicalDevice physical_device,VkDevice device,ImGui_ImplVulkanH_Window* wd,uint32_t queue_family,const VkAllocationCallbacks* allocator,int w,int h,uint32_t min_image_count,VkImageUsageFlags image_usage);
 CIMGUI_API void ImGui_ImplVulkanH_DestroyWindow(VkInstance instance,VkDevice device,ImGui_ImplVulkanH_Window* wd,const VkAllocationCallbacks* allocator);
 CIMGUI_API int ImGui_ImplVulkanH_GetMinImageCountFromPresentMode(VkPresentModeKHR present_mode);
-CIMGUI_API ImGui_ImplVulkanH_Window* ImGui_ImplVulkanH_GetWindowDataFromViewport(ImGuiViewport* viewport);
 CIMGUI_API VkPhysicalDevice ImGui_ImplVulkanH_SelectPhysicalDevice(VkInstance instance);
 CIMGUI_API VkPresentModeKHR ImGui_ImplVulkanH_SelectPresentMode(VkPhysicalDevice physical_device,VkSurfaceKHR surface,const VkPresentModeKHR* request_modes,int request_modes_count);
 CIMGUI_API uint32_t ImGui_ImplVulkanH_SelectQueueFamilyIndex(VkPhysicalDevice physical_device);
