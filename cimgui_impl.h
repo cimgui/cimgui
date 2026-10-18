@@ -47,6 +47,7 @@ CIMGUI_API ImGui_ImplOpenGL3_RenderState* ImGui_ImplOpenGL3_GetRenderState(void)
 CIMGUI_API bool ImGui_ImplOpenGL3_Init(const char* glsl_version);
 CIMGUI_API void ImGui_ImplOpenGL3_NewFrame(void);
 CIMGUI_API void ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data);
+CIMGUI_API void ImGui_ImplOpenGL3_SetClipOrigin(unsigned int gl_clip_origin);
 CIMGUI_API void ImGui_ImplOpenGL3_Shutdown(void);
 CIMGUI_API void ImGui_ImplOpenGL3_UpdateTexture(ImTextureData* tex);
 
@@ -220,6 +221,7 @@ CIMGUI_API VkSurfaceFormatKHR ImGui_ImplVulkanH_SelectSurfaceFormat(VkPhysicalDe
 CIMGUI_API ImGui_ImplVulkanH_Window* ImGui_ImplVulkanH_Window_ImGui_ImplVulkanH_Window(void);
 CIMGUI_API VkDescriptorSet ImGui_ImplVulkan_AddTexture(VkImageView image_view,VkImageLayout image_layout);
 CIMGUI_API void ImGui_ImplVulkan_CreateMainPipeline(const ImGui_ImplVulkan_PipelineInfo* info);
+CIMGUI_API ImGui_ImplVulkan_RenderState* ImGui_ImplVulkan_GetRenderState(void);
 CIMGUI_API bool ImGui_ImplVulkan_Init(ImGui_ImplVulkan_InitInfo* info);
 CIMGUI_API bool ImGui_ImplVulkan_LoadFunctions(uint32_t api_version,PFN_vkVoidFunction(*loader_func)(const char* function_name,void* user_data),void* user_data);
 CIMGUI_API void ImGui_ImplVulkan_NewFrame(void);

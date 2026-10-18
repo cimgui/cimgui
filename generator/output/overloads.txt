@@ -22,9 +22,6 @@ ImGuiStyleMod_ImGuiStyleMod	3
 1	nil	ImGuiStyleMod_ImGuiStyleMod_Int (ImGuiStyleVar,int)
 2	nil	ImGuiStyleMod_ImGuiStyleMod_Float (ImGuiStyleVar,float)
 3	nil	ImGuiStyleMod_ImGuiStyleMod_Vec2 (ImGuiStyleVar,ImVec2)
-ImGuiTextRange_ImGuiTextRange	2
-1	nil	ImGuiTextRange_ImGuiTextRange_Nil ()
-2	nil	ImGuiTextRange_ImGuiTextRange_Str (const char*,const char*)
 ImGuiWindow_GetID	3
 1	ImGuiID	ImGuiWindow_GetID_Str (const char*,const char*)
 2	ImGuiID	ImGuiWindow_GetID_Ptr (const void*)
@@ -149,6 +146,10 @@ igImAbs	3
 1	int	igImAbs_Int (int)
 2	float	igImAbs_Float (float)
 3	double	igImAbs_double (double)
+igImClamp	3
+1	int	igImClamp_Int (int,int,int)
+2	float	igImClamp_Float (float,float,float)
+3	ImVec2	igImClamp_Vec2 (const ImVec2,const ImVec2,const ImVec2)
 igImFloor	2
 1	float	igImFloor_Float (float)
 2	ImVec2	igImFloor_Vec2 (const ImVec2)
@@ -165,6 +166,14 @@ igImLerp	3
 igImLog	2
 1	float	igImLog_Float (float)
 2	double	igImLog_double (double)
+igImMax	3
+1	int	igImMax_Int (int,int)
+2	float	igImMax_Float (float,float)
+3	ImVec2	igImMax_Vec2 (const ImVec2,const ImVec2)
+igImMin	3
+1	int	igImMin_Int (int,int)
+2	float	igImMin_Float (float,float)
+3	ImVec2	igImMin_Vec2 (const ImVec2,const ImVec2)
 igImPow	2
 1	float	igImPow_Float (float,float)
 2	double	igImPow_double (double,double)
@@ -312,4 +321,4 @@ igValue	4
 2	void	igValue_Int (const char*,int)
 3	void	igValue_Uint (const char*,unsigned int)
 4	void	igValue_Float (const char*,float,const char*)
-218 overloaded
+225 overloaded
